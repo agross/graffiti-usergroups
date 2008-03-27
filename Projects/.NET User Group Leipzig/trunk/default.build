@@ -1,0 +1,149 @@
+﻿<?xml version="1.0"?>
+<project name="Accounting"
+		 default="all"
+		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- Load default configuration. -->
+	<if test="${file::exists('default.properties')}">
+		<echo message="Loading default.properties" />
+		<include buildfile="default.properties" />
+	</if>
+
+	<!-- Load developer-specific configuration. -->
+	<if test="${file::exists('local.properties')}">
+		<echo message="Loading local.properties" />
+		<include buildfile="local.properties" />
+	</if>
+
+	<echo message="Build configuration:" />
+	<script language="C#">
+		<code>
+			<![CDATA[
+				public static void ScriptMain(Project project)
+				{
+					System.Collections.Generic.SortedDictionary<string, string> sortedByKey = new System.Collections.Generic.SortedDictionary<string, string>();
+					foreach(DictionaryEntry de in project.Properties)
+					{
+						sortedByKey.Add(de.Key.ToString(), de.Value.ToString());
+					}
+
+					NAnt.Core.Tasks.EchoTask echo = new NAnt.Core.Tasks.EchoTask();
+					echo.Project = project;
+					foreach(System.Collections.Generic.KeyValuePair<string, string> kvp in sortedByKey)
+					{
+						if(kvp.Key.StartsWith("nant."))
+						{
+							continue;
+						}
+
+						echo.Message = String.Format("{0}: {1}", kvp.Key, kvp.Value);
+						echo.Execute();
+					}
+				}
+			]]>
+		</code>
+	</script>
+
+	<target name="all"
+			depends="build-theme, build-setup"
+			description="Compiles the application, runs all unit tests and creates deployment packages.">
+	</target>
+
+	<target name="clean"
+			description="Removes build artifacts.">
+		<delete dir="${test.results}"
+				failonerror="false" />
+		<delete dir="${deployment.artifacts}"
+				failonerror="false" />
+		<foreach item="Folder"
+				 property="folder">
+			<in>
+				<items>
+					<include name="${basedir.app}\**" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${folder}\deploy"
+						failonerror="false" />
+				<delete dir="${folder}\bin"
+						failonerror="false" />
+				<delete dir="${folder}\obj"
+						failonerror="false" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="get-build-number-from-file"
+			description="Reads the version number from VersionInfo.cs.">
+		<script language="C#">
+			<code>
+				<![CDATA[
+				public static void ScriptMain(Project project)
+				{
+					string file = String.Empty;
+					using (StreamReader sr = new StreamReader(Path.Combine(project.Properties["build.msbuild.solutiondir"], "VersionInfo.cs")))
+					{
+						file = sr.ReadToEnd();
+					}
+
+					project.Properties["build.number.fromfile"] = Regex.Match(file, "(?<=\\[assembly:\\s*AssemblyVersion(?:Attribute)?\\(\")\\d\\.\\d\\.\\d\\.\\d").Value;
+				}
+				]]>
+			</code>
+		</script>
+	</target>
+
+	<target name="init-build-theme">
+		<delete dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
+				failonerror="false" />
+		<mkdir dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}" />
+	</target>
+
+	<target name="build-theme"
+			depends="init-build-theme"
+			description="Builds the theme.">
+		<!-- Copy content files. -->
+		<copy todir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
+			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
+				<include name="**\*.css" />
+				<include name="**\*.js" />
+				<include name="**\*.png" />
+				<include name="**\*.gif" />
+				<exclude name="**\*.html" />
+			</fileset>
+		</copy>
+
+		<!-- Copy *.html renaming them to *.view. -->
+		<foreach item="File"
+				 property="filename">
+			<in>
+				<items basedir="${basedir.app}\DnugLeipzig.Theme">
+					<include name="**\*.html" />
+				</items>
+			</in>
+			<do>
+				<copy file="${filename}"
+					  tofile="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}\${path::get-file-name-without-extension(filename)}.view" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="init-build-setup">
+		<mkdir dir="${deployment.artifacts}" />
+	</target>
+
+	<target name="build-setup"
+			depends="init-build-setup, build-theme"
+			description="Creates the applications' deployment package.">
+		<zip zipfile="${deployment.artifacts}\Web-${build.number}.zip"
+			 ziplevel="9">
+			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
+				<include name="**\*.as?x" />
+				<include name="**\*.config" />
+				<include name="**\*.master" />
+				<include name="bin\**" />
+				<include name="content\**" />
+			</fileset>
+		</zip>
+	</target>
+</project>

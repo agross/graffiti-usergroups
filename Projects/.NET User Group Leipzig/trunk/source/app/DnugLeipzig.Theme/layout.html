@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>$title</title>
+	$macros.Style("css/base.css", "screen")
+	$macros.Style("css/graffiti.css", "screen")
+	<!--[if IE]>
+		$macros.Style("css/base_ie.css", "screen")
+	<![endif]-->
+	$macros.Head()
+</head>
+<body class="fixed blue">
+	<div id="wrapper">
+		<div id="header" class="clearfix">
+			<div id="title" class="clearfix">
+				<h1>
+					<a href="$urls.Home">$data.Site.Title</a></h1>
+				<p class="tag-line" style="clear: both;">
+					$data.Site.TagLine</p>
+				<div style="clear: both;">
+				</div>
+			</div>
+			<h2>
+				Hauptmenü</h2>
+			<ul id="menu">
+				$macros.NavBar()
+				<li class="rss">
+					<a href="$urls.Rss">
+						<img src="$macros.ThemeFile('/images/rss.gif')" alt="rssfeed" /></a></li>
+			</ul>
+		</div>
+		<div id="contentwrapper" class="clearfix">
+			<div id="content">
+				<div id="innerwrapper">
+					$childContent
+				</div>
+			</div>
+			<div id="sidebar">
+				$macros.RightSideBar("%{beforeWidget='<div class=\"boxy short\">', afterWidget='</div>', beforeTitle='<h3>', afterTitle='</h3>'}")
+			</div>
+		</div>
+		<div id="footer">
+			<p>
+				$!data.Site.Copyright</p>
+			<p>
+				Das Design basiert auf <a href="http://evil.che.lu">Cristi Balans</a> "Skittlish"-Design, welches von <a href="http://simpable.com">
+					Scott Watermasysk</a> angepasst wurde.</p>
+			<p>
+				$macros.Logo
+				Powered by <a href="http://graffiticms.com/">GraffitiCMS</a>.</p>
+		</div>
+	</div>
+	$!data.Site.WebStatistics
+</body>
+</html>

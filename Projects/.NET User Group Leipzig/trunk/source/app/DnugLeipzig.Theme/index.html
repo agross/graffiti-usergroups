@@ -1,0 +1,44 @@
+﻿#if($where == "category")
+<h1 class="archive_head">
+	Kategorie: '$category.Name'</h1>
+#elseif($where == "tag")
+<h1 class="archive_head">
+	Einträge mit dem Tag '$tag'</h1>
+#elseif($where == "search")
+<h1 class="archive_head">
+	Suchergebnisse für '$macros.SearchQuery'</h1>
+#end
+
+#foreach($post in $posts)
+<div class="article">
+	<h2 class="title">
+		<a href="$post.Url" rel="bookmark" title="$post.Title">$post.Title</a>
+	</h2>
+	<div class="body">
+		$post.Excerpt("<p>Vollständiger Artikel: ", "</p>" ,$post.Title, 300)
+	</div>
+	<div class="footer">
+		<h4 class="meta">
+			Kategorie:
+		</h4>
+		<p>
+			$macros.CategoryLink($post.Category) #if($macros.IsNull($post.TagList) == false) Tags: $macros.TagList($post.TagList,"")
+			#end
+		</p>
+		<h4 class="meta">
+			$macros.CommentUrl($post, "%{anchor='comments'}")
+		</h4>
+	</div>
+</div>
+#nodata
+<div class="article">
+	<h2 class="title">
+		Keine passenden Einträge gefunden.</h2>
+</div>
+#end
+
+#if($where == "category" || $where=="home")
+$macros.Pager("pagenavigation2")
+<div class="clear flat">
+</div>
+#end 
