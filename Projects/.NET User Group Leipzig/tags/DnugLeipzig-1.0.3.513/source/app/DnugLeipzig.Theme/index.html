@@ -1,0 +1,45 @@
+﻿#if($where == "category")
+	<h1 class="archive-head">
+		Einträge mit der Kategorie <em>$category.Name</em>
+	</h1>
+#elseif($where == "tag")
+	<h1 class="archive-head">
+		Einträge mit dem Tag <em>$tag</em>
+	</h1>
+#elseif($where == "search")
+	<h1 class="archive-head">
+		Suchergebnisse für <em>$macros.SearchQuery</em>
+	</h1>
+#end
+
+#foreach($post in $posts)
+	<div class="article">
+		<h2 class="title">
+			<a href="$post.Url" rel="bookmark" title="$dnug.EventTitle($post, ' am ', ', Sprecher: ')">
+				$dnug.EventDate($post, "", ":", "d") $post.Title
+			</a>
+		</h2>
+		<div class="body">
+			$post.Excerpt("", "", "Vollständigen Artikel lesen &raquo;", 300)
+		</div>
+		<div class="footer">
+			<ul>
+				<li>$dnug.CategoryLink($post.Category, "Kategorie: ")</li>
+				<li>$dnug.TagList($post.TagList, "Tags: ")</li>
+				<li>$dnug.CommentUrl($post, "%{ anchor = 'comments' }")</li>
+			</ul>
+		</div>
+	</div>
+#nodata
+	<div class="article">
+		<h3 class="title">
+			Keine passenden Einträge gefunden.
+		</h3>
+	</div>
+#end
+
+#if($where == "category" || $where == "home")
+	$macros.Pager("pager")
+	<div class="clear flat">
+	</div>
+#end 

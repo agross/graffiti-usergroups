@@ -1,0 +1,122 @@
+﻿<div class="article">
+	<h2 class="title">
+		<a href="$post.Url" rel="bookmark" title="$post.Title">$post.Title</a>
+	</h2>
+	<p class="meta">	
+		erstellt von $post.User.ProperName am $macros.FormattedDate($post.Published)</p>
+	<div class="body">
+		#if ($dnug.IsEvent($post))
+			<ul class="event-info">
+				$dnug.EventDate($post, "<li><strong>Datum:</strong> ", "</li>", "D")
+				$dnug.EventSpeaker($post, "<li><strong>Sprecher:</strong> ", "</li>")
+			</ul>
+		#end
+		$post.Body
+	</div>
+	<div class="footer">
+		<ul>
+			<li>$dnug.CategoryLink($post.Category, "Kategorie: ")</li>
+			<li>$dnug.TagList($post.TagList, "Tags: ")</li>
+			<li>$dnug.CommentUrl($post, "%{ anchor = 'comments' }")</li>
+		</ul>
+	</div>
+</div>
+
+##
+## Similar post.
+##
+#set($similarPosts = $data.SimilarSearch($post.Id, 3))
+
+#foreach($sp in $similarPosts)
+#beforeall
+	<div id="similar-posts">
+		<h3>Ähnliche Einträge</h3>
+		<ol class="list">
+#each
+			<li>
+				<a href="$sp.Url">$sp.Title</a>
+			</li>
+#afterall
+		</ol>
+	</div>
+#end
+
+##
+## Comments.
+##
+#foreach($comment in $comments)
+#beforeall
+	<div id="comments">
+		#if ($comments.Count > 0)
+		<h3>Kommentare</h3>
+		#end
+		<ul>
+#each
+		<li class="comment #if($comment.UserName == $post.UserName)by-author #end" id="comment-$comment.Id">
+			<p class="meta">
+				<a href="$post.Url#comment-$comment.Id">#</a>
+				$macros.CommentLink($comment) am $macros.FormattedDateTime($comment.Published, " um ") Uhr
+			</p>
+			<div class="body">
+				<div class="gravatar">
+					$macros.Gravatar($comment.Email, $comment.Name, $comment.IPAddress, "%{ size = '40' }")
+				</div>
+				<div class="body">
+					$comment.Body
+				</div>
+				<div class="clearfix">
+				</div>
+			</div>
+		</li>
+#afterall
+	</ul>
+</div>
+#end
+
+##
+## New comments.
+##
+<div id="comment-form">
+	<h3>
+		#if ($post.EnableNewComments) Kommentar verfassen #else Kommentare sind nicht gestattet. #end
+	</h3>
+	#if($post.EnableNewComments)
+	<form action="$url" method="post" id="comment_form">
+		<fieldset>
+			<dl>
+				#if($isUser)
+					<dt style="margin-bottom: 1em;">
+						Angemeldet als $user.ProperName <a href="$urls.Logout">Abmelden</a>
+					</dt>
+					<dl>
+					</dl>
+				#else
+					<dt><label for="author">Name:</label></dt>
+					<dd>
+						<input type="text" name="author" id="author" value="" tabindex="1" />
+					</dd>
+					<dt><label for="email">E-Mail:</label> (wird nicht veröffentlicht)</dt>
+					<dd>
+						<input type="text" name="email" id="email" value="" tabindex="2" />
+					</dd>
+					<dt><label for="url">Homepage:</label></dt>
+					<dd>
+						<input type="text" name="url" id="url" value="" tabindex="3" />
+					</dd>
+				#end
+				<dt>
+					<label for="comment">Kommentar:</label><br />
+					(HTML ist nicht erlaubt)
+				</dt>
+				<dd>
+					<textarea name="comment" id="comment" rows="7" tabindex="4"></textarea>
+				</dd>
+			</dl>
+		</fieldset>
+		
+		$macros.CommentButton("%{ class = 'submit_button', tabindex = '5', value = 'Kommentar absenden' }")
+		<div class="status" style="display: none;" id="comment_status"></div>
+		<input type="hidden" name="comment_post_ID" value="$post.Id" />
+	</form>
+#end
+</div>
