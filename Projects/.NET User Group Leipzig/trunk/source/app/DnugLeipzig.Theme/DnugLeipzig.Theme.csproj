@@ -29,18 +29,17 @@
     <Content Include="css\graffiti.css" />
     <Content Include="images\bg.gif" />
     <Content Include="images\comments.gif" />
-    <Content Include="images\content_top_bg.gif" />
+    <Content Include="images\content-top-background.gif" />
     <Content Include="images\feed.gif" />
     <Content Include="images\fixed.gif" />
     <Content Include="images\fluid.gif" />
-    <Content Include="images\footer_bg.gif" />
-    <Content Include="images\header_bg.gif" />
-    <Content Include="images\left_bg.gif" />
+    <Content Include="images\footer-background.gif" />
+    <Content Include="images\header-background.gif" />
+    <Content Include="images\left_background.gif" />
     <Content Include="images\rss.gif" />
-    <Content Include="images\x_blue_boxy_short.gif" />
-    <Content Include="images\x_blue_boxy_tall.gif" />
-    <Content Include="images\x_blue_sidebar_bg.gif" />
-    <Content Include="images\x_blue_sidebar_top.gif" />
+    <Content Include="images\sidebar-box-short.gif" />
+    <Content Include="images\sidebar-box-tall.gif" />
+    <Content Include="images\sidebar-background.gif" />
     <Content Include="layout.html" />
     <Content Include="preview.png" />
   </ItemGroup>
