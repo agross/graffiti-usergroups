@@ -8,26 +8,11 @@ using Graffiti.Core;
 namespace DnugLeipzig.Extensions
 {
 	[Chalk("dnug")]
-	public class DnugChalkExtensions
+	public class Dnug
 	{
-		public bool IsEvent(Post post)
-		{
-			if (post == null)
-			{
-				return false;
-			}
-
-			if (!post.Category.Name.Equals("Veranstaltungen", StringComparison.OrdinalIgnoreCase))
-			{
-				return false;
-			}
-
-			return true;
-		}
-
 		public string EventDate(Post post, string prefix, string suffix, string datePattern)
 		{
-			if (!IsEvent(post))
+			if (!Util.IsEvent(post))
 			{
 				return String.Empty;
 			}
@@ -38,15 +23,12 @@ namespace DnugLeipzig.Extensions
 				return String.Empty;
 			}
 
-			return String.Format("{0}{1}{2}",
-			                     prefix,
-								 HttpUtility.HtmlEncode(date.ToString(datePattern)),
-			                     suffix);
+			return String.Format("{0}{1}{2}", prefix, HttpUtility.HtmlEncode(date.ToString(datePattern)), suffix);
 		}
 
 		public string EventSpeaker(Post post, string prefix, string suffix)
 		{
-			if (!IsEvent(post))
+			if (!Util.IsEvent(post))
 			{
 				return String.Empty;
 			}
@@ -57,10 +39,7 @@ namespace DnugLeipzig.Extensions
 				return String.Empty;
 			}
 
-			return String.Format("{0}{1}{2}",
-			                     prefix,
-			                     HttpUtility.HtmlEncode(speaker),
-			                     suffix);
+			return String.Format("{0}{1}{2}", prefix, HttpUtility.HtmlEncode(speaker), suffix);
 		}
 
 		public string EventTitle(Post post, string datePrefix, string speakerPrefix)
@@ -141,7 +120,7 @@ namespace DnugLeipzig.Extensions
 			{
 				result[i] = String.Format("<a href=\"{0}/\" rel=\"tag\">{1}</a>",
 				                          HttpUtility.HtmlAttributeEncode(VirtualPathUtility.ToAbsolute("~/tags/") +
-				                                                          Util.CleanForUrl(tags[i])),
+				                                                          Graffiti.Core.Util.CleanForUrl(tags[i])),
 				                          HttpUtility.HtmlEncode(tags[i]));
 			}
 

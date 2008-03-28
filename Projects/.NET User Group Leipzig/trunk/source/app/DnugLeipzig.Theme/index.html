@@ -1,11 +1,13 @@
 ﻿#if($where == "category")
 	<h1 class="archive-head">
-		Einträge mit der Kategorie <em>$category.Name</em>
+		Einträge in der Kategorie <em>$category.Name</em>
 	</h1>
+	$dnugCollections.SortEvents($posts, $where)
 #elseif($where == "tag")
 	<h1 class="archive-head">
 		Einträge mit dem Tag <em>$tag</em>
 	</h1>
+	$dnugCollections.SortEvents($posts, $where)
 #elseif($where == "search")
 	<h1 class="archive-head">
 		Suchergebnisse für <em>$macros.SearchQuery</em>
@@ -33,13 +35,12 @@
 #nodata
 	<div class="article">
 		<h3 class="title">
-			Keine passenden Einträge gefunden.
+			Keine Einträge gefunden.
 		</h3>
 	</div>
 #end
 
 #if($where == "category" || $where == "home")
 	$macros.Pager("pager")
-	<div class="clear flat">
-	</div>
+	<div class="clearfix"></div>
 #end 

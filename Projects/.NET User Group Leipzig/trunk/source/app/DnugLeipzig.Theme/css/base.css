@@ -15,8 +15,8 @@ a img {
 /* Clearfix, the ie part is in the ie css */
 .clearfix {
 	clear: both;
-	}
-	
+}
+
 .clearfix:after {
 	content: ".";
 	display: block;
@@ -30,7 +30,7 @@ body {
 	background: #E3E3E3 url(../images/bg.gif) repeat-x;
 	color: #1B1B1B;
 	font: normal 76%;
-	font-family: "Segoe UI", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "Trebuchet MS", Tahoma, Verdana, sans-serif;
+	font-family: "Segoe UI" , "Lucida Grande" , "Lucida Sans Unicode" , "Lucida Sans" , "Trebuchet MS" , Tahoma, Verdana, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -55,8 +55,7 @@ a:hover {
 }
 
 /* Lists. */
-ul.list,
-ol.list {
+ul.list, ol.list {
 	margin-left: 3em;
 	margin-bottom: 1em;
 }
@@ -77,8 +76,8 @@ ol.list li {
 /* Layout. */
 html {
 	height: 100.01%;
-	}
-	
+}
+
 #wrapper {
 	position: relative;
 	width: 980px;
@@ -101,13 +100,13 @@ html {
 }
 
 #content-wrapper {
-	background: #fff;
+	background: #FFF url(../images/sidebar-background.gif) repeat-y scroll right top;
 }
 
 #content {
 	float: left;
 	width: 100%;
-	margin-right: -380px;
+	margin-right: -290px;
 	background: url(../images/content-top-background.gif) repeat-x;
 }
 
@@ -132,8 +131,7 @@ html {
 	display: none;
 }
 
-#header h1 a,
-#header #tag-line {
+#header h1 a, #header #tag-line {
 	color: #FFF;
 }
 
@@ -148,7 +146,6 @@ html {
 /* Menu. */
 #menu {
 	clear: both;
-	float: right;
 	display: inline;
 	margin-top: -1em;
 	margin-right: 30px;
@@ -173,19 +170,43 @@ html {
 #sidebar {
 	overflow: hidden;
 	float: right;
-	width: 380px;
-	/*padding-top: 1em;*/
+	width: 290px;
+	padding-top: 1em;
 	padding-bottom: 2em;
-/*	background: url(../images/sidebar-background.gif) right top no-repeat;*/
+	background: #0870C9 url(../images/sidebar-background.gif) right top repeat-y;
+	color: #FFF;
 }
 
-#sidebar h1 a,
-#sidebar h2 a,
-#sidebar h3 a,
-#sidebar h4 a,
-#sidebar h5 a,
-#sidebar h6 a {
+#sidebar h1 a, #sidebar h2 a, #sidebar h3 a, #sidebar h4 a, #sidebar h5 a, #sidebar h6 a {
 	font-weight: normal;
+}
+
+/* Sidebar boxes. */
+.boxy {
+	margin: 1em;
+	padding: 0.3em 1em 1em 1em;
+	background-color: #0870C9;
+	background-repeat: no-repeat;
+}
+
+#sidebar .boxy.short {
+	background-image: url(../images/sidebar-box-short.gif);
+}
+#sidebar .boxy.tall {
+	background-image: url(../images/sidebar-box-tall.gif);
+}
+
+.boxy a {
+	color: #FFF;
+}
+
+.boxy li {
+	margin-left: 1em;
+}
+
+.boxy h3 {
+	border-bottom: 1px solid #FFF;
+	margin-bottom: 1em;
 }
 
 /* Footer. */
@@ -207,9 +228,7 @@ html {
 
 /* Related posts. */
 
-#similar-posts h3,
-#comments h3,
-#comment-form h3 {
+#similar-posts h3, #comments h3, #comment-form h3 {
 	margin-top: 2em;
 	margin-bottom: 1em;
 	color: #E68800;
@@ -254,8 +273,7 @@ html {
 .article .comments a:hover {
 }
 
-.article .footer,
-.article .footer a {
+.article .footer, .article .footer a {
 	color: #838383;
 }
 
@@ -406,56 +424,7 @@ fieldset textarea {
 	width: 90%;
 }
 
-/* side boxes */
-.boxy {
-	padding: 0 2emx 4em 2em;
-	background-color: #0870C9;
-	background-repeat: no-repeat;
-}
-#sidebar .short, #sidebar .tall {
-	padding-top: 0.3em;
-}
-#sidebar .short {
-	background-image: url(../images/sidebar-box-short.gif);
-}
-#sidebar .tall {
-	background-image: url(../images/sidebar-box-tall.gif);
-}
-/* ems are nifty, eh? :) */
-#sidebar .minor {
-	font-size: .8em;
-}
-#sidebar .minor h3 {
-	font-size: 2em;
-}
-#sidebar .minor dt {
-	font-size: 1.5em;
-}
-.boxy a {
-	color: #FFF;
-}
-.boxy li {
-	margin-left: 1em;
-}
-.boxy ul, .boxy dt {
-	margin-top: 1em;
-}
-.boxy dt {
-	font-size: 1.2em;
-	line-height: 2;
-	vertical-align: middle;
-}
-.boxy dd {
-	margin-left: 1em;
-	margin-bottom: .25em;
-}
-.boxy ul dd, .boxy dl li {
-	margin-left: 0;
-}
-.boxy ul dt, .boxy dl ul {
-	margin-top: 0 !important;
-}
-
+ /
 /* options box */
 #options h2 {
 	display: block;
@@ -495,20 +464,7 @@ fieldset textarea {
 }
 
 /* selected */
-body.fixed #options li.fixed,
-body.fluid #options li.fluid,
-#options li:hover {
+body.fixed #options li.fixed, body.fluid #options li.fluid, #options li:hover {
 	padding: 3px;
 	background-color: #9a9a9a;
 }
-
-/* skittlish customizations */
-/* defaults: fixed blue */
-
-
-
-body .boxy {
-	background-color: #0870c9;
-}
-
-
