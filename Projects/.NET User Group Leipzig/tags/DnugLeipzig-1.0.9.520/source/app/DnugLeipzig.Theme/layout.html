@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>$title</title>
+		<link rel="shortcut icon" href="$macros.ThemeFile('/images/favicon.ico')" type="image/vnd.microsoft.icon" />
+		$macros.Style("css/base.css", "screen")
+		$macros.Style("css/graffiti.css", "screen")
+		<!--[if IE]>
+			$macros.Style("css/base_ie.css", "screen")
+		<![endif]-->
+		
+		$macros.MetaTags()
+		$macros.RssAutodiscovery()
+		$macros.RSD()
+		$macros.GraffitiJavaScript()
+	</head>
+	<body>
+		<div id="header">
+			<div id="wrapper">
+				$macros.LoadThemeView("components/site-header.view")
+				$macros.LoadThemeView("components/site-menu.view")
+			</div>
+		</div>
+
+		<div id="wrapper">
+			<div id="content-shadow">
+				<div id="content-wrapper" class="clearfix">
+					<div id="content">
+						<div id="inner-wrapper">
+							$childContent
+						</div>
+					</div>
+					<div id="sidebar">
+						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy short\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+					</div>
+				</div>
+				
+				$macros.LoadThemeView("components/site-footer.view")
+			</div>
+		</div>
+		
+		$!data.Site.WebStatistics
+	</body>
+</html>
