@@ -44,7 +44,14 @@
     <Content Include="preview.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\site-menu.html" />
+    <Content Include="components\site-footer.html" />
     <Content Include="contact.html" />
+    <Content Include="components\site-header.html" />
+    <Content Include="components\post-footer.html" />
+    <Content Include="images\favicon.ico" />
+    <Content Include="images\logo.png" />
+    <Content Include="images\menu-background.png" />
     <Content Include="index.html" />
     <Content Include="page.html" />
     <Content Include="post.html" />

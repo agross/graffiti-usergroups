@@ -82,21 +82,13 @@ html {
 	position: relative;
 	width: 980px;
 	margin: 0 auto;
-	padding-right: 5px;
-	border-left: solid 1px #9A9A9A;
-	background: url(../images/left_background.gif) right repeat-y;
 	font-size: 1em;
 }
 
-/* Layout: fixed. */
-.fixed #wrapper {
-	width: 980px;
-	margin: 0 auto;
-}
-/* Layout: fluid. */
-.fluid #wrapper {
-	width: auto;
-	margin: 0 80px;
+#content-shadow {
+	padding-right: 5px;
+	border-left: solid 1px #9A9A9A;
+	background: url(../images/left_background.gif) right repeat-y;
 }
 
 #content-wrapper {
@@ -117,9 +109,10 @@ html {
 /* Header. */
 #header {
 	clear: both;
-	padding: 1em 2em;
-	border-bottom: solid 1px #343434;
-	background: #1c1c1c url(../images/header-background.gif) repeat-x;
+	padding: 1em 1em 0 1em;
+	border-bottom: solid 1px #9A9A9A;
+	background: #FFF url(../images/header-background.png) repeat-x left bottom;
+	color: #000;
 }
 
 #header h1 {
@@ -127,12 +120,13 @@ html {
 	font-size: 2.2em;
 }
 
-#header h2 {
-	display: none;
-}
+#header #site-logo {
+	margin-right: 5px;
+	float: right;
+	}
 
-#header h1 a, #header #tag-line {
-	color: #FFF;
+#header h1 a {
+	color: #053C6D;
 }
 
 #tag-line {
@@ -144,26 +138,51 @@ html {
 }
 
 /* Menu. */
+#navigation h2 {
+	display: none;
+}
+
+#navigation .left,
+#navigation .right {
+	background: url(../images/menu-background-left.png) left top no-repeat;
+	width: 12px;
+	min-height: 50px;
+}
+
+#navigation .right {
+	background-image: url(../images/menu-background-right.png);
+}
+
+#navigation {
+	font-size: 1.3em;
+	}
+
 #menu {
 	clear: both;
 	display: inline;
-	margin-top: -1em;
-	margin-right: 30px;
-	text-align: right;
+	background: url(../images/menu-background.png) left top repeat-x;
+	padding: 0.2em 0;
 }
 
 #menu li {
 	display: inline;
-	margin-right: 1em;
-	color: #868686;
+	padding: 0 1em;
+	
+	background: url(../images/menu-divider.png) right top no-repeat;
 }
 
 #menu a {
-	color: #868686;
+	color: #FFF;
+	font-weight:normal;
 }
 
-#menu li.selected a {
-	color: #FFF;
+#menu a:hover {
+	text-decoration: none;
+	font-weight:normal;
+}
+
+#menu li.selectedli {
+	background: url(../images/menu-background-selected.png) left top repeat-x;
 }
 
 /* Sidebar. */
@@ -424,7 +443,7 @@ fieldset textarea {
 	width: 90%;
 }
 
- /
+ 
 /* options box */
 #options h2 {
 	display: block;

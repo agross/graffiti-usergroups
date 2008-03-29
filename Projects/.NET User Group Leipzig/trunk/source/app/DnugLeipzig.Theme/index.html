@@ -24,13 +24,7 @@
 		<div class="body">
 			$post.Excerpt("", "", "Vollständigen Artikel lesen &raquo;", 300)
 		</div>
-		<div class="footer">
-			<ul>
-				<li>$dnug.CategoryLink($post.Category, "Kategorie: ")</li>
-				<li>$dnug.TagList($post.TagList, "Tags: ")</li>
-				<li>$dnug.CommentUrl($post, "%{ anchor = 'comments' }")</li>
-			</ul>
-		</div>
+		$macros.LoadThemeView("components/post-footer.view")
 	</div>
 #nodata
 	<div class="article">

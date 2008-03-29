@@ -2,7 +2,7 @@
 <project name="DNUG"
 		 default="all"
 		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
-
+	
 	<!-- Load default configuration. -->
 	<if test="${file::exists('default.properties')}">
 		<echo message="Loading default.properties" />
@@ -228,6 +228,7 @@
 				 verbosity="${build.msbuild.verbosity}">
 			<arg value="/p:Configuration=${build.msbuild.configuration}" />
 			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+			<arg value="/p:NantCall=true" />
 		</msbuild>
 	</target>
 
@@ -247,23 +248,24 @@
 			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
 				<include name="**\*.css" />
 				<include name="**\*.js" />
+				<include name="**\*.ico" />
 				<include name="**\*.png" />
 				<include name="**\*.gif" />
-				<exclude name="**\*.html" />
+				<include name="**\*.html" />
 			</fileset>
 		</copy>
 
-		<!-- Copy *.html renaming them to *.view. -->
+		<!-- Rename *.html to *.view. -->
 		<foreach item="File"
 				 property="filename">
 			<in>
-				<items basedir="${basedir.app}\DnugLeipzig.Theme">
+				<items basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
 					<include name="**\*.html" />
 				</items>
 			</in>
 			<do>
-				<copy file="${filename}"
-					  tofile="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}\${path::get-file-name-without-extension(filename)}.view" />
+				<move file="${filename}"
+					  tofile="${path::change-extension(filename, '.view')}" />
 			</do>
 		</foreach>
 	</target>
@@ -283,11 +285,13 @@
 				<items refid="test-projects" />
 			</in>
 			<do>
+				<!--verbosity="${build.msbuild.verbosity}"-->
 				<msbuild project="${testproject}"
 						 target="${build.msbuild.target}"
 						 verbosity="${build.msbuild.verbosity}">
 					<arg value="/p:Configuration=${build.msbuild.configuration}" />
 					<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+					<arg value="/p:NantCall=true" />
 				</msbuild>
 			</do>
 		</foreach>

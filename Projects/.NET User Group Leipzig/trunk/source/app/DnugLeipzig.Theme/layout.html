@@ -2,61 +2,43 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>$title</title>
+		<link rel="shortcut icon" href="$macros.ThemeFile('/images/favicon.ico')" type="image/vnd.microsoft.icon" />
 		$macros.Style("css/base.css", "screen")
 		$macros.Style("css/graffiti.css", "screen")
 		<!--[if IE]>
 			$macros.Style("css/base_ie.css", "screen")
 		<![endif]-->
-		$macros.Head()
+		
+		$macros.MetaTags()
+		$macros.RssAutodiscovery()
+		$macros.RSD()
+		$macros.GraffitiJavaScript()
 	</head>
-	<body class="fixed">
-		<div id="wrapper">
-			<div id="header">
-				<div id="title">
-					<h1>
-						<a href="$urls.Home">$data.Site.Title</a>
-					</h1>
-					<p id="tag-line">
-						$data.Site.TagLine
-					</p>
-					<div class="clearfix"></div>
-				</div>
-				<h2>
-					Hauptmenü</h2>
-				<ul id="menu">
-					$macros.NavBar()
-					<li class="rss">
-						<a href="$urls.Rss">
-							<img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" title="RSS-Feed abonnieren" />
-						</a>
-					</li>
-					<div class="clearfix"></div>
-				</ul>
-			</div>
-			
-			<div id="content-wrapper" class="clearfix">
-				<div id="content">
-					<div id="inner-wrapper">
-						$childContent
-					</div>
-				</div>
-				<div id="sidebar">
-					$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy short\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
-				</div>
-			</div>
-			<div id="footer">
-				<p>
-					$!data.Site.Copyright</p>
-				<p>
-					Das Layout basiert auf <a href="http://evil.che.lu/">Cristi Balans</a> "Skittlish"-Design, welches von <a href="http://simpable.com/">
-						Scott Watermasysk</a> und <a href="http://therightstuff.de/">Alexander Groß</a> angepasst wurde.
-				</p>
-				<p>
-					$macros.Logo
-					Powered by <a href="http://graffiticms.com/">GraffitiCMS</a>.
-				</p>
+	<body>
+		<div id="header">
+			<div id="wrapper">
+				$macros.LoadThemeView("components/site-header.view")
+				$macros.LoadThemeView("components/site-menu.view")
 			</div>
 		</div>
+
+		<div id="wrapper">
+			<div id="content-shadow">
+				<div id="content-wrapper" class="clearfix">
+					<div id="content">
+						<div id="inner-wrapper">
+							$childContent
+						</div>
+					</div>
+					<div id="sidebar">
+						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy short\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+					</div>
+				</div>
+				
+				$macros.LoadThemeView("components/site-footer.view")
+			</div>
+		</div>
+		
 		$!data.Site.WebStatistics
 	</body>
 </html>

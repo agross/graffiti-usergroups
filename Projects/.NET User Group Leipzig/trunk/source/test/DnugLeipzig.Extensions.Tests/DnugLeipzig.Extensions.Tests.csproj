@@ -82,6 +82,8 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
-    <PreBuildEvent>"$(SolutionDir)..\tools\NAnt\nant.exe" -buildfile:"$(SolutionDir)..\default.build" init-run-tests</PreBuildEvent>
+    <PreBuildEvent>if "$(NantCall)" EQU "" (
+"$(SolutionDir)..\tools\NAnt\nant.exe" -buildfile:"$(SolutionDir)..\default.build" init-run-tests
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>
