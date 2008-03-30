@@ -146,11 +146,11 @@ html {
 /* Menu. */
 #navigation {
 	background: #011220 url(../images/menu-background-inactive.png) repeat-x left top;
-	height: 40px;
+	height: 35px;
 	overflow: hidden;
 	position: relative;
 	width: 850px;
-	font-size: 1.3em;
+	font-size: 1.25em;
 	margin-left: 1em;
 }
 
