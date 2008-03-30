@@ -1,0 +1,15 @@
+﻿<h1 class="archive-head">
+	Material zu den Vorträgen
+</h1>
+<p class="meta">
+	Hier finden sich Folien (soweit sie zum nachträglichen Lesen geeignet sind), weiterführende Links, Downloads, etc. zu den
+	Vorträgen, typischerweise ein paar Tage nach der jeweiligen <a href="/veranstaltungen/" title="Zur Veranstaltungsliste">Veranstaltung</a>.
+</p>
+
+#set($talks = $ugTalks.GetCurrent())
+
+#foreach($talk in $talks)
+	$macros.LoadThemeView("components/talks/talk.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end

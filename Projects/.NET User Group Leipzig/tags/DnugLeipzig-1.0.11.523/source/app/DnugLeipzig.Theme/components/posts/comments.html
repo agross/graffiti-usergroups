@@ -1,0 +1,28 @@
+﻿#foreach($comment in $comments)
+#beforeall
+	<div id="comments">
+		#if ($comments.Count > 0)
+		<h3>Kommentare</h3>
+		#end
+		<ul>
+#each
+		<li class="comment #if($comment.UserName == $post.UserName)by-author #end" id="comment-$comment.Id">
+			<p class="meta">
+				<a href="$post.Url#comment-$comment.Id">#</a>
+				$macros.CommentLink($comment) am $macros.FormattedDateTime($comment.Published, " um ") Uhr
+			</p>
+			<div class="body">
+				<div class="gravatar">
+					$macros.Gravatar($comment.Email, $comment.Name, $comment.IPAddress, "%{ size = '40' }")
+				</div>
+				<div class="body">
+					$comment.Body
+				</div>
+				<div class="clearfix">
+				</div>
+			</div>
+		</li>
+#afterall
+	</ul>
+</div>
+#end

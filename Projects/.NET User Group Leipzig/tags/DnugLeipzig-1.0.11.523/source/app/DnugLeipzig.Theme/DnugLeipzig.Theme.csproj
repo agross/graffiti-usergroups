@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <ProjectGuid>{9042FB6F-5A70-409D-A1DF-31A1092196A0}</ProjectGuid>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="css\base.css" />
+    <Content Include="css\base_ie.css" />
+    <Content Include="css\graffiti.css" />
+    <Content Include="images\bg.gif" />
+    <Content Include="images\comments.gif" />
+    <Content Include="images\content-top-background.gif" />
+    <Content Include="images\feed.gif" />
+    <Content Include="images\fixed.gif" />
+    <Content Include="images\fluid.gif" />
+    <Content Include="images\footer-background.gif" />
+    <Content Include="images\header-background.gif" />
+    <Content Include="images\left_background.gif" />
+    <Content Include="images\rss.gif" />
+    <Content Include="images\sidebar-box-short.gif" />
+    <Content Include="images\sidebar-box-tall.gif" />
+    <Content Include="images\sidebar-background.gif" />
+    <Content Include="layout.html" />
+    <Content Include="preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="components\events\event.post.html" />
+    <Content Include="components\no-data.html" />
+    <Content Include="components\events\event.html" />
+    <Content Include="components\events\events-for-year.html" />
+    <Content Include="components\events\future-events.html" />
+    <Content Include="components\events\past-events.html" />
+    <Content Include="components\posts\comments.html" />
+    <Content Include="components\posts\post.post.html" />
+    <Content Include="components\posts\post.html" />
+    <Content Include="components\posts\new-comment.html" />
+    <Content Include="components\posts\similar-posts.html" />
+    <Content Include="components\site-menu.html" />
+    <Content Include="components\site-footer.html" />
+    <Content Include="components\talks\current-talks.html" />
+    <Content Include="components\talks\talk.html" />
+    <Content Include="components\talks\past-talks.html" />
+    <Content Include="components\talks\talks-for-year.html" />
+    <Content Include="contact.html" />
+    <Content Include="components\site-header.html" />
+    <Content Include="components\post-footer.html" />
+    <Content Include="css\first-menu-item-selected.css" />
+    <Content Include="images\header-background.png" />
+    <Content Include="images\menu-background-active.png" />
+    <Content Include="images\menu-background-bottom-active.png" />
+    <Content Include="images\menu-background-bottom-inactive.png" />
+    <Content Include="images\menu-background-inactive.png" />
+    <Content Include="images\menu-corner-left-active.png" />
+    <Content Include="images\menu-corner-left-inactive.png" />
+    <Content Include="images\menu-corner-right-active.png" />
+    <Content Include="images\menu-corner-right-inactive.png" />
+    <Content Include="images\menu-divider.png" />
+    <Content Include="vortraege.html" />
+    <Content Include="veranstaltungen.post.html" />
+    <Content Include="veranstaltungen.html" />
+    <Content Include="images\favicon.ico" />
+    <Content Include="images\logo.png" />
+    <Content Include="index.html" />
+    <Content Include="page.html" />
+    <Content Include="post.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+</Project>
