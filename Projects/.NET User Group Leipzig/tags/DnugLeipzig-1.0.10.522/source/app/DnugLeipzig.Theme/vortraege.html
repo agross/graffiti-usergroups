@@ -1,0 +1,10 @@
+﻿##
+## Vortraege.view - Used to render the talk index. It overrides index.view. 
+##
+
+#if (!$macros.IsNull($ugEvents.GetViewYear()))
+	$macros.LoadThemeView("components/talks/talks-for-year.view")
+#else
+	$macros.LoadThemeView("components/talks/current-talks.view")
+	$macros.LoadThemeView("components/talks/past-talks.view")
+#end
