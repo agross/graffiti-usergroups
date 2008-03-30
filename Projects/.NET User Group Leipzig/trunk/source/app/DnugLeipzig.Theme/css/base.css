@@ -137,6 +137,12 @@ html {
 	text-decoration: none;
 }
 
+#header .badge {
+	margin-left: 0.5em;
+	margin-top: -20px;
+	vertical-align: bottom;
+}
+
 /* Menu. */
 #navigation {
 	background: #011220 url(../images/menu-background-inactive.png) repeat-x left top;

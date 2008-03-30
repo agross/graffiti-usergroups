@@ -65,6 +65,7 @@
     <Content Include="components\site-header.html" />
     <Content Include="components\post-footer.html" />
     <Content Include="css\first-menu-item-selected.css" />
+    <Content Include="images\badge-beta.png" />
     <Content Include="images\header-background.png" />
     <Content Include="images\menu-background-active.png" />
     <Content Include="images\menu-background-bottom-active.png" />
