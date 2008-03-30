@@ -1,24 +1,32 @@
 using System;
+using System.Web;
 
-using Graffiti.Core;
+using DnugLeipzig.Extensions.Extensions;
 
 namespace DnugLeipzig.Extensions
 {
 	public static class Util
 	{
-		public static bool IsEvent(Post post)
+		internal static int? GetViewYear(string yearQueryStringParameter)
 		{
-			if (post == null)
+			int year;
+			if (int.TryParse(HttpContext.Current.Request.QueryString[yearQueryStringParameter], out year))
 			{
-				return false;
+				return year;
 			}
 
-			if (!post.Category.Name.Equals("Veranstaltungen", StringComparison.OrdinalIgnoreCase))
-			{
-				return false;
-			}
+			return null;
+		}
 
-			return true;
+		internal static string GetUrlForYearView(int year, string yearQueryStringParameter)
+		{
+			bool needsAmpersand = !String.IsNullOrEmpty(HttpContext.Current.Request.Url.Query);
+
+			return String.Format("{0}{1}{2}={3}",
+			                     HttpContext.Current.Request.Url.PathAndQuery.StripDefaultAspx(),
+			                     needsAmpersand ? "&" : "?",
+			                     yearQueryStringParameter,
+			                     year);
 		}
 	}
 }

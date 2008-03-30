@@ -2,12 +2,10 @@
 	<h1 class="archive-head">
 		Einträge in der Kategorie <em>$category.Name</em>
 	</h1>
-	$dnugCollections.SortEvents($posts, $where)
 #elseif($where == "tag")
 	<h1 class="archive-head">
 		Einträge mit dem Tag <em>$tag</em>
 	</h1>
-	$dnugCollections.SortEvents($posts, $where)
 #elseif($where == "search")
 	<h1 class="archive-head">
 		Suchergebnisse für <em>$macros.SearchQuery</em>
@@ -15,23 +13,9 @@
 #end
 
 #foreach($post in $posts)
-	<div class="article">
-		<h2 class="title">
-			<a href="$post.Url" rel="bookmark" title="$dnug.EventTitle($post, ' am ', ', Sprecher: ')">
-				$dnug.EventDate($post, "", ":", "d") $post.Title
-			</a>
-		</h2>
-		<div class="body">
-			$post.Excerpt("", "", "Vollständigen Artikel lesen &raquo;", 300)
-		</div>
-		$macros.LoadThemeView("components/post-footer.view")
-	</div>
+	$macros.LoadThemeView("components/posts/post.view")
 #nodata
-	<div class="article">
-		<h3 class="title">
-			Keine Einträge gefunden.
-		</h3>
-	</div>
+	$macros.LoadThemeView("components/no-data.view")
 #end
 
 #if($where == "category" || $where == "home")

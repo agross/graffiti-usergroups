@@ -1,54 +1,43 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Text;
 using System.Web;
+
+using DnugLeipzig.Extensions.Extensions;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions
 {
-	[Chalk("dnug")]
-	public class Dnug
+	[Chalk("ui")]
+	public class Ui
 	{
-		public string EventDate(Post post, string prefix, string suffix, string datePattern)
+		static readonly string ManyComments;
+		static readonly string NoComments;
+		static readonly string SingleComment;
+		static readonly Macros Macros = new Macros();
+
+		static Ui()
 		{
-			if (!Util.IsEvent(post))
-			{
-				return String.Empty;
-			}
-
-			DateTime date;
-			if (!DateTime.TryParse(post.CustomFields()["Datum"], out date))
-			{
-				return String.Empty;
-			}
-
-			return String.Format("{0}{1}{2}", prefix, HttpUtility.HtmlEncode(date.ToString(datePattern)), suffix);
+			// Not perfect as there may be languages where there's no simple singular/plural forms.
+			NoComments = ConfigurationManager.AppSettings.GetOrDefault("Ui:Comments:NoComments", "Keine Kommentare");
+			SingleComment = ConfigurationManager.AppSettings.GetOrDefault("Ui:Comments:SingleComment", "1 Kommentar");
+			ManyComments = ConfigurationManager.AppSettings.GetOrDefault("Ui:Comments:ManyComments", "{0} Kommentare");
 		}
 
-		public string EventSpeaker(Post post, string prefix, string suffix)
+		public bool IsFirstNavigationLinkSelected()
 		{
-			if (!Util.IsEvent(post))
-			{
-				return String.Empty;
-			}
-
-			string speaker = post.CustomFields()["Sprecher"];
-			if (speaker == null || speaker.Trim().Length == 0)
-			{
-				return String.Empty;
-			}
-
-			return String.Format("{0}{1}{2}", prefix, HttpUtility.HtmlEncode(speaker), suffix);
+			List<Link> links = Macros.NavigationLinks();
+			return (links.Count > 0 && links[0].IsSelected);
 		}
 
-		public string EventTitle(Post post, string datePrefix, string speakerPrefix)
+		public bool IsNavigationLinkSelected()
 		{
-			return
-				HttpUtility.HtmlAttributeEncode(String.Format("{0}{1}{2}",
-				                                              post.Title,
-				                                              EventDate(post, datePrefix, String.Empty, "d"),
-				                                              EventSpeaker(post, speakerPrefix, String.Empty)));
+			List<Link> links = Macros.NavigationLinks();
+
+			return Array.Exists(links.ToArray(), delegate(Link link) { return link.IsSelected; });
 		}
 
 		public string CommentUrl(Post post, IDictionary dictionary)
@@ -71,15 +60,15 @@ namespace DnugLeipzig.Extensions
 			string linkText;
 			if (post.CommentCount <= 0)
 			{
-				linkText = "Keine Kommentare";
+				linkText = NoComments;
 			}
 			else if (post.CommentCount == 1)
 			{
-				linkText = "1 Kommentar";
+				linkText = SingleComment;
 			}
 			else
 			{
-				linkText = String.Format("{0} Kommentare", post.CommentCount);
+				linkText = String.Format(ManyComments, post.CommentCount);
 			}
 
 			return String.Format("<a href=\"{0}{1}{2}\">{3}</a>",
@@ -111,11 +100,11 @@ namespace DnugLeipzig.Extensions
 		{
 			if (String.IsNullOrEmpty(tagList))
 			{
-				return string.Empty;
+				return String.Empty;
 			}
 
 			string[] tags = tagList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-			string[] result = new string[tags.Length];
+			var result = new string[tags.Length];
 			for (int i = 0; i < tags.Length; i++)
 			{
 				result[i] = String.Format("<a href=\"{0}/\" rel=\"tag\">{1}</a>",
@@ -134,7 +123,7 @@ namespace DnugLeipzig.Extensions
 				return null;
 			}
 
-			StringBuilder result = new StringBuilder("?");
+			var result = new StringBuilder("?");
 
 			foreach (DictionaryEntry entry in dictionary)
 			{

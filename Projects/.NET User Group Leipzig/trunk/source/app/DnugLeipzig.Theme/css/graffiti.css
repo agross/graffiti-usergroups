@@ -1,9 +1,4 @@
-﻿
-li.tweet {
-	margin-bottom: 10px;
-}
-
-blockquote {
+﻿blockquote {
 	border-left: 1px solid #326ea1;
 	color: #555555;
 	font-size: 1.00em;
@@ -12,12 +7,6 @@ blockquote {
 	margin: 0 30px;
 	margin-bottom: 10px;
 }
-
-#menu li.selectedli a {
-	color: #fff;
-}
-
-
 
 .gravatar {
 	float: left;

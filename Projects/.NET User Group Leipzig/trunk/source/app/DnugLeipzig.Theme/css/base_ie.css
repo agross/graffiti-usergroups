@@ -14,10 +14,6 @@
   margin-top: -1.5em !important;
 }
 
-/* ie7 stupidly aligns the bg 49px to the right */
-#sidebar {
-  background-position: 23px 0;
-}
 
 /* random ie stupidity. i'm SO about to * { zoom: 1; } */
 #wrapper {

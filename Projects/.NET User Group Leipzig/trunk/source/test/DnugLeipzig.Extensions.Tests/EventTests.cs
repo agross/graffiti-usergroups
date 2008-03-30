@@ -1,5 +1,7 @@
 using System;
 
+using DnugLeipzig.Extensions.Extensions;
+
 using Graffiti.Core;
 
 using MbUnit.Framework;
@@ -53,37 +55,10 @@ namespace DnugLeipzig.Extensions.Tests
 			return post;
 		}
 
-		[RowTest]
-		[Row("")]
-		[Row("tags")]
-		public void SortsEventsOnlyInCategoryView(string pageType)
-		{
-			var dnug = new DnugCollections();
-			dnug.SortEvents(_posts, pageType);
-
-			CollectionAssert.AreCountEqual(_originalPosts, _posts);
-			CollectionAssert.AreEquivalent(_originalPosts, _posts);
-
-			// Assert that all elements have *not* been sorted using the post title.
-			for (int i = 0; i < PostSetsToGenerate; i++)
-			{
-				Post orginal = _originalPosts[i];
-				Post sorted = _posts[i];
-
-				Assert.AreEqual(orginal.Title,
-				                sorted.Title,
-				                "Element title at index {0} does not match: {1} != {2}\n",
-				                i,
-				                orginal.Title,
-				                sorted.Title);
-			}
-		}
-
 		[Test]
-		public void SortsEventsOnCategoryPage()
+		public void SortsEventIndex()
 		{
-			var dnug = new DnugCollections();
-			dnug.SortEvents(_posts, "category");
+			_posts.SortForIndexView();
 
 			CollectionAssert.AreCountEqual(_originalPosts, _posts);
 			CollectionAssert.AreEquivalent(_originalPosts, _posts);

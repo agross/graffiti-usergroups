@@ -1,7 +1,6 @@
-﻿<div class="top"></div>
-<div id="navigation">
+﻿<div id="navigation">
 	<h2>Hauptmenü</h2>
-	<span class="left"></span>
+	<div class="top"></div>
 	<ul id="menu">
 		$macros.NavBar()
 		<li class="rss">
@@ -10,5 +9,6 @@
 			</a>
 		</li>
 	</ul>
-	<span class="right">&nbsp;</span>
+	<div class="bottom"></div>
 </div>
+<div id="menu-bottom" #if ($ui.IsNavigationLinkSelected) class="active" #end></div>

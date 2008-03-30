@@ -1,4 +1,8 @@
-﻿$macros.LoadThemeView("components/posts/post.post.view")
+﻿##
+## Veranstaltungen.post.view - Used to render a single event. It overrides post.view. 
+##
+
+$macros.LoadThemeView("components/events/event.post.view")
 
 #set($similarPosts = $data.SimilarSearch($post.Id, 3))
 $macros.LoadThemeView("components/posts/similar-posts.view")
