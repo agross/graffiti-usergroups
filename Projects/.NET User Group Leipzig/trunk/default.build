@@ -50,6 +50,7 @@
 	</target>
 
 	<target name="clean"
+			depends="drop-database"
 			description="Removes build artifacts.">
 		<delete dir="${test.results}"
 				failonerror="false" />
