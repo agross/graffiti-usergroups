@@ -8,9 +8,9 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Filters
 {
-	internal class IsInFutureFilter : ByDateFilter
+	internal class IsInPast : ByDate
 	{
-		public IsInFutureFilter(string dateFieldName)
+		public IsInPast(string dateFieldName)
 			: base(dateFieldName)
 		{
 		}
@@ -19,7 +19,7 @@ namespace DnugLeipzig.Extensions.Filters
 		public override List<Post> Execute(List<Post> posts)
 		{
 			return (from post in posts
-			       where post.Custom(_dateFieldName).AsEventDate().Date >= DateTime.Now.Date
+			       where post.Custom(_dateFieldName).AsEventDate().Date < DateTime.Now.Date
 			       select post).ToList();
 		}
 		#endregion

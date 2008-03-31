@@ -7,35 +7,27 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Repositories
 {
-	public class TalkRepository : IRepository<Post>
+	public class TalkRepository : PostRepository
 	{
-		static readonly Data Data = new Data();
-		readonly string _categoryName;
 		readonly string _dateFieldName;
 
-		public TalkRepository(string categoryName, string dateFieldName)
+		public TalkRepository(string categoryName, string dateFieldName) : base(categoryName)
 		{
-			if (String.IsNullOrEmpty(categoryName))
-			{
-				throw new ArgumentOutOfRangeException("categoryName");
-			}
-
 			if (String.IsNullOrEmpty(dateFieldName))
 			{
 				throw new ArgumentOutOfRangeException("dateFieldName");
 			}
 
-			_categoryName = categoryName;
 			_dateFieldName = dateFieldName;
 		}
 
-		#region IRepository<PostCollection> Members
-		public List<Post> Get(params IPostFilter[] filters)
+		#region IRepository<Post> Members
+		public override List<Post> Get(IPostFilter[] filters)
 		{
 			PostCollection posts = Data.PostsByCategory(_categoryName, int.MaxValue);
 
 			// Pre-filter dates.
-			HasDateFilter hasDate = new HasDateFilter(_dateFieldName);
+			var hasDate = new HasDate(_dateFieldName);
 			List<Post> result = hasDate.Execute(posts);
 
 			foreach (IPostFilter filter in filters)
@@ -45,11 +37,7 @@ namespace DnugLeipzig.Extensions.Repositories
 
 			return result;
 		}
-
-		public Post Get(int id)
-		{
-			return Data.GetPost(id);
-		}
+	
 		#endregion
 	}
 }

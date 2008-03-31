@@ -1,6 +1,7 @@
 using System;
 
 using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Extensions.Filters;
 
 using Graffiti.Core;
 
@@ -58,10 +59,11 @@ namespace DnugLeipzig.Extensions.Tests
 		[Test]
 		public void SortsEventIndex()
 		{
-			_posts.SortForIndexView();
+			SortForIndexDescending sorter = new SortForIndexDescending("Datum");
+			System.Collections.Generic.List<Post> sorted = sorter.Execute(_posts);
 
-			CollectionAssert.AreCountEqual(_originalPosts, _posts);
-			CollectionAssert.AreEquivalent(_originalPosts, _posts);
+			CollectionAssert.AreCountEqual(_originalPosts, sorted);
+			CollectionAssert.AreEquivalent(_originalPosts, sorted);
 
 			// Assert that
 			// - posts without date come first,
@@ -71,7 +73,7 @@ namespace DnugLeipzig.Extensions.Tests
 			bool firstDatePostReached = false;
 			DateTime? lastDate = null;
 			Post lastPost = null;
-			foreach (Post post in _posts)
+			foreach (Post post in sorted)
 			{
 				DateTime date;
 				bool hasDate = DateTime.TryParse(post.CustomFields()["Datum"], out date);

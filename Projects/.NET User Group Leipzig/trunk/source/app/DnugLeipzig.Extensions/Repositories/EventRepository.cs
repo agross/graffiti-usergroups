@@ -7,26 +7,15 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Repositories
 {
-	public class EventRepository : IRepository<Post>
+	public class EventRepository : PostRepository
 	{
-		static readonly Data Data = new Data();
-		readonly string _categoryName;
-		PostCollection posts;
-
-		public EventRepository(string categoryName)
+		public EventRepository(string categoryName) : base(categoryName)
 		{
-			if (String.IsNullOrEmpty(categoryName))
-			{
-				throw new ArgumentOutOfRangeException("categoryName");
-			}
-
-			_categoryName = categoryName;
 		}
 
-		#region IRepository<Post> Members
-		public List<Post> Get(params IPostFilter[] filters)
+		public override List<Post> Get(IPostFilter[] filters)
 		{
-			posts = Data.PostsByCategory(_categoryName, int.MaxValue);
+			PostCollection posts = Data.PostsByCategory(_categoryName, int.MaxValue);
 
 			List<Post> result = posts;
 			foreach (IPostFilter filter in filters)
@@ -36,11 +25,5 @@ namespace DnugLeipzig.Extensions.Repositories
 
 			return result;
 		}
-
-		public Post Get(int id)
-		{
-			return Data.GetPost(id);
-		}
-		#endregion
 	}
 }

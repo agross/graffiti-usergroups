@@ -5,11 +5,11 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Filters
 {
-	internal abstract class ByDateFilter : IPostFilter
+	internal abstract class ByDate : IPostFilter
 	{
 		protected string _dateFieldName;
 
-		protected ByDateFilter(string dateFieldName)
+		protected ByDate(string dateFieldName)
 		{
 			if (String.IsNullOrEmpty(dateFieldName))
 			{

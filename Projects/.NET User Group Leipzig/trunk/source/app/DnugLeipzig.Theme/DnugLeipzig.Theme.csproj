@@ -25,7 +25,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="css\base.css" />
-    <Content Include="css\base_ie.css" />
+    <Content Include="css\hacks\IE.css" />
     <Content Include="css\graffiti.css" />
     <Content Include="images\bg.gif" />
     <Content Include="images\comments.gif" />
@@ -44,6 +44,7 @@
     <Content Include="preview.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\events\upcoming-events.html" />
     <Content Include="components\events\event.post.html" />
     <Content Include="components\no-data.html" />
     <Content Include="components\events\event.html" />
@@ -58,12 +59,14 @@
     <Content Include="components\site-menu.html" />
     <Content Include="components\site-footer.html" />
     <Content Include="components\talks\current-talks.html" />
+    <Content Include="components\talks\recent-talks.html" />
     <Content Include="components\talks\talk.html" />
     <Content Include="components\talks\past-talks.html" />
     <Content Include="components\talks\talks-for-year.html" />
     <Content Include="contact.html" />
     <Content Include="components\site-header.html" />
     <Content Include="components\post-footer.html" />
+    <Content Include="home.layout.html" />
     <Content Include="css\first-menu-item-selected.css" />
     <Content Include="images\badge-beta.png" />
     <Content Include="images\header-background.png" />

@@ -40,7 +40,7 @@ namespace DnugLeipzig.Extensions
 			YearQueryStringParameter =
 				ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:YearQueryStringParameterName", "year");
 		}
-		
+
 		public UserGroupEvents() : this(null)
 		{
 		}
@@ -53,6 +53,23 @@ namespace DnugLeipzig.Extensions
 			}
 
 			Repository = repository;
+		}
+
+		public string GetFeedUrl()
+		{
+			Category c = Repository.GetCategory();
+			if (!String.IsNullOrEmpty(c.FeedUrlOverride))
+			{
+				return c.FeedUrlOverride;
+			}
+
+			return String.Format("{0}feed/", c.Url);
+		}
+
+		public string GetCategoryLink()
+		{
+			Category c = Repository.GetCategory();
+			return c.Url;
 		}
 
 		public string Date(Post post, string prefix, string suffix)
@@ -87,21 +104,27 @@ namespace DnugLeipzig.Extensions
 
 		public List<Post> GetForFuture()
 		{
-			List<Post> posts = Repository.Get(new IsInFutureFilter(DateFieldName));
-			posts.SortForIndexView();
-			return posts;
+			return Repository.Get(new IsInFuture(DateFieldName), new SortForIndexDescending(DateFieldName));
+		}
+
+		public List<Post> GetUpcoming(int numberOfEvents)
+		{
+			return Repository.Get(new HasDate(DateFieldName),
+			                      new IsInFuture(DateFieldName),
+			                      new SortForIndexAscending(DateFieldName),
+			                      new LimitTo(numberOfEvents));
 		}
 
 		public List<Post> GetForYear(int year)
 		{
-			List<Post> posts = Repository.Get(new IsInYearFilter(DateFieldName, new DateTime(year, 1, 1)), new IsInPastFilter(DateFieldName));
-			posts.SortForIndexView();
-			return posts;
+			return Repository.Get(new IsInYear(DateFieldName, new DateTime(year, 1, 1)),
+			                      new IsInPast(DateFieldName),
+			                      new SortForIndexDescending(DateFieldName));
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IList<Post> posts = Repository.Get(new IsInPastFilter(DateFieldName));
+			IList<Post> posts = Repository.Get(new IsInPast(DateFieldName));
 
 			IEnumerable<PastPostInfo> pastEvents = from post in posts
 			                                       group post by post.Custom(DateFieldName).AsEventDate().Year

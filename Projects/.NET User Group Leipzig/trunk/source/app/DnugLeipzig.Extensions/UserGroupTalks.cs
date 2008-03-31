@@ -45,25 +45,38 @@ namespace DnugLeipzig.Extensions
 			Repository = repository;
 		}
 
-		public List<Post> GetForYear(int year)
+		public string GetFeedUrl()
 		{
-			List<Post> posts = Repository.Get(new IsInYearFilter(DateFieldName, new DateTime(year, 1, 1)));
-			posts.SortForIndexView();
+			Category c = Repository.GetCategory();
+			if (!String.IsNullOrEmpty(c.FeedUrlOverride))
+			{
+				return c.FeedUrlOverride;
+			}
 
-			return posts;
+			return String.Format("{0}feed/", c.Url);
 		}
 
-		public List<Post> GetCurrent()
+		public List<Post> GetForYear(int year)
 		{
-			List<Post> posts = Repository.Get(new IsInYearFilter(DateFieldName, DateTime.Now));
-			posts.SortForIndexView();
+			return Repository.Get(new IsInYear(DateFieldName, new DateTime(year, 1, 1)), new SortForIndexDescending(DateFieldName));
+		}
 
-			return posts;
+		public List<Post> GetForCurrentYear()
+		{
+			return GetForYear(DateTime.Now.Year);
+		}
+
+		public List<Post> GetRecent(int numberOfTalks)
+		{
+			return Repository.Get(new HasDate(DateFieldName),
+								  new IsInPast(DateFieldName),
+								  new SortForIndexDescending(DateFieldName),
+								  new LimitTo(numberOfTalks));
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IList<Post> posts = Repository.Get(new IsInPastYearFilter(DateFieldName));
+			IList<Post> posts = Repository.Get(new IsInPastYear(DateFieldName));
 
 			IEnumerable<PastPostInfo> pastTalks = from post in posts
 			                                      group post by post.Custom(DateFieldName).AsEventDate().Year

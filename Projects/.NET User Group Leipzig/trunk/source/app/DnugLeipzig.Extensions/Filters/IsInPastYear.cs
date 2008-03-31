@@ -8,20 +8,18 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Filters
 {
-	internal class IsInYearFilter : ByDateFilter
+	internal class IsInPastYear : ByDate
 	{
-		DateTime _year;
-
-		public IsInYearFilter(string dateFieldName, DateTime year) : base(dateFieldName)
+		public IsInPastYear(string dateFieldName) : base(dateFieldName)
 		{
-			_year = year;
 		}
 
 		#region IPostFilter Members
 		public override List<Post> Execute(List<Post> posts)
 		{
 			return (from post in posts
-			       where post.Custom(_dateFieldName).AsEventDate().Year == _year.Year
+			       where
+			       	post.Custom(_dateFieldName).AsEventDate().Year < DateTime.Now.Year
 			       select post).ToList();
 		}
 		#endregion

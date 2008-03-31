@@ -1,4 +1,9 @@
-﻿/* clearfix */
+﻿.teaser .bottom .right {
+	float:right;
+	left:0;
+}
+
+/* clearfix */
 .clearfix {
   zoom: 1;
 }
