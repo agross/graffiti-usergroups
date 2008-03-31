@@ -1,0 +1,35 @@
+﻿<div class="teaser orange">
+	<div class="top">
+		<div class="left"></div>
+		<div class="right"></div>
+	</div>
+	<div class="content upcoming-events">
+		<h1 class="archive-head">
+			Nächste Veranstaltungen
+			<a href="$ugEvents.GetFeedUrl()" title="RSS-Feed für Veranstaltungen abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
+			<a href="http://team.dotnet-leipzig.de/calendars/Kalender_von_DNUG.ics" title="Veranstaltungskalender abonnieren"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Veranstaltungskalender" /></a>
+		</h1>
+
+		#set($futureEvents = $ugEvents.GetUpcoming(3))
+
+		#foreach($event in $futureEvents)
+		#beforeall
+			<ol>
+		#each
+			<li>
+				<a href="$event.Url" rel="bookmark" title="$ugEvents.Title($event, ' am ', ', Sprecher: ')">
+					$ugEvents.Date($event, "", ":") $event.Title
+				</a>
+			</li>
+		#afterall
+			</ol>
+			<a href="$ugEvents.GetCategoryLink()" class="more" rel="bookmark">Mehr Veranstaltungen anzeigen &raquo;</a>
+		#nodata
+			$macros.LoadThemeView("components/no-data.view")
+		#end
+	</div>
+	<div class="bottom">
+		<div class="left"></div>
+		<div class="right"></div>
+	</div>
+</div>		
