@@ -1,0 +1,11 @@
+﻿<div class="article">
+	<h2 class="title">
+		<a href="$event.Url" rel="bookmark" title="$ugEvents.Title($event, ' am ', ', Sprecher: ')">
+			$ugEvents.Date($event, "", ":") $event.Title
+		</a>
+	</h2>
+	<div class="body">
+		$event.Excerpt("", "", '<span class="more">Vollständigen Artikel lesen &raquo;</span>', 300)
+	</div>
+	$macros.LoadThemeView("components/post-footer.view")
+</div>

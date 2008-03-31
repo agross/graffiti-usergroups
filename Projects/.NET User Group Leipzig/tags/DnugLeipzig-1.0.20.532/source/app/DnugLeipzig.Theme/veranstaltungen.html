@@ -1,0 +1,10 @@
+﻿##
+## Veranstaltungen.view - Used to render the event index. It overrides index.view. 
+##
+
+#if (!$macros.IsNull($ugEvents.GetViewYear()))
+	$macros.LoadThemeView("components/events/events-for-year.view")
+#else
+	$macros.LoadThemeView("components/events/future-events.view")
+	$macros.LoadThemeView("components/events/past-events.view")
+#end

@@ -1,0 +1,364 @@
+﻿<?xml version="1.0"?>
+<project name="DNUG"
+		 default="all"
+		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- Load default configuration. -->
+	<if test="${file::exists('default.properties')}">
+		<echo message="Loading default.properties" />
+		<include buildfile="default.properties" />
+	</if>
+
+	<!-- Load developer-specific configuration. -->
+	<if test="${file::exists('local.properties')}">
+		<echo message="Loading local.properties" />
+		<include buildfile="local.properties" />
+	</if>
+
+	<echo message="Build configuration:" />
+	<script language="C#">
+		<code>
+			<![CDATA[
+				public static void ScriptMain(Project project)
+				{
+					System.Collections.Generic.SortedDictionary<string, string> sortedByKey = new System.Collections.Generic.SortedDictionary<string, string>();
+					foreach(DictionaryEntry de in project.Properties)
+					{
+						sortedByKey.Add(de.Key.ToString(), de.Value.ToString());
+					}
+
+					NAnt.Core.Tasks.EchoTask echo = new NAnt.Core.Tasks.EchoTask();
+					echo.Project = project;
+					foreach(System.Collections.Generic.KeyValuePair<string, string> kvp in sortedByKey)
+					{
+						if(kvp.Key.StartsWith("nant."))
+						{
+							continue;
+						}
+
+						echo.Message = String.Format("{0}: {1}", kvp.Key, kvp.Value);
+						echo.Execute();
+					}
+				}
+			]]>
+		</code>
+	</script>
+
+	<target name="all"
+			depends="build-app, build-theme, run-tests, build-setup"
+			description="Compiles the application, runs all unit tests and creates deployment packages.">
+	</target>
+
+	<target name="clean"
+			description="Removes build artifacts.">
+		<delete dir="${test.results}"
+				failonerror="false" />
+		<delete dir="${basedir.deployment.artifacts}"
+				failonerror="false" />
+		<foreach item="Folder"
+				 property="folder">
+			<in>
+				<items>
+					<include name="${basedir.app}\**" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${folder}\deploy"
+						failonerror="false" />
+				<delete dir="${folder}\bin"
+						failonerror="false" />
+				<delete dir="${folder}\obj"
+						failonerror="false" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="get-build-number-from-file"
+			description="Reads the version number from VersionInfo.cs.">
+		<script language="C#">
+			<code>
+				<![CDATA[
+				public static void ScriptMain(Project project)
+				{
+					string file = String.Empty;
+					using (StreamReader sr = new StreamReader(Path.Combine(project.Properties["build.msbuild.solutiondir"], "VersionInfo.cs")))
+					{
+						file = sr.ReadToEnd();
+					}
+
+					project.Properties["build.number.fromfile"] = Regex.Match(file, "(?<=\\[assembly:\\s*AssemblyVersion(?:Attribute)?\\(\")\\d\\.\\d\\.\\d\\.\\d").Value;
+				}
+				]]>
+			</code>
+		</script>
+	</target>
+
+	<target name="drop-database"
+			description="Drops the database.">
+		<echo message="Dropping database ${database.name}"/>
+		<updateSqlDatabase action="Drop"
+						   database="${database.name}"
+						   server="${database.server}"
+						   integratedAuthentication="${database.auth.integrated}"
+						   username="${database.auth.username}"
+						   password="${database.auth.password}"
+						   failonerror="false" />
+	</target>
+
+	<target name="create-database"
+			depends="drop-database"
+			description="Creates the database baseline.">
+		<echo message="Creating database ${database.name}"/>
+		<updateSqlDatabase action="Create"
+						   scriptDirectory="${basedir.database}"
+						   database="${database.name}"
+						   server="${database.server}"
+						   integratedAuthentication="${database.auth.integrated}"
+						   username="${database.auth.username}"
+						   password="${database.auth.password}" />
+		<echo message="Current database version: ${usdDatabaseVersion}" />
+	</target>
+
+	<target name="update-database"
+			description="Updates the database.">
+		<echo message="Updating database ${database.name}"/>
+		<updateSqlDatabase action="Update"
+						   scriptDirectory="${basedir.database}"
+						   database="${database.name}"
+						   server="${database.server}"
+						   integratedAuthentication="${database.auth.integrated}"
+						   username="${database.auth.username}"
+						   password="${database.auth.password}" />
+		<echo message="Current database version: ${usdDatabaseVersion}" />
+	</target>
+
+	<target name="import-testdata"
+			depends="create-database, update-database"
+			description="Imports default test data.">
+		<echo message="Importing test data"/>
+		<foreach item="File"
+				 property="sqlfile">
+			<in>
+				<items>
+					<include name="${basedir.database}\Test Data\*.sql" />
+				</items>
+			</in>
+			<do>
+				<echo message="${sqlfile}" />
+				<sql connstring="${database.connectionstring.oledb}"
+					 transaction="true"
+					 delimiter="GO"
+					 delimstyle="Line"
+					 print="true"
+					 source="${sqlfile}"
+					 batch="false" />
+			</do>
+		</foreach>
+	</target>
+
+	<target name="export-testdata"
+			depends="update-database"
+			description="Exports test data to a file.">
+		<echo message="Exporting test data"/>
+		<exec basedir="${tools.sqlpub}"
+			  managed="true"
+			  program="SqlPubWiz.exe">
+			<arg value="script" />
+			<arg line='-C "${database.connectionstring}"' />
+			<arg value="${basedir.database}\Test Data\Test Data.sql" />
+			<arg value="-f" />
+			<arg value="-dataonly" />
+		</exec>
+	</target>
+
+	<target name="init-build-app"
+			depends="clean"
+			description="Creates VersionInfo.cs from the value specified at the command line or leaves the file as-is.">
+		<asminfo language="CSharp"
+				 output="source\VersionInfo.cs"
+				 if="${version::parse(build.number) != version::parse(build.number.fromfile)}">
+			<imports>
+				<import namespace="System" />
+				<import namespace="System.Reflection" />
+			</imports>
+			<attributes>
+				<attribute type="AssemblyFileVersionAttribute"
+						   value="${build.number}" />
+				<attribute type="AssemblyVersionAttribute"
+						   value="${build.number}" />
+			</attributes>
+		</asminfo>
+	</target>
+
+	<fileset id="config-files">
+		<include name="${basedir.test}\DnugLeipzig.Extensions.Tests\App.config.template" />
+	</fileset>
+
+	<target name="create-config"
+			description="Creates the configuration files for the application.">
+		<foreach item="File"
+				 property="configfile">
+			<in>
+				<items refid="config-files" />
+			</in>
+			<do>
+				<copy file="${configfile}"
+					  tofile="${path::change-extension(configfile, '')}"
+					  overwrite="true"
+					  inputencoding="utf-8"
+					  outputencoding="utf-8">
+					<filterchain>
+						<replacetokens>
+							<token key="database.connectionstring"
+								   value="${string::replace(database.connectionstring, '\', '\\')}" />
+							<token key="project.name"
+								   value="${project::get-name()}" />
+						</replacetokens>
+					</filterchain>
+				</copy>
+			</do>
+		</foreach>
+	</target>
+
+	<target name="build-app"
+			depends="init-build-app"
+			description="Compiles the application.">
+		<msbuild project="${basedir.app}\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj"
+				 target="${build.msbuild.target}"
+				 verbosity="${build.msbuild.verbosity}">
+			<arg value="/p:Configuration=${build.msbuild.configuration}" />
+			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+			<arg value="/p:NAntCall=true" />
+		</msbuild>
+	</target>
+
+	<target name="init-build-theme"
+			depends="clean"
+			description="Builds the theme.">
+		<delete dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
+				failonerror="false" />
+		<mkdir dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}" />
+	</target>
+
+	<target name="build-theme"
+			depends="init-build-theme"
+			description="Builds the theme.">
+		<!-- Copy content files. -->
+		<copy todir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
+			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
+				<include name="**\*.css" />
+				<include name="**\*.js" />
+				<include name="**\*.ico" />
+				<include name="**\*.png" />
+				<include name="**\*.gif" />
+				<include name="**\*.html" />
+			</fileset>
+		</copy>
+
+		<!-- Rename *.html to *.view. -->
+		<foreach item="File"
+				 property="filename">
+			<in>
+				<items basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
+					<include name="**\*.html" />
+				</items>
+			</in>
+			<do>
+				<move file="${filename}"
+					  tofile="${path::change-extension(filename, '.view')}" />
+			</do>
+		</foreach>
+	</target>
+
+	<fileset id="test-projects">
+		<patternset>
+			<include name="${basedir.test}\**\*.Tests.csproj" />
+		</patternset>
+	</fileset>
+
+	<target name="build-tests"
+			depends="build-app"
+			description="Compiles the applications' unit tests.">
+		<foreach item="File"
+				 property="testproject">
+			<in>
+				<items refid="test-projects" />
+			</in>
+			<do>
+				<msbuild project="${testproject}"
+						 target="${build.msbuild.target}"
+						 verbosity="${build.msbuild.verbosity}">
+					<arg value="/p:Configuration=${build.msbuild.configuration}" />
+					<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+					<arg value="/p:NAntCall=true" />
+				</msbuild>
+			</do>
+		</foreach>
+	</target>
+
+	<target name="init-run-tests"
+			depends="import-testdata, create-config">
+		<mkdir dir="${test.results}" />
+	</target>
+
+	<target name="run-tests"
+			depends="init-run-tests, build-tests"
+			description="Runs the applications' unit tests.">
+		<foreach item="File"
+				 property="testproject">
+			<in>
+				<items refid="test-projects" />
+			</in>
+			<do>
+				<echo message="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"/>
+				<exec basedir="${tools.mbunit}"
+					  workingdir="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"
+					  managed="true"
+					  program="MbUnit.Cons.exe">
+					<arg value="${path::get-file-name-without-extension(testproject)}.dll" />
+					<arg value="/report-type:Html" />
+					<arg value="/verbose+" />
+					<arg value="/report-folder:${test.results}" />
+					<arg value="/report-name-format:${path::get-file-name-without-extension(testproject)}" />
+				</exec>
+			</do>
+		</foreach>
+	</target>
+
+	<target name="init-build-setup"
+			depends="clean">
+		<mkdir dir="${basedir.deployment.artifacts}" />
+	</target>
+
+	<target name="build-setup"
+			depends="init-build-setup, build-app, build-theme, run-tests"
+			description="Creates the applications' deployment package.">
+		<zip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
+			 ziplevel="9">
+			<!-- Theme. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
+					 prefix="files\themes\${project::get-name()}">
+				<include name="**\*" />
+			</fileset>
+			<!-- Extensions. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
+					 prefix="bin">
+				<include name="DnugLeipzig.Extensions.*" />
+			</fileset>
+		</zip>
+	</target>
+
+	<target name="init-deploy">
+		<mkdir dir="${basedir.deployment.targetpath}" />
+	</target>
+
+	<target name="deploy"
+			depends="init-deploy, build-setup"
+			description="Deploys the application.">
+		<fail message="Cannot deploy, property basedir.deployment.targetpath does not exist or is empty. Enter it in your local.properties file."
+			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
+
+		<unzip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
+			   todir="${basedir.deployment.targetpath}"/>
+	</target>
+</project>
