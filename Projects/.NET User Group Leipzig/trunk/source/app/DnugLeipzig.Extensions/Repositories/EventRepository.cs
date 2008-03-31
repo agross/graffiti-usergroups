@@ -15,7 +15,7 @@ namespace DnugLeipzig.Extensions.Repositories
 
 		public override List<Post> Get(IPostFilter[] filters)
 		{
-			PostCollection posts = Data.PostsByCategory(_categoryName, int.MaxValue);
+			PostCollection posts = PostsByCategoryDisableHomepageOverride(int.MaxValue);
 
 			List<Post> result = posts;
 			foreach (IPostFilter filter in filters)

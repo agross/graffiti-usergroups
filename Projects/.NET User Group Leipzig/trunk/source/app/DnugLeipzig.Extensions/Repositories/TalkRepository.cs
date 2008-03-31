@@ -24,7 +24,7 @@ namespace DnugLeipzig.Extensions.Repositories
 		#region IRepository<Post> Members
 		public override List<Post> Get(IPostFilter[] filters)
 		{
-			PostCollection posts = Data.PostsByCategory(_categoryName, int.MaxValue);
+			PostCollection posts = PostsByCategoryDisableHomepageOverride(int.MaxValue);
 
 			// Pre-filter dates.
 			var hasDate = new HasDate(_dateFieldName);

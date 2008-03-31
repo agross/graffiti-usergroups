@@ -31,8 +31,6 @@
     <Content Include="images\comments.gif" />
     <Content Include="images\content-top-background.gif" />
     <Content Include="images\feed.gif" />
-    <Content Include="images\fixed.gif" />
-    <Content Include="images\fluid.gif" />
     <Content Include="images\footer-background.gif" />
     <Content Include="images\header-background.gif" />
     <Content Include="images\left_background.gif" />
@@ -79,6 +77,14 @@
     <Content Include="images\menu-corner-right-active.png" />
     <Content Include="images\menu-corner-right-inactive.png" />
     <Content Include="images\menu-divider.png" />
+    <Content Include="images\teaser-orange-bottom-left.png" />
+    <Content Include="images\teaser-orange-bottom-right.png" />
+    <Content Include="images\teaser-orange-bottom.png" />
+    <Content Include="images\teaser-orange-left.png" />
+    <Content Include="images\teaser-orange-right.png" />
+    <Content Include="images\teaser-orange-top-left.png" />
+    <Content Include="images\teaser-orange-top-right.png" />
+    <Content Include="images\teaser-orange-top.png" />
     <Content Include="vortraege.html" />
     <Content Include="veranstaltungen.post.html" />
     <Content Include="veranstaltungen.html" />
