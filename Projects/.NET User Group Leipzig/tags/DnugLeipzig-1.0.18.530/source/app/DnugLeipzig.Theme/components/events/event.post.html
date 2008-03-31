@@ -1,0 +1,26 @@
+﻿<div class="article">
+	<h2 class="title">
+		<a href="$post.Url" rel="bookmark" title="$post.Title">$post.Title</a>
+	</h2>
+	<p class="meta">	
+		erstellt von $post.User.ProperName am $macros.FormattedDate($post.Published)</p>
+	<div class="body">
+		#foreach ($info in $ugEvents.GetEventInfo($post))
+		#beforeall
+			<ul class="event-info">
+		#each
+			<li>
+				<strong>$info.Key:</strong>
+				$info.Value
+			</li>
+		#afterall
+			<li>
+				<strong>Kalendereintrag:</strong>
+				<a href="/Calendar.ashx?eventId=$post.ID">hier</a>
+			</li>
+			</ul>
+		#end
+		$post.Body
+	</div>
+	$macros.LoadThemeView("components/post-footer.view")
+</div>

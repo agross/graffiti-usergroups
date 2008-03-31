@@ -1,0 +1,14 @@
+﻿<div id="navigation">
+	<h2>Hauptmenü</h2>
+	<div class="top"></div>
+	<ul id="menu">
+		$macros.NavBar()
+		<li class="rss">
+			<a href="$urls.Rss">
+				<img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" title="RSS-Feed abonnieren" />
+			</a>
+		</li>
+	</ul>
+	<div class="bottom"></div>
+</div>
+<div id="menu-bottom" #if ($ui.IsNavigationLinkSelected) class="active" #end></div>

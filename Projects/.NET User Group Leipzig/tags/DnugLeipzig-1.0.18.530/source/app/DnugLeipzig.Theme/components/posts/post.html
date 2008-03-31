@@ -1,0 +1,11 @@
+﻿<div class="article">
+	<h2 class="title">
+		<a href="$post.Url" rel="bookmark">
+			$post.Title
+		</a>
+	</h2>
+	<div class="body">
+		$post.Excerpt("", "", '<p class="more">Vollständigen Artikel lesen &raquo;</p>', 300)
+	</div>
+	$macros.LoadThemeView("components/post-footer.view")
+</div>
