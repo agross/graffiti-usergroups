@@ -29,7 +29,6 @@ a img {
 body {
 	background: #E3E3E3 url(../images/bg.gif) repeat-x;
 	color: #1B1B1B;
-	font: normal 76%;
 	font-family: "Segoe UI" , "Lucida Grande" , "Lucida Sans Unicode" , "Lucida Sans" , "Trebuchet MS" , Tahoma, Verdana, sans-serif;
 }
 
@@ -93,7 +92,7 @@ html {
 	height: 100.01%;
 }
 
-#wrapper {
+.wrapper {
 	position: relative;
 	width: 980px;
 	margin: 0 auto;

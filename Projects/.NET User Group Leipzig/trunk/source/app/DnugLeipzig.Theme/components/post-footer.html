@@ -1,5 +1,6 @@
 ﻿<div class="footer">
 	<ul>
+		<li>erstellt von $post.User.ProperName am $macros.FormattedDate($post.Published)</li>
 		<li>$ui.CategoryLink($post.Category, "Kategorie: ")</li>
 		<li>$ui.TagList($post.TagList, "Tags: ")</li>
 		<li>$ui.CommentUrl($post, "%{ anchor = 'comments' }")</li>

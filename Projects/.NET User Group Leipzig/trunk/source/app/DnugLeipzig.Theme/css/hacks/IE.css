@@ -21,7 +21,7 @@
 
 
 /* random ie stupidity. i'm SO about to * { zoom: 1; } */
-#wrapper {
+.wrapper {
   zoom: 1;
 }
 #sidebar * {
