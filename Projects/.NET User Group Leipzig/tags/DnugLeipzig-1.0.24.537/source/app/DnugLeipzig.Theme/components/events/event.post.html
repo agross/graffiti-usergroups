@@ -1,0 +1,45 @@
+﻿<div class="article">
+	<h2 class="title">
+		<a href="$post.Url" rel="bookmark" title="$post.Title">$post.Title</a>
+	</h2>
+	<div class="teaser gray">
+		<div class="top">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+		<div class="content upcoming-events">
+			<ul class="event-info">
+				<li>
+					<strong>Beginn:</strong>
+					$ugEvents.GetBeginDate($post)
+				</li>
+				<li>
+					<strong>Ende:</strong>
+					$ugEvents.GetEndDate($post)
+				</li>
+				<li>
+					<strong>Ort:</strong>
+					$ugEvents.GetLocation($post)
+				</li>
+				<li>
+					<strong>Sprecher:</strong>
+					$ugEvents.GetSpeaker($post)
+				</li>
+				#if ($ugEvents.CanCreateCalendarItem($post))
+				<li>
+					<strong>Kalendereintrag:</strong>
+					<a href="/Calendar.ashx?eventId=$post.ID" title="Kalendereintrag herunterladen"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Kalendereintrag" /></a>
+				</li>
+				#end
+			</ul>
+		</div>
+		<div class="bottom">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+	</div>		
+	<div class="body">
+		$post.Body
+	</div>
+	$macros.LoadThemeView("components/post-footer.view")
+</div>
