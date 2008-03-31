@@ -1,7 +1,7 @@
 ﻿#if($where == "category")
 	<h1 class="archive-head">
 		Einträge in der Kategorie <em>$category.Name</em>
-		<a href="$urls.GetFeedUrl($category)" title="RSS-Feed für die Kategorie $category.Name abonnieren"><img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" /></a>
+		<a href="$urls.GetFeedUrl($category)" title="RSS-Feed für die Kategorie $category.Name abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
 	</h1>
 #elseif($where == "tag")
 	<h1 class="archive-head">

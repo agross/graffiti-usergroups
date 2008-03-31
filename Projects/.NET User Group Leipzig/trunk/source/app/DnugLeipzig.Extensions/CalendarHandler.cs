@@ -13,14 +13,16 @@ namespace DnugLeipzig.Extensions
 	public class CalendarHandler : IHttpHandler
 	{
 		static readonly string CategoryName;
-		static readonly string DateFieldName;
+		static readonly string BeginDateFieldName;
 		static string LocationFieldName;
 		readonly IRepository<Post> Repository;
+		static string EndDateFieldName;
 
 		static CalendarHandler()
 		{
 			CategoryName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Talks:CategoryName", "Vortr&#228;ge");
-			DateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Talks:DateFieldName", "Datum");
+			BeginDateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Talks:BeginDateFieldName", "Datum Anfang");
+			EndDateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Talks:EndDateFieldName", "Datum Anfang");
 			LocationFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:LocationFieldName", "Ort");
 		}
 
@@ -44,35 +46,40 @@ namespace DnugLeipzig.Extensions
 			int eventId;
 			if(!int.TryParse(context.Request.QueryString["eventId"], out eventId))
 			{
-				// TODO: Should we throw an exception?
+				HttpContext.Current.Response.StatusCode = 404;
+				HttpContext.Current.Response.End();
 				return;
 			}
 
-			Post @event = Repository.Get(eventId);
-
-			if (!@event.Custom(DateFieldName).IsDate())
+			Post post;
+			try
 			{
-				// No date for the event.
+				post = Repository.Get(eventId);
+			}
+			catch
+			{
+				HttpContext.Current.Response.StatusCode = 404;
+				HttpContext.Current.Response.End();
 				return;
 			}
 
-			ICalendarItem calendarItem = new ICalendarItem();
-			calendarItem.Location = @event.Custom(LocationFieldName);
-			calendarItem.StartDate = @event.Custom(DateFieldName).AsEventDate();
-			// HACK.
-			calendarItem.EndDate = @event.Custom(DateFieldName).AsEventDate().AddHours(3);
-			calendarItem.Subject = @event.Title;
-			calendarItem.Description = @event.Url;
-			calendarItem.LastModified = @event.Published;
-			
+			UserGroupEvents ugEvents = new UserGroupEvents();
 
-			string icalItem = calendarItem.ToString();
+			if (post == null || !ugEvents.CanCreateCalendarItem(post))
+			{
+				HttpContext.Current.Response.StatusCode = 404;
+				HttpContext.Current.Response.End();
+				return;
+			}
+
+			CalendarItem item = ugEvents.CreateCalendarItem(post);
+			string serializedItem = item.ToString();
 
 			context.Response.Clear();
-			context.Response.AppendHeader("Content-Disposition", "attachment; filename=Maintenance.vcs");
-			context.Response.AppendHeader("Content-Length", icalItem.Length.ToString());
-			context.Response.ContentType = "application/download";
-			context.Response.Write(icalItem);
+			context.Response.AppendHeader("Content-Disposition", String.Format("attachment; filename={0}.ics", HttpUtility.UrlPathEncode(HttpUtility.HtmlDecode(post.Title))));
+			context.Response.AppendHeader("Content-Length", serializedItem.Length.ToString());
+			context.Response.ContentType = "text/calendar";
+			context.Response.Write(serializedItem);
 			context.Response.End();
 		}
 

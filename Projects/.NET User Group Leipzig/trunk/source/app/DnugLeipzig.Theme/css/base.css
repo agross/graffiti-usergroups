@@ -57,6 +57,14 @@ a {
 	text-decoration: none;
 }
 
+a.more,
+span.more {
+	display: block;
+	margin-top: 0.5em;
+	margin-bottom: 0.2em;
+	font-size: 0.8em;
+	}
+
 a:hover {
 	text-decoration: underline;
 }
@@ -78,122 +86,6 @@ ul.list li {
 
 ol.list li {
 	list-style-type: decimal;
-}
-
-/* Teaser. */
-.teaser {
-	background: transparent none repeat-y scroll left top;
-	}
-
-.teaser .top,
-.teaser .bottom {
-	background: transparent none repeat-x scroll left top;
-	height: 10px;
-}
-
-.teaser .top {
-	position: relative;
-}
-
-.teaser .left,
-.teaser .right {
-	width: 10px;
-	height: 10px;
-	background-repeat: no-repeat;
-}
-
-.teaser .top .left,
-.teaser .top .right {
-	position: absolute;
-	top: 0;
-}
-
-.teaser .right {
-	left: 100%;
-	margin-left: -10px;
-}
-
-.teaser .top .right {
-	background-position: right top;
-}
-
-.teaser .bottom,
-.teaser .bottom .left,
-.teaser .bottom .right {
-	height: 60px;
-}
-
-.teaser .bottom .left {
-	float: left;
-}
-
-.teaser .bottom .right {
-	background-position: right bottom;
-	position: relative;
-}
-
-.teaser .content {
-	background-repeat: repeat-y;
-	background-position: right top;
-	margin-bottom: -60px;
-	position: relative;
-}
-
-/* Orange teaser. */
-.teaser.orange {
-	background-color: #FBE2A4;
-	background-image: url(../images/teaser-orange-left.png);
-}
-
-.teaser.orange .top {
-	background-image: url(../images/teaser-orange-top.png);
-}
-
-.teaser.orange .top .left {
-	background-image: url(../images/teaser-orange-top-left.png);
-}
-
-.teaser.orange .top .right {
-	background-image: url(../images/teaser-orange-top-right.png);
-}
-
-.teaser.orange .content {
-	background-image: url(../images/teaser-orange-right.png);
-}
-
-.teaser.orange .bottom {
-	background-image: url(../images/teaser-orange-bottom.png);
-}
-
-.teaser.orange .bottom .left {
-	background-image: url(../images/teaser-orange-bottom-left.png);
-}
-
-.teaser.orange .bottom .right {
-	background-image: url(../images/teaser-orange-bottom-right.png);
-}
-
-/* Teaser content. */
-.teaser .content {
-	padding: 0 0.5em 0.5em 0.5em;
-}
-
-.teaser .content h1 {
-	font-size: 1.2em;
-	font-weight: bold;
-}
-
-.teaser .content h3 {
-	font-size: 1em;
-}
-
-.teaser .content li a {
-	color: #000;
-}
-
-.teaser .content a {
-	font-weight: normal;
-	color: #FFF;
 }
 
 /* Layout. */
@@ -399,8 +291,11 @@ html {
 	color: #EAEAEA;
 }
 
-/* Related posts. */
+#footer .logo {
+	float: right;
+}
 
+/* Related posts. */
 #similar-posts h3, #comments h3, #comment-form h3 {
 	margin-top: 2em;
 	margin-bottom: 1em;
@@ -409,7 +304,7 @@ html {
 	font-weight: normal;
 }
 
-/* article styles */
+/* Article. */
 .article {
 	margin-bottom: 20px;
 }

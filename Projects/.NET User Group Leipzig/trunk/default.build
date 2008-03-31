@@ -2,7 +2,7 @@
 <project name="DNUG"
 		 default="all"
 		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
-	
+
 	<!-- Load default configuration. -->
 	<if test="${file::exists('default.properties')}">
 		<echo message="Loading default.properties" />
@@ -228,7 +228,7 @@
 				 verbosity="${build.msbuild.verbosity}">
 			<arg value="/p:Configuration=${build.msbuild.configuration}" />
 			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
-			<arg value="/p:NantCall=true" />
+			<arg value="/p:NAntCall=true" />
 		</msbuild>
 	</target>
 
@@ -285,13 +285,12 @@
 				<items refid="test-projects" />
 			</in>
 			<do>
-				<!--verbosity="${build.msbuild.verbosity}"-->
 				<msbuild project="${testproject}"
 						 target="${build.msbuild.target}"
 						 verbosity="${build.msbuild.verbosity}">
 					<arg value="/p:Configuration=${build.msbuild.configuration}" />
 					<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
-					<arg value="/p:NantCall=true" />
+					<arg value="/p:NAntCall=true" />
 				</msbuild>
 			</do>
 		</foreach>

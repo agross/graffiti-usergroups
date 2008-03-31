@@ -4,6 +4,7 @@
 		<title>$title</title>
 		$macros.Favicon($macros.ThemeFile('/images/favicon.ico'))
 		$macros.Style("css/base.css", "screen")
+		$macros.Style("css/teaser.css", "screen")
 		$macros.Style("css/graffiti.css", "screen")
 		<!--[if IE]>
 			$macros.Style("css/hacks/IE.css", "screen")
@@ -31,30 +32,8 @@
 					<div id="content">
 						<div id="inner-wrapper">
 							$childContent
-							<div class="teaser orange">
-								<div class="top">
-									<div class="left"></div>
-									<div class="right"></div>
-								</div>
-								<div class="content upcoming-events">
-									$macros.LoadThemeView("components/events/upcoming-events.view")
-								</div>
-								<div class="bottom">
-									<div class="left"></div>
-									<div class="right"></div>
-									<!--<span class="right" style="display:block"></span>-->
-								</div>
-							</div>
-							<!--<div class="teaser green">
-								<div class="top"></div>
-								<div class="content recent-talks">
-									##$macros.LoadThemeView("components/talks/recent-talks.view")
-								</div>
-								<div class="bottom">
-									<div class="left"></div>
-									<div class="right"></div>
-								</div>
-							</div>-->
+							$macros.LoadThemeView("components/events/upcoming-events.view")
+							$macros.LoadThemeView("components/talks/recent-talks.view")
 						</div>
 					</div>
 					<div id="sidebar">

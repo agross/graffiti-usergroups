@@ -60,7 +60,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="CalendarHandler.cs" />
-    <Compile Include="DataObjects\ICalendarItem.cs" />
+    <Compile Include="DataObjects\CalendarItem.cs" />
     <Compile Include="Filters\ByDate.cs" />
     <Compile Include="Filters\SortForIndexAscending.cs" />
     <Compile Include="Filters\SortForIndexDescending.cs" />

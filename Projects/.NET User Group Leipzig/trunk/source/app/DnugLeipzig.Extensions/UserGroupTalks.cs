@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Web;
 
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
@@ -54,6 +55,42 @@ namespace DnugLeipzig.Extensions
 			}
 
 			return String.Format("{0}feed/", c.Url);
+		}
+
+		public string GetCategoryLink()
+		{
+			Category c = Repository.GetCategory();
+			return c.Url;
+		}
+
+		public string Date(Post post, string prefix, string suffix)
+		{
+			DateTime date;
+			if (!DateTime.TryParse(post.Custom(DateFieldName), out date))
+			{
+				return String.Empty;
+			}
+
+			return HttpUtility.HtmlEncode(String.Format("{0}{1}{2}", prefix, Macros.FormattedDate(date), suffix));
+		}
+
+		public string Speaker(Post post, string prefix, string suffix)
+		{
+			string speaker = post.Custom(SpeakerFieldName);
+			if (speaker == null || speaker.Trim().Length == 0)
+			{
+				return String.Empty;
+			}
+
+			return HttpUtility.HtmlEncode(String.Format("{0}{1}{2}", prefix, speaker, suffix));
+		}
+
+		public string Title(Post post, string datePrefix, string speakerPrefix)
+		{
+			return String.Format("{0}{1}{2}",
+								 post.Title,
+								 Date(post, datePrefix, String.Empty),
+								 Speaker(post, speakerPrefix, String.Empty));
 		}
 
 		public List<Post> GetForYear(int year)

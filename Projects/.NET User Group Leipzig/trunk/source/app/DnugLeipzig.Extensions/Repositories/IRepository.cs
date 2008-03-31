@@ -8,6 +8,11 @@ namespace DnugLeipzig.Extensions.Repositories
 {
 	public interface IRepository<T> where T : class
 	{
+		Data Data
+		{
+			get; 
+		}
+
 		List<T> Get(params IPostFilter[] filters);
 
 		T Get(int id);

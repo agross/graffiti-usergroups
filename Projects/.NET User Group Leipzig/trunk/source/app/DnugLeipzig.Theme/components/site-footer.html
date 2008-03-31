@@ -1,13 +1,14 @@
 ﻿<div id="footer">
-	#if (!$macros.IsNull($data.Site.Copyright))
-		<p>$data.Site.Copyright</p>
-	#end
+	<div class="logo">
+		$macros.Logo
+	</div>
 	<p>
-		Das Layout basiert auf <a href="http://evil.che.lu/">Cristi Balans</a> "Skittlish"-Design, welches von <a href="http://simpable.com/">
-			Scott Watermasysk</a> und <a href="http://therightstuff.de/">Alexander Groß</a> angepasst wurde.
+		#if (!$macros.IsNull($data.Site.Copyright))
+			$data.Site.Copyright,
+		#end
+		<a href="/informationen/impressum/">Impressum</a>
 	</p>
 	<p>
-		$macros.Logo
-		Powered by <a href="http://graffiticms.com/">GraffitiCMS</a>.
+		Das Design dieser Seite wurde von <a href="http://therightstuff.de/">Alexander Groß</a> erstellt.
 	</p>
 </div>

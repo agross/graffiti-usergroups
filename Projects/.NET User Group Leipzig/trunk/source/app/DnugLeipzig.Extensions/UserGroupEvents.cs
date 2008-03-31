@@ -17,8 +17,9 @@ namespace DnugLeipzig.Extensions
 	public class UserGroupEvents
 	{
 		static readonly string CategoryName;
-		static readonly string DateFieldName;
+		static readonly string BeginDateFieldName;
 		static readonly string DateFormat;
+		static readonly string ShortDateFormat;
 		static readonly string DefaultLocationText;
 		static readonly string LocationFieldName;
 		static readonly Macros Macros = new Macros();
@@ -26,17 +27,20 @@ namespace DnugLeipzig.Extensions
 		static readonly string UnknownText;
 		static readonly string YearQueryStringParameter;
 		readonly IRepository<Post> Repository;
+		static string EndDateFieldName;
 
 		static UserGroupEvents()
 		{
 			DefaultLocationText = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:DefaultLocationText",
 			                                                                    "Marschnerstraﬂe");
 			CategoryName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:CategoryName", "Veranstaltungen");
-			DateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:DateFieldName", "Datum");
+			BeginDateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:BeginDateFieldName", "Datum Anfang");
+			EndDateFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:EndDateFieldName", "Datum Ende");
 			LocationFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:LocationFieldName", "Ort");
 			SpeakerFieldName = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:SpeakerFieldName", "Sprecher");
 			UnknownText = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:UnknownText", "Noch nicht bekannt");
-			DateFormat = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:DateFormat", "{0:D}, Beginn: {0:t} Uhr");
+			DateFormat = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:DateFormat", "{0:D}, {0:t} Uhr");
+			ShortDateFormat = ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:ShortDateFormat", "{0:t} Uhr");
 			YearQueryStringParameter =
 				ConfigurationManager.AppSettings.GetOrDefault("UserGroup:Events:YearQueryStringParameterName", "year");
 		}
@@ -75,7 +79,7 @@ namespace DnugLeipzig.Extensions
 		public string Date(Post post, string prefix, string suffix)
 		{
 			DateTime date;
-			if (!DateTime.TryParse(post.Custom(DateFieldName), out date))
+			if (!DateTime.TryParse(post.Custom(BeginDateFieldName), out date))
 			{
 				return String.Empty;
 			}
@@ -104,30 +108,30 @@ namespace DnugLeipzig.Extensions
 
 		public List<Post> GetForFuture()
 		{
-			return Repository.Get(new IsInFuture(DateFieldName), new SortForIndexDescending(DateFieldName));
+			return Repository.Get(new IsInFuture(BeginDateFieldName), new SortForIndexDescending(BeginDateFieldName));
 		}
 
 		public List<Post> GetUpcoming(int numberOfEvents)
 		{
-			return Repository.Get(new HasDate(DateFieldName),
-			                      new IsInFuture(DateFieldName),
-			                      new SortForIndexAscending(DateFieldName),
+			return Repository.Get(new HasDate(BeginDateFieldName),
+			                      new IsInFuture(BeginDateFieldName),
+			                      new SortForIndexAscending(BeginDateFieldName),
 			                      new LimitTo(numberOfEvents));
 		}
 
 		public List<Post> GetForYear(int year)
 		{
-			return Repository.Get(new IsInYear(DateFieldName, new DateTime(year, 1, 1)),
-			                      new IsInPast(DateFieldName),
-			                      new SortForIndexDescending(DateFieldName));
+			return Repository.Get(new IsInYear(BeginDateFieldName, new DateTime(year, 1, 1)),
+			                      new IsInPast(BeginDateFieldName),
+			                      new SortForIndexDescending(BeginDateFieldName));
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IList<Post> posts = Repository.Get(new IsInPast(DateFieldName));
+			IList<Post> posts = Repository.Get(new IsInPast(BeginDateFieldName));
 
 			IEnumerable<PastPostInfo> pastEvents = from post in posts
-			                                       group post by post.Custom(DateFieldName).AsEventDate().Year
+			                                       group post by post.Custom(BeginDateFieldName).AsEventDate().Year
 			                                       into years orderby years.Key descending
 			                                       	select
 			                                       	new PastPostInfo
@@ -139,19 +143,7 @@ namespace DnugLeipzig.Extensions
 			return new List<PastPostInfo>(pastEvents);
 		}
 
-		public IDictionary<string, string> GetEventInfo(Post post)
-		{
-			var result = new Dictionary<string, string>();
-
-			// Only add explicit properties.
-			result.Add(DateFieldName, GetEventDate(post));
-			result.Add(SpeakerFieldName, GetSpeaker(post));
-			result.Add(LocationFieldName, GetLocation(post));
-
-			return result;
-		}
-
-		static string GetLocation(Post post)
+		public string GetLocation(Post post)
 		{
 			string location = post.Custom(LocationFieldName);
 			if (String.IsNullOrEmpty(location))
@@ -161,7 +153,7 @@ namespace DnugLeipzig.Extensions
 			return location;
 		}
 
-		static string GetSpeaker(Post post)
+		public string GetSpeaker(Post post)
 		{
 			string speaker = post.Custom(SpeakerFieldName);
 			if (String.IsNullOrEmpty(speaker))
@@ -171,12 +163,36 @@ namespace DnugLeipzig.Extensions
 			return speaker;
 		}
 
-		static string GetEventDate(Post post)
+		public string GetBeginDate(Post post)
 		{
 			string eventDate;
-			if (post.Custom(DateFieldName).IsDate())
+			if (post.Custom(BeginDateFieldName).IsDate())
 			{
-				eventDate = String.Format(DateFormat, post.Custom(DateFieldName).AsEventDate());
+				eventDate = String.Format(DateFormat, post.Custom(BeginDateFieldName).AsEventDate());
+			}
+			else
+			{
+				eventDate = UnknownText;
+			}
+			return eventDate;
+		}
+
+		public string GetEndDate(Post post)
+		{
+			string eventDate;
+			if (post.Custom(EndDateFieldName).IsDate())
+			{
+				DateTime beginDate = post.Custom(BeginDateFieldName).AsEventDate();
+				DateTime endDate = post.Custom(EndDateFieldName).AsEventDate();
+
+				if (beginDate.Date == endDate.Date)
+				{
+					eventDate = String.Format(ShortDateFormat, endDate);
+				}
+				else
+				{
+					eventDate = String.Format(DateFormat, endDate);
+				}
 			}
 			else
 			{
@@ -188,6 +204,28 @@ namespace DnugLeipzig.Extensions
 		public int? GetViewYear()
 		{
 			return Util.GetViewYear(YearQueryStringParameter);
+		}
+
+		public bool CanCreateCalendarItem(Post post)
+		{
+			CalendarItem item = CreateCalendarItem(post);
+			return item.IsValid();
+		}
+
+		public CalendarItem CreateCalendarItem(Post post)
+		{
+			CalendarItem item = new CalendarItem
+			                    {
+			                    	StartDate = post.Custom(BeginDateFieldName).AsEventDate(),
+			                    	EndDate = post.Custom(EndDateFieldName).AsEventDate(),
+			                    	Location = post.Custom(LocationFieldName),
+			                    	Subject = post.Title,
+									Description = SiteSettings.BaseUrl + post.Url,
+			                    	LastModified = post.Published,
+			                    	Categories = Repository.Data.Site.Title
+			                    };
+
+			return item;
 		}
 	}
 }

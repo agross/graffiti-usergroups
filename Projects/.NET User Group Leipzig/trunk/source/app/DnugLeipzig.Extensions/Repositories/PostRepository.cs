@@ -37,6 +37,11 @@ namespace DnugLeipzig.Extensions.Repositories
 			return posts;
 		}
 
+		Data IRepository<Post>.Data
+		{
+			get { return Data; }
+		}
+
 		public abstract List<Post> Get(params IPostFilter[] filters);
 
 		public virtual Post Get(int id)
