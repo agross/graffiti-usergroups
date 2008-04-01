@@ -41,6 +41,7 @@
     <Content Include="preview.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\events\event-date.html" />
     <Content Include="components\events\upcoming-events.html" />
     <Content Include="components\events\event.post.html" />
     <Content Include="components\no-data.html" />
@@ -49,20 +50,23 @@
     <Content Include="components\events\future-events.html" />
     <Content Include="components\events\past-events.html" />
     <Content Include="components\posts\comments.html" />
+    <Content Include="components\talks\talk.post.html" />
+    <Content Include="components\talks\talk-date.html" />
     <Content Include="components\posts\post.post.html" />
     <Content Include="components\posts\post.html" />
     <Content Include="components\posts\new-comment.html" />
     <Content Include="components\posts\similar-posts.html" />
-    <Content Include="components\site-menu.html" />
-    <Content Include="components\site-footer.html" />
+    <Content Include="components\site\menu.html" />
+    <Content Include="components\site\footer.html" />
     <Content Include="components\talks\current-talks.html" />
     <Content Include="components\talks\recent-talks.html" />
     <Content Include="components\talks\talk.html" />
     <Content Include="components\talks\past-talks.html" />
     <Content Include="components\talks\talks-for-year.html" />
     <Content Include="contact.html" />
-    <Content Include="components\site-header.html" />
-    <Content Include="components\post-footer.html" />
+    <Content Include="components\site\header.html" />
+    <Content Include="components\posts\footer.html" />
+    <Content Include="vortraege.post.html" />
     <Content Include="css\teaser.css" />
     <Content Include="home.layout.html" />
     <Content Include="css\first-menu-item-selected.css" />

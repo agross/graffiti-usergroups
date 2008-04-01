@@ -1,0 +1,34 @@
+﻿<div class="article">
+	<h2 class="title">
+		$macros.LoadThemeView("components/talks/talk-date.view")
+		<a class="title #if ($ugTalks.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$ugTalks.Title($post, ' am ', ', Sprecher: ')">
+			$post.Title
+		</a>
+	</h2>
+	<div class="teaser gray">
+		<div class="top">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+		<div class="content upcoming-events">
+			<ul class="event-info">
+				<li>
+					<strong>Datum:</strong>
+					$ugTalks.Date($post, "", "")
+				</li>
+				<li>
+					<strong>Sprecher:</strong>
+					$ugTalks.Speaker($post, "", "")
+				</li>
+			</ul>
+		</div>
+		<div class="bottom">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+	</div>		
+	<div class="body">
+		$post.Body
+	</div>
+	$macros.LoadThemeView("components/posts/footer.view")
+</div>

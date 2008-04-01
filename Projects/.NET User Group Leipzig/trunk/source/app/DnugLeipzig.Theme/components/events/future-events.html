@@ -9,7 +9,7 @@
 
 #set($futureEvents = $ugEvents.GetForFuture())
 
-#foreach($event in $futureEvents)
+#foreach($post in $futureEvents)
 	$macros.LoadThemeView("components/events/event.view")
 #nodata
 	$macros.LoadThemeView("components/no-data.view")

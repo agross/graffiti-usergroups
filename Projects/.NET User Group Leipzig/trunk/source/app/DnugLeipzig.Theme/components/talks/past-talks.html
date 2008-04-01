@@ -4,11 +4,11 @@
 
 #set($pastTalks = $ugTalks.GetPastYearOverview())
 
-#foreach($talk in $pastTalks)
+#foreach($post in $pastTalks)
 #beforeall
 	<ul>
 #each
-	<li><a href="$talk.Url">$talk.Year</a></li>
+	<li><a href="$post.Url">$post.Year</a></li>
 #afterall
 	</ul>
 #nodata

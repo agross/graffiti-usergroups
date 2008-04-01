@@ -132,5 +132,26 @@ namespace DnugLeipzig.Extensions
 		{
 			return Util.GetViewYear(YearQueryStringParameter);
 		}
+
+		public bool IsInCurrentYear(Post post)
+		{
+			return post.Custom(DateFieldName).AsEventDate().Year == DateTime.Now.Year;
+		}
+
+		public bool HasDate(Post post)
+		{
+			return post.Custom(DateFieldName).IsDate();
+		}
+
+		public string Date(Post post, string format)
+		{
+			DateTime date;
+			if (!DateTime.TryParse(post.Custom(DateFieldName), out date))
+			{
+				return String.Empty;
+			}
+
+			return HttpUtility.HtmlEncode(date.ToString(format));
+		}
 	}
 }

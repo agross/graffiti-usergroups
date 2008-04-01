@@ -12,13 +12,13 @@
 
 		#set($futureEvents = $ugEvents.GetUpcoming(3))
 
-		#foreach($event in $futureEvents)
+		#foreach($post in $futureEvents)
 		#beforeall
 			<ol>
 		#each
 			<li>
-				<a href="$event.Url" rel="bookmark" title="$ugEvents.Title($event, ' am ', ', Sprecher: ')">
-					$ugEvents.Date($event, "", ":") $event.Title
+				<a href="$post.Url" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
+					$ugEvents.Date($post, "", ":") $post.Title
 				</a>
 			</li>
 		#afterall

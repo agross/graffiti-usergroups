@@ -304,11 +304,61 @@ html {
 }
 
 /* Article. */
-.article {
-	margin-bottom: 20px;
+.article h2.title {
+	position: relative;
+	}
+	
+.article .title a.date {
+	font-weight: normal;
+	color: #000;
+	}
+	
+.article .title a.date:hover {
+	color: #000;
+	font-weight: normal;
+	text-decoration: none;
+	cursor: pointer;
+	}
+
+.article .title span.date {
+	background: transparent url(../images/calendar.png) no-repeat scroll top left;
+	position: absolute;
+	min-height: 50px;
+	width: 50px;
+	top: -10px;
+	font-size:0.7em;
+	text-align: center;
+	display: block;
 }
+
+.article .title span.date.other-year {
+	background: transparent url(../images/calendar-with-year.png) no-repeat scroll top left;
+	min-height: 65px;
+}
+
+.article .title span.date span.month-year {
+	color: #FFF;
+	font-size: 0.8em;
+	display: block;
+	}
+
+.article .title span.date span.day {
+	font-weight: bold;
+	font-size: 1.2em;
+	display: block;
+}
+
+.article .title a.title.with-date {
+	padding-left: 60px;
+}
+	
+.article {
+	margin-bottom: 2em;
+}
+
 .article h2.title {
 	clear: both;
+	margin-bottom: 0.6em;
 }
 
 .article h2.title a {

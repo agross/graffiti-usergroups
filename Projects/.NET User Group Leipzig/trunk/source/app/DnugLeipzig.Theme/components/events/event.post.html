@@ -1,6 +1,9 @@
 ﻿<div class="article">
 	<h2 class="title">
-		<a href="$post.Url" rel="bookmark" title="$post.Title">$post.Title</a>
+		$macros.LoadThemeView("components/events/event-date.view")
+		<a class="title #if ($ugEvents.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
+			$post.Title
+		</a>
 	</h2>
 	<div class="teaser gray">
 		<div class="top">
@@ -41,5 +44,5 @@
 	<div class="body">
 		$post.Body
 	</div>
-	$macros.LoadThemeView("components/post-footer.view")
+	$macros.LoadThemeView("components/posts/footer.view")
 </div>

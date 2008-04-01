@@ -7,9 +7,9 @@
 	Vorträgen, typischerweise ein paar Tage nach der jeweiligen <a href="$ugEvents.GetCategoryLink()" title="Zur Veranstaltungsliste">Veranstaltung</a>.
 </p>
 
-#set($talks = $ugTalks.GetForCurrentYear())
+#set($posts = $ugTalks.GetForCurrentYear())
 
-#foreach($talk in $talks)
+#foreach($post in $posts)
 	$macros.LoadThemeView("components/talks/talk.view")
 #nodata
 	$macros.LoadThemeView("components/no-data.view")

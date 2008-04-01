@@ -87,6 +87,17 @@ namespace DnugLeipzig.Extensions
 			return HttpUtility.HtmlEncode(String.Format("{0}{1}{2}", prefix, Macros.FormattedDate(date), suffix));
 		}
 
+		public string Date(Post post, string format)
+		{
+			DateTime date;
+			if (!DateTime.TryParse(post.Custom(BeginDateFieldName), out date))
+			{
+				return String.Empty;
+			}
+
+			return HttpUtility.HtmlEncode(date.ToString(format));
+		}
+
 		public string Speaker(Post post, string prefix, string suffix)
 		{
 			string speaker = post.Custom(SpeakerFieldName);
@@ -161,6 +172,16 @@ namespace DnugLeipzig.Extensions
 				speaker = UnknownText;
 			}
 			return speaker;
+		}
+
+		public bool IsInCurrentYear(Post post)
+		{
+			return post.Custom(BeginDateFieldName).AsEventDate().Year == DateTime.Now.Year;
+		}
+
+		public bool HasDate(Post post)
+		{
+			return post.Custom(BeginDateFieldName).IsDate();
 		}
 
 		public string GetBeginDate(Post post)

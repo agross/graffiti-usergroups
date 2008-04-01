@@ -11,13 +11,13 @@
 		
 		#set($lastTalks = $ugTalks.GetRecent(3))
 
-		#foreach($talk in $lastTalks)
+		#foreach($post in $lastTalks)
 		#beforeall
 			<ol>
 		#each
 			<li>
-				<a href="$talk.Url" rel="bookmark" title="$ugTalks.Title($talk, ' am ', ', Sprecher: ')">
-					$ugTalks.Date($talk, "", ":") $talk.Title
+				<a href="$post.Url" rel="bookmark" title="$ugTalks.Title($post, ' am ', ', Sprecher: ')">
+					$ugTalks.Date($post, "", ":") $post.Title
 				</a>
 			</li>
 		#afterall

@@ -2,9 +2,9 @@
 	Veranstaltungen von $ugEvents.GetViewYear()
 </h1>
 
-#set($events = $ugEvents.GetForYear($ugEvents.GetViewYear()))
+#set($posts = $ugEvents.GetForYear($ugEvents.GetViewYear()))
 
-#foreach($event in $events)
+#foreach($post in $posts)
 	$macros.LoadThemeView("components/events/event.view")
 #nodata
 	$macros.LoadThemeView("components/no-data.view")

@@ -4,11 +4,11 @@
 
 #set($pastEvents = $ugEvents.GetPastYearOverview())
 
-#foreach($event in $pastEvents)
+#foreach($post in $pastEvents)
 #beforeall
 	<ul>
 #each
-	<li><a href="$event.Url">$event.Year</a></li>
+	<li><a href="$post.Url">$post.Year</a></li>
 #afterall
 	</ul>
 #nodata

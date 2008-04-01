@@ -2,9 +2,9 @@
 	Material zu den Vorträgen von $ugTalks.GetViewYear()
 </h1>
 
-#set($talks = $ugTalks.GetForYear($ugTalks.GetViewYear()))
+#set($posts = $ugTalks.GetForYear($ugTalks.GetViewYear()))
 
-#foreach($talk in $talks)
+#foreach($post in $posts)
  	$macros.LoadThemeView("components/talks/talk.view")
 #nodata
 	$macros.LoadThemeView("components/no-data.view")
