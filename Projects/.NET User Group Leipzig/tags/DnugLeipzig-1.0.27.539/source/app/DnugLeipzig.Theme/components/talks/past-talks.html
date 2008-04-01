@@ -1,0 +1,16 @@
+﻿<h1 class="archive-head">
+	Zurückliegende Vorträge
+</h1>
+
+#set($pastTalks = $ugTalks.GetPastYearOverview())
+
+#foreach($post in $pastTalks)
+#beforeall
+	<ul>
+#each
+	<li><a href="$post.Url">$post.Year</a></li>
+#afterall
+	</ul>
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end

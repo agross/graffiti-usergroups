@@ -1,0 +1,13 @@
+﻿#if ($ugEvents.HasDate($post))
+	<a href="$post.Url" class="date" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
+		<span class="date #if (!$ugEvents.IsInCurrentYear($post)) other-year #end">
+			<span class="month-year">
+				$ugEvents.Date($post, "MMM")
+				#if (!$ugEvents.IsInCurrentYear($post))
+					$ugEvents.Date($post, "yy")
+				#end
+			</span>
+			<span class="day">$ugEvents.Date($post, "dd")</span>
+		</span>
+	</a>
+#end
