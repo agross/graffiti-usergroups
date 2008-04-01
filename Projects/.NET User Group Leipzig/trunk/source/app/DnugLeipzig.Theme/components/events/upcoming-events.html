@@ -6,24 +6,24 @@
 	<div class="content upcoming-events">
 		<h1 class="archive-head">
 			Nächste Veranstaltungen
-			<a href="$ugEvents.GetFeedUrl()" title="RSS-Feed für Veranstaltungen abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
+			<a href="$events.GetFeedUrl()" title="RSS-Feed für Veranstaltungen abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
 			<a href="http://team.dotnet-leipzig.de/calendars/Kalender_von_DNUG.ics" title="Veranstaltungskalender abonnieren"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Veranstaltungskalender" /></a>
 		</h1>
 
-		#set($futureEvents = $ugEvents.GetUpcoming(3))
+		#set($futureEvents = $events.GetUpcoming(3))
 
 		#foreach($post in $futureEvents)
 		#beforeall
 			<ol>
 		#each
 			<li>
-				<a href="$post.Url" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
-					$ugEvents.Date($post, "", ":") $post.Title
+				<a href="$post.Url" rel="bookmark" title="$events.Title($post, ' am ', ', Sprecher: ')">
+					$events.Date($post, "", ":") $post.Title
 				</a>
 			</li>
 		#afterall
 			</ol>
-			<a href="$ugEvents.GetCategoryLink()" class="more" rel="bookmark">Mehr Veranstaltungen anzeigen &raquo;</a>
+			<a href="$events.GetCategoryLink()" class="more" rel="bookmark">Mehr Veranstaltungen anzeigen &raquo;</a>
 		#nodata
 			$macros.LoadThemeView("components/no-data.view")
 		#end

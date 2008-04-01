@@ -7,7 +7,7 @@ namespace DnugLeipzig.Extensions
 {
 	public static class Util
 	{
-		internal static int? GetViewYear(string yearQueryStringParameter)
+		internal static int? GetYearOfView(string yearQueryStringParameter)
 		{
 			int year;
 			if (int.TryParse(HttpContext.Current.Request.QueryString[yearQueryStringParameter], out year))

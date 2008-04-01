@@ -1,13 +1,13 @@
-﻿#if ($ugTalks.HasDate($post))
-	<a href="$post.Url" class="date" rel="bookmark" title="$ugTalks.Title($post, ' am ', ', Sprecher: ')">
-		<span class="date #if (!$ugTalks.IsInCurrentYear($post)) other-year #end">
+﻿#if ($talks.HasDate($post))
+	<a href="$post.Url" class="date" rel="bookmark" title="$talks.Title($post, ' am ', ', Sprecher: ')">
+		<span class="date #if (!$talks.IsInCurrentYear($post)) other-year #end">
 			<span class="month-year">
-				$ugTalks.Date($post, "MMM")
-				#if (!$ugTalks.IsInCurrentYear($post))
-					$ugTalks.Date($post, "yy")
+				$talks.Date($post, "MMM")
+				#if (!$talks.IsInCurrentYear($post))
+					$talks.Date($post, "yy")
 				#end
 			</span>
-			<span class="day">$ugTalks.Date($post, "dd")</span>
+			<span class="day">$talks.Date($post, "dd")</span>
 		</span>
 	</a>
 #end

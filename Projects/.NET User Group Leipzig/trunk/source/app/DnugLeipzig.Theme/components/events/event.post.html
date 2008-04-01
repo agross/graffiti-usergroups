@@ -1,7 +1,7 @@
 ﻿<div class="article">
 	<h2 class="title">
 		$macros.LoadThemeView("components/events/event-date.view")
-		<a class="title #if ($ugEvents.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
+		<a class="title #if ($events.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$events.Title($post, ' am ', ', Sprecher: ')">
 			$post.Title
 		</a>
 	</h2>
@@ -14,21 +14,21 @@
 			<ul class="event-info">
 				<li>
 					<strong>Beginn:</strong>
-					$ugEvents.GetBeginDate($post)
+					$events.StartDate($post)
 				</li>
 				<li>
 					<strong>Ende:</strong>
-					$ugEvents.GetEndDate($post)
+					$events.EndDate($post)
 				</li>
 				<li>
 					<strong>Ort:</strong>
-					$ugEvents.GetLocation($post)
+					$events.Location($post)
 				</li>
 				<li>
 					<strong>Sprecher:</strong>
-					$ugEvents.GetSpeaker($post)
+					$events.Speaker($post)
 				</li>
-				#if ($ugEvents.CanCreateCalendarItem($post))
+				#if ($events.CanCreateCalendarItem($post))
 				<li>
 					<strong>Kalendereintrag:</strong>
 					<a href="/Calendar.ashx?eventId=$post.ID" title="Kalendereintrag herunterladen"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Kalendereintrag" /></a>

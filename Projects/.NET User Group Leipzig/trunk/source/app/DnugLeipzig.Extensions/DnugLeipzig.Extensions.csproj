@@ -71,17 +71,18 @@
     <Compile Include="Filters\IsInFuture.cs" />
     <Compile Include="Filters\IPostFilter.cs" />
     <Compile Include="Filters\LimitTo.cs" />
+    <Compile Include="Macros\MacroBase.cs" />
     <Compile Include="PostComparer.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\TalkRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\EventRepository.cs" />
-    <Compile Include="UserGroupTalks.cs" />
+    <Compile Include="Macros\Talks.cs" />
     <Compile Include="DataObjects\PastPostInfo.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Ui.cs" />
-    <Compile Include="UserGroupEvents.cs" />
+    <Compile Include="Macros\Ui.cs" />
+    <Compile Include="Macros\Events.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

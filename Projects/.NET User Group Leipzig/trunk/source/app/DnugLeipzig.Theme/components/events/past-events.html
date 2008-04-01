@@ -2,7 +2,7 @@
 	Zurückliegende Veranstaltungen
 </h1>
 
-#set($pastEvents = $ugEvents.GetPastYearOverview())
+#set($pastEvents = $events.GetPastYearOverview())
 
 #foreach($post in $pastEvents)
 #beforeall

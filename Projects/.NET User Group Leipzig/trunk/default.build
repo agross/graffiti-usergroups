@@ -87,7 +87,7 @@
 						file = sr.ReadToEnd();
 					}
 
-					project.Properties["build.number.fromfile"] = Regex.Match(file, "(?<=\\[assembly:\\s*AssemblyVersion(?:Attribute)?\\(\")\\d\\.\\d\\.\\d\\.\\d").Value;
+					project.Properties["build.number.fromfile"] = Regex.Match(file, "(?<=\\[assembly:\\s*AssemblyVersion(?:Attribute)?\\(\")\\d+\\.\\d+\\.\\d+\\.\\d+").Value;
 				}
 				]]>
 			</code>

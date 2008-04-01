@@ -1,8 +1,8 @@
 ﻿<h1 class="archive-head">
-	Material zu den Vorträgen von $ugTalks.GetViewYear()
+	Material zu den Vorträgen von $talks.GetYearOfView()
 </h1>
 
-#set($posts = $ugTalks.GetForYear($ugTalks.GetViewYear()))
+#set($posts = $talks.GetForYear($talks.GetYearOfView()))
 
 #foreach($post in $posts)
  	$macros.LoadThemeView("components/talks/talk.view")

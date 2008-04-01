@@ -1,7 +1,7 @@
 ﻿<div class="article">
 	<h2 class="title">
 		$macros.LoadThemeView("components/events/event-date.view")
-		<a class="title #if ($ugEvents.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$ugEvents.Title($post, ' am ', ', Sprecher: ')">
+		<a class="title #if ($events.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$events.Title($post, ' am ', ', Sprecher: ')">
 			$post.Title
 		</a>
 	</h2>

@@ -9,15 +9,16 @@ using DnugLeipzig.Extensions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions
+namespace DnugLeipzig.Extensions.Macros
 {
+	// TODO: Refactor into a plugin and let the user define the values of the various fields using the Graffiti UI.
 	[Chalk("ui")]
 	public class Ui
 	{
+		static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
 		static readonly string ManyComments;
 		static readonly string NoComments;
 		static readonly string SingleComment;
-		static readonly Macros Macros = new Macros();
 
 		static Ui()
 		{
@@ -29,15 +30,15 @@ namespace DnugLeipzig.Extensions
 
 		public bool IsFirstNavigationLinkSelected()
 		{
-			List<Link> links = Macros.NavigationLinks();
+			List<Link> links = GraffitiMacros.NavigationLinks();
 			return (links.Count > 0 && links[0].IsSelected);
 		}
 
 		public bool IsNavigationLinkSelected()
 		{
-			List<Link> links = Macros.NavigationLinks();
+			List<Link> links = GraffitiMacros.NavigationLinks();
 
-			return Array.Exists(links.ToArray(), delegate(Link link) { return link.IsSelected; });
+			return Array.Exists(links.ToArray(), link => link.IsSelected);
 		}
 
 		public string CommentUrl(Post post, IDictionary dictionary)

@@ -1,7 +1,7 @@
 ﻿<div class="article">
 	<h2 class="title">
 		$macros.LoadThemeView("components/talks/talk-date.view")
-		<a class="title #if ($ugTalks.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$ugTalks.Title($post, ' am ', ', Sprecher: ')">
+		<a class="title #if ($talks.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$talks.Title($post, ' am ', ', Sprecher: ')">
 			$post.Title
 		</a>
 	</h2>
@@ -14,11 +14,11 @@
 			<ul class="event-info">
 				<li>
 					<strong>Datum:</strong>
-					$ugTalks.Date($post, "", "")
+					$talks.Date($post, "", "")
 				</li>
 				<li>
 					<strong>Sprecher:</strong>
-					$ugTalks.Speaker($post, "", "")
+					$talks.Speaker($post, "", "")
 				</li>
 			</ul>
 		</div>

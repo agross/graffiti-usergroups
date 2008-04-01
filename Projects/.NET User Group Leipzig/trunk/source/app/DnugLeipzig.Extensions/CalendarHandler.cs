@@ -8,6 +8,8 @@ using DnugLeipzig.Extensions.Repositories;
 
 using Graffiti.Core;
 
+using Events=DnugLeipzig.Extensions.Macros.Events;
+
 namespace DnugLeipzig.Extensions
 {
 	public class CalendarHandler : IHttpHandler
@@ -63,16 +65,16 @@ namespace DnugLeipzig.Extensions
 				return;
 			}
 
-			UserGroupEvents ugEvents = new UserGroupEvents();
+			Events events = new Events();
 
-			if (post == null || !ugEvents.CanCreateCalendarItem(post))
+			if (post == null || !events.CanCreateCalendarItem(post))
 			{
 				HttpContext.Current.Response.StatusCode = 404;
 				HttpContext.Current.Response.End();
 				return;
 			}
 
-			CalendarItem item = ugEvents.CreateCalendarItem(post);
+			CalendarItem item = events.CreateCalendarItem(post);
 			string serializedItem = item.ToString();
 
 			context.Response.Clear();

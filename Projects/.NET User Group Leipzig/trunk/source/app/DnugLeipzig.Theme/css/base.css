@@ -48,11 +48,11 @@ p.meta {
 	padding: 0.5em;
 	font-size: 0.9em;
 	background-color: #FFDC7F;
+	margin-bottom: 2em;
 }
 
 a {
-	color: #095EAE;
-	font-weight: bold;
+	color: #053C6D;
 	text-decoration: none;
 }
 
@@ -62,6 +62,7 @@ span.more {
 	margin-top: 0.5em;
 	margin-bottom: 0.2em;
 	font-size: 0.8em;
+	font-weight: bold;
 	}
 
 a:hover {
@@ -141,6 +142,7 @@ html {
 
 #header h1 a {
 	color: #053C6D;
+	font-weight: bold;
 }
 
 #tag-line {
@@ -163,9 +165,8 @@ html {
 	height: 35px;
 	overflow: hidden;
 	position: relative;
-	width: 850px;
+	width: 100%;
 	font-size: 1.25em;
-	margin-left: 1em;
 }
 
 #navigation .top,
@@ -181,8 +182,8 @@ html {
 
 #navigation .bottom {
 	background-image: url(../images/menu-corner-right-inactive.png);
-	background-position: -10px top;
-	left: 840px;
+	margin-left: -10px;
+	left: 100%;
 }
 
 #navigation h2 {
@@ -284,6 +285,7 @@ html {
 
 #footer a {
 	color: #BABABA;
+	font-weight: bold;
 }
 
 #footer a:hover {
@@ -323,33 +325,31 @@ html {
 .article .title span.date {
 	background: transparent url(../images/calendar.png) no-repeat scroll top left;
 	position: absolute;
-	min-height: 50px;
-	width: 50px;
-	top: -10px;
-	font-size:0.7em;
+	min-height: 40px;
+	width: 40px;
+	top: -5px;
+	font-size: 0.7em;
 	text-align: center;
 	display: block;
 }
 
 .article .title span.date.other-year {
 	background: transparent url(../images/calendar-with-year.png) no-repeat scroll top left;
-	min-height: 65px;
 }
 
 .article .title span.date span.month-year {
 	color: #FFF;
-	font-size: 0.8em;
+	font-size: 0.7em;
 	display: block;
 	}
 
 .article .title span.date span.day {
 	font-weight: bold;
-	font-size: 1.2em;
 	display: block;
 }
 
 .article .title a.title.with-date {
-	padding-left: 60px;
+	padding-left: 50px;
 }
 	
 .article {
@@ -361,21 +361,18 @@ html {
 	margin-bottom: 0.6em;
 }
 
-.article h2.title a {
-	color: #0870c9;
-}
-
 .article .meta {
 	margin-bottom: 1em;
 	color: #838383;
 	font-size: .8em;
 }
-.article a {
-	color: #095eae;
-}
 
 .article .body {
 	margin-bottom: 1em;
+}
+
+.article .body a{
+	font-weight: bold;
 }
 .article .comments {
 	background: url(../images/comments.gif) left center no-repeat;
@@ -392,6 +389,10 @@ html {
 
 .article .footer, .article .footer a {
 	color: #838383;
+}
+
+.article .footer a {
+	font-weight: bold;
 }
 
 .article .footer {
