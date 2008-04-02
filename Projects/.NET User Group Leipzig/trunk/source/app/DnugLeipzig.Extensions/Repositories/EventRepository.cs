@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
 
+using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.Filters;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Repositories
 {
-	public class EventRepository : PostRepository
+	public class EventRepository : Repository
 	{
-		public EventRepository(string categoryName) : base(categoryName)
+		public EventRepository(IRepositoryConfigurationSource configuration) : base(configuration)
 		{
 		}
 

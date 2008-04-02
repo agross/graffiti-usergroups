@@ -1,33 +1,25 @@
 using System;
 using System.Collections.Generic;
 
+using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.Filters;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Repositories
 {
-	public class TalkRepository : PostRepository
+	public class TalkRepository : Repository
 	{
-		readonly string _dateFieldName;
-
-		public TalkRepository(string categoryName, string dateFieldName) : base(categoryName)
+		public TalkRepository(IRepositoryConfigurationSource configuration) : base(configuration)
 		{
-			if (String.IsNullOrEmpty(dateFieldName))
-			{
-				throw new ArgumentOutOfRangeException("dateFieldName");
-			}
-
-			_dateFieldName = dateFieldName;
 		}
 
-		#region IRepository<Post> Members
 		public override List<Post> Get(IPostFilter[] filters)
 		{
 			PostCollection posts = PostsByCategoryDisableHomepageOverride(int.MaxValue);
 
 			// Pre-filter dates.
-			var hasDate = new HasDate(_dateFieldName);
+			var hasDate = new HasDate(Configuration.SortRelevantDateField);
 			List<Post> result = hasDate.Execute(posts);
 
 			foreach (IPostFilter filter in filters)
@@ -37,7 +29,5 @@ namespace DnugLeipzig.Extensions.Repositories
 
 			return result;
 		}
-	
-		#endregion
 	}
 }

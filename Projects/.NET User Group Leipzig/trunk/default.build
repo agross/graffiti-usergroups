@@ -231,6 +231,14 @@
 			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
 			<arg value="/p:NAntCall=true" />
 		</msbuild>
+		
+		<msbuild project="${basedir.app}\DnugLeipzig.Plugins\DnugLeipzig.Plugins.csproj"
+				 target="${build.msbuild.target}"
+				 verbosity="${build.msbuild.verbosity}">
+			<arg value="/p:Configuration=${build.msbuild.configuration}" />
+			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+			<arg value="/p:NAntCall=true" />
+		</msbuild>
 	</target>
 
 	<target name="init-build-theme"
@@ -341,10 +349,17 @@
 					 prefix="files\themes\${project::get-name()}">
 				<include name="**\*" />
 			</fileset>
+			
 			<!-- Extensions. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
 					 prefix="bin">
 				<include name="DnugLeipzig.Extensions.*" />
+			</fileset>
+			
+			<!-- Plugins. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.Plugins\bin\${build.msbuild.configuration}"
+					 prefix="bin">
+				<include name="DnugLeipzig.Plugins.*" />
 			</fileset>
 		</zip>
 	</target>
