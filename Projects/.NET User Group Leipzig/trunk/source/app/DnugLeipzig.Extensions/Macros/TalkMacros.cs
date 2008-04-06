@@ -40,11 +40,10 @@ namespace DnugLeipzig.Extensions.Macros
 		}
 		#endregion
 
-		#region Retrieval
 		public List<Post> GetForYear(int year)
 		{
 			return Repository.Get(new IsInYear(Configuration.DateField, new DateTime(year, 1, 1)),
-			                      new SortForIndexDescending(Configuration.DateField));
+			                      new SortForIndexAscending(Configuration.DateField));
 		}
 
 		public List<Post> GetForCurrentYear()
@@ -56,7 +55,7 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return Repository.Get(new HasDate(Configuration.DateField),
 			                      new IsInPast(Configuration.DateField),
-			                      new SortForIndexDescending(Configuration.DateField),
+								  new SortForIndexAscending(Configuration.DateField),
 			                      new LimitTo(numberOfTalks));
 		}
 
@@ -77,6 +76,5 @@ namespace DnugLeipzig.Extensions.Macros
 
 			return new List<PastPostInfo>(pastTalks);
 		}
-		#endregion
 	}
 }

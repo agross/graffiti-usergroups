@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Web;
 
 using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Plugins.Migration;
 
 using Graffiti.Core;
 
@@ -16,20 +17,14 @@ namespace DnugLeipzig.Plugins
 		const string Form_DefaultLocation = "defaultLocation";
 		const string Form_EndDateField = "endDateField";
 		const string Form_LocationField = "locationField";
+		const string Form_LocationUnknownField = "locationUnknown";
+		const string Form_MigrateFieldValues = "migrate";
+		const string Form_RegistrationNeededField = "registrationNeeded";
 		const string Form_ShortEndDateFormat = "shortDateFormat";
 		const string Form_SpeakerField = "speakerField";
 		const string Form_StartDateField = "startDateField";
 		const string Form_UnknownText = "unknownText";
 		const string Form_YearQueryString = "yearQueryString";
-		string _categoryName;
-		string _dateFormat;
-		string _endDateField;
-		string _locationField;
-		string _shortEndDateFormat;
-		string _speakerField;
-		string _startDateField;
-		string _unknownText;
-		string _yearQueryString;
 
 		public EventPlugin()
 		{
@@ -38,11 +33,13 @@ namespace DnugLeipzig.Plugins
 			StartDateField = "Start Date";
 			EndDateField = "End Date";
 			SpeakerField = "Speaker";
-			DateFormat = "{0:D}, {0:t}";
-			ShortEndDateFormat = "{0:t}";
+			DateFormat = "on {0:D}, at {0:t}";
+			ShortEndDateFormat = "at {0:t}";
 			LocationField = "Location";
-			UnknownText = "(Unknown)";
+			UnknownText = "(TBA)";
 			YearQueryString = "year";
+			LocationUnknownField = "Location is unknown";
+			RegistrationNeededField = "Registration needed";
 		}
 
 		public override string Name
@@ -60,8 +57,6 @@ namespace DnugLeipzig.Plugins
 			get { return "Extends Graffiti CMS for events management."; }
 		}
 
-		//{{{-ConvertToAutoProperty
-
 		#region IEventConfigurationSource Members
 		public string SortRelevantDateField
 		{
@@ -70,60 +65,70 @@ namespace DnugLeipzig.Plugins
 
 		public string CategoryName
 		{
-			get { return _categoryName; }
-			set { _categoryName = value; }
+			get;
+			set;
 		}
 
 		public string SpeakerField
 		{
-			get { return _speakerField; }
-			set { _speakerField = value; }
+			get;
+			set;
 		}
 
 		public string YearQueryString
 		{
-			get { return _yearQueryString; }
-			set { _yearQueryString = value; }
+			get;
+			set;
 		}
 
 		public string DateFormat
 		{
-			get { return _dateFormat; }
-			set { _dateFormat = value; }
+			get;
+			set;
 		}
 
 		public string EndDateField
 		{
-			get { return _endDateField; }
-			set { _endDateField = value; }
+			get;
+			set;
 		}
 
 		public string LocationField
 		{
-			get { return _locationField; }
-			set { _locationField = value; }
+			get;
+			set;
 		}
 
 		public string ShortEndDateFormat
 		{
-			get { return _shortEndDateFormat; }
-			set { _shortEndDateFormat = value; }
+			get;
+			set;
 		}
 
 		public string StartDateField
 		{
-			get { return _startDateField; }
-			set { _startDateField = value; }
+			get;
+			set;
 		}
 
 		public string UnknownText
 		{
-			get { return _unknownText; }
-			set { _unknownText = value; }
+			get;
+			set;
+		}
+
+		public string LocationUnknownField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationNeededField
+		{
+			get;
+			set;
 		}
 		#endregion
-
-		//{{{+ConvertToAutoProperty
 
 		public override void Init(GraffitiApplication ga)
 		{
@@ -151,33 +156,43 @@ namespace DnugLeipzig.Plugins
 		{
 			return new FormElementCollection
 			       {
+			       	new CheckFormElement(Form_MigrateFieldValues,
+			       	                     "Migrate custom field values",
+			       	                     "Check to automatically migrate custom field values if category and/or field names change.",
+			       	                     true),
 			       	new TextFormElement(Form_CategoryName,
 			       	                    "Graffiti events category",
-			       	                    "Enter the name of the category in which you store talks, e.g. \"Talks\"."),
+			       	                    "Enter the name of the category to store events, e.g. \"Talks\"."),
 			       	new TextFormElement(Form_StartDateField,
-			       	                    "Event start date and time custom field",
-			       	                    "Enter the name of the custom field in which the events's start date (and, optionally, time) is stored, e.g. \"Start Date\". This field will be validated to be either empty or hold a correct date time/value."),
+			       	                    "\"Event start date and time\" field",
+			       	                    "Enter the name of the custom text field to store the events's start date (and, optionally, time), e.g. \"Start Date\". This field will be validated to be either empty or hold a correct date time/value."),
 			       	new TextFormElement(Form_EndDateField,
-			       	                    "Event end date and time custom field",
-			       	                    "Enter the name of the custom field in which the events's end date (and, optionally, time) is stored, e.g. \"End Date\". This field will be validated to be either empty or hold a correct date time/value."),
+			       	                    "\"Event end date and time\" field",
+			       	                    "Enter the name of the custom text field to store the events's end date (and, optionally, time), e.g. \"End Date\". This field will be validated to be either empty or hold a correct date time/value."),
 			       	new TextFormElement(Form_SpeakerField,
-			       	                    "Speaker custom field",
-			       	                    "Enter the name of the custom field in which the speaker's name is stored, e.g. \"Speaker\"."),
+			       	                    "\"Speaker\" field",
+			       	                    "Enter the name of the custom text field to store the speaker's name, e.g. \"Speaker\"."),
 			       	new TextFormElement(Form_DateFormat,
 			       	                    "Date/time format",
-			       	                    "Enter .NET format string to be used for the start date and the end date, e.g. \"{0:D}, {0:t}\". Leave blank to use the Graffiti date format from web.config."),
+			       	                    "Enter .NET format string to be used for the start date and the end date, e.g. \"on {0:D}, at {0:t}\". Leave blank to use the Graffiti date format from web.config."),
 			       	new TextFormElement(Form_ShortEndDateFormat,
 			       	                    "Short end date/time format",
-			       	                    "Enter .NET format string to be used for the end date if the start date and end date of the event is the same day, e.g. \"{0:t}\". Leave blank to use the Graffiti date format from above."),
+			       	                    "Enter .NET format string to be used for the end date if the start date and end date of the event is the same day, e.g. \"at {0:t}\". Leave blank to use the Graffiti date format from above."),
 			       	new TextFormElement(Form_LocationField,
-			       	                    "Event location",
-			       	                    "Enter the name of the custom field in which the events location is stored, e.g. \"Location\"."),
+			       	                    "Event location field",
+			       	                    "Enter the name of the custom text field to store the event's location, e.g. \"Location\"."),
+			       	new TextFormElement(Form_LocationUnknownField,
+			       	                    "\"Location unknown\" field",
+			       	                    "Enter the name of the custom checkbox field to store if the event location is unknown, e.g. \"Location is unknown\"."),
 			       	new TextFormElement(Form_DefaultLocation,
 			       	                    "Default event location",
-			       	                    "Enter the default value of the locaton if you don't enter one, e.g. \"Initech Corp., Floor 1\". This value will be used to fill the event location field above."),
+			       	                    "Enter the default value of the locaton if you don't enter one, e.g. \"Initech Corp., Floor 1\". This value will be used to fill the event location field above if \"Location unknown\" is not checked."),
 			       	new TextFormElement(Form_UnknownText,
 			       	                    "\"Unknown\" text",
-			       	                    "Enter the text to be displayed if event information (dates, speaker, location) is not yet known, e.g. \"(Unknown)\"."),
+			       	                    "Enter the text to be displayed if event information (dates, speaker, location) is not yet known, e.g. \"(TBA)\"."),
+			       	new TextFormElement(Form_RegistrationNeededField,
+			       	                    "\"Registration needed\" field",
+			       	                    "Enter the name of the custom field to store if registration for the event is needed, e.g. \"Registration needed\"."),
 			       	new TextFormElement(Form_YearQueryString,
 			       	                    "Query string parameter for paging by year",
 			       	                    "Enter a value for the query string parameter used to display talks of a specific year.")
@@ -186,31 +201,55 @@ namespace DnugLeipzig.Plugins
 
 		public override StatusType SetValues(HttpContext context, NameValueCollection nvc)
 		{
-			HttpContext.Current.Cache.Remove(EventPluginConfigurationSource.CacheKey);
-
-			if (String.IsNullOrEmpty(nvc[Form_CategoryName]))
+			try
 			{
-				SetMessage(context, "Enter a category name.");
+				HttpContext.Current.Cache.Remove(EventPluginConfigurationSource.CacheKey);
+
+				if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
+				{
+					SetMessage(context, "Please enter a category name.");
+					return StatusType.Error;
+				}
+
+				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
+				if (!Util.StringToBoolean(nvc[Form_MigrateFieldValues]) && !Util.ValidateExistingCategory(categoryName))
+				{
+					SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
+					return StatusType.Warning;
+				}
+
+				if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
+				{
+					SetMessage(context, "Please enter a year query string parameter.");
+					return StatusType.Error;
+				}
+
+				EventPluginMemento oldState = CreateMemento();
+
+				CategoryName = categoryName;
+				StartDateField = nvc[Form_StartDateField];
+				EndDateField = nvc[Form_EndDateField];
+				SpeakerField = nvc[Form_SpeakerField];
+				DateFormat = nvc[Form_DateFormat];
+				ShortEndDateFormat = nvc[Form_ShortEndDateFormat];
+				LocationField = nvc[Form_LocationField];
+				UnknownText = nvc[Form_UnknownText];
+				LocationUnknownField = nvc[Form_LocationUnknownField];
+				RegistrationNeededField = nvc[Form_RegistrationNeededField];
+				YearQueryString = nvc[Form_YearQueryString];
+
+				EventPluginMemento newState = CreateMemento();
+
+				FieldMigrator migrator = new FieldMigrator();
+				migrator.MigrateValues(new MigrationInfo(oldState, newState));
+
+				return StatusType.Success;
+			}
+			catch (Exception ex)
+			{
+				SetMessage(context, String.Format("Error: {0}", ex.Message));
 				return StatusType.Error;
 			}
-
-			CategoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName]);
-			StartDateField = nvc[Form_StartDateField];
-			EndDateField = nvc[Form_EndDateField];
-			SpeakerField = nvc[Form_SpeakerField];
-			DateFormat = nvc[Form_DateFormat];
-			ShortEndDateFormat = nvc[Form_ShortEndDateFormat];
-			LocationField = nvc[Form_LocationField];
-			UnknownText = nvc[Form_UnknownText];
-
-			if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
-			{
-				SetMessage(context, "Enter a year query string parameter.");
-				return StatusType.Error;
-			}
-			YearQueryString = nvc[Form_YearQueryString];
-
-			return StatusType.Success;
 		}
 
 		protected override NameValueCollection DataAsNameValueCollection()
@@ -225,9 +264,18 @@ namespace DnugLeipzig.Plugins
 			values[Form_ShortEndDateFormat] = ShortEndDateFormat;
 			values[Form_LocationField] = LocationField;
 			values[Form_UnknownText] = UnknownText;
+			values[Form_LocationUnknownField] = LocationUnknownField;
+			values[Form_RegistrationNeededField] = RegistrationNeededField;
 			values[Form_YearQueryString] = YearQueryString;
 
 			return values;
+		}
+		#endregion
+
+		#region Memento
+		EventPluginMemento CreateMemento()
+		{
+			return new EventPluginMemento(this);
 		}
 		#endregion
 	}

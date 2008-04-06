@@ -20,8 +20,7 @@ namespace DnugLeipzig.Extensions.Filters
 				return posts;
 			}
 
-			posts.Sort(new PostComparer(_dateFieldName));
-			posts.Reverse();
+			posts.Sort(new DateAscendingPostComparer(_dateFieldName));
 			return posts;
 		}
 		#endregion

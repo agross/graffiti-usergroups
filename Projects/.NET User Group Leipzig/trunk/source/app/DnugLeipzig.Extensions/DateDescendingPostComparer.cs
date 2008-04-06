@@ -7,11 +7,11 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions
 {
-	internal class PostComparer : IComparer<Post>
+	internal class DateDescendingPostComparer : IComparer<Post>
 	{
 		readonly string DateFieldName;
 
-		public PostComparer(string dateFieldName)
+		public DateDescendingPostComparer(string dateFieldName)
 		{
 			DateFieldName = dateFieldName;
 		}

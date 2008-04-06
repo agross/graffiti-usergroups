@@ -102,6 +102,24 @@ namespace DnugLeipzig.Extensions.Configuration
 				return PluginInstance.UnknownText;
 			}
 		}
+
+		public string LocationUnknownField
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.LocationUnknownField;
+			}
+		}
+
+		public string RegistrationNeededField
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.RegistrationNeededField;
+			}
+		}
 		#endregion
 
 		static void EnsureCurrentInstance()

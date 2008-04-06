@@ -99,7 +99,7 @@ namespace DnugLeipzig.Extensions.Macros
 		public List<Post> GetForFuture()
 		{
 			return Repository.Get(new IsInFuture(Configuration.StartDateField),
-			                      new SortForIndexDescending(Configuration.StartDateField));
+								  new SortForIndexAscending(Configuration.StartDateField));
 		}
 
 		public List<Post> GetUpcoming(int numberOfEvents)
@@ -114,7 +114,7 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return Repository.Get(new IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1)),
 			                      new IsInPast(Configuration.StartDateField),
-			                      new SortForIndexDescending(Configuration.StartDateField));
+								  new SortForIndexAscending(Configuration.StartDateField));
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()

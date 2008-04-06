@@ -13,14 +13,14 @@ namespace DnugLeipzig.Extensions.Macros
 {
 	// TODO: Refactor into a plugin and let the user define the values of the various fields using the Graffiti UI.
 	[Chalk("ui")]
-	public class Ui
+	public class UiMacros
 	{
 		static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
 		static readonly string ManyComments;
 		static readonly string NoComments;
 		static readonly string SingleComment;
 
-		static Ui()
+		static UiMacros()
 		{
 			// TODO
 			// Not perfect as there may be languages where there's no simple singular/plural forms.

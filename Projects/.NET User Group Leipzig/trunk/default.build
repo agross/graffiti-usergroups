@@ -193,6 +193,7 @@
 
 	<fileset id="config-files">
 		<include name="${basedir.test}\DnugLeipzig.Extensions.Tests\App.config.template" />
+		<include name="${basedir.test}\DnugLeipzig.Plugins.Tests\App.config.template" />
 	</fileset>
 
 	<target name="create-config"

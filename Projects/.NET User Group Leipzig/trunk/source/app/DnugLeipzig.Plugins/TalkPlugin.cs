@@ -13,12 +13,9 @@ namespace DnugLeipzig.Plugins
 	{
 		const string Form_CategoryName = "categoryName";
 		const string Form_DateField = "dateField";
+		const string Form_MigrateFieldValues = "migrate";
 		const string Form_SpeakerField = "speakerField";
 		const string Form_YearQueryString = "yearQueryString";
-		string _categoryName;
-		string _DateField;
-		string _speakerField;
-		string _yearQueryString;
 
 		public TalkPlugin()
 		{
@@ -44,13 +41,11 @@ namespace DnugLeipzig.Plugins
 			get { return "Extends Graffiti CMS for talks management."; }
 		}
 
-		//{{{-ConvertToAutoProperty
-
 		#region ITalkConfigurationSource Members
 		public string DateField
 		{
-			get { return _DateField; }
-			set { _DateField = value; }
+			get;
+			set;
 		}
 
 		public string SortRelevantDateField
@@ -60,24 +55,22 @@ namespace DnugLeipzig.Plugins
 
 		public string CategoryName
 		{
-			get { return _categoryName; }
-			set { _categoryName = value; }
+			get;
+			set;
 		}
 
 		public string SpeakerField
 		{
-			get { return _speakerField; }
-			set { _speakerField = value; }
+			get;
+			set;
 		}
 
 		public string YearQueryString
 		{
-			get { return _yearQueryString; }
-			set { _yearQueryString = value; }
+			get;
+			set;
 		}
 		#endregion
-
-		//{{{+ConvertToAutoProperty
 
 		public override void Init(GraffitiApplication ga)
 		{
@@ -105,6 +98,10 @@ namespace DnugLeipzig.Plugins
 		{
 			return new FormElementCollection
 			       {
+			       	new CheckFormElement(Form_MigrateFieldValues,
+			       	                     "Migrate custom field values",
+			       	                     "Check to automatically migrate custom field values if field names change.",
+			       	                     true),
 			       	new TextFormElement(Form_CategoryName,
 			       	                    "Graffiti talks category",
 			       	                    "Enter the name of the category in which you store talks, e.g. \"Talks\"."),
@@ -124,19 +121,26 @@ namespace DnugLeipzig.Plugins
 		{
 			HttpContext.Current.Cache.Remove(TalkPluginConfigurationSource.CacheKey);
 
-			if (String.IsNullOrEmpty(nvc[Form_CategoryName]))
+			if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
 			{
-				SetMessage(context, "Enter a category name.");
+				SetMessage(context, "Please enter a category name.");
 				return StatusType.Error;
 			}
 
-			CategoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName]);
+			string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
+			if (!Util.ValidateExistingCategory(categoryName))
+			{
+				SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
+				return StatusType.Warning;
+			}
+
+			CategoryName = categoryName;
 			DateField = nvc[Form_DateField];
 			SpeakerField = nvc[Form_SpeakerField];
 
 			if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
 			{
-				SetMessage(context, "Enter a year query string parameter.");
+				SetMessage(context, "Please enter a year query string parameter.");
 				return StatusType.Error;
 			}
 			YearQueryString = nvc[Form_YearQueryString];

@@ -33,5 +33,15 @@ namespace DnugLeipzig.Extensions.Configuration
 		{
 			get;
 		}
+
+		string LocationUnknownField
+		{
+			get;
+		}
+
+		string RegistrationNeededField
+		{
+			get;
+		}
 	}
 }

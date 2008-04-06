@@ -10,9 +10,10 @@ using MbUnit.Framework;
 namespace DnugLeipzig.Extensions.Tests
 {
 	[TestFixture]
-	public class EventTests
+	public class EventSortingTests
 	{
 		const int PostSetsToGenerate = 4;
+		const string StartDateField = "StartDate";
 		PostCollection _posts;
 		PostCollection _originalPosts;
 
@@ -50,16 +51,16 @@ namespace DnugLeipzig.Extensions.Tests
 
 			if (eventDate.HasValue)
 			{
-				post.CustomFields().Add("Datum", eventDate.Value.ToString("d"));
+				post.CustomFields().Add(StartDateField, eventDate.Value.ToString("d"));
 			}
 
 			return post;
 		}
 
 		[Test]
-		public void SortsEventIndex()
+		public void SortsEventIndexDescending()
 		{
-			SortForIndexDescending sorter = new SortForIndexDescending("Datum");
+			SortForIndexDescending sorter = new SortForIndexDescending(StartDateField);
 			System.Collections.Generic.List<Post> sorted = sorter.Execute(_posts);
 
 			CollectionAssert.AreCountEqual(_originalPosts, sorted);
@@ -76,7 +77,7 @@ namespace DnugLeipzig.Extensions.Tests
 			foreach (Post post in sorted)
 			{
 				DateTime date;
-				bool hasDate = DateTime.TryParse(post.CustomFields()["Datum"], out date);
+				bool hasDate = DateTime.TryParse(post.CustomFields()[StartDateField], out date);
 
 				if (hasDate)
 				{
@@ -96,6 +97,53 @@ namespace DnugLeipzig.Extensions.Tests
 				if (firstDatePostReached && lastDate != null && hasDate)
 				{
 					Assert.LowerEqualThan(date, lastDate.Value, post.Title+ " " +lastPost.Title);
+				}
+
+				lastPost = post;
+				lastDate = hasDate ? date : (DateTime?) null;
+			}
+		}
+		
+		[Test]
+		public void SortsEventIndexAscending()
+		{
+			SortForIndexAscending sorter = new SortForIndexAscending(StartDateField);
+			System.Collections.Generic.List<Post> sorted = sorter.Execute(_posts);
+
+			CollectionAssert.AreCountEqual(_originalPosts, sorted);
+			CollectionAssert.AreEquivalent(_originalPosts, sorted);
+
+			// Assert that
+			// - posts without date come first,
+			// - posts following the first date post also have dates,
+			// - posts without date are sorted by title (ascending),
+			// - posts with date are sorted by date (ascending).
+			bool firstDatePostReached = false;
+			DateTime? lastDate = null;
+			Post lastPost = null;
+			foreach (Post post in sorted)
+			{
+				DateTime date;
+				bool hasDate = DateTime.TryParse(post.CustomFields()[StartDateField], out date);
+
+				if (hasDate)
+				{
+					firstDatePostReached = true;
+				}
+
+				if (firstDatePostReached && !hasDate)
+				{
+					Assert.Fail("There are posts without dates following a post with a date.");
+				}
+
+				if (!firstDatePostReached && lastPost != null)
+				{
+					Assert.GreaterEqualThan(post.Title, lastPost.Title);
+				}
+
+				if (firstDatePostReached && lastDate != null && hasDate)
+				{
+					Assert.GreaterEqualThan(date, lastDate.Value, post.Title + " " + lastPost.Title);
 				}
 
 				lastPost = post;
