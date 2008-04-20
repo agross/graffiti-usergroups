@@ -307,7 +307,7 @@
 	</target>
 
 	<target name="init-run-tests"
-			depends="import-testdata, create-config">
+			depends="create-config">
 		<mkdir dir="${test.results}" />
 	</target>
 

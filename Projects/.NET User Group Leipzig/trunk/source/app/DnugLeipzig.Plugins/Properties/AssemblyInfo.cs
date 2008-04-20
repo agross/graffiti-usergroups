@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -24,3 +23,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("39615F05-511B-4e68-B731-3B35B8FD79BA")]
 
 [assembly: InternalsVisibleTo("DnugLeipzig.Plugins.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

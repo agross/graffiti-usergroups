@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Extensions.Configuration;
-using DnugLeipzig.Extensions.Filters;
 
 using Graffiti.Core;
 
@@ -29,9 +28,9 @@ namespace DnugLeipzig.Extensions.Repositories
 			get { return Data; }
 		}
 
-		public abstract List<Post> Get(params IPostFilter[] filters);
+		public abstract IList<Post> GetAll();
 
-		public virtual Post Get(int id)
+		public virtual Post GetById(int id)
 		{
 			return Data.GetPost(id);
 		}
@@ -42,7 +41,7 @@ namespace DnugLeipzig.Extensions.Repositories
 		}
 		#endregion
 
-		protected PostCollection PostsByCategoryDisableHomepageOverride(int count)
+		protected IList<Post> PostsByCategoryDisableHomepageOverride(int count)
 		{
 			// HACK
 			// Temporarily disable homepage overrides to get all posts of the category, even if they aren't

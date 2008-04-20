@@ -50,7 +50,7 @@ namespace DnugLeipzig.Extensions
 			Post post;
 			try
 			{
-				post = Repository.Get(eventId);
+				post = Repository.GetById(eventId);
 			}
 			catch
 			{

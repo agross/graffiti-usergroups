@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-using DnugLeipzig.Extensions.Filters;
-
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Repositories
@@ -13,10 +11,8 @@ namespace DnugLeipzig.Extensions.Repositories
 			get; 
 		}
 
-		List<T> Get(params IPostFilter[] filters);
-
-		T Get(int id);
-
+		IList<T> GetAll();
+		T GetById(int id);
 		Category GetCategory();
 	}
 }

@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -68,17 +69,8 @@
     <Compile Include="Configuration\TalkPluginConfigurationSource.cs" />
     <Compile Include="DateAscendingPostComparer.cs" />
     <Compile Include="DataObjects\CalendarItem.cs" />
-    <Compile Include="Filters\ByDate.cs" />
-    <Compile Include="Filters\SortForIndexAscending.cs" />
-    <Compile Include="Filters\SortForIndexDescending.cs" />
-    <Compile Include="Filters\IsInPastYear.cs" />
-    <Compile Include="Filters\HasDate.cs" />
-    <Compile Include="Filters\IsInPast.cs" />
-    <Compile Include="Filters\IsInYear.cs" />
-    <Compile Include="Filters\IsInFuture.cs" />
-    <Compile Include="Filters\IPostFilter.cs" />
-    <Compile Include="Filters\LimitTo.cs" />
-    <Compile Include="Macros\MacrosBase.cs" />
+    <Compile Include="Extensions\PostFilterExtensions.cs" />
+    <Compile Include="Macros\Macros.cs" />
     <Compile Include="DateDescendingPostComparer.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\TalkRepository.cs" />

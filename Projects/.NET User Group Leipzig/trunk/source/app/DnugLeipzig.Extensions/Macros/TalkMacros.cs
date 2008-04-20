@@ -5,7 +5,6 @@ using System.Linq;
 using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Filters;
 using DnugLeipzig.Extensions.Repositories;
 
 using Graffiti.Core;
@@ -13,7 +12,7 @@ using Graffiti.Core;
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("talks")]
-	public class TalkMacros : MacrosBase
+	public class TalkMacros : Macros
 	{
 		readonly ITalkConfigurationSource Configuration;
 
@@ -40,28 +39,28 @@ namespace DnugLeipzig.Extensions.Macros
 		}
 		#endregion
 
-		public List<Post> GetForYear(int year)
+		public IList<Post> GetForYear(int year)
 		{
-			return Repository.Get(new IsInYear(Configuration.DateField, new DateTime(year, 1, 1)),
-			                      new SortForIndexAscending(Configuration.DateField));
+			return Repository.GetAll().IsInYear(Configuration.DateField, new DateTime(year, 1, 1)).
+			                      SortAscending(Configuration.DateField).ToList();
 		}
 
-		public List<Post> GetForCurrentYear()
+		public IList<Post> GetForCurrentYear()
 		{
 			return GetForYear(DateTime.Now.Year);
 		}
 
-		public List<Post> GetRecent(int numberOfTalks)
+		public IList<Post> GetRecent(int numberOfTalks)
 		{
-			return Repository.Get(new HasDate(Configuration.DateField),
-			                      new IsInPast(Configuration.DateField),
-								  new SortForIndexAscending(Configuration.DateField),
-			                      new LimitTo(numberOfTalks));
+			return Repository.GetAll().HasDate(Configuration.DateField).
+			                      IsInPast(Configuration.DateField).
+								  SortAscending(Configuration.DateField).
+			                      LimitTo(numberOfTalks).ToList();
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IList<Post> posts = Repository.Get(new IsInPastYear(Configuration.DateField));
+			IEnumerable<Post> posts = Repository.GetAll().IsInPastYear(Configuration.DateField);
 
 			IEnumerable<PastPostInfo> pastTalks = from post in posts
 			                                      group post by
@@ -74,7 +73,7 @@ namespace DnugLeipzig.Extensions.Macros
 			                                      		Url = Util.GetUrlForYearView(years.Key, Configuration.YearQueryString)
 			                                      	};
 
-			return new List<PastPostInfo>(pastTalks);
+			return pastTalks.ToList();
 		}
 	}
 }

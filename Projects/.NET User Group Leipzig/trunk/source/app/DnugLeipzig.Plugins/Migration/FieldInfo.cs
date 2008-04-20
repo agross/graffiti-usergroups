@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 
 using Graffiti.Core;
@@ -6,7 +5,7 @@ using Graffiti.Core;
 namespace DnugLeipzig.Plugins.Migration
 {
 	[DebuggerDisplay("FieldName = {FieldName}, FieldType = {FieldType}")]
-	class FieldInfo
+	internal class FieldInfo
 	{
 		public FieldInfo(string fieldName, FieldType fieldType)
 		{

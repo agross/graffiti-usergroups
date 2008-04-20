@@ -241,7 +241,7 @@ namespace DnugLeipzig.Plugins
 				EventPluginMemento newState = CreateMemento();
 
 				FieldMigrator migrator = new FieldMigrator();
-				migrator.MigrateValues(new MigrationInfo(oldState, newState));
+				migrator.Migrate(new MigrationInfo(oldState, newState));
 
 				return StatusType.Success;
 			}

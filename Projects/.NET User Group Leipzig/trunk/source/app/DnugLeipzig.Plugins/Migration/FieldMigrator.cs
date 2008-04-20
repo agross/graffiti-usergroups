@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Plugins.Migration;
 using DnugLeipzig.Plugins.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Plugins.Migration
 {
 	internal class FieldMigrator
 	{
@@ -30,13 +29,41 @@ namespace DnugLeipzig.Plugins
 				throw new ArgumentNullException("postRepository");
 			}
 
-
 			CategoryRepository = categoryRepository;
 			PostRepository = postRepository;
 		}
 		#endregion
 
-		public void SetUpCategory(string categoryName)
+		public void Migrate(MigrationInfo migrationInfo)
+		{
+			if (migrationInfo == null)
+			{
+				throw new ArgumentNullException("migrationInfo");
+			}
+
+			EnsureTargetCategory(migrationInfo.TargetCategoryName);
+			EnsureFields(migrationInfo.TargetCategoryName, migrationInfo.AllFields);
+
+			MigratePostsAndFieldValues(migrationInfo.SourceCategoryName,
+			                           migrationInfo.TargetCategoryName,
+			                           migrationInfo.ChangedFieldNames);
+
+			// Delete old fields (names are the ChangedFieldNames.Keys collection).
+			string[] fieldsToDelete = new string[migrationInfo.ChangedFieldNames.Keys.Count];
+			migrationInfo.ChangedFieldNames.Keys.CopyTo(fieldsToDelete, 0);
+			DeleteFields(migrationInfo.TargetCategoryName, fieldsToDelete);
+
+			if (!String.Equals(migrationInfo.SourceCategoryName, migrationInfo.TargetCategoryName))
+			{
+				DeleteCategory(migrationInfo.SourceCategoryName);
+			}
+		}
+
+		/// <summary>
+		/// Creates a new top-level category if it does not exist.
+		/// </summary>
+		/// <param name="categoryName">Name of the category.</param>
+		internal void EnsureTargetCategory(string categoryName)
 		{
 			if (String.IsNullOrEmpty(categoryName))
 			{
@@ -53,36 +80,51 @@ namespace DnugLeipzig.Plugins
 			CategoryRepository.AddCategory(category);
 		}
 
-		public void SetUpFields(string categoryName, Dictionary<string, FieldType> fieldNames)
+		/// <summary>
+		/// Creates fields in a category if they do not exist. Does not change any existing fields.
+		/// </summary>
+		/// <param name="categoryName">Name of the category.</param>
+		/// <param name="fields">The fields.</param>
+		internal void EnsureFields(string categoryName, Dictionary<string, FieldType> fields)
 		{
 			if (String.IsNullOrEmpty(categoryName))
 			{
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			if (fieldNames == null)
+			if (fields == null)
 			{
-				throw new ArgumentNullException("fieldNames");
+				throw new ArgumentNullException("fields");
 			}
 
-			CustomFormSettings settings = CategoryRepository.GetFormSettings(categoryName);
-
-			// Ensure that the destination fields exist.
-			foreach (var fieldName in fieldNames)
+			if (fields.Count == 0)
 			{
-				KeyValuePair<string, FieldType> pair = fieldName;
-				if (settings.Fields.Exists(field => Graffiti.Core.Util.AreEqualIgnoreCase(pair.Key, field.Name)))
+				// Nothing to to.
+				return;
+			}
+
+			CustomFormSettings formSettings = CategoryRepository.GetFormSettings(categoryName);
+
+			// Ensure that the fields exist.
+			foreach (var field in fields)
+			{
+				KeyValuePair<string, FieldType> pair = field;
+				if (formSettings.Fields.Exists(f => Graffiti.Core.Util.AreEqualIgnoreCase(pair.Key, f.Name)))
 				{
 					continue;
 				}
 
 				CustomField newField = new CustomField
-				                       { Name = fieldName.Key, Enabled = true, Id = Guid.NewGuid(), FieldType = fieldName.Value };
+				                       { Name = field.Key, Enabled = true, Id = Guid.NewGuid(), FieldType = field.Value };
 
-				CategoryRepository.AddField(settings, newField);
+				CategoryRepository.AddField(formSettings, newField);
 			}
 		}
 
+		/// <summary>
+		/// Deletes the category.
+		/// </summary>
+		/// <param name="categoryName">Name of the category.</param>
 		void DeleteCategory(string categoryName)
 		{
 			if (String.IsNullOrEmpty(categoryName))
@@ -93,77 +135,69 @@ namespace DnugLeipzig.Plugins
 			CategoryRepository.DeleteCategory(categoryName);
 		}
 
-		void DeleteFields(string categoryName, Dictionary<string, string> fieldNames)
+		/// <summary>
+		/// Deletes fields in a category.
+		/// </summary>
+		/// <param name="categoryName">Name of the category.</param>
+		/// <param name="fieldNames">The fields to delete.</param>
+		void DeleteFields(string categoryName, ICollection<string> fieldNames)
 		{
 			if (String.IsNullOrEmpty(categoryName))
 			{
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			if (fieldNames == null)
+			if (fieldNames.Count == 0)
 			{
-				throw new ArgumentNullException("fieldNames");
+				// Nothing to do.
+				return;
 			}
 
-			CustomFormSettings settings = CategoryRepository.GetFormSettings(categoryName);
+			CustomFormSettings formSettings = CategoryRepository.GetFormSettings(categoryName);
 
-			// Ensure that the destination fields exist.
-			foreach (var fieldName in fieldNames)
+			foreach (string field in fieldNames)
 			{
-				CategoryRepository.DeleteField(settings, fieldName.Key);
+				CategoryRepository.DeleteField(formSettings, field);
 			}
 		}
 
-		public void MigrateValues(MigrationInfo migrationInfo)
+		/// <summary>
+		/// Migrates posts to the target category. Also migrates field values to the new fields.
+		/// </summary>
+		void MigratePostsAndFieldValues(string sourceCategoryName,
+		                                string targetCategoryName,
+		                                Dictionary<string, string> changedFieldNames)
 		{
-			if (migrationInfo == null)
+			if (changedFieldNames == null)
 			{
-				throw new ArgumentNullException("migrationInfo");
+				throw new ArgumentNullException("changedFieldNames");
 			}
 
-			// Ensure new category and fields.
-			SetUpCategory(migrationInfo.NewCategoryName);
-			SetUpFields(migrationInfo.NewCategoryName, migrationInfo.FieldTypes);
-
-			Category newCategory = CategoryRepository.GetCategory(migrationInfo.NewCategoryName);
-
-			// Migrate custom fields.
-			foreach (var fieldName in migrationInfo.ChangedFieldNames)
+			if (String.Equals(sourceCategoryName, targetCategoryName, StringComparison.OrdinalIgnoreCase) && changedFieldNames.Count == 0)
 			{
-				if (String.Equals(fieldName.Key, fieldName.Value, StringComparison.OrdinalIgnoreCase))
-				{
-					// Field name is unchanged.
-					continue;
-				}
+				// Nothing to do.
+				return;
+			}
 
-				PostCollection posts = PostRepository.GetPosts(migrationInfo.OldCategoryName);
-				foreach (Post post in posts)
+			PostCollection posts = PostRepository.GetPosts(sourceCategoryName);
+			Category targetCategory = CategoryRepository.GetCategory(targetCategoryName);
+
+			foreach (Post post in posts)
+			{
+				// Migrate post.
+				post.CategoryId = targetCategory.Id;
+
+				// Migrate field values.
+				foreach (var fieldNames in changedFieldNames)
 				{
-					// Copy old field value.
-					post.CustomFields().Add(fieldName.Value, post.Custom(fieldName.Key));
-					
+					// Copy field value to the new field name.
+					post.CustomFields().Add(fieldNames.Value, post.Custom(fieldNames.Key));
+
 					// Delete old field value.
-					post.CustomFields().Remove(fieldName.Key);
-
-					PostRepository.Save(post);
-				}
-			}
-
-			DeleteFields(migrationInfo.NewCategoryName, migrationInfo.ChangedFieldNames);
-
-			// Migrate posts to the new category.
-			if (!String.Equals(migrationInfo.OldCategoryName, migrationInfo.NewCategoryName))
-			{
-				PostCollection posts = PostRepository.GetPosts(migrationInfo.OldCategoryName);
-				foreach (Post post in posts)
-				{
-					post.CategoryId = newCategory.Id;
-					PostRepository.Save(post);
+					post.CustomFields().Remove(fieldNames.Key);
 				}
 
-				// Delete old category and fields.
-				DeleteCategory(migrationInfo.OldCategoryName);
-				DeleteFields(migrationInfo.OldCategoryName, migrationInfo.ChangedFieldNames);
+				PostRepository.Save(post);
 			}
 		}
 	}

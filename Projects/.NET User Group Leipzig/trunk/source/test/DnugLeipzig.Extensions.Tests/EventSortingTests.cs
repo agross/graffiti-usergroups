@@ -1,7 +1,6 @@
 using System;
-
-using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Filters;
+using System.Linq;
+using System.Collections.Generic;
 
 using Graffiti.Core;
 
@@ -60,8 +59,7 @@ namespace DnugLeipzig.Extensions.Tests
 		[Test]
 		public void SortsEventIndexDescending()
 		{
-			SortForIndexDescending sorter = new SortForIndexDescending(StartDateField);
-			System.Collections.Generic.List<Post> sorted = sorter.Execute(_posts);
+			List<Post> sorted = _posts.OrderBy(p => p, new DateDescendingPostComparer(StartDateField)).ToList();
 
 			CollectionAssert.AreCountEqual(_originalPosts, sorted);
 			CollectionAssert.AreEquivalent(_originalPosts, sorted);
@@ -77,7 +75,7 @@ namespace DnugLeipzig.Extensions.Tests
 			foreach (Post post in sorted)
 			{
 				DateTime date;
-				bool hasDate = DateTime.TryParse(post.CustomFields()[StartDateField], out date);
+				bool hasDate = DateTime.TryParse(post.Custom(StartDateField), out date);
 
 				if (hasDate)
 				{
@@ -107,8 +105,7 @@ namespace DnugLeipzig.Extensions.Tests
 		[Test]
 		public void SortsEventIndexAscending()
 		{
-			SortForIndexAscending sorter = new SortForIndexAscending(StartDateField);
-			System.Collections.Generic.List<Post> sorted = sorter.Execute(_posts);
+			List<Post> sorted = _posts.OrderBy(p => p, new DateAscendingPostComparer(StartDateField)).ToList();
 
 			CollectionAssert.AreCountEqual(_originalPosts, sorted);
 			CollectionAssert.AreEquivalent(_originalPosts, sorted);
@@ -124,7 +121,7 @@ namespace DnugLeipzig.Extensions.Tests
 			foreach (Post post in sorted)
 			{
 				DateTime date;
-				bool hasDate = DateTime.TryParse(post.CustomFields()[StartDateField], out date);
+				bool hasDate = DateTime.TryParse(post.Custom(StartDateField), out date);
 
 				if (hasDate)
 				{

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Filters;
 using DnugLeipzig.Extensions.Repositories;
 
 using Graffiti.Core;
@@ -13,7 +13,7 @@ using Graffiti.Core;
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("events")]
-	public class EventMacros : MacrosBase
+	public class EventMacros : Macros
 	{
 		readonly IEventConfigurationSource Configuration;
 
@@ -45,7 +45,7 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			if (!post.Custom(Configuration.StartDateField).IsDate())
 			{
-				return Configuration.UnknownText;
+				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
 
 			string dateFormat = Configuration.DateFormat;
@@ -54,14 +54,14 @@ namespace DnugLeipzig.Extensions.Macros
 				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
 			}
 
-			return String.Format(dateFormat, post.Custom(Configuration.StartDateField).AsEventDate());
+			return HttpUtility.HtmlEncode(String.Format(dateFormat, post.Custom(Configuration.StartDateField).AsEventDate()));
 		}
 
 		public string EndDate(Post post)
 		{
 			if (!post.Custom(Configuration.EndDateField).IsDate())
 			{
-				return Configuration.UnknownText;
+				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
 
 			DateTime beginDate = post.Custom(Configuration.StartDateField).AsEventDate();
@@ -77,7 +77,7 @@ namespace DnugLeipzig.Extensions.Macros
 				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
 			}
 
-			return String.Format(dateFormat, endDate);
+			return HttpUtility.HtmlEncode(String.Format(dateFormat, endDate));
 		}
 
 		public string Location(Post post)
@@ -87,7 +87,7 @@ namespace DnugLeipzig.Extensions.Macros
 			{
 				location = Configuration.UnknownText;
 			}
-			return location;
+			return HttpUtility.HtmlEncode(location);
 		}
 
 		public override string Speaker(Post post)
@@ -96,34 +96,32 @@ namespace DnugLeipzig.Extensions.Macros
 		}
 		#endregion
 
-		public List<Post> GetForFuture()
+		public IList<Post> GetForFuture()
 		{
-			return Repository.Get(new IsInFuture(Configuration.StartDateField),
-								  new SortForIndexAscending(Configuration.StartDateField));
+			return
+				Repository.GetAll().IsInFuture(Configuration.StartDateField).SortAscending(Configuration.StartDateField).ToList();
 		}
 
-		public List<Post> GetUpcoming(int numberOfEvents)
+		public IList<Post> GetUpcoming(int numberOfEvents)
 		{
-			return Repository.Get(new HasDate(Configuration.StartDateField),
-			                      new IsInFuture(Configuration.StartDateField),
-			                      new SortForIndexAscending(Configuration.StartDateField),
-			                      new LimitTo(numberOfEvents));
+			return
+				Repository.GetAll().HasDate(Configuration.StartDateField).IsInFuture(Configuration.StartDateField).SortAscending(
+					Configuration.StartDateField).LimitTo(numberOfEvents).ToList();
 		}
 
-		public List<Post> GetForYear(int year)
+		public IList<Post> GetForYear(int year)
 		{
-			return Repository.Get(new IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1)),
-			                      new IsInPast(Configuration.StartDateField),
-								  new SortForIndexAscending(Configuration.StartDateField));
+			return
+				Repository.GetAll().IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1)).IsInPast(
+					Configuration.StartDateField).SortAscending(Configuration.StartDateField).ToList();
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IList<Post> posts = Repository.Get(new IsInPast(Configuration.StartDateField));
+			IEnumerable<Post> posts = Repository.GetAll().IsInPast(Configuration.StartDateField);
 
 			IEnumerable<PastPostInfo> pastEvents = from post in posts
-			                                       group post by
-			                                       	post.Custom(Configuration.StartDateField).AsEventDate().Year
+			                                       group post by post.Custom(Configuration.StartDateField).AsEventDate().Year
 			                                       into years orderby years.Key descending
 			                                       	select
 			                                       	new PastPostInfo
@@ -132,7 +130,7 @@ namespace DnugLeipzig.Extensions.Macros
 			                                       		Url = Util.GetUrlForYearView(years.Key, Configuration.YearQueryString)
 			                                       	};
 
-			return new List<PastPostInfo>(pastEvents);
+			return pastEvents.ToList();
 		}
 
 		public bool CanCreateCalendarItem(Post post)
@@ -148,10 +146,10 @@ namespace DnugLeipzig.Extensions.Macros
 			       	StartDate = post.Custom(Configuration.StartDateField).AsEventDate(),
 			       	EndDate = post.Custom(Configuration.EndDateField).AsEventDate(),
 			       	Location = post.Custom(Configuration.LocationField),
-			       	Subject = post.Title,
+			       	Subject = HttpUtility.HtmlDecode(post.Title),
 			       	Description = SiteSettings.BaseUrl + post.Url,
 			       	LastModified = post.Published,
-			       	Categories = Repository.Data.Site.Title
+			       	Categories = HttpUtility.HtmlDecode(Repository.Data.Site.Title)
 			       };
 		}
 	}

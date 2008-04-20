@@ -5,7 +5,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins.Migration
 {
-	class MigrationInfo
+	internal class MigrationInfo
 	{
 		public MigrationInfo(IMemento oldState, IMemento newState)
 		{
@@ -19,8 +19,8 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentNullException("newState");
 			}
 
-			OldCategoryName = oldState.CategoryName;
-			NewCategoryName = newState.CategoryName;
+			SourceCategoryName = oldState.CategoryName;
+			TargetCategoryName = newState.CategoryName;
 
 			// Merge fields of the old and new state into one Dictionary.
 			ChangedFieldNames = new Dictionary<string, string>();
@@ -41,20 +41,20 @@ namespace DnugLeipzig.Plugins.Migration
 				ChangedFieldNames.Add(oldField.Value.FieldName, newState.Fields[oldField.Key].FieldName);
 			}
 
-			FieldTypes = new Dictionary<string, FieldType>();
+			AllFields = new Dictionary<string, FieldType>();
 			foreach (var newField in newState.Fields)
 			{
-				FieldTypes.Add(newField.Value.FieldName, newField.Value.FieldType);
+				AllFields.Add(newField.Value.FieldName, newField.Value.FieldType);
 			}
 		}
 
-		public string OldCategoryName
+		public string SourceCategoryName
 		{
 			get;
 			protected set;
 		}
 
-		public string NewCategoryName
+		public string TargetCategoryName
 		{
 			get;
 			protected set;
@@ -72,7 +72,7 @@ namespace DnugLeipzig.Plugins.Migration
 		/// <summary>
 		/// Field types, keyed by the new field name.
 		/// </summary>
-		public Dictionary<string, FieldType> FieldTypes
+		public Dictionary<string, FieldType> AllFields
 		{
 			get;
 			protected set;

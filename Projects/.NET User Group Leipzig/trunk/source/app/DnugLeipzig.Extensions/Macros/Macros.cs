@@ -9,13 +9,13 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Macros
 {
-	public abstract class MacrosBase
+	public abstract class Macros
 	{
 		protected static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
 		readonly IConfigurationSource Configuration;
 		protected IRepository<Post> Repository;
 
-		protected MacrosBase(IConfigurationSource configuration)
+		protected Macros(IConfigurationSource configuration)
 		{
 			if (configuration == null)
 			{
