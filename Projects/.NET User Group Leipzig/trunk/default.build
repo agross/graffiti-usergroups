@@ -262,6 +262,7 @@
 				<include name="**\*.png" />
 				<include name="**\*.gif" />
 				<include name="**\*.html" />
+				<include name="**\*.as?x" />
 			</fileset>
 		</copy>
 

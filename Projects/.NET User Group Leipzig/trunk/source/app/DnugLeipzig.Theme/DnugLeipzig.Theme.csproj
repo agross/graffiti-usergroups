@@ -41,6 +41,7 @@
     <Content Include="preview.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\events\event-list-item.html" />
     <Content Include="components\events\event-date.html" />
     <Content Include="components\events\upcoming-events.html" />
     <Content Include="components\events\event.post.html" />
@@ -66,6 +67,8 @@
     <Content Include="contact.html" />
     <Content Include="components\site\header.html" />
     <Content Include="components\posts\footer.html" />
+    <Content Include="anmeldung.html" />
+    <Content Include="scripts\Register.js" />
     <Content Include="vortraege.post.html" />
     <Content Include="css\teaser.css" />
     <Content Include="home.layout.html" />
@@ -132,5 +135,8 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Register.ashx" />
   </ItemGroup>
 </Project>

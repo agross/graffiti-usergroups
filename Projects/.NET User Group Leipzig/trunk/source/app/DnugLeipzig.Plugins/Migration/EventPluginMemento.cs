@@ -16,6 +16,9 @@ namespace DnugLeipzig.Plugins.Migration
 			StartDateField = source.StartDateField;
 			LocationUnknownField = source.LocationUnknownField;
 			RegistrationNeededField = source.RegistrationNeededField;
+			RegistrationRecipient = source.RegistrationRecipientField;
+			MaximumNumberOfAttendees = source.MaximumNumberOfRegistrationsField;
+			NumberOfAttendees = source.NumberOfRegistrationsField;
 			CategoryName = source.CategoryName;
 		}
 
@@ -55,6 +58,24 @@ namespace DnugLeipzig.Plugins.Migration
 			protected set;
 		}
 
+		public string RegistrationRecipient
+		{
+			get;
+			protected set;
+		}
+
+		public string MaximumNumberOfAttendees
+		{
+			get;
+			protected set;
+		}
+
+		public string NumberOfAttendees
+		{
+			get;
+			protected set;
+		}
+
 		#region IMemento Members
 		public string CategoryName
 		{
@@ -73,7 +94,10 @@ namespace DnugLeipzig.Plugins.Migration
 				       	{ "{7B411215-E069-4f5b-AEA9-F9EC70A68B51}", new FieldInfo(SpeakerField, FieldType.TextBox) },
 				       	{ "{51BE26B6-03FC-47de-A490-283359C4C47A}", new FieldInfo(LocationUnknownField, FieldType.CheckBox) },
 				       	{ "{AF99664E-BB66-446a-8968-6899348EEB34}", new FieldInfo(LocationField, FieldType.TextBox) },
-				       	{ "{4DA43A0C-1C7E-4df6-A72A-0671660D8318}", new FieldInfo(RegistrationNeededField, FieldType.CheckBox) }
+				       	{ "{4DA43A0C-1C7E-4df6-A72A-0671660D8318}", new FieldInfo(RegistrationNeededField, FieldType.CheckBox) },
+				       	{ "{9151702C-88C9-48f2-8C2C-10C17264F456}", new FieldInfo(RegistrationRecipient, FieldType.TextBox) },
+				       	{ "{FB6BF2D1-28C7-428e-8ABF-357D7EE82EB3}", new FieldInfo(MaximumNumberOfAttendees, FieldType.TextBox) },
+				       	{ "{6741A2DA-6B1E-481c-B139-A0043AEC0EE0}", new FieldInfo(NumberOfAttendees, FieldType.TextBox) }
 				       };
 			}
 		}

@@ -15,25 +15,29 @@ namespace DnugLeipzig.Plugins
 {
 	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationSource
 	{
-		readonly IPostRepository Repository;
-
 		const string Form_CategoryName = "categoryName";
+		const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
 		const string Form_DateFormat = "dateFormat";
 		const string Form_DefaultLocation = "defaultLocation";
+		const string Form_DefaultMaximumNumberOfRegistrations = "defaultMaximumNumberOfRegistrations";
+		const string Form_DefaultRegistrationRecipient = "defaultRegistrationRecipient";
 		const string Form_EndDateField = "endDateField";
 		const string Form_LocationField = "locationField";
 		const string Form_LocationUnknownField = "locationUnknown";
+		const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
 		const string Form_MigrateFieldValues = "migrate";
+		const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
 		const string Form_RegistrationNeededField = "registrationNeeded";
+		const string Form_RegistrationRecipientField = "registrationRecipient";
 		const string Form_ShortEndDateFormat = "shortDateFormat";
 		const string Form_SpeakerField = "speakerField";
 		const string Form_StartDateField = "startDateField";
 		const string Form_UnknownText = "unknownText";
 		const string Form_YearQueryString = "yearQueryString";
+		readonly IPostRepository Repository;
 
-		public EventPlugin():this(new PostRepository())
+		public EventPlugin() : this(new PostRepository())
 		{
-			
 		}
 
 		public EventPlugin(IPostRepository repository)
@@ -57,6 +61,9 @@ namespace DnugLeipzig.Plugins
 			YearQueryString = "year";
 			LocationUnknownField = "Location is unknown";
 			RegistrationNeededField = "Registration needed";
+			RegistrationRecipientField = "Registration recipient e-mail address";
+			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
+			NumberOfRegistrationsField = "Number of registrations";
 		}
 
 		public override string Name
@@ -75,6 +82,18 @@ namespace DnugLeipzig.Plugins
 		}
 
 		public string DefaultLocation
+		{
+			get;
+			set;
+		}
+
+		public string DefaultMaximumNumberOfRegistrations
+		{
+			get;
+			set;
+		}
+
+		public string DefaultRegistrationRecipient
 		{
 			get;
 			set;
@@ -147,6 +166,24 @@ namespace DnugLeipzig.Plugins
 		}
 
 		public string RegistrationNeededField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationRecipientField
+		{
+			get;
+			set;
+		}
+
+		public string MaximumNumberOfRegistrationsField
+		{
+			get;
+			set;
+		}
+
+		public string NumberOfRegistrationsField
 		{
 			get;
 			set;
@@ -246,6 +283,10 @@ namespace DnugLeipzig.Plugins
 		{
 			return new FormElementCollection
 			       {
+			       	new CheckFormElement(Form_CreateTargetCategoryAndFields,
+			       	                     "Create category and fields",
+			       	                     "Check to automatically create the category and custom fields.",
+			       	                     true),
 			       	new CheckFormElement(Form_MigrateFieldValues,
 			       	                     "Migrate custom field values",
 			       	                     "Check to automatically migrate custom field values if category and/or field names change.",
@@ -283,6 +324,21 @@ namespace DnugLeipzig.Plugins
 			       	new TextFormElement(Form_RegistrationNeededField,
 			       	                    "\"Registration needed\" field",
 			       	                    "Enter the name of the custom checkbox field to store if registration for the event is needed, e.g. \"Registration needed\"."),
+			       	new TextFormElement(Form_RegistrationRecipientField,
+			       	                    "\"Registration recipient e-mail address\" field",
+			       	                    "Enter the name of the custom textbox field to store the registration recipient e-mail address, e.g. \"Registration recipient e-mail address\"."),
+			       	new TextFormElement(Form_DefaultRegistrationRecipient,
+			       	                    " Default registration recipient e-mail address",
+			       	                    "Enter the default registration e-mail address, e.g. \"registration@example.com\"."),
+			       	new TextFormElement(Form_MaximumNumberOfRegistrationsField,
+			       	                    "\"Maximum number of registrations\" field",
+			       	                    "Enter the name of the custom textbox field to store the maximum number of registrations for the event, e.g. \"Maximum number of registrations\"."),
+			       	new TextFormElement(Form_DefaultMaximumNumberOfRegistrations,
+			       	                    "Default maximum number of registrations",
+			       	                    "Enter the default maximum number of registrations, e.g. \"100\". If that number is reached, new registrations will not be possible. Leave blank to allow unlimited registrations."),
+			       	new TextFormElement(Form_NumberOfRegistrationsField,
+			       	                    "\"Number of registrations\" field",
+			       	                    "Enter the name of the custom textbox field to store the number of received registrations for the event, e.g. \"Number of registrations\"."),
 			       	new TextFormElement(Form_YearQueryString,
 			       	                    "Query string parameter for paging by year",
 			       	                    "Enter a value for the query string parameter used to display talks of a specific year.")
@@ -302,7 +358,7 @@ namespace DnugLeipzig.Plugins
 				}
 
 				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
-				if (!Util.StringToBoolean(nvc[Form_MigrateFieldValues]) && !Util.ValidateExistingCategory(categoryName))
+				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !Util.IsExistingCategory(categoryName))
 				{
 					SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
 					return StatusType.Warning;
@@ -328,11 +384,24 @@ namespace DnugLeipzig.Plugins
 				RegistrationNeededField = nvc[Form_RegistrationNeededField];
 				YearQueryString = nvc[Form_YearQueryString];
 				DefaultLocation = nvc[Form_DefaultLocation];
+				RegistrationRecipientField = nvc[Form_RegistrationRecipientField];
+				DefaultRegistrationRecipient = nvc[Form_DefaultRegistrationRecipient];
+				MaximumNumberOfRegistrationsField = nvc[Form_MaximumNumberOfRegistrationsField];
+				DefaultMaximumNumberOfRegistrations = nvc[Form_DefaultMaximumNumberOfRegistrations];
+				NumberOfRegistrationsField = nvc[Form_NumberOfRegistrationsField];
 
 				EventPluginMemento newState = CreateMemento();
 
 				FieldMigrator migrator = new FieldMigrator();
-				migrator.Migrate(new MigrationInfo(oldState, newState));
+				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
+				{
+					migrator.EnsureTargetCategory(categoryName);
+					migrator.EnsureFields(categoryName, new MigrationInfo(oldState, newState).AllFields);
+				}
+				if (nvc[Form_MigrateFieldValues].IsChecked())
+				{
+					migrator.Migrate(new MigrationInfo(oldState, newState));
+				}
 
 				return StatusType.Success;
 			}
@@ -359,6 +428,11 @@ namespace DnugLeipzig.Plugins
 			values[Form_RegistrationNeededField] = RegistrationNeededField;
 			values[Form_YearQueryString] = YearQueryString;
 			values[Form_DefaultLocation] = DefaultLocation;
+			values[Form_RegistrationRecipientField] = RegistrationRecipientField;
+			values[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
+			values[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;
+			values[Form_DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
+			values[Form_NumberOfRegistrationsField] = NumberOfRegistrationsField;
 
 			return values;
 		}

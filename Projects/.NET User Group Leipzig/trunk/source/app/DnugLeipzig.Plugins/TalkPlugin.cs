@@ -128,7 +128,7 @@ namespace DnugLeipzig.Plugins
 			}
 
 			string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
-			if (!Util.ValidateExistingCategory(categoryName))
+			if (!Util.IsExistingCategory(categoryName))
 			{
 				SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
 				return StatusType.Warning;

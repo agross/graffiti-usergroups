@@ -93,6 +93,7 @@
     <Compile Include="Macros\UiMacros.cs" />
     <Compile Include="Macros\EventMacros.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationHandler.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

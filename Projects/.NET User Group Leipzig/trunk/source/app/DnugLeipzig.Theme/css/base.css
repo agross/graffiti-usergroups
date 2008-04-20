@@ -12,6 +12,10 @@ a img {
 	border-style: none;
 }
 
+label {
+	cursor: pointer;
+}	
+
 /* Clearfix, the ie part is in the ie css */
 .clearfix {
 	clear: both;

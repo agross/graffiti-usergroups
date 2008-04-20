@@ -119,6 +119,33 @@ namespace DnugLeipzig.Definitions.Configuration
 				return PluginInstance.RegistrationNeededField;
 			}
 		}
+
+		public string RegistrationRecipientField
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.RegistrationRecipientField;
+			}
+		}
+
+		public string MaximumNumberOfRegistrationsField
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.MaximumNumberOfRegistrationsField;
+			}
+		}
+
+		public string NumberOfRegistrationsField
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.NumberOfRegistrationsField;
+			}
+		}
 		#endregion
 
 		static void EnsureCurrentInstance()

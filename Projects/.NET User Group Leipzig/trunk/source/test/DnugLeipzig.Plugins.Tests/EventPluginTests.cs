@@ -7,7 +7,6 @@ using Graffiti.Core;
 using MbUnit.Framework;
 
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Plugins.Tests
 {

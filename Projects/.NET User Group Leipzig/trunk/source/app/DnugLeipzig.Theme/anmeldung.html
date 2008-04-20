@@ -1,0 +1,64 @@
+﻿<div class="article">
+	<h1 class="title">
+		$post.Title</h1>
+	<div class="body">
+		$post.Body
+	</div>
+</div>
+
+<div class="list">
+	#set($futureEvents = $events.GetForRegistration())
+
+	#foreach($post in $futureEvents)
+	#beforeall
+		<ol>
+	#each
+		<li>
+			$macros.LoadThemeView("components/events/event-list-item.view")
+		</li>
+	#afterall
+		</ol>
+	#nodata
+		$macros.LoadThemeView("components/no-data.view")
+	#end
+</div>
+
+#if ($futureEvents.Count > 0)
+	<form action="$url" method="post" id="registationForm">
+		<fieldset>
+			<dl>
+				<dt>
+					<label for="formOfAddressMr">Anrede:</label>
+				</dt>
+				<dd>
+					<input type="radio" name="formOfAddress" id="formOfAddressMr" value="mr" /> <label for="formOfAddressMr">Herr</label>
+					<input type="radio" name="formOfAddress" id="formOfAddressMrs" value="mrs" /> <label for="formOfAddressMrs">Frau</label>
+				</dd>
+				<dt>
+					<label for="name">Name:</label>
+				</dt>
+				<dd>
+					<input type="text" name="name" id="name" />
+				</dd>
+				<dt>
+					<label for="statusStudent">Status:</label>
+				</dt>
+				<dd>
+					<input type="radio" name="status" id="statusStudent" value="student" /> <label for="statusStudent">Student</label>
+					<input type="radio" name="status" id="statusResearcher" value="researcher" /> <label for="statusResearcher">wissenschaftlicher Mitarbeiter</label>
+					<input type="radio" name="status" id="statusOther" value="other" /> <label for="statusOther">Sonstiges</label>
+				</dd>				
+				<dt>
+					<label for="email">E-Mail-Adresse:</label>
+				</dt>
+				<dd>
+					<input type="text" name="email" id="email" />
+				</dd>
+			</dl>
+		</fieldset>
+		
+		$events.RegisterButton("%{id = 'register' class = 'submit', value = 'Anmelden'}")
+		<div style="display: none;" id="Div1">
+		</div>
+	</form>
+#end

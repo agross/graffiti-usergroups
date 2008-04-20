@@ -51,5 +51,16 @@ namespace DnugLeipzig.Extensions.Extensions
 		{
 			return posts.Take(maximumNumberOfPosts);
 		}
+
+		public static IEnumerable<Post> RegistrationPossible(this IEnumerable<Post> posts,
+		                                                     string numberOfRegistrationsFieldName,
+		                                                     string maximumNumberOfRegistrationsFieldName)
+		{
+			return from post in posts
+			       where
+			       	post.Custom(numberOfRegistrationsFieldName).ToIntMin() <
+			       	post.Custom(maximumNumberOfRegistrationsFieldName).ToIntMax()
+			       select post;
+		}
 	}
 }

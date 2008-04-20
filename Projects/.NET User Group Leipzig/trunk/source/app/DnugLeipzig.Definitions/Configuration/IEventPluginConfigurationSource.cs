@@ -41,5 +41,20 @@ namespace DnugLeipzig.Definitions.Configuration
 		{
 			get;
 		}
+
+		string RegistrationRecipientField
+		{
+			get;
+		}
+
+		string MaximumNumberOfRegistrationsField
+		{
+			get;
+		}
+
+		string NumberOfRegistrationsField
+		{
+			get;
+		}
 	}
 }

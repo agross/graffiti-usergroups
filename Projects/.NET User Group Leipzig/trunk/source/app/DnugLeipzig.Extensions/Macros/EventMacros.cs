@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -23,7 +24,8 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 		}
 
-		public EventMacros(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration) : base(configuration)
+		public EventMacros(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration)
+			: base(configuration)
 		{
 			if (configuration == null)
 			{
@@ -103,6 +105,14 @@ namespace DnugLeipzig.Extensions.Macros
 				Repository.GetAll().IsInFuture(Configuration.StartDateField).SortAscending(Configuration.StartDateField).ToList();
 		}
 
+		public IList<Post> GetForRegistration()
+		{
+			return
+				Repository.GetAll().HasDate(Configuration.StartDateField).IsInFuture(Configuration.StartDateField).
+					RegistrationPossible(Configuration.NumberOfRegistrationsField, Configuration.MaximumNumberOfRegistrationsField).
+					SortAscending(Configuration.StartDateField).ToList();
+		}
+
 		public IList<Post> GetUpcoming(int numberOfEvents)
 		{
 			return
@@ -132,6 +142,29 @@ namespace DnugLeipzig.Extensions.Macros
 			                                       	};
 
 			return pastEvents.ToList();
+		}
+
+		public string RegisterButton(IDictionary properties)
+		{
+			string scriptPath =
+				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/Register.ashx", GraffitiContext.Current.Theme));
+			
+			string cssClass = GetAttribute(properties, "class");
+			string text = GetAttribute(properties, "value");
+			string id = GetAttribute(properties, "id");
+
+			return string.Format("<input {0} {1} {2} type=\"button\" onclick=\"Register.submitMessage('{3}');\" />", id, cssClass, text, scriptPath);
+		}
+
+		static string GetAttribute(IDictionary properties, string key)
+		{
+			string value = properties[key] as string;
+			if (!String.IsNullOrEmpty(value))
+			{
+				value = String.Format("{0}=\"{1}\"", key, value.Trim());
+			}
+
+			return value;
 		}
 
 		public bool CanCreateCalendarItem(Post post)
