@@ -21,23 +21,12 @@ namespace DnugLeipzig.Extensions.Extensions
 			return DateTime.TryParse(value, out date);
 		}
 
-		public static int ToIntMin(this string value)
+		public static int ToInt(this string value, int defaultValue)
 		{
 			int intValue;
 			if (!int.TryParse(value, out intValue))
 			{
-				return int.MinValue;
-			}
-
-			return intValue;
-		}
-
-		public static int ToIntMax(this string value)
-		{
-			int intValue;
-			if (!int.TryParse(value, out intValue))
-			{
-				return int.MaxValue;
+				return defaultValue;
 			}
 
 			return intValue;

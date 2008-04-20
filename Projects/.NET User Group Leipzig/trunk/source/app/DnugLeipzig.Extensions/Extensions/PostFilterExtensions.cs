@@ -58,8 +58,8 @@ namespace DnugLeipzig.Extensions.Extensions
 		{
 			return from post in posts
 			       where
-			       	post.Custom(numberOfRegistrationsFieldName).ToIntMin() <
-			       	post.Custom(maximumNumberOfRegistrationsFieldName).ToIntMax()
+			       	post.Custom(numberOfRegistrationsFieldName).ToInt(0) <
+			       	post.Custom(maximumNumberOfRegistrationsFieldName).ToInt(int.MaxValue)
 			       select post;
 		}
 	}
