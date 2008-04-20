@@ -135,20 +135,28 @@ namespace DnugLeipzig.Plugins
 			Debug.WriteLine("Init Event Plugin");
 
 			ga.BeforeValidate += ga_BeforeValidate;
-			ga.BeforeInsert += ga_BeforeInsert;
-			ga.BeforeUpdate += ga_BeforeUpdate;
 		}
 
 		void ga_BeforeValidate(DataBuddyBase dataObject, EventArgs e)
 		{
-		}
+			Post post = dataObject as Post;
+			if (post == null)
+			{
+				return;
+			}
 
-		void ga_BeforeUpdate(DataBuddyBase dataObject, EventArgs e)
-		{
-		}
-
-		void ga_BeforeInsert(DataBuddyBase dataObject, EventArgs e)
-		{
+			if (post.Category.Name == CategoryName)
+			{
+				// Validate input.
+				if (!String.IsNullOrEmpty(post.Custom(StartDateField)))
+				{
+					DateTime dateTime;
+					if (!DateTime.TryParse(post.Custom(StartDateField), out dateTime))
+					{
+						throw new Exception("Please enter a valid date.");
+					}
+				}
+			}
 		}
 
 		#region Settings
