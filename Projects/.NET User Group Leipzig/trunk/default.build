@@ -192,8 +192,8 @@
 	</target>
 
 	<fileset id="config-files">
-		<include name="${basedir.test}\DnugLeipzig.Extensions.Tests\App.config.template" />
-		<include name="${basedir.test}\DnugLeipzig.Plugins.Tests\App.config.template" />
+		<include name="${basedir.app}\**\*.config.template" />
+		<include name="${basedir.test}\**\*.config.template" />
 	</fileset>
 
 	<target name="create-config"
@@ -307,7 +307,7 @@
 	</target>
 
 	<target name="init-run-tests"
-			depends="create-config">
+			depends="import-testdata, create-config">
 		<mkdir dir="${test.results}" />
 	</target>
 

@@ -56,7 +56,7 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return Repository.GetAll().HasDate(Configuration.DateField).
 			                      IsInPast(Configuration.DateField).
-								  SortAscending(Configuration.DateField).
+								  SortDescending(Configuration.DateField).
 			                      LimitTo(numberOfTalks).ToList();
 		}
 

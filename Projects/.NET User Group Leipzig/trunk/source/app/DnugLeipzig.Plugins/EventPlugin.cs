@@ -4,7 +4,10 @@ using System.Diagnostics;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -12,6 +15,8 @@ namespace DnugLeipzig.Plugins
 {
 	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationSource
 	{
+		readonly IPostRepository Repository;
+
 		const string Form_CategoryName = "categoryName";
 		const string Form_DateFormat = "dateFormat";
 		const string Form_DefaultLocation = "defaultLocation";
@@ -26,8 +31,20 @@ namespace DnugLeipzig.Plugins
 		const string Form_UnknownText = "unknownText";
 		const string Form_YearQueryString = "yearQueryString";
 
-		public EventPlugin()
+		public EventPlugin():this(new PostRepository())
 		{
+			
+		}
+
+		public EventPlugin(IPostRepository repository)
+		{
+			if (repository == null)
+			{
+				throw new ArgumentNullException("repository");
+			}
+
+			Repository = repository;
+
 			// Initialize with default values.
 			CategoryName = "Talks";
 			StartDateField = "Start Date";
@@ -36,7 +53,7 @@ namespace DnugLeipzig.Plugins
 			DateFormat = "on {0:D}, at {0:t}";
 			ShortEndDateFormat = "at {0:t}";
 			LocationField = "Location";
-			UnknownText = "(TBA)";
+			UnknownText = "(To be announced)";
 			YearQueryString = "year";
 			LocationUnknownField = "Location is unknown";
 			RegistrationNeededField = "Registration needed";
@@ -55,6 +72,12 @@ namespace DnugLeipzig.Plugins
 		public override string Description
 		{
 			get { return "Extends Graffiti CMS for events management."; }
+		}
+
+		public string DefaultLocation
+		{
+			get;
+			set;
 		}
 
 		#region IEventPluginConfigurationSource Members
@@ -135,9 +158,11 @@ namespace DnugLeipzig.Plugins
 			Debug.WriteLine("Init Event Plugin");
 
 			ga.BeforeValidate += ga_BeforeValidate;
+			ga.BeforeInsert += ga_SetDefaultValues;
+			ga.BeforeUpdate += ga_SetDefaultValues;
 		}
 
-		void ga_BeforeValidate(DataBuddyBase dataObject, EventArgs e)
+		internal void ga_BeforeValidate(DataBuddyBase dataObject, EventArgs e)
 		{
 			Post post = dataObject as Post;
 			if (post == null)
@@ -145,18 +170,75 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (post.Category.Name == CategoryName)
+			if (post.Category.Name != CategoryName)
 			{
-				// Validate input.
-				if (!String.IsNullOrEmpty(post.Custom(StartDateField)))
-				{
-					DateTime dateTime;
-					if (!DateTime.TryParse(post.Custom(StartDateField), out dateTime))
-					{
-						throw new Exception("Please enter a valid date.");
-					}
-				}
+				return;
 			}
+
+			// Validate input.
+			DateTime? startDate = ValidateDate(post, StartDateField);
+			DateTime? endDate = ValidateDate(post, EndDateField);
+
+			if (!startDate.HasValue && endDate.HasValue)
+			{
+				throw new ValidationException("Please enter a start date if the end date is set.", StartDateField);
+			}
+
+			if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+			{
+				throw new ValidationException("Please enter a start date that is less or equal than the end date.",
+				                              StartDateField,
+				                              EndDateField);
+			}
+
+			if (post.Custom(LocationUnknownField).IsChecked() && !post.Custom(LocationField).IsNullOrEmptyTrimmed())
+			{
+				throw new ValidationException(
+					String.Format(
+						"Either check the '{0}' field the or enter a location. You can leave the '{0}' field unchecked and the '{1}' field empty to apply the default location value '{2}'.",
+						LocationUnknownField,
+						LocationField,
+						DefaultLocation),
+					LocationUnknownField,
+					LocationField);
+			}
+		}
+
+		internal void ga_SetDefaultValues(DataBuddyBase dataObject, EventArgs e)
+		{
+			Post post = dataObject as Post;
+			if (post == null)
+			{
+				return;
+			}
+
+			if (post.Category.Name != CategoryName)
+			{
+				return;
+			}
+
+			// Set default location if no location is given.
+			if (!post.Custom(LocationUnknownField).IsChecked() && post.Custom(LocationField).IsNullOrEmptyTrimmed())
+			{
+				post.CustomFields()[LocationField] = DefaultLocation;
+				//Repository.Save(post);
+			}
+		}
+
+		static DateTime? ValidateDate(Post post, string dateField)
+		{
+			if (!post.Custom(dateField).IsNullOrEmptyTrimmed())
+			{
+				DateTime dateTime;
+				if (!DateTime.TryParse(post.Custom(dateField), out dateTime))
+				{
+					throw new ValidationException("Please enter a valid date.", dateField);
+				}
+
+				return dateTime;
+			}
+
+			return null;
 		}
 
 		#region Settings
@@ -170,7 +252,7 @@ namespace DnugLeipzig.Plugins
 			       	                     true),
 			       	new TextFormElement(Form_CategoryName,
 			       	                    "Graffiti events category",
-			       	                    "Enter the name of the category to store events, e.g. \"Talks\"."),
+			       	                    "Enter the name of the category to store events, e.g. \"Events\"."),
 			       	new TextFormElement(Form_StartDateField,
 			       	                    "\"Event start date and time\" field",
 			       	                    "Enter the name of the custom text field to store the events's start date (and, optionally, time), e.g. \"Start Date\". This field will be validated to be either empty or hold a correct date time/value."),
@@ -197,10 +279,10 @@ namespace DnugLeipzig.Plugins
 			       	                    "Enter the default value of the locaton if you don't enter one, e.g. \"Initech Corp., Floor 1\". This value will be used to fill the event location field above if \"Location unknown\" is not checked."),
 			       	new TextFormElement(Form_UnknownText,
 			       	                    "\"Unknown\" text",
-			       	                    "Enter the text to be displayed if event information (dates, speaker, location) is not yet known, e.g. \"(TBA)\"."),
+			       	                    "Enter the text to be displayed if event information (dates, speaker, location) is not yet known, e.g. \"(To be announced)\"."),
 			       	new TextFormElement(Form_RegistrationNeededField,
 			       	                    "\"Registration needed\" field",
-			       	                    "Enter the name of the custom field to store if registration for the event is needed, e.g. \"Registration needed\"."),
+			       	                    "Enter the name of the custom checkbox field to store if registration for the event is needed, e.g. \"Registration needed\"."),
 			       	new TextFormElement(Form_YearQueryString,
 			       	                    "Query string parameter for paging by year",
 			       	                    "Enter a value for the query string parameter used to display talks of a specific year.")
@@ -245,6 +327,7 @@ namespace DnugLeipzig.Plugins
 				LocationUnknownField = nvc[Form_LocationUnknownField];
 				RegistrationNeededField = nvc[Form_RegistrationNeededField];
 				YearQueryString = nvc[Form_YearQueryString];
+				DefaultLocation = nvc[Form_DefaultLocation];
 
 				EventPluginMemento newState = CreateMemento();
 
@@ -275,6 +358,7 @@ namespace DnugLeipzig.Plugins
 			values[Form_LocationUnknownField] = LocationUnknownField;
 			values[Form_RegistrationNeededField] = RegistrationNeededField;
 			values[Form_YearQueryString] = YearQueryString;
+			values[Form_DefaultLocation] = DefaultLocation;
 
 			return values;
 		}
