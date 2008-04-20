@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<project name="DNUG"
+		 default="test-build"
+		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
+
+	<!-- Load test-specific configuration. -->
+	<if test="${file::exists('test.properties')}">
+		<echo message="Loading test.properties" />
+		<include buildfile="test.properties" />
+	</if>
+
+	<include buildfile="default.build" />
+
+	<target name="test-build"
+			depends="all"
+			description="Compiles the application, runs all unit tests and creates deployment packages.">
+	</target>
+</project>
