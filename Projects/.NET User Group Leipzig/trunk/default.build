@@ -344,7 +344,8 @@
 			depends="init-build-setup, build-app, build-theme, run-tests"
 			description="Creates the applications' deployment package.">
 		<zip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
-			 ziplevel="9">
+			 ziplevel="9"
+			 duplicate="Preserve">
 			<!-- Theme. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
 					 prefix="files\themes\${project::get-name()}">
@@ -354,13 +355,13 @@
 			<!-- Extensions. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
 					 prefix="bin">
-				<include name="DnugLeipzig.Extensions.*" />
+				<include name="DnugLeipzig.*" />
 			</fileset>
 			
 			<!-- Plugins. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Plugins\bin\${build.msbuild.configuration}"
 					 prefix="bin">
-				<include name="DnugLeipzig.Plugins.*" />
+				<include name="DnugLeipzig.*" />
 			</fileset>
 		</zip>
 	</target>
