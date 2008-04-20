@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Plugins.Repositories;
+using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -179,7 +180,7 @@ namespace DnugLeipzig.Plugins.Migration
 				return;
 			}
 
-			PostCollection posts = PostRepository.GetPosts(sourceCategoryName);
+			IList<Post> posts = PostRepository.GetByCategory(sourceCategoryName);
 			Category targetCategory = CategoryRepository.GetCategory(targetCategoryName);
 
 			foreach (Post post in posts)

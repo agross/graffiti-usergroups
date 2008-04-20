@@ -68,9 +68,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
+      <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
+      <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\app\DnugLeipzig.Plugins\DnugLeipzig.Plugins.csproj">
       <Project>{A135CE3D-C7DB-4241-8F9C-12695655CE6F}</Project>
       <Name>DnugLeipzig.Plugins</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\DnugLeipzig.Runtime\DnugLeipzig.Runtime.csproj">
+      <Project>{7F147039-28C6-4CE6-B134-4A94E90BA183}</Project>
+      <Name>DnugLeipzig.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

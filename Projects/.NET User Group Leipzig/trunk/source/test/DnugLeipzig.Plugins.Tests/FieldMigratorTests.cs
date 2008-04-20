@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
-using DnugLeipzig.Plugins.Repositories;
 using DnugLeipzig.Plugins.Tests.Extensions;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -101,7 +102,7 @@ namespace DnugLeipzig.Plugins.Tests
 
 				// No posts to migrate.
 				postRepository = _mocks.CreateMock<IPostRepository>();
-				Expect.Call(postRepository.GetPosts(sourceCategoryName)).Return(new PostCollection());
+				Expect.Call(postRepository.GetByCategory(sourceCategoryName)).Return(new PostCollection());
 			}
 
 			using (_mocks.Playback())
@@ -265,7 +266,7 @@ namespace DnugLeipzig.Plugins.Tests
 
 				// No posts to migrate.
 				postRepository = _mocks.CreateMock<IPostRepository>();
-				Expect.Call(postRepository.GetPosts(categoryName)).Return(new PostCollection());
+				Expect.Call(postRepository.GetByCategory(categoryName)).Return(new PostCollection());
 			}
 
 			using (_mocks.Playback())

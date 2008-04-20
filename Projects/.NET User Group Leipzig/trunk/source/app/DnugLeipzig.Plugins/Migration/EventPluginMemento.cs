@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
 
 using Graffiti.Core;
 
@@ -8,7 +8,7 @@ namespace DnugLeipzig.Plugins.Migration
 {
 	internal class EventPluginMemento : IMemento
 	{
-		public EventPluginMemento(IEventConfigurationSource source)
+		public EventPluginMemento(IEventPluginConfigurationSource source)
 		{
 			SpeakerField = source.SpeakerField;
 			EndDateField = source.EndDateField;

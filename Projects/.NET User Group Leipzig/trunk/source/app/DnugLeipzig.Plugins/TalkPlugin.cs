@@ -3,13 +3,13 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class TalkPlugin : GraffitiEvent, ITalkConfigurationSource
+	public class TalkPlugin : GraffitiEvent, ITalkPluginConfigurationSource
 	{
 		const string Form_CategoryName = "categoryName";
 		const string Form_DateField = "dateField";
@@ -41,7 +41,7 @@ namespace DnugLeipzig.Plugins
 			get { return "Extends Graffiti CMS for talks management."; }
 		}
 
-		#region ITalkConfigurationSource Members
+		#region ITalkPluginConfigurationSource Members
 		public string DateField
 		{
 			get;

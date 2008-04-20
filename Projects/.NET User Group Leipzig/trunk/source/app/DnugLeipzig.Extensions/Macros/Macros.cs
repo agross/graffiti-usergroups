@@ -1,9 +1,9 @@
 using System;
 using System.Web;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Repositories;
 
 using Graffiti.Core;
 
@@ -12,10 +12,10 @@ namespace DnugLeipzig.Extensions.Macros
 	public abstract class Macros
 	{
 		protected static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
-		readonly IConfigurationSource Configuration;
-		protected IRepository<Post> Repository;
+		readonly IPluginConfigurationSource Configuration;
+		protected ICategoryEnabledRepository Repository;
 
-		protected Macros(IConfigurationSource configuration)
+		protected Macros(IPluginConfigurationSource configuration)
 		{
 			if (configuration == null)
 			{

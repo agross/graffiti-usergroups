@@ -3,14 +3,14 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Plugins.Migration;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class EventPlugin : GraffitiEvent, IEventConfigurationSource
+	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationSource
 	{
 		const string Form_CategoryName = "categoryName";
 		const string Form_DateFormat = "dateFormat";
@@ -57,7 +57,7 @@ namespace DnugLeipzig.Plugins
 			get { return "Extends Graffiti CMS for events management."; }
 		}
 
-		#region IEventConfigurationSource Members
+		#region IEventPluginConfigurationSource Members
 		public string SortRelevantDateField
 		{
 			get { return StartDateField; }

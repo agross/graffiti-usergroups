@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Repositories;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -15,14 +16,14 @@ namespace DnugLeipzig.Extensions.Macros
 	[Chalk("events")]
 	public class EventMacros : Macros
 	{
-		readonly IEventConfigurationSource Configuration;
+		readonly IEventPluginConfigurationSource Configuration;
 
 		#region ctors
 		public EventMacros() : this(null, new EventPluginConfigurationSource())
 		{
 		}
 
-		public EventMacros(IRepository<Post> repository, IEventConfigurationSource configuration) : base(configuration)
+		public EventMacros(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration) : base(configuration)
 		{
 			if (configuration == null)
 			{
@@ -149,7 +150,7 @@ namespace DnugLeipzig.Extensions.Macros
 			       	Subject = HttpUtility.HtmlDecode(post.Title),
 			       	Description = SiteSettings.BaseUrl + post.Url,
 			       	LastModified = post.Published,
-			       	Categories = HttpUtility.HtmlDecode(Repository.Data.Site.Title)
+			       	Categories = HttpUtility.HtmlDecode(Repository.GraffitiData.Site.Title)
 			       };
 		}
 	}

@@ -1,10 +1,11 @@
 using System;
 using System.Web;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Macros;
-using DnugLeipzig.Extensions.Repositories;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -12,14 +13,14 @@ namespace DnugLeipzig.Extensions
 {
 	public class CalendarHandler : IHttpHandler
 	{
-		readonly IEventConfigurationSource Configuration;
-		readonly IRepository<Post> Repository;
+		readonly IEventPluginConfigurationSource Configuration;
+		readonly ICategoryEnabledRepository Repository;
 
 		public CalendarHandler() : this(null, new EventPluginConfigurationSource())
 		{
 		}
 
-		public CalendarHandler(IRepository<Post> repository, IEventConfigurationSource configuration)
+		public CalendarHandler(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration)
 		{
 			if (configuration == null)
 			{

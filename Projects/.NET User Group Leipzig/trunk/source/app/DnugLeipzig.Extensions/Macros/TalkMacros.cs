@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Extensions.Repositories;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -14,14 +15,15 @@ namespace DnugLeipzig.Extensions.Macros
 	[Chalk("talks")]
 	public class TalkMacros : Macros
 	{
-		readonly ITalkConfigurationSource Configuration;
+		readonly ITalkPluginConfigurationSource Configuration;
 
 		#region ctors
 		public TalkMacros() : this(null, new TalkPluginConfigurationSource())
 		{
 		}
 
-		public TalkMacros(IRepository<Post> repository, ITalkConfigurationSource configuration) : base(configuration)
+		public TalkMacros(ICategoryEnabledRepository repository, ITalkPluginConfigurationSource configuration)
+			: base(configuration)
 		{
 			if (configuration == null)
 			{

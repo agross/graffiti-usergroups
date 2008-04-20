@@ -60,17 +60,21 @@
     <Compile Include="Migration\IMemento.cs" />
     <Compile Include="Migration\MigrationInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\CategoryRepository.cs" />
-    <Compile Include="Repositories\ICategoryRepository.cs" />
-    <Compile Include="Repositories\IPostRepository.cs" />
-    <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="TalkPlugin.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
+      <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
+      <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj">
       <Project>{43CDFC01-CED1-484C-A74B-B9746A670100}</Project>
       <Name>DnugLeipzig.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DnugLeipzig.Runtime\DnugLeipzig.Runtime.csproj">
+      <Project>{7F147039-28C6-4CE6-B134-4A94E90BA183}</Project>
+      <Name>DnugLeipzig.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
