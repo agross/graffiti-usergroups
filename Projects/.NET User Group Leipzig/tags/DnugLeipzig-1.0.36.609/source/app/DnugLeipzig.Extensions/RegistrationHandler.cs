@@ -1,0 +1,20 @@
+using System;
+using System.Web;
+
+namespace DnugLeipzig.Extensions
+{
+	public class RegistrationHandler : IHttpHandler
+	{
+		#region IHttpHandler Members
+		public void ProcessRequest(HttpContext context)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool IsReusable
+		{
+			get { return true; }
+		}
+		#endregion
+	}
+}
