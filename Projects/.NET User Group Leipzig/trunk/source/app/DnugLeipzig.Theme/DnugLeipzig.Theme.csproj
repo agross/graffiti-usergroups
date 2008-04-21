@@ -137,6 +137,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Register.ashx" />
+    <None Include="handlers\Calendar.ashx" />
+    <None Include="handlers\Register.ashx" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public interface ITalkPluginConfigurationSource : IPluginConfigurationSource
+	public interface ITalkPluginConfiguration : IPluginConfiguration
 	{
 		string DateField
 		{

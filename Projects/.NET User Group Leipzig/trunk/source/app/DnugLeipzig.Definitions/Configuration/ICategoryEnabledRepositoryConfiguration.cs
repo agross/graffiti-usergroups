@@ -1,6 +1,6 @@
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public interface ICategoryEnabledRepositoryConfigurationSource
+	public interface ICategoryEnabledRepositoryConfiguration
 	{
 		string CategoryName
 		{

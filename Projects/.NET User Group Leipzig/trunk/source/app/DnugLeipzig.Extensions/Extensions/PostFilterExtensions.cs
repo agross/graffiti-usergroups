@@ -11,27 +11,27 @@ namespace DnugLeipzig.Extensions.Extensions
 		#region Date/Time Related
 		public static IEnumerable<Post> HasDate(this IEnumerable<Post> posts, string dateFieldName)
 		{
-			return from post in posts where post.Custom(dateFieldName).IsDate() select post;
+			return posts.Where(post => post.HasDate(dateFieldName));
 		}
 
 		public static IEnumerable<Post> IsInPastYear(this IEnumerable<Post> posts, string dateFieldName)
 		{
-			return from post in posts where post.Custom(dateFieldName).AsEventDate().Year < DateTime.Now.Year select post;
+			return posts.Where(post => post.IsInPastYear(dateFieldName));
 		}
 
 		public static IEnumerable<Post> IsInPast(this IEnumerable<Post> posts, string dateFieldName)
 		{
-			return from post in posts where post.Custom(dateFieldName).AsEventDate().Date < DateTime.Now.Date select post;
+			return posts.Where(post => post.IsInPast(dateFieldName));
 		}
 
 		public static IEnumerable<Post> IsInFuture(this IEnumerable<Post> posts, string dateFieldName)
 		{
-			return from post in posts where post.Custom(dateFieldName).AsEventDate().Date >= DateTime.Now.Date select post;
+			return posts.Where(post => post.IsInFuture(dateFieldName));
 		}
 
 		public static IEnumerable<Post> IsInYear(this IEnumerable<Post> posts, string dateFieldName, DateTime year)
 		{
-			return from post in posts where post.Custom(dateFieldName).AsEventDate().Year == year.Year select post;
+			return posts.Where(post => post.IsInYear(dateFieldName, year));
 		}
 		#endregion
 
@@ -52,15 +52,17 @@ namespace DnugLeipzig.Extensions.Extensions
 			return posts.Take(maximumNumberOfPosts);
 		}
 
+		public static IEnumerable<Post> RegistrationNeeded(this IEnumerable<Post> posts, string registrationNeededFieldName)
+		{
+			return posts.Where(post => post.RegistrationNeeded(registrationNeededFieldName));
+		}
+
 		public static IEnumerable<Post> RegistrationPossible(this IEnumerable<Post> posts,
 		                                                     string numberOfRegistrationsFieldName,
 		                                                     string maximumNumberOfRegistrationsFieldName)
 		{
-			return from post in posts
-			       where
-			       	post.Custom(numberOfRegistrationsFieldName).ToInt(0) <
-			       	post.Custom(maximumNumberOfRegistrationsFieldName).ToInt(int.MaxValue)
-			       select post;
+			return
+				posts.Where(post => post.RegistrationPossible(numberOfRegistrationsFieldName, maximumNumberOfRegistrationsFieldName));
 		}
 	}
 }

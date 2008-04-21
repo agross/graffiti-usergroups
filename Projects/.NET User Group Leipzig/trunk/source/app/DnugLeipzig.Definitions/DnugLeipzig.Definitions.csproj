@@ -74,12 +74,12 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\EventPluginConfigurationSource.cs" />
-    <Compile Include="Configuration\IPluginConfigurationSource.cs" />
-    <Compile Include="Configuration\IEventPluginConfigurationSource.cs" />
-    <Compile Include="Configuration\ICategoryEnabledRepositoryConfigurationSource.cs" />
-    <Compile Include="Configuration\ITalkPluginConfigurationSource.cs" />
-    <Compile Include="Configuration\TalkPluginConfigurationSource.cs" />
+    <Compile Include="Configuration\EventPluginConfiguration.cs" />
+    <Compile Include="Configuration\IPluginConfiguration.cs" />
+    <Compile Include="Configuration\IEventPluginConfiguration.cs" />
+    <Compile Include="Configuration\ICategoryEnabledRepositoryConfiguration.cs" />
+    <Compile Include="Configuration\ITalkPluginConfiguration.cs" />
+    <Compile Include="Configuration\TalkPluginConfiguration.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ICategoryEnabledRepository.cs" />

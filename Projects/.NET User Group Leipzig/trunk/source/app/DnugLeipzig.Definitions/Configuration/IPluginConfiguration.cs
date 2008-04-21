@@ -1,6 +1,6 @@
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public interface IPluginConfigurationSource : ICategoryEnabledRepositoryConfigurationSource
+	public interface IPluginConfiguration : ICategoryEnabledRepositoryConfiguration
 	{
 		string SpeakerField
 		{

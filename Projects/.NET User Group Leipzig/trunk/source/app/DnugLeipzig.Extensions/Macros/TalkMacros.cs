@@ -15,14 +15,14 @@ namespace DnugLeipzig.Extensions.Macros
 	[Chalk("talks")]
 	public class TalkMacros : Macros
 	{
-		readonly ITalkPluginConfigurationSource Configuration;
+		readonly ITalkPluginConfiguration Configuration;
 
 		#region ctors
-		public TalkMacros() : this(null, new TalkPluginConfigurationSource())
+		public TalkMacros() : this(null, new TalkPluginConfiguration())
 		{
 		}
 
-		public TalkMacros(ICategoryEnabledRepository repository, ITalkPluginConfigurationSource configuration)
+		public TalkMacros(ICategoryEnabledRepository repository, ITalkPluginConfiguration configuration)
 			: base(configuration)
 		{
 			if (configuration == null)

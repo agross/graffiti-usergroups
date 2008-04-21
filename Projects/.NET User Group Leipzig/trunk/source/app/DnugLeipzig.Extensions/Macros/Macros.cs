@@ -12,10 +12,10 @@ namespace DnugLeipzig.Extensions.Macros
 	public abstract class Macros
 	{
 		protected static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
-		readonly IPluginConfigurationSource Configuration;
+		readonly IPluginConfiguration Configuration;
 		protected ICategoryEnabledRepository Repository;
 
-		protected Macros(IPluginConfigurationSource configuration)
+		protected Macros(IPluginConfiguration configuration)
 		{
 			if (configuration == null)
 			{

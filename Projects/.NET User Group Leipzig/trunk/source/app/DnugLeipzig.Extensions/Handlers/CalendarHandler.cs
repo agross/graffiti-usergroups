@@ -9,18 +9,18 @@ using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions
+namespace DnugLeipzig.Extensions.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
-		readonly IEventPluginConfigurationSource Configuration;
+		readonly IEventPluginConfiguration Configuration;
 		readonly ICategoryEnabledRepository Repository;
 
-		public CalendarHandler() : this(null, new EventPluginConfigurationSource())
+		public CalendarHandler() : this(null, new EventPluginConfiguration())
 		{
 		}
 
-		public CalendarHandler(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration)
+		public CalendarHandler(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration)
 		{
 			if (configuration == null)
 			{

@@ -10,9 +10,9 @@ namespace DnugLeipzig.Runtime.Repositories
 {
 	public abstract class CategoryEnabledRepository : PostRepository, ICategoryEnabledRepository
 	{
-		protected readonly ICategoryEnabledRepositoryConfigurationSource Configuration;
+		protected readonly ICategoryEnabledRepositoryConfiguration Configuration;
 
-		protected CategoryEnabledRepository(ICategoryEnabledRepositoryConfigurationSource configuration)
+		protected CategoryEnabledRepository(ICategoryEnabledRepositoryConfiguration configuration)
 		{
 			if (configuration == null)
 			{

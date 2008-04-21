@@ -6,12 +6,12 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public class EventPluginConfigurationSource : IEventPluginConfigurationSource
+	public class EventPluginConfiguration : IEventPluginConfiguration
 	{
-		public static readonly string CacheKey = typeof(EventPluginConfigurationSource).Name;
-		static IEventPluginConfigurationSource PluginInstance;
+		public static readonly string CacheKey = typeof(EventPluginConfiguration).Name;
+		static IEventPluginConfiguration PluginInstance;
 
-		#region IEventPluginConfigurationSource Members
+		#region IEventPluginConfiguration Members
 		public string CategoryName
 		{
 			get
@@ -150,9 +150,9 @@ namespace DnugLeipzig.Definitions.Configuration
 
 		static void EnsureCurrentInstance()
 		{
-			Debug.WriteLine("EventPluginConfigurationSource.EnsureCurrentInstance");
+			Debug.WriteLine("EventPluginConfiguration.EnsureCurrentInstance");
 
-			PluginInstance = HttpContext.Current.Cache.Get(CacheKey) as IEventPluginConfigurationSource;
+			PluginInstance = HttpContext.Current.Cache.Get(CacheKey) as IEventPluginConfiguration;
 			if (PluginInstance != null)
 			{
 				Debug.WriteLine("--> Cached");
@@ -165,7 +165,7 @@ namespace DnugLeipzig.Definitions.Configuration
 			Events.Instance();
 
 			PluginInstance =
-				Events.GetEvent("DnugLeipzig.Plugins.EventPlugin, DnugLeipzig.Plugins").Event as IEventPluginConfigurationSource;
+				Events.GetEvent("DnugLeipzig.Plugins.EventPlugin, DnugLeipzig.Plugins").Event as IEventPluginConfiguration;
 
 			HttpContext.Current.Cache.Add(CacheKey,
 			                              PluginInstance,

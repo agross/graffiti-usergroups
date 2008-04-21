@@ -4,7 +4,7 @@ namespace DnugLeipzig.Runtime.Repositories
 {
 	public class EventRepository : CategoryEnabledRepository
 	{
-		public EventRepository(ICategoryEnabledRepositoryConfigurationSource configuration) : base(configuration)
+		public EventRepository(ICategoryEnabledRepositoryConfiguration configuration) : base(configuration)
 		{
 		}
 	}

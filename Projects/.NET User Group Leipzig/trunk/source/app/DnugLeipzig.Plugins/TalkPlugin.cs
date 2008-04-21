@@ -9,7 +9,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class TalkPlugin : GraffitiEvent, ITalkPluginConfigurationSource
+	public class TalkPlugin : GraffitiEvent, ITalkPluginConfiguration
 	{
 		const string Form_CategoryName = "categoryName";
 		const string Form_DateField = "dateField";
@@ -41,7 +41,7 @@ namespace DnugLeipzig.Plugins
 			get { return "Extends Graffiti CMS for talks management."; }
 		}
 
-		#region ITalkPluginConfigurationSource Members
+		#region ITalkPluginConfiguration Members
 		public string DateField
 		{
 			get;
@@ -119,7 +119,7 @@ namespace DnugLeipzig.Plugins
 
 		public override StatusType SetValues(HttpContext context, NameValueCollection nvc)
 		{
-			HttpContext.Current.Cache.Remove(TalkPluginConfigurationSource.CacheKey);
+			HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
 
 			if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
 			{

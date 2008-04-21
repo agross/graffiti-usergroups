@@ -8,7 +8,7 @@ namespace DnugLeipzig.Plugins.Migration
 {
 	internal class EventPluginMemento : IMemento
 	{
-		public EventPluginMemento(IEventPluginConfigurationSource source)
+		public EventPluginMemento(IEventPluginConfiguration source)
 		{
 			SpeakerField = source.SpeakerField;
 			EndDateField = source.EndDateField;
@@ -16,9 +16,9 @@ namespace DnugLeipzig.Plugins.Migration
 			StartDateField = source.StartDateField;
 			LocationUnknownField = source.LocationUnknownField;
 			RegistrationNeededField = source.RegistrationNeededField;
-			RegistrationRecipient = source.RegistrationRecipientField;
-			MaximumNumberOfAttendees = source.MaximumNumberOfRegistrationsField;
-			NumberOfAttendees = source.NumberOfRegistrationsField;
+			RegistrationRecipientField = source.RegistrationRecipientField;
+			MaximumNumberOfRegistrationsField = source.MaximumNumberOfRegistrationsField;
+			NumberOfRegistrationsField = source.NumberOfRegistrationsField;
 			CategoryName = source.CategoryName;
 		}
 
@@ -58,19 +58,19 @@ namespace DnugLeipzig.Plugins.Migration
 			protected set;
 		}
 
-		public string RegistrationRecipient
+		public string RegistrationRecipientField
 		{
 			get;
 			protected set;
 		}
 
-		public string MaximumNumberOfAttendees
+		public string MaximumNumberOfRegistrationsField
 		{
 			get;
 			protected set;
 		}
 
-		public string NumberOfAttendees
+		public string NumberOfRegistrationsField
 		{
 			get;
 			protected set;
@@ -95,9 +95,9 @@ namespace DnugLeipzig.Plugins.Migration
 				       	{ "{51BE26B6-03FC-47de-A490-283359C4C47A}", new FieldInfo(LocationUnknownField, FieldType.CheckBox) },
 				       	{ "{AF99664E-BB66-446a-8968-6899348EEB34}", new FieldInfo(LocationField, FieldType.TextBox) },
 				       	{ "{4DA43A0C-1C7E-4df6-A72A-0671660D8318}", new FieldInfo(RegistrationNeededField, FieldType.CheckBox) },
-				       	{ "{9151702C-88C9-48f2-8C2C-10C17264F456}", new FieldInfo(RegistrationRecipient, FieldType.TextBox) },
-				       	{ "{FB6BF2D1-28C7-428e-8ABF-357D7EE82EB3}", new FieldInfo(MaximumNumberOfAttendees, FieldType.TextBox) },
-				       	{ "{6741A2DA-6B1E-481c-B139-A0043AEC0EE0}", new FieldInfo(NumberOfAttendees, FieldType.TextBox) }
+				       	{ "{9151702C-88C9-48f2-8C2C-10C17264F456}", new FieldInfo(RegistrationRecipientField, FieldType.TextBox) },
+				       	{ "{FB6BF2D1-28C7-428e-8ABF-357D7EE82EB3}", new FieldInfo(MaximumNumberOfRegistrationsField, FieldType.TextBox) },
+				       	{ "{6741A2DA-6B1E-481c-B139-A0043AEC0EE0}", new FieldInfo(NumberOfRegistrationsField, FieldType.TextBox) }
 				       };
 			}
 		}

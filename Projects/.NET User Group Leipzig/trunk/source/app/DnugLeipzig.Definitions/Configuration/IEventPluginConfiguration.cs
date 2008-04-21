@@ -1,6 +1,6 @@
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public interface IEventPluginConfigurationSource : IPluginConfigurationSource
+	public interface IEventPluginConfiguration : IPluginConfiguration
 	{
 		string DateFormat
 		{

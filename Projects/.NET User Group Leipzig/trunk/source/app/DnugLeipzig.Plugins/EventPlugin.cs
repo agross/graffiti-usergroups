@@ -13,7 +13,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationSource
+	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration
 	{
 		const string Form_CategoryName = "categoryName";
 		const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
@@ -99,7 +99,7 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
-		#region IEventPluginConfigurationSource Members
+		#region IEventPluginConfiguration Members
 		public string SortRelevantDateField
 		{
 			get { return StartDateField; }
@@ -166,6 +166,12 @@ namespace DnugLeipzig.Plugins
 		}
 
 		public string RegistrationNeededField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationPage
 		{
 			get;
 			set;
@@ -349,7 +355,7 @@ namespace DnugLeipzig.Plugins
 		{
 			try
 			{
-				HttpContext.Current.Cache.Remove(EventPluginConfigurationSource.CacheKey);
+				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
 
 				if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
 				{
@@ -381,9 +387,9 @@ namespace DnugLeipzig.Plugins
 				LocationField = nvc[Form_LocationField];
 				UnknownText = nvc[Form_UnknownText];
 				LocationUnknownField = nvc[Form_LocationUnknownField];
-				RegistrationNeededField = nvc[Form_RegistrationNeededField];
 				YearQueryString = nvc[Form_YearQueryString];
 				DefaultLocation = nvc[Form_DefaultLocation];
+				RegistrationNeededField = nvc[Form_RegistrationNeededField];
 				RegistrationRecipientField = nvc[Form_RegistrationRecipientField];
 				DefaultRegistrationRecipient = nvc[Form_DefaultRegistrationRecipient];
 				MaximumNumberOfRegistrationsField = nvc[Form_MaximumNumberOfRegistrationsField];
@@ -425,9 +431,9 @@ namespace DnugLeipzig.Plugins
 			values[Form_LocationField] = LocationField;
 			values[Form_UnknownText] = UnknownText;
 			values[Form_LocationUnknownField] = LocationUnknownField;
-			values[Form_RegistrationNeededField] = RegistrationNeededField;
 			values[Form_YearQueryString] = YearQueryString;
 			values[Form_DefaultLocation] = DefaultLocation;
+			values[Form_RegistrationNeededField] = RegistrationNeededField;
 			values[Form_RegistrationRecipientField] = RegistrationRecipientField;
 			values[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
 			values[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;

@@ -4,7 +4,7 @@ namespace DnugLeipzig.Runtime.Repositories
 {
 	public class TalkRepository : CategoryEnabledRepository
 	{
-		public TalkRepository(ICategoryEnabledRepositoryConfigurationSource configuration) : base(configuration)
+		public TalkRepository(ICategoryEnabledRepositoryConfiguration configuration) : base(configuration)
 		{
 		}
 	}

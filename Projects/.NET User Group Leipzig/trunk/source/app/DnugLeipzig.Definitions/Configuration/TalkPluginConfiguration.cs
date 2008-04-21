@@ -6,12 +6,12 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Definitions.Configuration
 {
-	public class TalkPluginConfigurationSource : ITalkPluginConfigurationSource
+	public class TalkPluginConfiguration : ITalkPluginConfiguration
 	{
-		public static readonly string CacheKey = typeof(TalkPluginConfigurationSource).Name;
-		static ITalkPluginConfigurationSource PluginInstance;
+		public static readonly string CacheKey = typeof(TalkPluginConfiguration).Name;
+		static ITalkPluginConfiguration PluginInstance;
 
-		#region ITalkPluginConfigurationSource Members
+		#region ITalkPluginConfiguration Members
 		public string DateField
 		{
 			get
@@ -60,9 +60,9 @@ namespace DnugLeipzig.Definitions.Configuration
 
 		static void EnsureCurrentInstance()
 		{
-			Debug.WriteLine("TalkPluginConfigurationSource.EnsureCurrentInstance");
+			Debug.WriteLine("TalkPluginConfiguration.EnsureCurrentInstance");
 
-			PluginInstance = HttpContext.Current.Cache.Get(CacheKey) as ITalkPluginConfigurationSource;
+			PluginInstance = HttpContext.Current.Cache.Get(CacheKey) as ITalkPluginConfiguration;
 			if (PluginInstance != null)
 			{
 				Debug.WriteLine("--> Cached");
@@ -75,7 +75,7 @@ namespace DnugLeipzig.Definitions.Configuration
 			Events.Instance();
 
 			PluginInstance =
-				Events.GetEvent("DnugLeipzig.Plugins.TalkPlugin, DnugLeipzig.Plugins").Event as ITalkPluginConfigurationSource;
+				Events.GetEvent("DnugLeipzig.Plugins.TalkPlugin, DnugLeipzig.Plugins").Event as ITalkPluginConfiguration;
 
 			HttpContext.Current.Cache.Add(CacheKey,
 			                              PluginInstance,

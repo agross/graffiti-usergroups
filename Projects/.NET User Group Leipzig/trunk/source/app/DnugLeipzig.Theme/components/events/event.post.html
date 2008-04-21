@@ -31,7 +31,13 @@
 				#if ($events.CanCreateCalendarItem($post))
 				<li>
 					<strong>Kalendereintrag:</strong>
-					<a href="/Calendar.ashx?eventId=$post.ID" title="Kalendereintrag herunterladen"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Kalendereintrag" /></a>
+					<a href="$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$post.ID" title="Kalendereintrag herunterladen"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Kalendereintrag" /></a>
+				</li>
+				#end
+				#if ($events.RegistrationPossible($post))
+				<li>
+					<strong>Registrierung:</strong>
+					<a href="/anmeldung/?eventId=$post.ID">Registrierung ist erforderlich</a>
 				</li>
 				#end
 			</ul>

@@ -17,14 +17,14 @@ namespace DnugLeipzig.Extensions.Macros
 	[Chalk("events")]
 	public class EventMacros : Macros
 	{
-		readonly IEventPluginConfigurationSource Configuration;
+		readonly IEventPluginConfiguration Configuration;
 
 		#region ctors
-		public EventMacros() : this(null, new EventPluginConfigurationSource())
+		public EventMacros() : this(null, new EventPluginConfiguration())
 		{
 		}
 
-		public EventMacros(ICategoryEnabledRepository repository, IEventPluginConfigurationSource configuration)
+		public EventMacros(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration)
 			: base(configuration)
 		{
 			if (configuration == null)
@@ -109,8 +109,9 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return
 				Repository.GetAll().HasDate(Configuration.StartDateField).IsInFuture(Configuration.StartDateField).
-					RegistrationPossible(Configuration.NumberOfRegistrationsField, Configuration.MaximumNumberOfRegistrationsField).
-					SortAscending(Configuration.StartDateField).ToList();
+					RegistrationNeeded(Configuration.RegistrationNeededField).RegistrationPossible(
+					Configuration.NumberOfRegistrationsField, Configuration.MaximumNumberOfRegistrationsField).SortAscending(
+					Configuration.StartDateField).ToList();
 		}
 
 		public IList<Post> GetUpcoming(int numberOfEvents)
@@ -144,16 +145,29 @@ namespace DnugLeipzig.Extensions.Macros
 			return pastEvents.ToList();
 		}
 
+		public bool RegistrationPossible(Post post)
+		{
+			return post.HasDate(Configuration.StartDateField) && post.IsInFuture(Configuration.StartDateField) &&
+			       post.RegistrationNeeded(Configuration.RegistrationNeededField) &&
+			       post.RegistrationPossible(Configuration.NumberOfRegistrationsField,
+			                                 Configuration.MaximumNumberOfRegistrationsField);
+		}
+
 		public string RegisterButton(IDictionary properties)
 		{
 			string scriptPath =
-				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/Register.ashx", GraffitiContext.Current.Theme));
-			
+				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
+				                                            GraffitiContext.Current.Theme));
+
 			string cssClass = GetAttribute(properties, "class");
 			string text = GetAttribute(properties, "value");
 			string id = GetAttribute(properties, "id");
 
-			return string.Format("<input {0} {1} {2} type=\"button\" onclick=\"Register.submitMessage('{3}');\" />", id, cssClass, text, scriptPath);
+			return string.Format("<input {0} {1} {2} type=\"button\" onclick=\"Register.submitMessage('{3}');\" />",
+			                     id,
+			                     cssClass,
+			                     text,
+			                     scriptPath);
 		}
 
 		static string GetAttribute(IDictionary properties, string key)

@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 
-namespace DnugLeipzig.Extensions
+namespace DnugLeipzig.Extensions.Handlers
 {
 	public class RegistrationHandler : IHttpHandler
 	{
