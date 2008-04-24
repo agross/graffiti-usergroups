@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Reflection;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
@@ -99,6 +100,12 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
+		public string RegistrationPage
+		{
+			get;
+			set;
+		}
+
 		#region IEventPluginConfiguration Members
 		public string SortRelevantDateField
 		{
@@ -171,12 +178,6 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
-		public string RegistrationPage
-		{
-			get;
-			set;
-		}
-
 		public string RegistrationRecipientField
 		{
 			get;
@@ -200,12 +201,13 @@ namespace DnugLeipzig.Plugins
 		{
 			Debug.WriteLine("Init Event Plugin");
 
-			ga.BeforeValidate += ga_BeforeValidate;
-			ga.BeforeInsert += ga_SetDefaultValues;
-			ga.BeforeUpdate += ga_SetDefaultValues;
+			// Also tried BeforeInsert and BeforeUpdate.
+			ga.BeforeValidate += Post_Validate;
+			ga.BeforeInsert += Post_SetDefaultValues;
+			ga.BeforeUpdate += Post_SetDefaultValues;
 		}
 
-		internal void ga_BeforeValidate(DataBuddyBase dataObject, EventArgs e)
+		internal void Post_Validate(DataBuddyBase dataObject, EventArgs e)
 		{
 			Post post = dataObject as Post;
 			if (post == null)
@@ -234,7 +236,7 @@ namespace DnugLeipzig.Plugins
 				                              EndDateField);
 			}
 
-			if (post.Custom(LocationUnknownField).IsChecked() && !post.Custom(LocationField).IsNullOrEmptyTrimmed())
+			if (post[LocationUnknownField].IsChecked() && !post[LocationField].IsNullOrEmptyTrimmed())
 			{
 				throw new ValidationException(
 					String.Format(
@@ -247,7 +249,7 @@ namespace DnugLeipzig.Plugins
 			}
 		}
 
-		internal void ga_SetDefaultValues(DataBuddyBase dataObject, EventArgs e)
+		internal void Post_SetDefaultValues(DataBuddyBase dataObject, EventArgs e)
 		{
 			Post post = dataObject as Post;
 			if (post == null)
@@ -261,19 +263,39 @@ namespace DnugLeipzig.Plugins
 			}
 
 			// Set default location if no location is given.
-			if (!post.Custom(LocationUnknownField).IsChecked() && post.Custom(LocationField).IsNullOrEmptyTrimmed())
+			if (!post[LocationUnknownField].IsChecked() && post[LocationField].IsNullOrEmptyTrimmed())
 			{
-				post.CustomFields()[LocationField] = DefaultLocation;
-				//Repository.Save(post);
+				post[LocationField] = DefaultLocation;
+				ForcePropertyUpdate(post);
 			}
+
+			// Set default number maximum number of registrations.
+			
+				//DefaultMaximumNumberOfRegistrations DefaultRegistrationRecipient
+		}
+
+		// HACK: This will very likely break when Graffiti is updated.
+		void ForcePropertyUpdate(Post post)
+		{
+			if (post == null)
+			{
+				throw new ArgumentNullException("post");
+			}
+
+			MethodInfo[] methods = post.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo method = Array.Find(methods,
+			                               m =>
+			                               m.ReturnType == typeof(void) && m.IsHideBySig && !m.IsFamily &&
+			                               m.GetParameters().Length == 0 && m.MetadataToken == 100663972);
+			method.Invoke(post, null);
 		}
 
 		static DateTime? ValidateDate(Post post, string dateField)
 		{
-			if (!post.Custom(dateField).IsNullOrEmptyTrimmed())
+			if (!post[dateField].IsNullOrEmptyTrimmed())
 			{
 				DateTime dateTime;
-				if (!DateTime.TryParse(post.Custom(dateField), out dateTime))
+				if (!DateTime.TryParse(post[dateField], out dateTime))
 				{
 					throw new ValidationException("Please enter a valid date.", dateField);
 				}

@@ -48,26 +48,16 @@ namespace DnugLeipzig.Plugins.Tests
 		[Row("")]
 		[Row("    ")]
 		[Row(null)]
-		[RollBack]
 		public void SetsDefaultLocation(string location)
 		{
-			using (_mocks.Record())
-			{
-				//_postRepository.Save(null);
-				//LastCall.Constraints(Is.Equal(_post));
-			}
+			_post.CustomFields().Add(LocationField, location);
+			_post.CustomFields().Add(LocationUnknownField, "off");
 
-			using (_mocks.Playback())
-			{
-				_post.CustomFields().Add(LocationField, location);
-				_post.CustomFields().Add(LocationUnknownField, "off");
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
 
-				_plugin.ga_BeforeValidate(_post, EventArgs.Empty);
-				_plugin.ga_SetDefaultValues(_post, EventArgs.Empty);
-
-				Assert.IsNotNull(_post.Custom(LocationField));
-				Assert.AreEqual(_post.Custom(LocationField), DefaultLocation);
-			}
+			Assert.IsNotNull(_post[LocationField]);
+			Assert.AreEqual(_post[LocationField], DefaultLocation);
 		}
 
 		[RowTest]
@@ -77,11 +67,11 @@ namespace DnugLeipzig.Plugins.Tests
 			_post.CustomFields().Add(LocationField, location);
 			_post.CustomFields().Add(LocationUnknownField, "off");
 
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);
-			_plugin.ga_SetDefaultValues(_post, EventArgs.Empty);
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
 
-			Assert.IsNotNull(_post.Custom(LocationField));
-			Assert.AreEqual(_post.Custom(LocationField), location);
+			Assert.IsNotNull(_post[LocationField]);
+			Assert.AreEqual(_post[LocationField], location);
 		}
 
 		[Test]
@@ -89,10 +79,10 @@ namespace DnugLeipzig.Plugins.Tests
 		{
 			_post.CustomFields().Add(LocationUnknownField, "on");
 
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);
-			_plugin.ga_SetDefaultValues(_post, EventArgs.Empty);
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
 
-			Assert.IsNull(_post.Custom(LocationField));
+			Assert.IsNull(_post[LocationField]);
 		}
 	}
 }

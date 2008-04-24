@@ -46,7 +46,7 @@ namespace DnugLeipzig.Extensions.Macros
 		#region Dates, Location
 		public string StartDate(Post post)
 		{
-			if (!post.Custom(Configuration.StartDateField).IsDate())
+			if (!post[Configuration.StartDateField].IsDate())
 			{
 				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
@@ -57,18 +57,18 @@ namespace DnugLeipzig.Extensions.Macros
 				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
 			}
 
-			return HttpUtility.HtmlEncode(String.Format(dateFormat, post.Custom(Configuration.StartDateField).AsEventDate()));
+			return HttpUtility.HtmlEncode(String.Format(dateFormat, post[Configuration.StartDateField].AsEventDate()));
 		}
 
 		public string EndDate(Post post)
 		{
-			if (!post.Custom(Configuration.EndDateField).IsDate())
+			if (!post[Configuration.EndDateField].IsDate())
 			{
 				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
 
-			DateTime beginDate = post.Custom(Configuration.StartDateField).AsEventDate();
-			DateTime endDate = post.Custom(Configuration.EndDateField).AsEventDate();
+			DateTime beginDate = post[Configuration.StartDateField].AsEventDate();
+			DateTime endDate = post[Configuration.EndDateField].AsEventDate();
 
 			string dateFormat = Configuration.DateFormat;
 			if (beginDate.Date == endDate.Date && !String.IsNullOrEmpty(Configuration.ShortEndDateFormat))
@@ -85,7 +85,7 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public string Location(Post post)
 		{
-			string location = post.Custom(Configuration.LocationField);
+			string location = post[Configuration.LocationField];
 			if (String.IsNullOrEmpty(location))
 			{
 				location = Configuration.UnknownText;
@@ -133,7 +133,7 @@ namespace DnugLeipzig.Extensions.Macros
 			IEnumerable<Post> posts = Repository.GetAll().IsInPast(Configuration.StartDateField);
 
 			IEnumerable<PastPostInfo> pastEvents = from post in posts
-			                                       group post by post.Custom(Configuration.StartDateField).AsEventDate().Year
+			                                       group post by post[Configuration.StartDateField].AsEventDate().Year
 			                                       into years orderby years.Key descending
 			                                       	select
 			                                       	new PastPostInfo
@@ -191,9 +191,9 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return new CalendarItem
 			       {
-			       	StartDate = post.Custom(Configuration.StartDateField).AsEventDate(),
-			       	EndDate = post.Custom(Configuration.EndDateField).AsEventDate(),
-			       	Location = post.Custom(Configuration.LocationField),
+			       	StartDate = post[Configuration.StartDateField].AsEventDate(),
+			       	EndDate = post[Configuration.EndDateField].AsEventDate(),
+			       	Location = post[Configuration.LocationField],
 			       	Subject = HttpUtility.HtmlDecode(post.Title),
 			       	Description = SiteSettings.BaseUrl + post.Url,
 			       	LastModified = post.Published,

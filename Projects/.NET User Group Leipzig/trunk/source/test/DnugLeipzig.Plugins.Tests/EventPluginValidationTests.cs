@@ -43,7 +43,7 @@ namespace DnugLeipzig.Plugins.Tests
 		{
 			_post.CustomFields().Add(StartDateField, startDateValue);
 
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);	
 		}
 		
 		[RowTest]
@@ -59,7 +59,7 @@ namespace DnugLeipzig.Plugins.Tests
 			_post.CustomFields().Add(StartDateField, "2008/2/3");
 			_post.CustomFields().Add(EndDateField, endDateValue);
 
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);	
 		}
 
 		[Test]
@@ -67,7 +67,7 @@ namespace DnugLeipzig.Plugins.Tests
 		public void RequiresStartDateIfEndDateIsSet()
 		{
 			_post.CustomFields().Add(EndDateField, "2008/2/3");
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);	
 		}
 
 		[RowTest]
@@ -83,7 +83,7 @@ namespace DnugLeipzig.Plugins.Tests
 		{
 			_post.CustomFields().Add(StartDateField, startDateValue);
 			_post.CustomFields().Add(EndDateField, endDateValue);
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);
+			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace DnugLeipzig.Plugins.Tests
 			_post.CustomFields().Add(LocationField, "some location");
 			_post.CustomFields().Add(LocationUnknownField, "on");
 
-			_plugin.ga_BeforeValidate(_post, EventArgs.Empty);
+			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
 	}
 }

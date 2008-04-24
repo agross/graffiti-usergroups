@@ -75,7 +75,7 @@ namespace DnugLeipzig.Extensions.Tests
 			foreach (Post post in sorted)
 			{
 				DateTime date;
-				bool hasDate = DateTime.TryParse(post.Custom(StartDateField), out date);
+				bool hasDate = DateTime.TryParse(post[StartDateField], out date);
 
 				if (hasDate)
 				{
@@ -121,7 +121,7 @@ namespace DnugLeipzig.Extensions.Tests
 			foreach (Post post in sorted)
 			{
 				DateTime date;
-				bool hasDate = DateTime.TryParse(post.Custom(StartDateField), out date);
+				bool hasDate = DateTime.TryParse(post[StartDateField], out date);
 
 				if (hasDate)
 				{

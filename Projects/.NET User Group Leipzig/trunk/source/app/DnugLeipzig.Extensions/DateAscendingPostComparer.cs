@@ -20,12 +20,12 @@ namespace DnugLeipzig.Extensions
 		public int Compare(Post x, Post y)
 		{
 			// Posts without date are shown at the top (DateTime.MinValue).
-			DateTime xDate = x.Custom(DateFieldName).AsEventDate() == DateTime.MaxValue
+			DateTime xDate = x[DateFieldName].AsEventDate() == DateTime.MaxValue
 			                 	? DateTime.MinValue
-			                 	: x.Custom(DateFieldName).AsEventDate();
-			DateTime yDate = y.Custom(DateFieldName).AsEventDate() == DateTime.MaxValue
+			                 	: x[DateFieldName].AsEventDate();
+			DateTime yDate = y[DateFieldName].AsEventDate() == DateTime.MaxValue
 			                 	? DateTime.MinValue
-			                 	: y.Custom(DateFieldName).AsEventDate();
+			                 	: y[DateFieldName].AsEventDate();
 
 			int dateResult = xDate.CompareTo(yDate);
 

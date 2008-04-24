@@ -73,9 +73,8 @@
 }
 
 .teaser .content li {
-	list-style-position: inside;
 	list-style-type: square;
-	margin-left: 0.5em;
+	margin-left: 1.5em;
 }
 
 .teaser .content a {

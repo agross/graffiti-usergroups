@@ -66,7 +66,7 @@ namespace DnugLeipzig.Extensions.Macros
 
 			IEnumerable<PastPostInfo> pastTalks = from post in posts
 			                                      group post by
-			                                      	post.Custom(Configuration.DateField).AsEventDate().Year
+			                                      	post[Configuration.DateField].AsEventDate().Year
 			                                      into years orderby years.Key descending
 			                                      	select
 			                                      	new PastPostInfo

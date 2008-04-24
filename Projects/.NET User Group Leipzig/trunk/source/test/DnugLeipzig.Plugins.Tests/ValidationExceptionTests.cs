@@ -1,7 +1,7 @@
+using MbUnit.Framework;
+
 namespace DnugLeipzig.Plugins.Tests
 {
-	using MbUnit.Framework;
-
 	[TestFixture]
 	public class ValidationExceptionTests
 	{
@@ -11,14 +11,14 @@ namespace DnugLeipzig.Plugins.Tests
 			ValidationException ex = new ValidationException("Some message.");
 			Assert.AreEqual("Some message.", ex.Message);
 		}
-		
+
 		[Test]
 		public void ConstructsCorrectMessageWithOneAffectedField()
 		{
 			ValidationException ex = new ValidationException("Some message.", "Field 1");
 			Assert.AreEqual("Some message. Affected field: Field 1", ex.Message);
 		}
-		
+
 		[Test]
 		public void ConstructsCorrectMessageWithMultipleAffectedFields()
 		{

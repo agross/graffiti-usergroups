@@ -192,7 +192,7 @@ namespace DnugLeipzig.Plugins.Migration
 				foreach (var fieldNames in changedFieldNames)
 				{
 					// Copy field value to the new field name.
-					post.CustomFields().Add(fieldNames.Value, post.Custom(fieldNames.Key));
+					post.CustomFields().Add(fieldNames.Value, post[fieldNames.Key]);
 
 					// Delete old field value.
 					post.CustomFields().Remove(fieldNames.Key);

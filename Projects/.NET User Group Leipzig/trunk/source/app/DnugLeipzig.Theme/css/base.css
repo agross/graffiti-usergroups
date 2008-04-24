@@ -14,7 +14,7 @@ a img {
 
 label {
 	cursor: pointer;
-}	
+}
 
 /* Clearfix, the ie part is in the ie css */
 .clearfix {
@@ -234,7 +234,7 @@ html {
 	height: 10px;
 	background: #011220 url(../images/menu-background-bottom-inactive.png) repeat-x scroll left top;
 	}
-	
+
 #menu-bottom.active {
 	background-image: url(../images/menu-background-bottom-active.png);
 	}
@@ -315,20 +315,19 @@ html {
 
 ul.archive li {
 	list-style-type: square;
-	list-style-position: inside;
-	margin-left: 0.5em;
+	margin-left: 1.5em;
 	}
 
 /* Article. */
 .article h2.title {
 	position: relative;
 	}
-	
+
 .article .title a.date {
 	font-weight: normal;
 	color: #000;
 	}
-	
+
 .article .title a.date:hover {
 	color: #000;
 	font-weight: normal;
@@ -365,7 +364,7 @@ ul.archive li {
 .article .title a.title.with-date {
 	padding-left: 50px;
 }
-	
+
 .article {
 	margin-bottom: 2em;
 }
