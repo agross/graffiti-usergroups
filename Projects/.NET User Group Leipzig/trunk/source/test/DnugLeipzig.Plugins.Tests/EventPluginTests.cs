@@ -1,12 +1,8 @@
 using System;
 
-using DnugLeipzig.Definitions.Repositories;
-
 using Graffiti.Core;
 
 using MbUnit.Framework;
-
-using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests
 {
@@ -17,17 +13,13 @@ namespace DnugLeipzig.Plugins.Tests
 		const int EventCategoryId = 2;
 		const string LocationField = "Location field";
 		const string LocationUnknownField = "Location is unknown field";
-		readonly MockRepository _mocks = new MockRepository();
 		EventPlugin _plugin;
 		Post _post;
-		IPostRepository _postRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_postRepository = _mocks.CreateMock<IPostRepository>();
-
-			_plugin = new EventPlugin(_postRepository);
+			_plugin = new EventPlugin();
 			_plugin.CategoryName = "Events";
 			_plugin.LocationField = LocationField;
 			_plugin.LocationUnknownField = LocationUnknownField;
@@ -35,13 +27,6 @@ namespace DnugLeipzig.Plugins.Tests
 
 			_post = new Post();
 			_post.CategoryId = EventCategoryId;
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			_mocks.ReplayAll();
-			_mocks.VerifyAll();
 		}
 
 		[RowTest]

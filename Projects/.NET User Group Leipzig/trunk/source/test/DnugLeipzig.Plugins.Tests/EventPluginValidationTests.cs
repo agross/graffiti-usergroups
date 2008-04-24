@@ -13,6 +13,9 @@ namespace DnugLeipzig.Plugins.Tests
 		const string EndDateField = "End date field";
 		const string LocationUnknownField = "Location is unknown field";
 		const string LocationField = "Location field";
+		const string MaximumNumberOfRegistrationsField = "Maximum number of registrations field";
+		const string NumberOfRegistrationsField = "Number of registrations field";
+		const string RegistrationRecipientField = "Registration recipient field";
 		const int EventCategoryId = 2;
 		EventPlugin _plugin;
 		Post _post;
@@ -26,6 +29,9 @@ namespace DnugLeipzig.Plugins.Tests
 			_plugin.EndDateField = EndDateField;
 			_plugin.LocationField = LocationField;
 			_plugin.LocationUnknownField = LocationUnknownField;
+			_plugin.MaximumNumberOfRegistrationsField = MaximumNumberOfRegistrationsField;
+			_plugin.NumberOfRegistrationsField = NumberOfRegistrationsField;
+			_plugin.RegistrationRecipientField = RegistrationRecipientField;
 
 			_post = new Post();
 			_post.CategoryId = EventCategoryId;
@@ -92,6 +98,41 @@ namespace DnugLeipzig.Plugins.Tests
 		{
 			_post.CustomFields().Add(LocationField, "some location");
 			_post.CustomFields().Add(LocationUnknownField, "on");
+
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+		}
+
+		[RowTest]
+		[Row("0")]
+		[Row("100")]
+		[Row("-100", ExpectedException = typeof(ValidationException))]
+		[Row("abc", ExpectedException = typeof(ValidationException))]
+		public void MaximumNumberOfRegistrationsMustBePositiveInteger(string maximumNumberOfRegistrationsValue)
+		{
+			_post.CustomFields().Add(MaximumNumberOfRegistrationsField, maximumNumberOfRegistrationsValue);
+
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+		}
+		
+		[RowTest]
+		[Row("0")]
+		[Row("100")]
+		[Row("-100", ExpectedException = typeof(ValidationException))]
+		[Row("abc", ExpectedException = typeof(ValidationException))]
+		public void NumberOfRegistrationsMustBePositiveInteger(string numberOfRegistrationsValue)
+		{
+			_post.CustomFields().Add(NumberOfRegistrationsField, numberOfRegistrationsValue);
+
+			_plugin.Post_Validate(_post, EventArgs.Empty);
+		}
+
+		[RowTest]
+		[Row("")]
+		[Row("foo@example.com")]
+		[Row("abc", ExpectedException = typeof(ValidationException))]
+		public void RegistrationRecipientMustBeValidIfGiven(string email)
+		{
+			_post.CustomFields().Add(RegistrationRecipientField, email);
 
 			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}

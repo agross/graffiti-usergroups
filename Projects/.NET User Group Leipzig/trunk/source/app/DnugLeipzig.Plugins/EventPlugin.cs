@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Reflection;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
-using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
-using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -35,21 +32,9 @@ namespace DnugLeipzig.Plugins
 		const string Form_StartDateField = "startDateField";
 		const string Form_UnknownText = "unknownText";
 		const string Form_YearQueryString = "yearQueryString";
-		readonly IPostRepository Repository;
 
-		public EventPlugin() : this(new PostRepository())
+		public EventPlugin()
 		{
-		}
-
-		public EventPlugin(IPostRepository repository)
-		{
-			if (repository == null)
-			{
-				throw new ArgumentNullException("repository");
-			}
-
-			Repository = repository;
-
 			// Initialize with default values.
 			CategoryName = "Talks";
 			StartDateField = "Start Date";
@@ -221,8 +206,8 @@ namespace DnugLeipzig.Plugins
 			}
 
 			// Validate input.
-			DateTime? startDate = ValidateDate(post, StartDateField);
-			DateTime? endDate = ValidateDate(post, EndDateField);
+			DateTime? startDate = Validator.ValidateDate(post, StartDateField);
+			DateTime? endDate = Validator.ValidateDate(post, EndDateField);
 
 			if (!startDate.HasValue && endDate.HasValue)
 			{
@@ -247,6 +232,28 @@ namespace DnugLeipzig.Plugins
 					LocationUnknownField,
 					LocationField);
 			}
+
+			int? maximumNumberOfRegistrations = Validator.ValidateInt(post, MaximumNumberOfRegistrationsField);
+			if (maximumNumberOfRegistrations.HasValue && maximumNumberOfRegistrations < 0)
+			{
+				throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
+				                              MaximumNumberOfRegistrationsField);
+			}
+
+			int? numberOfRegistrations = Validator.ValidateInt(post, NumberOfRegistrationsField);
+			if (numberOfRegistrations.HasValue && numberOfRegistrations < 0)
+			{
+				throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
+				                              NumberOfRegistrationsField);
+			}
+
+			if (!post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
+			{
+				if (!Validator.ValidateEmail(post, RegistrationRecipientField))
+				{
+					throw new ValidationException(String.Format("Please enter a valid e-mail address."), RegistrationRecipientField);
+				}
+			}
 		}
 
 		internal void Post_SetDefaultValues(DataBuddyBase dataObject, EventArgs e)
@@ -266,44 +273,22 @@ namespace DnugLeipzig.Plugins
 			if (!post[LocationUnknownField].IsChecked() && post[LocationField].IsNullOrEmptyTrimmed())
 			{
 				post[LocationField] = DefaultLocation;
-				ForcePropertyUpdate(post);
+				Util.ForcePropertyUpdate(post);
 			}
 
 			// Set default number maximum number of registrations.
-			
-				//DefaultMaximumNumberOfRegistrations DefaultRegistrationRecipient
-		}
-
-		// HACK: This will very likely break when Graffiti is updated.
-		void ForcePropertyUpdate(Post post)
-		{
-			if (post == null)
+			if (post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
 			{
-				throw new ArgumentNullException("post");
+				post[MaximumNumberOfRegistrationsField] = DefaultMaximumNumberOfRegistrations;
+				Util.ForcePropertyUpdate(post);
 			}
 
-			MethodInfo[] methods = post.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
-			MethodInfo method = Array.Find(methods,
-			                               m =>
-			                               m.ReturnType == typeof(void) && m.IsHideBySig && !m.IsFamily &&
-			                               m.GetParameters().Length == 0 && m.MetadataToken == 100663972);
-			method.Invoke(post, null);
-		}
-
-		static DateTime? ValidateDate(Post post, string dateField)
-		{
-			if (!post[dateField].IsNullOrEmptyTrimmed())
+			// Set default registration recipient.
+			if (post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
 			{
-				DateTime dateTime;
-				if (!DateTime.TryParse(post[dateField], out dateTime))
-				{
-					throw new ValidationException("Please enter a valid date.", dateField);
-				}
-
-				return dateTime;
+				post[RegistrationRecipientField] = DefaultRegistrationRecipient;
+				Util.ForcePropertyUpdate(post);
 			}
-
-			return null;
 		}
 
 		#region Settings

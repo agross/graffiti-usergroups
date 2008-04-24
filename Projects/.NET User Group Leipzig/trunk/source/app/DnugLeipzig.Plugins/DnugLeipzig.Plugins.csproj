@@ -83,6 +83,7 @@
     <Compile Include="TalkPlugin.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="ValidationException.cs" />
+    <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
