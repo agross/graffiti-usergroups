@@ -1,0 +1,476 @@
+using System;
+using System.Collections.Specialized;
+using System.Diagnostics;
+using System.Reflection;
+using System.Web;
+
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Repositories;
+
+using Graffiti.Core;
+
+namespace DnugLeipzig.Plugins
+{
+	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration
+	{
+		const string Form_CategoryName = "categoryName";
+		const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
+		const string Form_DateFormat = "dateFormat";
+		const string Form_DefaultLocation = "defaultLocation";
+		const string Form_DefaultMaximumNumberOfRegistrations = "defaultMaximumNumberOfRegistrations";
+		const string Form_DefaultRegistrationRecipient = "defaultRegistrationRecipient";
+		const string Form_EndDateField = "endDateField";
+		const string Form_LocationField = "locationField";
+		const string Form_LocationUnknownField = "locationUnknown";
+		const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
+		const string Form_MigrateFieldValues = "migrate";
+		const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
+		const string Form_RegistrationNeededField = "registrationNeeded";
+		const string Form_RegistrationRecipientField = "registrationRecipient";
+		const string Form_ShortEndDateFormat = "shortDateFormat";
+		const string Form_SpeakerField = "speakerField";
+		const string Form_StartDateField = "startDateField";
+		const string Form_UnknownText = "unknownText";
+		const string Form_YearQueryString = "yearQueryString";
+		readonly IPostRepository Repository;
+
+		public EventPlugin() : this(new PostRepository())
+		{
+		}
+
+		public EventPlugin(IPostRepository repository)
+		{
+			if (repository == null)
+			{
+				throw new ArgumentNullException("repository");
+			}
+
+			Repository = repository;
+
+			// Initialize with default values.
+			CategoryName = "Talks";
+			StartDateField = "Start Date";
+			EndDateField = "End Date";
+			SpeakerField = "Speaker";
+			DateFormat = "on {0:D}, at {0:t}";
+			ShortEndDateFormat = "at {0:t}";
+			LocationField = "Location";
+			UnknownText = "(To be announced)";
+			YearQueryString = "year";
+			LocationUnknownField = "Location is unknown";
+			RegistrationNeededField = "Registration needed";
+			RegistrationRecipientField = "Registration recipient e-mail address";
+			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
+			NumberOfRegistrationsField = "Number of registrations";
+		}
+
+		public override string Name
+		{
+			get { return "Events Plugin"; }
+		}
+
+		public override bool IsEditable
+		{
+			get { return true; }
+		}
+
+		public override string Description
+		{
+			get { return "Extends Graffiti CMS for events management."; }
+		}
+
+		public string DefaultLocation
+		{
+			get;
+			set;
+		}
+
+		public string DefaultMaximumNumberOfRegistrations
+		{
+			get;
+			set;
+		}
+
+		public string DefaultRegistrationRecipient
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationPage
+		{
+			get;
+			set;
+		}
+
+		#region IEventPluginConfiguration Members
+		public string SortRelevantDateField
+		{
+			get { return StartDateField; }
+		}
+
+		public string CategoryName
+		{
+			get;
+			set;
+		}
+
+		public string SpeakerField
+		{
+			get;
+			set;
+		}
+
+		public string YearQueryString
+		{
+			get;
+			set;
+		}
+
+		public string DateFormat
+		{
+			get;
+			set;
+		}
+
+		public string EndDateField
+		{
+			get;
+			set;
+		}
+
+		public string LocationField
+		{
+			get;
+			set;
+		}
+
+		public string ShortEndDateFormat
+		{
+			get;
+			set;
+		}
+
+		public string StartDateField
+		{
+			get;
+			set;
+		}
+
+		public string UnknownText
+		{
+			get;
+			set;
+		}
+
+		public string LocationUnknownField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationNeededField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationRecipientField
+		{
+			get;
+			set;
+		}
+
+		public string MaximumNumberOfRegistrationsField
+		{
+			get;
+			set;
+		}
+
+		public string NumberOfRegistrationsField
+		{
+			get;
+			set;
+		}
+		#endregion
+
+		public override void Init(GraffitiApplication ga)
+		{
+			Debug.WriteLine("Init Event Plugin");
+
+			// Also tried BeforeInsert and BeforeUpdate.
+			ga.BeforeValidate += Post_Validate;
+			ga.BeforeInsert += Post_SetDefaultValues;
+			ga.BeforeUpdate += Post_SetDefaultValues;
+		}
+
+		internal void Post_Validate(DataBuddyBase dataObject, EventArgs e)
+		{
+			Post post = dataObject as Post;
+			if (post == null)
+			{
+				return;
+			}
+
+			if (post.Category.Name != CategoryName)
+			{
+				return;
+			}
+
+			// Validate input.
+			DateTime? startDate = ValidateDate(post, StartDateField);
+			DateTime? endDate = ValidateDate(post, EndDateField);
+
+			if (!startDate.HasValue && endDate.HasValue)
+			{
+				throw new ValidationException("Please enter a start date if the end date is set.", StartDateField);
+			}
+
+			if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+			{
+				throw new ValidationException("Please enter a start date that is less or equal than the end date.",
+				                              StartDateField,
+				                              EndDateField);
+			}
+
+			if (post[LocationUnknownField].IsChecked() && !post[LocationField].IsNullOrEmptyTrimmed())
+			{
+				throw new ValidationException(
+					String.Format(
+						"Either check the '{0}' field the or enter a location. You can leave the '{0}' field unchecked and the '{1}' field empty to apply the default location value '{2}'.",
+						LocationUnknownField,
+						LocationField,
+						DefaultLocation),
+					LocationUnknownField,
+					LocationField);
+			}
+		}
+
+		internal void Post_SetDefaultValues(DataBuddyBase dataObject, EventArgs e)
+		{
+			Post post = dataObject as Post;
+			if (post == null)
+			{
+				return;
+			}
+
+			if (post.Category.Name != CategoryName)
+			{
+				return;
+			}
+
+			// Set default location if no location is given.
+			if (!post[LocationUnknownField].IsChecked() && post[LocationField].IsNullOrEmptyTrimmed())
+			{
+				post[LocationField] = DefaultLocation;
+				ForcePropertyUpdate(post);
+			}
+
+			// Set default number maximum number of registrations.
+			
+				//DefaultMaximumNumberOfRegistrations DefaultRegistrationRecipient
+		}
+
+		// HACK: This will very likely break when Graffiti is updated.
+		void ForcePropertyUpdate(Post post)
+		{
+			if (post == null)
+			{
+				throw new ArgumentNullException("post");
+			}
+
+			MethodInfo[] methods = post.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo method = Array.Find(methods,
+			                               m =>
+			                               m.ReturnType == typeof(void) && m.IsHideBySig && !m.IsFamily &&
+			                               m.GetParameters().Length == 0 && m.MetadataToken == 100663972);
+			method.Invoke(post, null);
+		}
+
+		static DateTime? ValidateDate(Post post, string dateField)
+		{
+			if (!post[dateField].IsNullOrEmptyTrimmed())
+			{
+				DateTime dateTime;
+				if (!DateTime.TryParse(post[dateField], out dateTime))
+				{
+					throw new ValidationException("Please enter a valid date.", dateField);
+				}
+
+				return dateTime;
+			}
+
+			return null;
+		}
+
+		#region Settings
+		protected override FormElementCollection AddFormElements()
+		{
+			return new FormElementCollection
+			       {
+			       	new CheckFormElement(Form_CreateTargetCategoryAndFields,
+			       	                     "Create category and fields",
+			       	                     "Check to automatically create the category and custom fields.",
+			       	                     true),
+			       	new CheckFormElement(Form_MigrateFieldValues,
+			       	                     "Migrate custom field values",
+			       	                     "Check to automatically migrate custom field values if category and/or field names change.",
+			       	                     true),
+			       	new TextFormElement(Form_CategoryName,
+			       	                    "Graffiti events category",
+			       	                    "Enter the name of the category to store events, e.g. \"Events\"."),
+			       	new TextFormElement(Form_StartDateField,
+			       	                    "\"Event start date and time\" field",
+			       	                    "Enter the name of the custom text field to store the events's start date (and, optionally, time), e.g. \"Start Date\". This field will be validated to be either empty or hold a correct date time/value."),
+			       	new TextFormElement(Form_EndDateField,
+			       	                    "\"Event end date and time\" field",
+			       	                    "Enter the name of the custom text field to store the events's end date (and, optionally, time), e.g. \"End Date\". This field will be validated to be either empty or hold a correct date time/value."),
+			       	new TextFormElement(Form_SpeakerField,
+			       	                    "\"Speaker\" field",
+			       	                    "Enter the name of the custom text field to store the speaker's name, e.g. \"Speaker\"."),
+			       	new TextFormElement(Form_DateFormat,
+			       	                    "Date/time format",
+			       	                    "Enter .NET format string to be used for the start date and the end date, e.g. \"on {0:D}, at {0:t}\". Leave blank to use the Graffiti date format from web.config."),
+			       	new TextFormElement(Form_ShortEndDateFormat,
+			       	                    "Short end date/time format",
+			       	                    "Enter .NET format string to be used for the end date if the start date and end date of the event is the same day, e.g. \"at {0:t}\". Leave blank to use the Graffiti date format from above."),
+			       	new TextFormElement(Form_LocationField,
+			       	                    "Event location field",
+			       	                    "Enter the name of the custom text field to store the event's location, e.g. \"Location\"."),
+			       	new TextFormElement(Form_LocationUnknownField,
+			       	                    "\"Location unknown\" field",
+			       	                    "Enter the name of the custom checkbox field to store if the event location is unknown, e.g. \"Location is unknown\"."),
+			       	new TextFormElement(Form_DefaultLocation,
+			       	                    "Default event location",
+			       	                    "Enter the default value of the locaton if you don't enter one, e.g. \"Initech Corp., Floor 1\". This value will be used to fill the event location field above if \"Location unknown\" is not checked."),
+			       	new TextFormElement(Form_UnknownText,
+			       	                    "\"Unknown\" text",
+			       	                    "Enter the text to be displayed if event information (dates, speaker, location) is not yet known, e.g. \"(To be announced)\"."),
+			       	new TextFormElement(Form_RegistrationNeededField,
+			       	                    "\"Registration needed\" field",
+			       	                    "Enter the name of the custom checkbox field to store if registration for the event is needed, e.g. \"Registration needed\"."),
+			       	new TextFormElement(Form_RegistrationRecipientField,
+			       	                    "\"Registration recipient e-mail address\" field",
+			       	                    "Enter the name of the custom textbox field to store the registration recipient e-mail address, e.g. \"Registration recipient e-mail address\"."),
+			       	new TextFormElement(Form_DefaultRegistrationRecipient,
+			       	                    " Default registration recipient e-mail address",
+			       	                    "Enter the default registration e-mail address, e.g. \"registration@example.com\"."),
+			       	new TextFormElement(Form_MaximumNumberOfRegistrationsField,
+			       	                    "\"Maximum number of registrations\" field",
+			       	                    "Enter the name of the custom textbox field to store the maximum number of registrations for the event, e.g. \"Maximum number of registrations\"."),
+			       	new TextFormElement(Form_DefaultMaximumNumberOfRegistrations,
+			       	                    "Default maximum number of registrations",
+			       	                    "Enter the default maximum number of registrations, e.g. \"100\". If that number is reached, new registrations will not be possible. Leave blank to allow unlimited registrations."),
+			       	new TextFormElement(Form_NumberOfRegistrationsField,
+			       	                    "\"Number of registrations\" field",
+			       	                    "Enter the name of the custom textbox field to store the number of received registrations for the event, e.g. \"Number of registrations\"."),
+			       	new TextFormElement(Form_YearQueryString,
+			       	                    "Query string parameter for paging by year",
+			       	                    "Enter a value for the query string parameter used to display talks of a specific year.")
+			       };
+		}
+
+		public override StatusType SetValues(HttpContext context, NameValueCollection nvc)
+		{
+			try
+			{
+				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
+
+				if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
+				{
+					SetMessage(context, "Please enter a category name.");
+					return StatusType.Error;
+				}
+
+				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
+				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !Util.IsExistingCategory(categoryName))
+				{
+					SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
+					return StatusType.Warning;
+				}
+
+				if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
+				{
+					SetMessage(context, "Please enter a year query string parameter.");
+					return StatusType.Error;
+				}
+
+				EventPluginMemento oldState = CreateMemento();
+
+				CategoryName = categoryName;
+				StartDateField = nvc[Form_StartDateField];
+				EndDateField = nvc[Form_EndDateField];
+				SpeakerField = nvc[Form_SpeakerField];
+				DateFormat = nvc[Form_DateFormat];
+				ShortEndDateFormat = nvc[Form_ShortEndDateFormat];
+				LocationField = nvc[Form_LocationField];
+				UnknownText = nvc[Form_UnknownText];
+				LocationUnknownField = nvc[Form_LocationUnknownField];
+				YearQueryString = nvc[Form_YearQueryString];
+				DefaultLocation = nvc[Form_DefaultLocation];
+				RegistrationNeededField = nvc[Form_RegistrationNeededField];
+				RegistrationRecipientField = nvc[Form_RegistrationRecipientField];
+				DefaultRegistrationRecipient = nvc[Form_DefaultRegistrationRecipient];
+				MaximumNumberOfRegistrationsField = nvc[Form_MaximumNumberOfRegistrationsField];
+				DefaultMaximumNumberOfRegistrations = nvc[Form_DefaultMaximumNumberOfRegistrations];
+				NumberOfRegistrationsField = nvc[Form_NumberOfRegistrationsField];
+
+				EventPluginMemento newState = CreateMemento();
+
+				FieldMigrator migrator = new FieldMigrator();
+				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
+				{
+					migrator.EnsureTargetCategory(categoryName);
+					migrator.EnsureFields(categoryName, new MigrationInfo(oldState, newState).AllFields);
+				}
+				if (nvc[Form_MigrateFieldValues].IsChecked())
+				{
+					migrator.Migrate(new MigrationInfo(oldState, newState));
+				}
+
+				return StatusType.Success;
+			}
+			catch (Exception ex)
+			{
+				SetMessage(context, String.Format("Error: {0}", ex.Message));
+				return StatusType.Error;
+			}
+		}
+
+		protected override NameValueCollection DataAsNameValueCollection()
+		{
+			var values = new NameValueCollection();
+
+			values[Form_CategoryName] = HttpUtility.HtmlDecode(CategoryName);
+			values[Form_StartDateField] = StartDateField;
+			values[Form_EndDateField] = EndDateField;
+			values[Form_SpeakerField] = SpeakerField;
+			values[Form_DateFormat] = DateFormat;
+			values[Form_ShortEndDateFormat] = ShortEndDateFormat;
+			values[Form_LocationField] = LocationField;
+			values[Form_UnknownText] = UnknownText;
+			values[Form_LocationUnknownField] = LocationUnknownField;
+			values[Form_YearQueryString] = YearQueryString;
+			values[Form_DefaultLocation] = DefaultLocation;
+			values[Form_RegistrationNeededField] = RegistrationNeededField;
+			values[Form_RegistrationRecipientField] = RegistrationRecipientField;
+			values[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
+			values[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;
+			values[Form_DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
+			values[Form_NumberOfRegistrationsField] = NumberOfRegistrationsField;
+
+			return values;
+		}
+		#endregion
+
+		#region Memento
+		EventPluginMemento CreateMemento()
+		{
+			return new EventPluginMemento(this);
+		}
+		#endregion
+	}
+}
