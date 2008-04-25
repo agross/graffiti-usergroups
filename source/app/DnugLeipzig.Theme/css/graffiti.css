@@ -1,0 +1,50 @@
+﻿
+li.tweet {
+	margin-bottom: 10px;
+}
+
+blockquote {
+	border-left: 1px solid #326ea1;
+	color: #555555;
+	font-size: 1.00em;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 0 30px;
+	margin-bottom: 10px;
+}
+
+#menu li.selectedli a {
+	color: #fff;
+}
+
+
+
+.gravatar {
+	float: left;
+	width: 65px;
+}
+.commentBody {
+	float: left;
+	width: 80%;
+}
+
+fieldset input {
+	width: 400px;
+	height: 20px;
+	font-size: 20px;
+}
+
+.alignleft, .previous {
+	float: left;
+	text-align: left;
+}
+
+.alignright, .next {
+	float: right;
+	margin-top: -1px;
+	text-align: right;
+}
+
+#similarPosts.list {
+	margin-left: 1.5em;
+}
