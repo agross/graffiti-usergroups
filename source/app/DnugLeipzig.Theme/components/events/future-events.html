@@ -1,0 +1,16 @@
+﻿<h1 class="archive-head">
+	Veranstaltungen
+	<a href="$ugEvents.GetFeedUrl()" title="RSS-Feed für Veranstaltungen abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
+	<a href="http://team.dotnet-leipzig.de/calendars/Kalender_von_DNUG.ics" title="Veranstaltungskalender abonnieren"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Veranstaltungskalender" /></a>
+</h1>
+<p class="meta">
+	Sofern nicht anders erwähnt, sind die hier aufgeführten Termine kostenlos, ggf. ist eine Anmeldung notwendig.
+</p>
+
+#set($futureEvents = $ugEvents.GetForFuture())
+
+#foreach($event in $futureEvents)
+	$macros.LoadThemeView("components/events/event.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
