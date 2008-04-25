@@ -1,0 +1,25 @@
+﻿#if($where == "category")
+	<h1 class="archive-head">
+		Einträge in der Kategorie <em>$category.Name</em>
+		<a href="$urls.GetFeedUrl($category)" title="RSS-Feed für die Kategorie $category.Name abonnieren"><img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" /></a>
+	</h1>
+#elseif($where == "tag")
+	<h1 class="archive-head">
+		Einträge mit dem Tag <em>$tag</em>
+	</h1>
+#elseif($where == "search")
+	<h1 class="archive-head">
+		Suchergebnisse für <em>$macros.SearchQuery</em>
+	</h1>
+#end
+
+#foreach($post in $posts)
+	$macros.LoadThemeView("components/posts/post.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
+
+#if($where == "category" || $where == "home")
+	$macros.Pager("pager")
+	<div class="clearfix"></div>
+#end 

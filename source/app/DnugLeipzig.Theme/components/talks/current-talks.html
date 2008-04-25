@@ -1,0 +1,16 @@
+﻿<h1 class="archive-head">
+	Material zu den Vorträgen
+	<a href="$ugTalks.GetFeedUrl()" title="RSS-Feed für Vorträge abonnieren"><img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" /></a>
+</h1>
+<p class="meta">
+	Hier finden sich Folien (soweit sie zum nachträglichen Lesen geeignet sind), weiterführende Links, Downloads, etc. zu den
+	Vorträgen, typischerweise ein paar Tage nach der jeweiligen <a href="$ugEvents.GetCategoryLink()" title="Zur Veranstaltungsliste">Veranstaltung</a>.
+</p>
+
+#set($talks = $ugTalks.GetForCurrentYear())
+
+#foreach($talk in $talks)
+	$macros.LoadThemeView("components/talks/talk.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
