@@ -1,0 +1,11 @@
+﻿<h1 class="archive-head">
+	Material zu den Vorträgen von $ugTalks.GetViewYear()
+</h1>
+
+#set($posts = $ugTalks.GetForYear($ugTalks.GetViewYear()))
+
+#foreach($post in $posts)
+ 	$macros.LoadThemeView("components/talks/talk.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end

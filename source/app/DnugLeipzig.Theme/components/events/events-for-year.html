@@ -1,0 +1,11 @@
+﻿<h1 class="archive-head">
+	Veranstaltungen von $ugEvents.GetViewYear()
+</h1>
+
+#set($posts = $ugEvents.GetForYear($ugEvents.GetViewYear()))
+
+#foreach($post in $posts)
+	$macros.LoadThemeView("components/events/event.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
