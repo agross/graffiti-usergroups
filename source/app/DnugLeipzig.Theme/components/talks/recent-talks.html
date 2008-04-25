@@ -1,0 +1,21 @@
+﻿<h1 class="archive-head">
+	Aktuelle Vorträge 
+	<a href="$ugTalks.GetFeedUrl()" title="RSS-Feed für Vorträge abonnieren"><img src="$macros.ThemeFile('/images/rss.gif')" alt="RSS-Feed" /></a>
+</h1>
+
+#set($lastTalks = $ugTalks.GetRecent(3))
+
+#foreach($talk in $lastTalks)
+#beforeall
+	<ol>
+#each
+	<li>
+		<a href="$talk.Url" rel="bookmark" title="$ugEvents.Title($talk, ' am ', ', Sprecher: ')">
+			$ugEvents.Date($talk, "", ":") $talk.Title
+		</a>
+	</li>
+#afterall
+	</ol>
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
