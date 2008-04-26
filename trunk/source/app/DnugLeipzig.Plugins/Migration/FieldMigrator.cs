@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Runtime.Repositories;
@@ -120,6 +121,24 @@ namespace DnugLeipzig.Plugins.Migration
 
 				CategoryRepository.AddField(formSettings, newField);
 			}
+
+			// Order the fields according the order of the fields in the "fields" variable.
+			string[] fieldNames = new string[fields.Keys.Count];
+			fields.Keys.CopyTo(fieldNames, 0);
+			formSettings.Fields.Sort(delegate(CustomField x, CustomField y)
+				{
+					if (Array.IndexOf(fieldNames, x.Name) < Array.IndexOf(fieldNames, y.Name))
+					{
+						return -1;
+					}
+
+					if (Array.IndexOf(fieldNames, x.Name) > Array.IndexOf(fieldNames, y.Name))
+					{
+						return 1;
+					}
+
+					return 0;
+				});
 		}
 
 		/// <summary>
