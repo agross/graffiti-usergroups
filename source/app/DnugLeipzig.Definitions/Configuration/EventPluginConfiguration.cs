@@ -146,6 +146,15 @@ namespace DnugLeipzig.Definitions.Configuration
 				return PluginInstance.NumberOfRegistrationsField;
 			}
 		}
+
+		public string RegistrationMailSubject
+		{
+			get
+			{
+				EnsureCurrentInstance();
+				return PluginInstance.RegistrationMailSubject;
+			}
+		}
 		#endregion
 
 		static void EnsureCurrentInstance()

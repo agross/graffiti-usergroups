@@ -18,7 +18,7 @@ namespace DnugLeipzig.Extensions.Macros
 	{
 		readonly ITalkPluginConfiguration Configuration;
 
-		#region ctors
+		#region Ctors
 		public TalkMacros() : this(null, new TalkPluginConfiguration())
 		{
 		}

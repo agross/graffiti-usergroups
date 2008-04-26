@@ -2,6 +2,7 @@
 * {
 	margin: 0;
 	padding: 0;
+	font-family: "Segoe UI" , "Lucida Grande" , "Lucida Sans Unicode" , "Lucida Sans" , "Trebuchet MS" , Tahoma, Verdana, sans-serif;
 }
 
 li {
@@ -33,7 +34,6 @@ label {
 body {
 	background: #E3E3E3 url(../images/bg.gif) repeat-x;
 	color: #1B1B1B;
-	font-family: "Segoe UI" , "Lucida Grande" , "Lucida Sans Unicode" , "Lucida Sans" , "Trebuchet MS" , Tahoma, Verdana, sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -526,21 +526,17 @@ fieldset dt {
 fieldset dd {
 	margin-bottom: 1em;
 }
-fieldset input, fieldset textarea {
-	padding: 2px 4px;
-	border: solid 1px #838383;
-	background-color: #eaeada;
-	font-family: monospace;
-	font-size: 1.2em;
-}
+
 fieldset input:hover, fieldset textarea:hover {
 	background-color: #f2f2e2;
 }
 fieldset input:focus, fieldset textarea:focus {
 	background-color: #fafaea;
 }
+
 input {
 	padding: 2px 4px;
+	vertical-align: baseline;
 }
 fieldset textarea {
 	width: 500px;

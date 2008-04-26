@@ -20,7 +20,7 @@ namespace DnugLeipzig.Extensions.Macros
 	{
 		readonly IEventPluginConfiguration Configuration;
 
-		#region ctors
+		#region Ctors
 		public EventMacros() : this(null, new EventPluginConfiguration())
 		{
 		}

@@ -27,6 +27,7 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
 		internal const string Form_MigrateFieldValues = "migrate";
 		internal const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
+		internal const string Form_RegistrationMailSubject = "registrationMailSubject";
 		internal const string Form_RegistrationNeededField = "registrationNeeded";
 		internal const string Form_RegistrationRecipientField = "registrationRecipient";
 		internal const string Form_ShortEndDateFormat = "shortDateFormat";
@@ -53,6 +54,7 @@ namespace DnugLeipzig.Plugins
 			RegistrationRecipientField = "Registration recipient e-mail address";
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			NumberOfRegistrationsField = "Number of registrations";
+			RegistrationMailSubject = "New Registration";
 
 			EnableEventHandlers = true;
 		}
@@ -190,6 +192,12 @@ namespace DnugLeipzig.Plugins
 		}
 
 		public string NumberOfRegistrationsField
+		{
+			get;
+			set;
+		}
+
+		public string RegistrationMailSubject
 		{
 			get;
 			set;
@@ -402,8 +410,11 @@ namespace DnugLeipzig.Plugins
 			       	                    "\"Registration recipient e-mail address\" field",
 			       	                    "Enter the name of the custom textbox field to store the registration recipient e-mail address, e.g. \"Registration recipient e-mail address\"."),
 			       	new TextFormElement(Form_DefaultRegistrationRecipient,
-			       	                    " Default registration recipient e-mail address",
+			       	                    "Default registration recipient e-mail address",
 			       	                    "Enter the default registration e-mail address, e.g. \"registration@example.com\"."),
+			       	new TextFormElement(Form_RegistrationMailSubject,
+			       	                    "Registration e-mail subject",
+			       	                    "Enter the registration e-mail subject, e.g. \"New Registration\"."),
 			       	new TextFormElement(Form_MaximumNumberOfRegistrationsField,
 			       	                    "\"Maximum number of registrations\" field",
 			       	                    "Enter the name of the custom textbox field to store the maximum number of registrations for the event, e.g. \"Maximum number of registrations\"."),
@@ -488,6 +499,7 @@ namespace DnugLeipzig.Plugins
 				MaximumNumberOfRegistrationsField = nvc[Form_MaximumNumberOfRegistrationsField];
 				DefaultMaximumNumberOfRegistrations = nvc[Form_DefaultMaximumNumberOfRegistrations];
 				NumberOfRegistrationsField = nvc[Form_NumberOfRegistrationsField];
+				RegistrationMailSubject = nvc[Form_RegistrationMailSubject];
 
 				newState = CreateMemento();
 			}
@@ -532,27 +544,28 @@ namespace DnugLeipzig.Plugins
 
 		protected override NameValueCollection DataAsNameValueCollection()
 		{
-			var values = new NameValueCollection();
+			var nvc = new NameValueCollection();
 
-			values[Form_CategoryName] = HttpUtility.HtmlDecode(CategoryName);
-			values[Form_StartDateField] = StartDateField;
-			values[Form_EndDateField] = EndDateField;
-			values[Form_SpeakerField] = SpeakerField;
-			values[Form_DateFormat] = DateFormat;
-			values[Form_ShortEndDateFormat] = ShortEndDateFormat;
-			values[Form_LocationField] = LocationField;
-			values[Form_UnknownText] = UnknownText;
-			values[Form_LocationUnknownField] = LocationUnknownField;
-			values[Form_YearQueryString] = YearQueryString;
-			values[Form_DefaultLocation] = DefaultLocation;
-			values[Form_RegistrationNeededField] = RegistrationNeededField;
-			values[Form_RegistrationRecipientField] = RegistrationRecipientField;
-			values[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
-			values[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;
-			values[Form_DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
-			values[Form_NumberOfRegistrationsField] = NumberOfRegistrationsField;
+			nvc[Form_CategoryName] = HttpUtility.HtmlDecode(CategoryName);
+			nvc[Form_StartDateField] = StartDateField;
+			nvc[Form_EndDateField] = EndDateField;
+			nvc[Form_SpeakerField] = SpeakerField;
+			nvc[Form_DateFormat] = DateFormat;
+			nvc[Form_ShortEndDateFormat] = ShortEndDateFormat;
+			nvc[Form_LocationField] = LocationField;
+			nvc[Form_UnknownText] = UnknownText;
+			nvc[Form_LocationUnknownField] = LocationUnknownField;
+			nvc[Form_YearQueryString] = YearQueryString;
+			nvc[Form_DefaultLocation] = DefaultLocation;
+			nvc[Form_RegistrationNeededField] = RegistrationNeededField;
+			nvc[Form_RegistrationRecipientField] = RegistrationRecipientField;
+			nvc[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
+			nvc[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;
+			nvc[Form_DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
+			nvc[Form_NumberOfRegistrationsField] = NumberOfRegistrationsField;
+			nvc[Form_RegistrationMailSubject] = RegistrationMailSubject;
 
-			return values;
+			return nvc;
 		}
 		#endregion
 

@@ -56,5 +56,10 @@ namespace DnugLeipzig.Definitions.Configuration
 		{
 			get;
 		}
+
+		string RegistrationMailSubject
+		{
+			get;
+		}
 	}
 }

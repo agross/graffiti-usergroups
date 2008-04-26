@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Runtime.Repositories;
@@ -14,7 +13,7 @@ namespace DnugLeipzig.Plugins.Migration
 		readonly ICategoryRepository CategoryRepository;
 		readonly IPostRepository PostRepository;
 
-		#region ctors
+		#region Ctors
 		public FieldMigrator() : this(new CategoryRepository(), new PostRepository())
 		{
 		}

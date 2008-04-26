@@ -237,13 +237,14 @@ namespace DnugLeipzig.Plugins
 
 		protected override NameValueCollection DataAsNameValueCollection()
 		{
-			var values = new NameValueCollection();
-			values[Form_CategoryName] = HttpUtility.HtmlDecode(CategoryName);
-			values[Form_DateField] = DateField;
-			values[Form_SpeakerField] = SpeakerField;
-			values[Form_YearQueryString] = YearQueryString;
+			var nvc = new NameValueCollection();
 
-			return values;
+			nvc[Form_CategoryName] = HttpUtility.HtmlDecode(CategoryName);
+			nvc[Form_DateField] = DateField;
+			nvc[Form_SpeakerField] = SpeakerField;
+			nvc[Form_YearQueryString] = YearQueryString;
+
+			return nvc;
 		}
 		#endregion
 
