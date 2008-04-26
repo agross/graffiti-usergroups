@@ -2,8 +2,8 @@ using System;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.Extensions;
 
 using Graffiti.Core;
 

@@ -73,6 +73,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -82,8 +83,14 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="EventPluginSettingsValidationTests.cs" />
+    <Compile Include="HttpMocks\HttpSimulator.cs" />
+    <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
+    <Compile Include="HttpMocks\ReflectionHelper.cs" />
+    <Compile Include="HttpMocks\SimulatedHttpRequest.cs" />
+    <Compile Include="TalkPluginPostValidationTests.cs" />
     <Compile Include="EventPluginTests.cs" />
-    <Compile Include="EventPluginValidationTests.cs" />
+    <Compile Include="EventPluginPostValidationTests.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="FieldMigratorTests.cs" />

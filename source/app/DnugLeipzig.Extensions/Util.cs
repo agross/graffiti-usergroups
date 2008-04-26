@@ -1,7 +1,7 @@
 using System;
 using System.Web;
 
-using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Definitions.Extensions;
 
 namespace DnugLeipzig.Extensions
 {

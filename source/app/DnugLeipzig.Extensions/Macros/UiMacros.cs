@@ -5,7 +5,7 @@ using System.Configuration;
 using System.Text;
 using System.Web;
 
-using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 

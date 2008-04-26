@@ -13,25 +13,25 @@ namespace DnugLeipzig.Plugins
 {
 	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration
 	{
-		const string Form_CategoryName = "categoryName";
-		const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
-		const string Form_DateFormat = "dateFormat";
-		const string Form_DefaultLocation = "defaultLocation";
-		const string Form_DefaultMaximumNumberOfRegistrations = "defaultMaximumNumberOfRegistrations";
-		const string Form_DefaultRegistrationRecipient = "defaultRegistrationRecipient";
-		const string Form_EndDateField = "endDateField";
-		const string Form_LocationField = "locationField";
-		const string Form_LocationUnknownField = "locationUnknown";
-		const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
-		const string Form_MigrateFieldValues = "migrate";
-		const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
-		const string Form_RegistrationNeededField = "registrationNeeded";
-		const string Form_RegistrationRecipientField = "registrationRecipient";
-		const string Form_ShortEndDateFormat = "shortDateFormat";
-		const string Form_SpeakerField = "speakerField";
-		const string Form_StartDateField = "startDateField";
-		const string Form_UnknownText = "unknownText";
-		const string Form_YearQueryString = "yearQueryString";
+		internal const string Form_CategoryName = "categoryName";
+		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
+		internal const string Form_DateFormat = "dateFormat";
+		internal const string Form_DefaultLocation = "defaultLocation";
+		internal const string Form_DefaultMaximumNumberOfRegistrations = "defaultMaximumNumberOfRegistrations";
+		internal const string Form_DefaultRegistrationRecipient = "defaultRegistrationRecipient";
+		internal const string Form_EndDateField = "endDateField";
+		internal const string Form_LocationField = "locationField";
+		internal const string Form_LocationUnknownField = "locationUnknown";
+		internal const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
+		internal const string Form_MigrateFieldValues = "migrate";
+		internal const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
+		internal const string Form_RegistrationNeededField = "registrationNeeded";
+		internal const string Form_RegistrationRecipientField = "registrationRecipient";
+		internal const string Form_ShortEndDateFormat = "shortDateFormat";
+		internal const string Form_SpeakerField = "speakerField";
+		internal const string Form_StartDateField = "startDateField";
+		internal const string Form_UnknownText = "unknownText";
+		internal const string Form_YearQueryString = "yearQueryString";
 
 		public EventPlugin()
 		{
@@ -186,7 +186,6 @@ namespace DnugLeipzig.Plugins
 		{
 			Debug.WriteLine("Init Event Plugin");
 
-			// Also tried BeforeInsert and BeforeUpdate.
 			ga.BeforeValidate += Post_Validate;
 			ga.BeforeInsert += Post_SetDefaultValues;
 			ga.BeforeUpdate += Post_SetDefaultValues;
@@ -206,8 +205,28 @@ namespace DnugLeipzig.Plugins
 			}
 
 			// Validate input.
-			DateTime? startDate = Validator.ValidateDate(post, StartDateField);
-			DateTime? endDate = Validator.ValidateDate(post, EndDateField);
+			DateTime? startDate = null;
+			DateTime? endDate = null;
+
+			if (!post[StartDateField].IsNullOrEmptyTrimmed())
+			{
+				if (!Validator.ValidateDate(post[StartDateField]))
+				{
+					throw new ValidationException("Please enter a valid date.", StartDateField);
+				}
+
+				startDate = DateTime.Parse(post[StartDateField]);
+			}
+
+			if (!post[EndDateField].IsNullOrEmptyTrimmed())
+			{
+				if (!Validator.ValidateDate(post[EndDateField]))
+				{
+					throw new ValidationException("Please enter a valid date.", EndDateField);
+				}
+
+				endDate = DateTime.Parse(post[EndDateField]);
+			}
 
 			if (!startDate.HasValue && endDate.HasValue)
 			{
@@ -233,23 +252,41 @@ namespace DnugLeipzig.Plugins
 					LocationField);
 			}
 
-			int? maximumNumberOfRegistrations = Validator.ValidateInt(post, MaximumNumberOfRegistrationsField);
-			if (maximumNumberOfRegistrations.HasValue && maximumNumberOfRegistrations < 0)
+			if (!post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
 			{
-				throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
-				                              MaximumNumberOfRegistrationsField);
+				if (!Validator.ValidateInt(post[MaximumNumberOfRegistrationsField]))
+				{
+					throw new ValidationException("Please enter a valid integer value.", MaximumNumberOfRegistrationsField);
+				}
+
+				int maximumNumberOfRegistrations = int.Parse(post[MaximumNumberOfRegistrationsField]);
+
+				if (!Validator.ValidateRange(maximumNumberOfRegistrations, 0, int.MaxValue))
+				{
+					throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
+					                              MaximumNumberOfRegistrationsField);
+				}
 			}
 
-			int? numberOfRegistrations = Validator.ValidateInt(post, NumberOfRegistrationsField);
-			if (numberOfRegistrations.HasValue && numberOfRegistrations < 0)
+			if (!post[NumberOfRegistrationsField].IsNullOrEmptyTrimmed())
 			{
-				throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
-				                              NumberOfRegistrationsField);
+				if (!Validator.ValidateInt(post[NumberOfRegistrationsField]))
+				{
+					throw new ValidationException("Please enter a valid integer value.", NumberOfRegistrationsField);
+				}
+
+				int numberOfRegistrations = int.Parse(post[NumberOfRegistrationsField]);
+
+				if (!Validator.ValidateRange(numberOfRegistrations, 0, int.MaxValue))
+				{
+					throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
+					                              NumberOfRegistrationsField);
+				}
 			}
 
 			if (!post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
 			{
-				if (!Validator.ValidateEmail(post, RegistrationRecipientField))
+				if (!Validator.ValidateEmail(post[RegistrationRecipientField]))
 				{
 					throw new ValidationException(String.Format("Please enter a valid e-mail address."), RegistrationRecipientField);
 				}
@@ -364,25 +401,47 @@ namespace DnugLeipzig.Plugins
 			{
 				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
 
-				if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
+				nvc.TrimAllValues();
+
+				// Validation.
+				if (!Validator.ValidateExisting(nvc[Form_CategoryName]))
 				{
-					SetMessage(context, "Please enter a category name.");
-					return StatusType.Error;
+					throw new ValidationException("Please enter a category name.");
 				}
 
-				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
+				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName]);
 				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !Util.IsExistingCategory(categoryName))
 				{
-					SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
-					return StatusType.Warning;
+					throw new ValidationException(String.Format("The category '{0}' does not exist.", categoryName), StatusType.Warning);
 				}
 
-				if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
+				if (!nvc[Form_DefaultRegistrationRecipient].IsNullOrEmptyTrimmed())
 				{
-					SetMessage(context, "Please enter a year query string parameter.");
-					return StatusType.Error;
+					if (!Validator.ValidateEmail(nvc[Form_DefaultRegistrationRecipient]))
+					{
+						throw new ValidationException("Please enter a valid e-mail address for the default registration recipient.");
+					}
 				}
 
+				if (!nvc[Form_DefaultMaximumNumberOfRegistrations].IsNullOrEmptyTrimmed())
+				{
+					if (!Validator.ValidateInt(nvc[Form_DefaultMaximumNumberOfRegistrations]))
+					{
+						throw new ValidationException("Please enter a valid integer value for the default maximum number of registrations.");
+					}
+
+					if (!Validator.ValidateRange(int.Parse(nvc[Form_DefaultMaximumNumberOfRegistrations]), 0, int.MaxValue))
+					{
+						throw new ValidationException("Please enter a value greater or equal than 0 for the default maximum number of registrations.");
+					}
+				}
+
+				if (!Validator.ValidateExisting(nvc[Form_YearQueryString]))
+				{
+					throw new ValidationException("Please enter a year query string parameter.");
+				}
+
+				// Write back.
 				EventPluginMemento oldState = CreateMemento();
 
 				CategoryName = categoryName;
@@ -417,6 +476,11 @@ namespace DnugLeipzig.Plugins
 				}
 
 				return StatusType.Success;
+			}
+			catch (ValidationException ex)
+			{
+				SetMessage(context, ex.Message);
+				return ex.Severity;
 			}
 			catch (Exception ex)
 			{
