@@ -1,0 +1,45 @@
+﻿<div id="comment-form">
+	<a name="comments"></a>
+	<h3>
+		#if ($post.EnableNewComments) Kommentar verfassen #else Kommentare sind nicht gestattet. #end
+	</h3>
+	#if($post.EnableNewComments)
+		<form action="$url" method="post" id="comment_form">
+			<fieldset>
+				<dl>
+					#if($isUser)
+						<dt style="margin-bottom: 1em;">
+							Angemeldet als $user.ProperName <a href="$urls.Logout">Abmelden</a>
+						</dt>
+						<dl>
+						</dl>
+					#else
+						<dt><label for="author">Name:</label></dt>
+						<dd>
+							<input type="text" name="author" id="author" value="" tabindex="1" />
+						</dd>
+						<dt><label for="email">E-Mail:</label> (wird nicht veröffentlicht)</dt>
+						<dd>
+							<input type="text" name="email" id="email" value="" tabindex="2" />
+						</dd>
+						<dt><label for="url">Homepage:</label></dt>
+						<dd>
+							<input type="text" name="url" id="url" value="" tabindex="3" />
+						</dd>
+					#end
+					<dt>
+						<label for="comment">Kommentar:</label><br />
+						(HTML ist nicht erlaubt)
+					</dt>
+					<dd>
+						<textarea name="comment" id="comment" rows="7" tabindex="4"></textarea>
+					</dd>
+				</dl>
+			</fieldset>
+			
+			$macros.CommentButton("%{ class = 'submit_button', tabindex = '5', value = 'Kommentar absenden' }")
+			<div class="status" style="display: none;" id="comment_status"></div>
+			<input type="hidden" name="comment_post_ID" value="$post.Id" />
+		</form>
+	#end
+</div>
