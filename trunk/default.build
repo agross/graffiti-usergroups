@@ -394,7 +394,7 @@
 	</target>
 
 	<target name="init-deploy">
-		<fail message="Cannot deploy, property basedir.deployment.targetpath does not exist or is empty. Enter it in your local.properties file."
+		<fail message="Cannot deploy, property 'basedir.deployment.targetpath' is empty or does not exist. Enter it in your local.properties file (see local.properties.template for more information)."
 			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
 		
 		<mkdir dir="${basedir.deployment.targetpath}" />

@@ -4,20 +4,20 @@ using Graffiti.Core;
 
 using MbUnit.Framework;
 
-namespace DnugLeipzig.Plugins.Tests
+namespace DnugLeipzig.Plugins.Tests.Events
 {
 	[TestFixture]
-	public class EventPluginPostValidationTests
+	public class PostValidationTests
 	{
-		const string StartDateField = "Start date field";
 		const string EndDateField = "End date field";
-		const string LocationUnknownField = "Location is unknown field";
+		const int EventCategoryId = 2;
+		const string EventsCategoryName = "Events";
 		const string LocationField = "Location field";
+		const string LocationUnknownField = "Location is unknown field";
 		const string MaximumNumberOfRegistrationsField = "Maximum number of registrations field";
 		const string NumberOfRegistrationsField = "Number of registrations field";
 		const string RegistrationRecipientField = "Registration recipient field";
-		const int EventCategoryId = 2;
-		const string EventsCategoryName = "Events";
+		const string StartDateField = "Start date field";
 		EventPlugin _plugin;
 		Post _post;
 
@@ -50,9 +50,9 @@ namespace DnugLeipzig.Plugins.Tests
 		{
 			_post.CustomFields().Add(StartDateField, startDateValue);
 
-			_plugin.Post_Validate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
-		
+
 		[RowTest]
 		[Row("")]
 		[Row("     ")]
@@ -66,7 +66,7 @@ namespace DnugLeipzig.Plugins.Tests
 			_post.CustomFields().Add(StartDateField, "2008/2/3");
 			_post.CustomFields().Add(EndDateField, endDateValue);
 
-			_plugin.Post_Validate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace DnugLeipzig.Plugins.Tests
 		public void RequiresStartDateIfEndDateIsSet()
 		{
 			_post.CustomFields().Add(EndDateField, "2008/2/3");
-			_plugin.Post_Validate(_post, EventArgs.Empty);	
+			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
 
 		[RowTest]
@@ -116,7 +116,7 @@ namespace DnugLeipzig.Plugins.Tests
 
 			_plugin.Post_Validate(_post, EventArgs.Empty);
 		}
-		
+
 		[RowTest]
 		[Row("")]
 		[Row(null)]

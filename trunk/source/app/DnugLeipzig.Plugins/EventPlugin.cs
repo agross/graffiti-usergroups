@@ -5,7 +5,9 @@ using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -32,8 +34,9 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_StartDateField = "startDateField";
 		internal const string Form_UnknownText = "unknownText";
 		internal const string Form_YearQueryString = "yearQueryString";
+		readonly ICategoryRepository _categoryRepository;
 
-		public EventPlugin()
+		public EventPlugin() : this(new CategoryRepository())
 		{
 			// Initialize with default values.
 			CategoryName = "Talks";
@@ -50,6 +53,11 @@ namespace DnugLeipzig.Plugins
 			RegistrationRecipientField = "Registration recipient e-mail address";
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			NumberOfRegistrationsField = "Number of registrations";
+		}
+
+		public EventPlugin(ICategoryRepository categoryRepository)
+		{
+			_categoryRepository = categoryRepository;
 		}
 
 		public override string Name
@@ -80,12 +88,6 @@ namespace DnugLeipzig.Plugins
 		}
 
 		public string DefaultRegistrationRecipient
-		{
-			get;
-			set;
-		}
-
-		public string RegistrationPage
 		{
 			get;
 			set;
@@ -339,7 +341,7 @@ namespace DnugLeipzig.Plugins
 			       	                     true),
 			       	new CheckFormElement(Form_MigrateFieldValues,
 			       	                     "Migrate custom field values",
-			       	                     "Check to automatically migrate custom field values if category and/or field names change.",
+			       	                     "Check to automatically migrate posts and custom field values if category and/or field names change.",
 			       	                     true),
 			       	new TextFormElement(Form_CategoryName,
 			       	                    "Graffiti events category",
@@ -401,8 +403,6 @@ namespace DnugLeipzig.Plugins
 			{
 				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
 
-				nvc.TrimAllValues();
-
 				// Validation.
 				if (!Validator.ValidateExisting(nvc[Form_CategoryName]))
 				{
@@ -410,7 +410,7 @@ namespace DnugLeipzig.Plugins
 				}
 
 				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName]);
-				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !Util.IsExistingCategory(categoryName))
+				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !_categoryRepository.IsExistingCategory(categoryName))
 				{
 					throw new ValidationException(String.Format("The category '{0}' does not exist.", categoryName), StatusType.Warning);
 				}
@@ -427,12 +427,14 @@ namespace DnugLeipzig.Plugins
 				{
 					if (!Validator.ValidateInt(nvc[Form_DefaultMaximumNumberOfRegistrations]))
 					{
-						throw new ValidationException("Please enter a valid integer value for the default maximum number of registrations.");
+						throw new ValidationException(
+							"Please enter a valid integer value for the default maximum number of registrations.");
 					}
 
 					if (!Validator.ValidateRange(int.Parse(nvc[Form_DefaultMaximumNumberOfRegistrations]), 0, int.MaxValue))
 					{
-						throw new ValidationException("Please enter a value greater or equal than 0 for the default maximum number of registrations.");
+						throw new ValidationException(
+							"Please enter a value greater or equal than 0 for the default maximum number of registrations.");
 					}
 				}
 
@@ -442,7 +444,7 @@ namespace DnugLeipzig.Plugins
 				}
 
 				// Write back.
-				EventPluginMemento oldState = CreateMemento();
+				IMemento oldState = CreateMemento();
 
 				CategoryName = categoryName;
 				StartDateField = nvc[Form_StartDateField];
@@ -462,7 +464,7 @@ namespace DnugLeipzig.Plugins
 				DefaultMaximumNumberOfRegistrations = nvc[Form_DefaultMaximumNumberOfRegistrations];
 				NumberOfRegistrationsField = nvc[Form_NumberOfRegistrationsField];
 
-				EventPluginMemento newState = CreateMemento();
+				IMemento newState = CreateMemento();
 
 				FieldMigrator migrator = new FieldMigrator();
 				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
@@ -516,7 +518,7 @@ namespace DnugLeipzig.Plugins
 		#endregion
 
 		#region Memento
-		EventPluginMemento CreateMemento()
+		IMemento CreateMemento()
 		{
 			return new EventPluginMemento(this);
 		}

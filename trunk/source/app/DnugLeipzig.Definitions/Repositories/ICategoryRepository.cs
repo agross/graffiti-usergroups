@@ -10,5 +10,6 @@ namespace DnugLeipzig.Definitions.Repositories
 		void AddField(CustomFormSettings settings, CustomField field);
 		void DeleteCategory(string categoryName);
 		void DeleteField(CustomFormSettings settings, string fieldName);
+		bool IsExistingCategory(string categoryName);
 	}
 }

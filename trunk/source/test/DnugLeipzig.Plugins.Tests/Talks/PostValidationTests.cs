@@ -4,10 +4,10 @@ using Graffiti.Core;
 
 using MbUnit.Framework;
 
-namespace DnugLeipzig.Plugins.Tests
+namespace DnugLeipzig.Plugins.Tests.Talks
 {
 	[TestFixture]
-	public class TalkPluginPostValidationTests
+	public class PostValidationTests
 	{
 		const string DateField = "Date field";
 		const int TalkCategoryId = 3;
