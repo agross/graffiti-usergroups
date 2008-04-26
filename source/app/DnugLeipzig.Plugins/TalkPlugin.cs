@@ -30,6 +30,8 @@ namespace DnugLeipzig.Plugins
 			DateField = "Date";
 			SpeakerField = "Speaker";
 			YearQueryString = "year";
+
+			EnableEventHandlers = true;
 		}
 
 		public TalkPlugin(ICategoryRepository categoryRepository)
@@ -50,6 +52,16 @@ namespace DnugLeipzig.Plugins
 		public override string Description
 		{
 			get { return "Extends Graffiti CMS for talks management."; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether to enable validation and default valie event handlers. Event handlers will be disabled during migration.
+		/// </summary>
+		/// <value><c>true</c> if event handlers are enabled; otherwise, <c>false</c>.</value>
+		static bool EnableEventHandlers
+		{
+			get;
+			set;
 		}
 
 		#region ITalkPluginConfiguration Members
@@ -92,6 +104,11 @@ namespace DnugLeipzig.Plugins
 
 		internal void Post_Validate(DataBuddyBase dataObject, EventArgs e)
 		{
+			if (!EnableEventHandlers)
+			{
+				return;
+			}
+
 			Post post = dataObject as Post;
 			if (post == null)
 			{
@@ -143,6 +160,9 @@ namespace DnugLeipzig.Plugins
 
 		public override StatusType SetValues(HttpContext context, NameValueCollection nvc)
 		{
+			IMemento oldState;
+			IMemento newState;
+
 			try
 			{
 				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
@@ -167,27 +187,14 @@ namespace DnugLeipzig.Plugins
 				}
 
 				// Write back.
-				IMemento oldState = CreateMemento();
+				oldState = CreateMemento();
 
 				CategoryName = categoryName;
 				DateField = nvc[Form_DateField];
 				SpeakerField = nvc[Form_SpeakerField];
 				YearQueryString = nvc[Form_YearQueryString];
 
-				IMemento newState = CreateMemento();
-
-				FieldMigrator migrator = new FieldMigrator();
-				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
-				{
-					migrator.EnsureTargetCategory(categoryName);
-					migrator.EnsureFields(categoryName, new MigrationInfo(oldState, newState).AllFields);
-				}
-				if (nvc[Form_MigrateFieldValues].IsChecked())
-				{
-					migrator.Migrate(new MigrationInfo(oldState, newState));
-				}
-
-				return StatusType.Success;
+				newState = CreateMemento();
 			}
 			catch (ValidationException ex)
 			{
@@ -198,6 +205,33 @@ namespace DnugLeipzig.Plugins
 			{
 				SetMessage(context, String.Format("Error: {0}", ex.Message));
 				return StatusType.Error;
+			}
+
+			try
+			{
+				EnableEventHandlers = false;
+
+				FieldMigrator migrator = new FieldMigrator();
+				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
+				{
+					migrator.EnsureTargetCategory(newState.CategoryName);
+					migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
+				}
+				if (nvc[Form_MigrateFieldValues].IsChecked())
+				{
+					migrator.Migrate(new MigrationInfo(oldState, newState));
+				}
+
+				return StatusType.Success;
+			}
+			catch (Exception ex)
+			{
+				SetMessage(context, String.Format("Error while migrating category and fields: {0}", ex.Message));
+				return StatusType.Error;
+			}
+			finally
+			{
+				EnableEventHandlers = true;
 			}
 		}
 
