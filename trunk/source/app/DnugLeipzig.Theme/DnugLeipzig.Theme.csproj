@@ -118,6 +118,7 @@
     <Content Include="index.html" />
     <Content Include="page.html" />
     <Content Include="post.html" />
+    <Content Include="templates\register.html" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

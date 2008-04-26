@@ -1,0 +1,76 @@
+﻿<html>
+<head>
+<title></title>
+</head>
+<body>
+	#if($formOfAddress == "mr")
+		#set($formOfAddressText = "Herr")
+	#else
+		#set($formOfAddressText = "Frau")
+	#end
+	
+	#if($occupation == "student")
+		#set($occupationText = "Student")
+	#elseif($occupation == "researcher")
+		#set($occupationText = "wissenschaftlicher Mitarbeiter")
+	#else
+		#set($occupationText = "Sonstiges")
+	#end
+
+	#if ($isCcToAttendee)
+		<p>
+			#if($formOfAddress == "mr")
+				Sehr geehrter Herr $name,
+			#else
+				Sehr geehrte Frau $name,
+			#end
+		</p>
+		<p>
+			anbei erhalten Sie wie gewünscht die Bestätigung für Ihre Anmeldung zu nachfolgender Veranstaltung.
+			
+			#if ($isOnWaitingList)
+				<strong>Bitte beachten Sie, dass Sie sich auf der Warteliste befinden. Sollte es möglich sein, dass Sie an der Veranstaltung
+				teilnehmen können, werden wir uns gesondert mit Ihnen in Verbindung setzen.</strong>
+			#end
+		</p>
+	#else
+		<h2>
+			Neue Anmeldung zu einer Veranstaltung
+		</h2>
+	#end
+
+	<h3>
+		Anmeldung für die Veranstaltung:</h3>
+	<p>
+		Wir haben Ihre Anmeldung für folgende Veranstaltung erhalten: <a href="$settings.BaseUrl$event.Url" title="Veranstaltungsseite öffnen">
+			$event.Title
+		</a>
+	</p>
+	#if ($events.CanCreateCalendarItem($event))
+		<p>
+			Für diese Veranstaltung steht ein 
+			<a href="$settings.BaseUrl$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$event.ID">
+				Kalendereintrag
+			</a>
+			zur Verfügung.
+		</p>
+	#end
+
+	<h3>
+		Teilnehmerdaten:</h3>
+	<p>
+		<ul>
+			<li>
+				Anrede: $formOfAddressText</li>
+			<li>
+				Name: $name</li>
+			<li>
+				Status: $occupationText</li>
+			<li>
+				E-Mail: <a href="mailto:$attendeeEMail">$attendeeEMail</a></li>
+			<li>
+				Warteliste: #if($isOnWaitingList) Ja #else Nein #end</li>
+		</ul>
+	</p>
+</body>
+</html>

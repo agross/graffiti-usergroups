@@ -44,8 +44,11 @@ namespace DnugLeipzig.Extensions.Extensions
 		                                        string numberOfRegistrationsFieldName,
 		                                        string maximumNumberOfRegistrationsFieldName)
 		{
-			return post[numberOfRegistrationsFieldName].ToInt(0) <
-			       post[maximumNumberOfRegistrationsFieldName].ToInt(int.MaxValue);
+			// Registration is always possible, but attendees will be notified if they are on the waiting list.
+			return true;
+
+			//return post[numberOfRegistrationsFieldName].ToInt(0) <
+			//       post[maximumNumberOfRegistrationsFieldName].ToInt(int.MaxValue);
 		}
 	}
 }
