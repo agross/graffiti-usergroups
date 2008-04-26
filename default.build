@@ -294,11 +294,11 @@
 				<move file="${filename}"
 					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'events', theme.category.events))}"
 					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'events')}"/>
-				
+
 				<move file="${filename}"
 					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'talks', theme.category.talks))}"
 					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'talks')}"/>
-				
+
 				<move file="${filename}"
 					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'register', theme.post.register))}"
 					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'register')}"/>
@@ -394,15 +394,15 @@
 	</target>
 
 	<target name="init-deploy">
+		<fail message="Cannot deploy, property basedir.deployment.targetpath does not exist or is empty. Enter it in your local.properties file."
+			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
+		
 		<mkdir dir="${basedir.deployment.targetpath}" />
 	</target>
 
 	<target name="deploy"
 			depends="init-deploy, build-setup"
 			description="Deploys the application.">
-		<fail message="Cannot deploy, property basedir.deployment.targetpath does not exist or is empty. Enter it in your local.properties file."
-			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
-
 		<unzip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
 			   todir="${basedir.deployment.targetpath}"/>
 	</target>
