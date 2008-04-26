@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;

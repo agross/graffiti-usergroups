@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 

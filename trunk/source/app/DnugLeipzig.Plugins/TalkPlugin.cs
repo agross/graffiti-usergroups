@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 
@@ -76,21 +77,30 @@ namespace DnugLeipzig.Plugins
 		{
 			Debug.WriteLine("Init Talk Plugin");
 
-			ga.BeforeValidate += ga_BeforeValidate;
-			ga.BeforeInsert += ga_BeforeInsert;
-			ga.BeforeUpdate += ga_BeforeUpdate;
+			ga.BeforeValidate += Post_Validate;
 		}
 
-		void ga_BeforeValidate(DataBuddyBase dataObject, EventArgs e)
+		internal void Post_Validate(DataBuddyBase dataObject, EventArgs e)
 		{
-		}
+			Post post = dataObject as Post;
+			if (post == null)
+			{
+				return;
+			}
 
-		void ga_BeforeUpdate(DataBuddyBase dataObject, EventArgs e)
-		{
-		}
+			if (post.Category.Name != CategoryName)
+			{
+				return;
+			}
 
-		void ga_BeforeInsert(DataBuddyBase dataObject, EventArgs e)
-		{
+			// Validate input.
+			if (!post[DateField].IsNullOrEmptyTrimmed())
+			{
+				if (!Validator.ValidateDate(post[DateField]))
+				{
+					throw new ValidationException("Please enter a valid date.", DateField);
+				}
+			}
 		}
 
 		#region Settings

@@ -89,8 +89,6 @@
     <Compile Include="DateDescendingPostComparer.cs" />
     <Compile Include="Macros\TalkMacros.cs" />
     <Compile Include="DataObjects\PastPostInfo.cs" />
-    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Macros\UiMacros.cs" />
     <Compile Include="Macros\EventMacros.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

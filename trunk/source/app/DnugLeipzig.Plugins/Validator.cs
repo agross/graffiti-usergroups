@@ -3,8 +3,6 @@ using System.Text.RegularExpressions;
 
 using DnugLeipzig.Definitions.Extensions;
 
-using Graffiti.Core;
-
 namespace DnugLeipzig.Plugins
 {
 	internal static class Validator
@@ -42,41 +40,31 @@ namespace DnugLeipzig.Plugins
 				RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace |
 				RegexOptions.Compiled);
 
-		public static DateTime? ValidateDate(Post post, string fieldName)
+		public static bool ValidateExisting(string value)
 		{
-			if (post[fieldName].IsNullOrEmptyTrimmed())
-			{
-				return null;
-			}
-
-			DateTime dateTime;
-			if (!DateTime.TryParse(post[fieldName], out dateTime))
-			{
-				throw new ValidationException("Please enter a valid date.", fieldName);
-			}
-
-			return dateTime;
+			return !value.IsNullOrEmptyTrimmed();
 		}
 
-		public static int? ValidateInt(Post post, string fieldName)
+		public static bool ValidateRange<T>(T value, T minValue, T maxValue) where T : IComparable
 		{
-			if (post[fieldName].IsNullOrEmptyTrimmed())
-			{
-				return null;
-			}
+			return value.CompareTo(minValue) >= 0 && value.CompareTo(maxValue) <= 0;
+		}
 
+		public static bool ValidateDate(string value)
+		{
+			DateTime dateTimeValue;
+			return DateTime.TryParse(value, out dateTimeValue);
+		}
+
+		public static bool ValidateInt(string value)
+		{
 			int intValue;
-			if (!int.TryParse(post[fieldName], out intValue))
-			{
-				throw new ValidationException("Please enter a valid integer.", fieldName);
-			}
-
-			return intValue;
+			return int.TryParse(value, out intValue);
 		}
 
-		public static bool ValidateEmail(Post post, string fieldName)
+		public static bool ValidateEmail(string value)
 		{
-			return EmailRegex.IsMatch(post[fieldName]);
+			return EmailRegex.IsMatch(value);
 		}
 	}
 }
