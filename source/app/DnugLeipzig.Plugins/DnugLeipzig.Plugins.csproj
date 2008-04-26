@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="EventPlugin.cs" />
     <Compile Include="FormFieldInfo.cs" />
+    <Compile Include="Migration\TalkPluginMemento.cs" />
     <Compile Include="Migration\EventPluginMemento.cs" />
     <Compile Include="Migration\FieldInfo.cs" />
     <Compile Include="Migration\FieldMigrator.cs" />

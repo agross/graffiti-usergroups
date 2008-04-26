@@ -67,9 +67,9 @@
     <Content Include="contact.html" />
     <Content Include="components\site\header.html" />
     <Content Include="components\posts\footer.html" />
-    <Content Include="anmeldung.html" />
+    <Content Include="register.html" />
     <Content Include="scripts\Register.js" />
-    <Content Include="vortraege.post.html" />
+    <Content Include="talks.post.html" />
     <Content Include="css\teaser.css" />
     <Content Include="home.layout.html" />
     <Content Include="css\first-menu-item-selected.css" />
@@ -110,9 +110,9 @@
     <Content Include="images\teaser-red-top-left.png" />
     <Content Include="images\teaser-red-top-right.png" />
     <Content Include="images\teaser-red-top.png" />
-    <Content Include="vortraege.html" />
-    <Content Include="veranstaltungen.post.html" />
-    <Content Include="veranstaltungen.html" />
+    <Content Include="talks.html" />
+    <Content Include="events.post.html" />
+    <Content Include="events.html" />
     <Content Include="images\favicon.ico" />
     <Content Include="images\logo.png" />
     <Content Include="index.html" />

@@ -5,6 +5,9 @@ using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
@@ -12,19 +15,26 @@ namespace DnugLeipzig.Plugins
 {
 	public class TalkPlugin : GraffitiEvent, ITalkPluginConfiguration
 	{
-		const string Form_CategoryName = "categoryName";
-		const string Form_DateField = "dateField";
-		const string Form_MigrateFieldValues = "migrate";
-		const string Form_SpeakerField = "speakerField";
-		const string Form_YearQueryString = "yearQueryString";
+		internal const string Form_CategoryName = "categoryName";
+		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
+		internal const string Form_DateField = "dateField";
+		internal const string Form_MigrateFieldValues = "migrate";
+		internal const string Form_SpeakerField = "speakerField";
+		internal const string Form_YearQueryString = "yearQueryString";
+		readonly ICategoryRepository _categoryRepository;
 
-		public TalkPlugin()
+		public TalkPlugin() : this(new CategoryRepository())
 		{
 			// Initialize with default values.
 			CategoryName = "Talks";
 			DateField = "Date";
 			SpeakerField = "Speaker";
 			YearQueryString = "year";
+		}
+
+		public TalkPlugin(ICategoryRepository categoryRepository)
+		{
+			_categoryRepository = categoryRepository;
 		}
 
 		public override string Name
@@ -108,9 +118,13 @@ namespace DnugLeipzig.Plugins
 		{
 			return new FormElementCollection
 			       {
+			       	new CheckFormElement(Form_CreateTargetCategoryAndFields,
+			       	                     "Create category and fields",
+			       	                     "Check to automatically create the category and custom fields.",
+			       	                     true),
 			       	new CheckFormElement(Form_MigrateFieldValues,
 			       	                     "Migrate custom field values",
-			       	                     "Check to automatically migrate custom field values if field names change.",
+			       	                     "Check to automatically migrate posts and custom field values if category and/or field names change.",
 			       	                     true),
 			       	new TextFormElement(Form_CategoryName,
 			       	                    "Graffiti talks category",
@@ -129,33 +143,62 @@ namespace DnugLeipzig.Plugins
 
 		public override StatusType SetValues(HttpContext context, NameValueCollection nvc)
 		{
-			HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
-
-			if (String.IsNullOrEmpty(nvc[Form_CategoryName].Trim()))
+			try
 			{
-				SetMessage(context, "Please enter a category name.");
+				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
+
+				// Validation.
+				HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
+
+				if (!Validator.ValidateExisting(nvc[Form_CategoryName]))
+				{
+					throw new ValidationException("Please enter a category name.");
+				}
+
+				string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName]);
+				if (!nvc[Form_CreateTargetCategoryAndFields].IsChecked() && !_categoryRepository.IsExistingCategory(categoryName))
+				{
+					throw new ValidationException(String.Format("The category '{0}' does not exist.", categoryName), StatusType.Warning);
+				}
+
+				if (!Validator.ValidateExisting(nvc[Form_YearQueryString]))
+				{
+					throw new ValidationException("Please enter a year query string parameter.");
+				}
+
+				// Write back.
+				IMemento oldState = CreateMemento();
+
+				CategoryName = categoryName;
+				DateField = nvc[Form_DateField];
+				SpeakerField = nvc[Form_SpeakerField];
+				YearQueryString = nvc[Form_YearQueryString];
+
+				IMemento newState = CreateMemento();
+
+				FieldMigrator migrator = new FieldMigrator();
+				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
+				{
+					migrator.EnsureTargetCategory(categoryName);
+					migrator.EnsureFields(categoryName, new MigrationInfo(oldState, newState).AllFields);
+				}
+				if (nvc[Form_MigrateFieldValues].IsChecked())
+				{
+					migrator.Migrate(new MigrationInfo(oldState, newState));
+				}
+
+				return StatusType.Success;
+			}
+			catch (ValidationException ex)
+			{
+				SetMessage(context, ex.Message);
+				return ex.Severity;
+			}
+			catch (Exception ex)
+			{
+				SetMessage(context, String.Format("Error: {0}", ex.Message));
 				return StatusType.Error;
 			}
-
-			string categoryName = HttpUtility.HtmlEncode(nvc[Form_CategoryName].Trim());
-			if (!Util.IsExistingCategory(categoryName))
-			{
-				SetMessage(context, String.Format("The category '{0}' does not exist.", categoryName));
-				return StatusType.Warning;
-			}
-
-			CategoryName = categoryName;
-			DateField = nvc[Form_DateField];
-			SpeakerField = nvc[Form_SpeakerField];
-
-			if (String.IsNullOrEmpty(nvc[Form_YearQueryString]))
-			{
-				SetMessage(context, "Please enter a year query string parameter.");
-				return StatusType.Error;
-			}
-			YearQueryString = nvc[Form_YearQueryString];
-
-			return StatusType.Success;
 		}
 
 		protected override NameValueCollection DataAsNameValueCollection()
@@ -167,6 +210,13 @@ namespace DnugLeipzig.Plugins
 			values[Form_YearQueryString] = YearQueryString;
 
 			return values;
+		}
+		#endregion
+
+		#region Memento
+		IMemento CreateMemento()
+		{
+			return new TalkPluginMemento(this);
 		}
 		#endregion
 	}

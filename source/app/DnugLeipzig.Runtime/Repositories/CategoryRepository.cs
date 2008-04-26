@@ -84,6 +84,11 @@ namespace DnugLeipzig.Runtime.Repositories
 			}
 		}
 
+		public bool IsExistingCategory(string categoryName)
+		{
+			return GraffitiData.GetCategory(categoryName) != null;
+		}
+
 		public Data GraffitiData
 		{
 			get { return Data; }
