@@ -2,6 +2,12 @@
 
 Register.submitMessage = function(url)
 {
+	// Track this click in the registration funnel of Google Analytics.
+	if(typeof(pageTracker) !== "undefined")
+	{
+		pageTracker._trackPageview("/funnel-registration/register-clicked.html")
+	}
+	
 	GraffitiHelpers.statusMessage('registration-status', 'Sende Anfrage... Bitte warten.', true);
 	
 	new Ajax.Request(url + '?command=register',
