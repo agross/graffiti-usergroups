@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using Graffiti.Core;
 
 namespace DnugLeipzig.Definitions.Repositories

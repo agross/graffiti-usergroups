@@ -60,7 +60,12 @@
     <Content Include="components\talks\past-talks.html" />
     <Content Include="components\talks\talks-for-year.html" />
     <Content Include="components\site\header.html" />
+    <Content Include="demosite\images\ajax-loader.gif" />
+    <Content Include="demosite\ajax-status.html" />
+    <Content Include="demosite\images\error.png" />
     <Content Include="demosite\setup.html" />
+    <Content Include="demosite\images\success.png" />
+    <Content Include="demosite\images\todo.png" />
     <Content Include="images\ajax-loader.gif" />
     <Content Include="images\calendar-with-year.png" />
     <Content Include="images\calendar.png" />
@@ -75,7 +80,7 @@
     <Content Include="images\teaser-gray-top.png" />
     <Content Include="index.html" />
     <Content Include="register.html" />
-    <Content Include="demosite\DemoSite.js" />
+    <Content Include="demosite\scripts\DemoSite.js" />
     <Content Include="scripts\Register.js" />
     <Content Include="talks.post.html" />
     <Content Include="css\teaser.css" />
@@ -121,7 +126,6 @@
     <Content Include="talks.html" />
     <Content Include="events.post.html" />
     <Content Include="events.html" />
-    <Content Include="images\favicon.ico" />
     <Content Include="images\logo.png" />
     <Content Include="templates\register.html" />
   </ItemGroup>
@@ -144,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="handlers\Calendar.ashx" />
-    <None Include="demosite\DemoSite.ashx" />
+    <None Include="demosite\handlers\DemoSite.ashx" />
     <None Include="handlers\Register.ashx" />
   </ItemGroup>
 </Project>

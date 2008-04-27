@@ -40,7 +40,7 @@ namespace DnugLeipzig.Plugins
 		public EventPlugin() : this(new CategoryRepository())
 		{
 			// Initialize with default values.
-			CategoryName = "Talks";
+			CategoryName = "Events";
 			StartDateField = "Start Date";
 			EndDateField = "End Date";
 			SpeakerField = "Speaker";
@@ -516,25 +516,35 @@ namespace DnugLeipzig.Plugins
 
 			try
 			{
-				EnableEventHandlers = false;
-
-				FieldMigrator migrator = new FieldMigrator();
-				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
-				{
-					migrator.EnsureTargetCategory(newState.CategoryName);
-					migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
-				}
-				if (nvc[Form_MigrateFieldValues].IsChecked())
-				{
-					migrator.Migrate(new MigrationInfo(oldState, newState));
-				}
-
+				Migrate(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
+				        nvc[Form_MigrateFieldValues].IsChecked(),
+				        newState,
+				        oldState);
 				return StatusType.Success;
 			}
 			catch (Exception ex)
 			{
 				SetMessage(context, String.Format("Error while migrating category and fields: {0}", ex.Message));
 				return StatusType.Error;
+			}
+		}
+
+		public static void Migrate(bool createTargetCategoryAndFields, bool migrateFieldValues, IMemento newState, IMemento oldState)
+		{
+			try
+			{
+				EnableEventHandlers = false;
+
+				FieldMigrator migrator = new FieldMigrator();
+				if (createTargetCategoryAndFields)
+				{
+					migrator.EnsureTargetCategory(newState.CategoryName);
+					migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
+				}
+				if (migrateFieldValues)
+				{
+					migrator.Migrate(new MigrationInfo(oldState, newState));
+				}
 			}
 			finally
 			{
@@ -570,7 +580,7 @@ namespace DnugLeipzig.Plugins
 		#endregion
 
 		#region Memento
-		IMemento CreateMemento()
+		public IMemento CreateMemento()
 		{
 			return new EventPluginMemento(this);
 		}
