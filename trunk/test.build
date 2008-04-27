@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<project name="DNUG"
+<project name="Graffiti-UserGroups"
 		 default="test-build"
 		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 

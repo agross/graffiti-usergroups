@@ -1,4 +1,5 @@
-﻿<div class="article">
+﻿<script type="text/javascript" src="$macros.ThemeFile('scripts/Register.js')"></script>
+<div class="article">
 	<h1 class="title">
 		$post.Title</h1>
 	<div class="body">
@@ -6,7 +7,7 @@
 	</div>
 </div>
 <form action="$url" method="post" id="registationForm">
-	<h2>Veranstaltungen</h2>
+	<h2>Events</h2>
 	<div class="list">
 		#set($futureEvents = $events.GetForRegistration())
 
@@ -25,15 +26,15 @@
 	</div>
 
 	#if ($futureEvents.Count > 0)
-		<h2>Teilnehmer</h2>
+		<h2>Attendee</h2>
 		<fieldset>
 			<dl>
 				<dt>
-					<label for="formOfAddressMr">Anrede:</label>
+					<label for="formOfAddressMr">For Of Address:</label>
 				</dt>
 				<dd>
-					<input type="radio" name="formOfAddress" id="formOfAddressMr" value="mr" /> <label for="formOfAddressMr">Herr</label>
-					<input type="radio" name="formOfAddress" id="formOfAddressMrs" value="mrs" /> <label for="formOfAddressMrs">Frau</label>
+					<input type="radio" name="formOfAddress" id="formOfAddressMr" value="mr" /> <label for="formOfAddressMr">Mr</label>
+					<input type="radio" name="formOfAddress" id="formOfAddressMrs" value="mrs" /> <label for="formOfAddressMrs">Mrs</label>
 				</dd>
 				<dt>
 					<label for="name">Name:</label>
@@ -46,20 +47,20 @@
 				</dt>
 				<dd>
 					<input type="radio" name="occupation" id="occupationStudent" value="student" /> <label for="occupationStudent">Student</label>
-					<input type="radio" name="occupation" id="occupationResearcher" value="researcher" /> <label for="occupationResearcher">wissenschaftlicher Mitarbeiter</label>
-					<input type="radio" name="occupation" id="occupationOther" value="other" /> <label for="occupationOther">Sonstiges</label>
+					<input type="radio" name="occupation" id="occupationResearcher" value="researcher" /> <label for="occupationResearcher">Researcher</label>
+					<input type="radio" name="occupation" id="occupationOther" value="other" /> <label for="occupationOther">Other</label>
 				</dd>				
 				<dt>
 					<label for="email">E-Mail-Adresse:</label>
 				</dt>
 				<dd>
 					<input type="text" name="attendeeEMail" id="attendeeEMail" />
-					<input type="checkbox" name="ccToAttendee" id="ccToAttendee" /> <label for="ccToAttendee">Kopie der Anmeldung an diese Adresse senden</label>
+					<input type="checkbox" name="ccToAttendee" id="ccToAttendee" /> <label for="ccToAttendee">Send a copy of my registration to this address</label>
 				</dd>
 			</dl>
 		</fieldset>
 		
-		$events.RegisterButton("%{id = 'register' class = 'submit', value = 'Anmelden'}")
+		$events.RegisterButton("%{id = 'register' class = 'submit', value = 'Register'}")
 		<div style="display: none;" id="registration-status">
 		</div>
 	#end

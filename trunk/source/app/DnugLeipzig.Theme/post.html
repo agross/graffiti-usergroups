@@ -1,8 +1,0 @@
-﻿$macros.LoadThemeView("components/posts/post.post.view")
-
-#set($similarPosts = $data.SimilarSearch($post.Id, 3))
-$macros.LoadThemeView("components/posts/similar-posts.view")
-
-$macros.LoadThemeView("components/posts/comments.view")
-
-$macros.LoadThemeView("components/posts/new-comment.view")

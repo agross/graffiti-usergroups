@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</ProjectGuid>
+    <ProjectGuid>{47E83768-1722-4F4C-BA0E-CA313AE6B11D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DnugLeipzig.Definitions</RootNamespace>
-    <AssemblyName>DnugLeipzig.Definitions</AssemblyName>
+    <RootNamespace>DnugLeipzig.DemoSite</RootNamespace>
+    <AssemblyName>DnugLeipzig.DemoSite</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -51,16 +51,16 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DataBuddy, Version=1.0.28.35361, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Graffiti\DataBuddy.dll</HintPath>
-    </Reference>
     <Reference Include="Graffiti.Core, Version=1.0.1.963, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Graffiti\Graffiti.Core.dll</HintPath>
     </Reference>
+    <Reference Include="NVelocity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Graffiti\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+    <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
@@ -74,24 +74,15 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\EventPluginConfiguration.cs" />
-    <Compile Include="Configuration\IPluginConfiguration.cs" />
-    <Compile Include="Configuration\IEventPluginConfiguration.cs" />
-    <Compile Include="Configuration\ICategoryEnabledRepositoryConfiguration.cs" />
-    <Compile Include="Configuration\ITalkPluginConfiguration.cs" />
-    <Compile Include="Configuration\TalkPluginConfiguration.cs" />
-    <Compile Include="Extensions\IDictionaryExtensions.cs" />
-    <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Handlers\DemoSiteHandler.cs" />
+    <Compile Include="Macros\DemoSiteMacros.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ICategoryEnabledRepository.cs" />
-    <Compile Include="Repositories\ICategoryRepository.cs" />
-    <Compile Include="Repositories\IPostRepository.cs" />
-    <Compile Include="Repositories\IRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Configuration\Configuration.cd" />
-    <None Include="Repositories\Repositories.cd" />
+    <ProjectReference Include="..\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
+      <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
+      <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

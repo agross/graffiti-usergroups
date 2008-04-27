@@ -5,9 +5,8 @@
 	</div>
 	<div class="content upcoming-events">
 		<h1 class="archive-head">
-			Nächste Veranstaltungen
-			<a href="$events.GetFeedUrl()" title="RSS-Feed für Veranstaltungen abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
-			<a href="http://team.dotnet-leipzig.de/calendars/Kalender_von_DNUG.ics" title="Veranstaltungskalender abonnieren"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Veranstaltungskalender" /></a>
+			Upcoming Events
+			<a href="$events.GetFeedUrl()" title="Subscribe to events RSS feed"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS feed" /></a>
 		</h1>
 
 		#set($futureEvents = $events.GetUpcoming(3))
@@ -17,13 +16,13 @@
 			<ol>
 		#each
 			<li>
-				<a href="$post.Url" rel="bookmark" title="$events.Title($post, ' am ', ', Sprecher: ')">
+				<a href="$post.Url" rel="bookmark" title="$events.Title($post, ' on ', ', speaker: ')">
 					$events.Date($post, "", ":") $post.Title
 				</a>
 			</li>
 		#afterall
 			</ol>
-			<a href="$events.GetCategoryLink()" class="more" rel="bookmark">Mehr Veranstaltungen anzeigen &raquo;</a>
+			<a href="$events.GetCategoryLink()" class="more" rel="bookmark">Show more events &raquo;</a>
 		#nodata
 			$macros.LoadThemeView("components/no-data.view")
 		#end

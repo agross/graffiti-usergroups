@@ -1,0 +1,55 @@
+﻿<script type="text/javascript" src="$macros.ThemeFile('demosite/DemoSite.js')"></script>
+
+<h1>
+	Hi!
+</h1>
+<h2>
+	Thank you for downloading and installing <a href="http://code.google.com/p/graffiti-usergroups/">Graffiti-UserGroups</a>.
+</h2>
+<p>
+	This site helps you to set up Graffiti-UserGroups for your site. It's a good way to try out Graffiti-UserGroups on a new
+	and empty Graffiti site. We will set up everything you need so you can play around with the user group plugins and macros.
+</p>
+<ul>
+	<li>
+		<span id="create-event-category" style="display: none;">
+			<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" /></span> Create category for events.
+		<div>
+			The category will be named "Events".</div>
+	</li>
+	<li>
+		<span id="configure-events-plugin" style="display: none;">
+			<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" /></span> Configure events plugin.
+		<div>
+			We will set up all plugin properties such that the theme works.</div>
+	</li>
+	<li>
+		<span id="enable-events-plugin" style="display: none;">
+			<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" /></span> Enable events plugin.
+		<div>
+			Enabling the plugin is a mandatory step to make the macros work.</div>
+	</li>
+	<li>
+		<span id="create-registration-post" style="display: none;">
+			<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" /></span> Create registration post.
+		<div>
+			We will create post called "Register" to enable registration for your events.</div>
+	</li>
+	<li>
+		<span id="create-sample-events" style="display: none;">
+			<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" /></span> Create sample events.
+		<div>
+			We will create a couple of sample posts so you can play around.</div>
+	</li>
+	<li class="your-turn">
+		Your turn!
+		<div>
+			Read the documentation or <a href="http://code.google.com/p/graffiti-usergroups/source/browse/trunk">browse the source code</a>
+			to become familiar with what Graffiti-UserGroups provides. Then, create or customize your own theme.</div>
+	</li>
+</ul>
+<p>
+	$demoSite.RegisterButton("%{id = 'register' class = 'submit', value = 'Go!'}")
+	<div style="display: none;" id="registration-status">
+	</div>
+</p>

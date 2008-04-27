@@ -33,9 +33,13 @@
 				<div id="content-wrapper" class="clearfix">
 					<div id="content">
 						<div id="inner-wrapper">
-							$childContent
-							$macros.LoadThemeView("components/events/upcoming-events.view")
-							$macros.LoadThemeView("components/talks/recent-talks.view")
+							#if ($demoSite.SetupComplete())
+								$childContent
+								$macros.LoadThemeView("components/events/upcoming-events.view")
+								$macros.LoadThemeView("components/talks/recent-talks.view")
+							#else
+								$macros.LoadThemeView("demosite/setup.view")
+							#end
 						</div>
 					</div>
 					<div id="sidebar">
