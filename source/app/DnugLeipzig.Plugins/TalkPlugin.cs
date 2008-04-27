@@ -13,7 +13,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class TalkPlugin : GraffitiEvent, ITalkPluginConfiguration
+	public class TalkPlugin : GraffitiEvent, ITalkPluginConfiguration, ISupportsMemento
 	{
 		internal const string Form_CategoryName = "categoryName";
 		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
@@ -211,17 +211,10 @@ namespace DnugLeipzig.Plugins
 			{
 				EnableEventHandlers = false;
 
-				FieldMigrator migrator = new FieldMigrator();
-				if (nvc[Form_CreateTargetCategoryAndFields].IsChecked())
-				{
-					migrator.EnsureTargetCategory(newState.CategoryName);
-					migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
-				}
-				if (nvc[Form_MigrateFieldValues].IsChecked())
-				{
-					migrator.Migrate(new MigrationInfo(oldState, newState));
-				}
-
+				PluginMigrator.MigrateSettings(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
+						nvc[Form_MigrateFieldValues].IsChecked(),
+						newState,
+						oldState);
 				return StatusType.Success;
 			}
 			catch (Exception ex)
@@ -248,8 +241,8 @@ namespace DnugLeipzig.Plugins
 		}
 		#endregion
 
-		#region Memento
-		IMemento CreateMemento()
+		#region ISupportsMemento
+		public IMemento CreateMemento()
 		{
 			return new TalkPluginMemento(this);
 		}

@@ -13,7 +13,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration
+	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration, ISupportsMemento
 	{
 		internal const string Form_CategoryName = "categoryName";
 		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
@@ -55,6 +55,7 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			NumberOfRegistrationsField = "Number of registrations";
 			RegistrationMailSubject = "New Registration";
+			DefaultRegistrationRecipient = CommentSettings.Get().Email;
 
 			EnableEventHandlers = true;
 		}
@@ -516,7 +517,9 @@ namespace DnugLeipzig.Plugins
 
 			try
 			{
-				Migrate(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
+				EnableEventHandlers = false;
+
+				PluginMigrator.MigrateSettings(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
 				        nvc[Form_MigrateFieldValues].IsChecked(),
 				        newState,
 				        oldState);
@@ -526,25 +529,6 @@ namespace DnugLeipzig.Plugins
 			{
 				SetMessage(context, String.Format("Error while migrating category and fields: {0}", ex.Message));
 				return StatusType.Error;
-			}
-		}
-
-		public static void Migrate(bool createTargetCategoryAndFields, bool migrateFieldValues, IMemento newState, IMemento oldState)
-		{
-			try
-			{
-				EnableEventHandlers = false;
-
-				FieldMigrator migrator = new FieldMigrator();
-				if (createTargetCategoryAndFields)
-				{
-					migrator.EnsureTargetCategory(newState.CategoryName);
-					migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
-				}
-				if (migrateFieldValues)
-				{
-					migrator.Migrate(new MigrationInfo(oldState, newState));
-				}
 			}
 			finally
 			{
@@ -579,7 +563,7 @@ namespace DnugLeipzig.Plugins
 		}
 		#endregion
 
-		#region Memento
+		#region ISupportsMemento Members
 		public IMemento CreateMemento()
 		{
 			return new EventPluginMemento(this);

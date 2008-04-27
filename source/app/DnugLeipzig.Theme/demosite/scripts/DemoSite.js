@@ -2,26 +2,39 @@
 
 DemoSite.setupDemoSite = function(url)
 {
-	Event.observe('create-event-category-success',
-				  'DOMAttrModified',
-				  function(){ DemoSite.runAction(url, 'configure-event-plugin'); })
-		
-	Event.observe('configure-event-plugin-success',
-				  'DOMAttrModified',
-				  function(){ DemoSite.runAction(url, 'enable-event-plugin'); })
-				  
-	Event.observe('enable-event-plugin-success',
-				  'DOMAttrModified',
-				  function(){ DemoSite.runAction(url, 'create-registration-post'); })
-				  
-	Event.observe('create-registration-post-success',
-				  'DOMAttrModified',
-				  function(){ DemoSite.runAction(url, 'create-sample-events'); })
-	
-	DemoSite.runAction(url, 'create-event-category');
+	DemoSite.actionIndex = 0;
+	DemoSite.runNextAction(url);
 }
 
-DemoSite.runAction = function(url, action)
+DemoSite.actionIndex = 0;
+
+DemoSite.actionList = new Array('create-event-category',
+								'configure-event-plugin',
+								'enable-event-plugin',
+								'create-registration-post',
+								'create-sample-events',
+								'create-talk-category',
+								'configure-talk-plugin',
+								'enable-talk-plugin',
+								'create-sample-talks',
+								'create-navigation-links');
+								
+DemoSite.runNextAction = function(url)
+{
+	var index = DemoSite.actionIndex;
+	DemoSite.actionIndex++;
+	
+	if (DemoSite.actionIndex >= DemoSite.actionList.length)
+	{
+		DemoSite.runAction(url, DemoSite.actionList[index]);
+	}
+	else
+	{
+		DemoSite.runAction(url, DemoSite.actionList[index], function() { DemoSite.runNextAction(url); });
+	}
+}
+
+DemoSite.runAction = function(url, action, successAction)
 {
 	new Ajax.Request(url + '?command=' + action,
 	{
@@ -38,6 +51,11 @@ DemoSite.runAction = function(url, action)
 			var response = transport.responseText;
 			GraffitiHelpers.statusMessage('registration-status', response, false);
 			$(action + '-success').show();
+			
+			if(typeof(successAction) !== "undefined")
+			{
+				successAction();
+			}
 		},
 		onFailure: function(transport)
 		{

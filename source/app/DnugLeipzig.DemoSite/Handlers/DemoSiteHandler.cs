@@ -3,6 +3,8 @@ using System.Security;
 using System.Threading;
 using System.Web;
 
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins;
 using DnugLeipzig.Plugins.Migration;
@@ -63,20 +65,49 @@ namespace DnugLeipzig.DemoSite.Handlers
 				switch (context.Request.QueryString["command"])
 				{
 					case "create-event-category":
-						CreateCategory("Events");
+						CreateCategory<EventPlugin>();
 						break;
+
 					case "configure-event-plugin":
-						ConfigureEventPlugin();
+						ConfigurePlugin<EventPlugin>();
 						break;
+
 					case "enable-event-plugin":
-						EnablePlugin(typeof(EventPlugin));
+						EnablePlugin<EventPlugin>();
 						break;
-					case "create-registration-post":
-						CreateRegistrationPost(currentUser);
-						break;
+
 					case "create-sample-events":
 						CreateSampleEvents(15, currentUser);
 						break;
+
+					case "create-registration-post":
+						CreateRegistrationPost(currentUser);
+						break;
+
+					case "create-talk-category":
+						//CreateCategory<TalkPlugin>();
+						Thread.Sleep(1000);
+						break;
+
+					case "configure-talk-plugin":
+						//ConfigurePlugin<TalkPlugin>();
+						Thread.Sleep(1000);
+						break;
+
+					case "enable-talk-plugin":
+						//EnablePlugin<TalkPlugin>();
+						Thread.Sleep(1000);
+						break;
+
+					case "create-sample-talks":
+						//CreateSampleTalks(15, currentUser);
+						Thread.Sleep(1000);
+						break;
+
+					case "create-navigation-links":
+						Thread.Sleep(1000);
+						break;
+
 					default:
 						throw new InvalidOperationException(String.Format("Unknown command '{0}'", context.Request.QueryString["command"]));
 				}
@@ -99,41 +130,38 @@ namespace DnugLeipzig.DemoSite.Handlers
 		}
 		#endregion
 
-		void CreateCategory(string categoryName)
+		static TPlugin GetPluginWithCurrentSettings<TPlugin>()
+			where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
 		{
-			if (String.IsNullOrEmpty(categoryName))
+			EventDetails eventDetails = Events.GetEvent(typeof(TPlugin).GetPluginName());
+			return eventDetails.Event as TPlugin;
+		}
+
+		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
+		{
+			TPlugin plugin = GetPluginWithCurrentSettings<TPlugin>();
+
+			if (_categoryRepository.GetCategory(plugin.CategoryName) != null)
 			{
-				throw new ArgumentOutOfRangeException("categoryName");
+				throw new InvalidOperationException(String.Format("The category '{0}' already exists.", plugin.CategoryName));
 			}
 
-			try
-			{
-				_categoryRepository.DeleteCategory(categoryName);
-			}
-			catch(NullReferenceException)
-			{
-			}
-
-			Category category = new Category { Name = categoryName, ParentId = -1 };
+			Category category = new Category { Name = plugin.CategoryName, ParentId = -1 };
 			_categoryRepository.AddCategory(category);
 		}
 
-		static void ConfigureEventPlugin()
+		static void ConfigurePlugin<TPlugin>()
+			where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, ISupportsMemento, new()
 		{
-			EventPlugin eventPlugin = new EventPlugin();
-			IMemento state = eventPlugin.CreateMemento();
+			TPlugin plugin = GetPluginWithCurrentSettings<TPlugin>();
+			IMemento state = plugin.CreateMemento();
 
-			EventPlugin.Migrate(true, false, state, state);
+			PluginMigrator.MigrateSettings(true, false, state, state);
 		}
 
-		static void EnablePlugin(Type plugingType)
+		static void EnablePlugin<TPlugin>()
 		{
-			if (plugingType == null)
-			{
-				throw new ArgumentNullException("plugingType");
-			}
-
-			EventDetails eventDetails = Events.GetEvent(plugingType.AssemblyQualifiedName);
+			EventDetails eventDetails = Events.GetEvent(typeof(TPlugin).GetPluginName());
 			eventDetails.Enabled = true;
 			eventDetails.Event.EventEnabled();
 			Events.Save(eventDetails);
@@ -158,12 +186,12 @@ namespace DnugLeipzig.DemoSite.Handlers
 				Post post = CreatePost(user);
 				post.Title = String.Format("Sample Event {0}", i);
 				post.CategoryId = eventCategory.Id;
-				
+
 				// One event from 9 AM to 6 PM every two months.
 				startDate = startDate.AddMonths(2);
 				post[eventPlugin.StartDateField] = startDate.AddHours(9).ToString();
 				post[eventPlugin.EndDateField] = startDate.AddHours(18).ToString();
-				if (i %2 == 0)
+				if (i % 2 == 0)
 				{
 					post[eventPlugin.LocationField] = "Sample location";
 					post[eventPlugin.SpeakerField] = "Sample speaker";
