@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace DnugLeipzig.Plugins.Migration
 {
-	internal interface IMemento
+	public interface IMemento
 	{
 		string CategoryName
 		{

@@ -56,13 +56,26 @@ namespace DnugLeipzig.Extensions.Handlers
 
 			context.Response.ContentType = "text/plain";
 
-			switch (context.Request.QueryString["command"])
+			try
 			{
-				case "register":
-					ProcessRegistration(context);
-					break;
-				default:
-					throw new HttpException(500, String.Format("Unknown command '{0}'", context.Request.QueryString["command"]));
+				switch (context.Request.QueryString["command"])
+				{
+					case "register":
+						ProcessRegistration(context);
+						break;
+					default:
+						throw new HttpException(500, String.Format("Unknown command '{0}'", context.Request.QueryString["command"]));
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Error(String.Format("{0}: Could not process request", GetType().Name), ex.Message);
+
+				context.Response.StatusCode = 500;
+				context.Response.StatusDescription = "Internal server error";
+
+				context.Response.Clear();
+				context.Response.Write(ex.Message);
 			}
 		}
 
@@ -110,10 +123,7 @@ namespace DnugLeipzig.Extensions.Handlers
 			catch (Exception ex)
 			{
 				Log.Error("Could not process registration", ex.Message);
-
-				context.Response.Clear();
-				context.Response.Write(
-					"Bei der Verarbeitung Ihrer Anmeldung ist ein Fehler aufgetreten. Wir bitten um Entschuldigung.");
+				throw;
 			}
 		}
 
