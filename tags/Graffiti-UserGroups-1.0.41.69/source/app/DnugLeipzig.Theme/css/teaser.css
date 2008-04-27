@@ -1,0 +1,223 @@
+﻿/* Teasers. */
+.teaser {
+	background: transparent none repeat-y scroll left top;
+	margin-bottom: 1em;
+	}
+
+.teaser .top,
+.teaser .bottom {
+	background: transparent none repeat-x scroll left top;
+	height: 10px;
+}
+
+.teaser .top {
+	position: relative;
+}
+
+.teaser .left,
+.teaser .right {
+	width: 10px;
+	height: 10px;
+	background-repeat: no-repeat;
+}
+
+.teaser .top .left,
+.teaser .top .right {
+	position: absolute;
+	top: 0;
+}
+
+.teaser .right {
+	left: 100%;
+	margin-left: -10px;
+}
+
+.teaser .top .right {
+	background-position: right top;
+}
+
+.teaser .bottom,
+.teaser .bottom .left,
+.teaser .bottom .right {
+	height: 60px;
+}
+
+.teaser .bottom .left {
+	float: left;
+}
+
+.teaser .bottom .right {
+	background-position: right bottom;
+	position: relative;
+}
+
+.teaser .content {
+	background-repeat: repeat-y;
+	background-position: right top;
+	margin-bottom: -60px;
+	position: relative;
+}
+
+/* Teaser content. */
+.teaser .content {
+	padding: 0 0.5em 0.5em 0.5em;
+}
+
+.teaser .content h1 {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+.teaser .content h3 {
+	font-size: 1em;
+}
+
+.teaser .content li {
+	list-style-type: square;
+	margin-left: 1.5em;
+}
+
+.teaser .content a {
+	color: #000;
+}
+
+/* Orange teaser. */
+.teaser.orange {
+	background-color: #FBE2A4;
+	background-image: url(../images/teaser-orange-left.png);
+}
+
+.teaser.orange .top {
+	background-image: url(../images/teaser-orange-top.png);
+}
+
+.teaser.orange .top .left {
+	background-image: url(../images/teaser-orange-top-left.png);
+}
+
+.teaser.orange .top .right {
+	background-image: url(../images/teaser-orange-top-right.png);
+}
+
+.teaser.orange .content {
+	background-image: url(../images/teaser-orange-right.png);
+}
+
+.teaser.orange .bottom {
+	background-image: url(../images/teaser-orange-bottom.png);
+}
+
+.teaser.orange .bottom .left {
+	background-image: url(../images/teaser-orange-bottom-left.png);
+}
+
+.teaser.orange .bottom .right {
+	background-image: url(../images/teaser-orange-bottom-right.png);
+}
+
+/* Red teaser. */
+.teaser.red {
+	background-color: #F34949;
+	background-image: url(../images/teaser-red-left.png);
+}
+
+.teaser.red .top {
+	background-image: url(../images/teaser-red-top.png);
+}
+
+.teaser.red .top .left {
+	background-image: url(../images/teaser-red-top-left.png);
+}
+
+.teaser.red .top .right {
+	background-image: url(../images/teaser-red-top-right.png);
+}
+
+.teaser.red .content {
+	background-image: url(../images/teaser-red-right.png);
+}
+
+.teaser.red .bottom {
+	background-image: url(../images/teaser-red-bottom.png);
+}
+
+.teaser.red .bottom .left {
+	background-image: url(../images/teaser-red-bottom-left.png);
+}
+
+.teaser.red .bottom .right {
+	background-image: url(../images/teaser-red-bottom-right.png);
+}
+
+/* Blue teaser. */
+.teaser.blue {
+	background-color: #0A73D1;
+	background-image: url(../images/teaser-blue-left.png);
+}
+
+.teaser.blue .top {
+	background-image: url(../images/teaser-blue-top.png);
+}
+
+.teaser.blue .top .left {
+	background-image: url(../images/teaser-blue-top-left.png);
+}
+
+.teaser.blue .top .right {
+	background-image: url(../images/teaser-blue-top-right.png);
+}
+
+.teaser.blue .content {
+	background-image: url(../images/teaser-blue-right.png);
+}
+
+.teaser.blue .bottom {
+	background-image: url(../images/teaser-blue-bottom.png);
+}
+
+.teaser.blue .bottom .left {
+	background-image: url(../images/teaser-blue-bottom-left.png);
+}
+
+.teaser.blue .bottom .right {
+	background-image: url(../images/teaser-blue-bottom-right.png);
+}
+
+.teaser.blue .content,
+.teaser.blue .content a {
+	color: #FFF;
+}
+
+/* Gray teaser. */
+.teaser.gray {
+	background-color: #F8F9F9;
+	background-image: url(../images/teaser-gray-left.png);
+}
+
+.teaser.gray .top {
+	background-image: url(../images/teaser-gray-top.png);
+}
+
+.teaser.gray .top .left {
+	background-image: url(../images/teaser-gray-top-left.png);
+}
+
+.teaser.gray .top .right {
+	background-image: url(../images/teaser-gray-top-right.png);
+}
+
+.teaser.gray .content {
+	background-image: url(../images/teaser-gray-right.png);
+}
+
+.teaser.gray .bottom {
+	background-image: url(../images/teaser-gray-bottom.png);
+}
+
+.teaser.gray .bottom .left {
+	background-image: url(../images/teaser-gray-bottom-left.png);
+}
+
+.teaser.gray .bottom .right {
+	background-image: url(../images/teaser-gray-bottom-right.png);
+}
