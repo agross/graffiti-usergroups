@@ -5,6 +5,6 @@ using System.Reflection;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyCompany("Softwareschmiede")]
+[assembly: AssemblyCompany("Alexander Groß")]
 [assembly: AssemblyProduct(".NET User Group Leipzig Extensions for Graffiti CMS")]
-[assembly: AssemblyCopyright("Copyright © Softwareschmiede 2008")]
+[assembly: AssemblyCopyright("Copyright © Alexander Groß 2008")]
