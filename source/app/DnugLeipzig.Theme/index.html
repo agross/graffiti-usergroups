@@ -1,15 +1,14 @@
 ﻿#if($where == "category")
 	<h1 class="archive-head">
-		Einträge in der Kategorie <em>$category.Name</em>
-		<a href="$urls.GetFeedUrl($category)" title="RSS-Feed für die Kategorie $category.Name abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
+		Posts in category <em>$category.Name</em>
 	</h1>
 #elseif($where == "tag")
 	<h1 class="archive-head">
-		Einträge mit dem Tag <em>$tag</em>
+		Posts tagged <em>$tag</em>
 	</h1>
 #elseif($where == "search")
 	<h1 class="archive-head">
-		Suchergebnisse für <em>$macros.SearchQuery</em>
+		Search results for <em>$macros.SearchQuery</em>
 	</h1>
 #end
 

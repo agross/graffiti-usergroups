@@ -160,26 +160,15 @@ namespace DnugLeipzig.Extensions.Macros
 				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
 				                                            GraffitiContext.Current.Theme));
 
-			string cssClass = GetAttribute(properties, "class");
-			string text = GetAttribute(properties, "value");
-			string id = GetAttribute(properties, "id");
+			string cssClass = properties.GetAsAttribute("class");
+			string text = properties.GetAsAttribute("value");
+			string id = properties.GetAsAttribute("id");
 
 			return string.Format("<input {0} {1} {2} type=\"button\" onclick=\"Register.submitMessage('{3}');\" />",
 			                     id,
 			                     cssClass,
 			                     text,
 			                     scriptPath);
-		}
-
-		static string GetAttribute(IDictionary properties, string key)
-		{
-			string value = properties[key] as string;
-			if (!String.IsNullOrEmpty(value))
-			{
-				value = String.Format("{0}=\"{1}\"", key, value.Trim());
-			}
-
-			return value;
 		}
 
 		public bool CanCreateCalendarItem(Post post)

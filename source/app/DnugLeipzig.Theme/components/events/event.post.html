@@ -1,7 +1,7 @@
 ﻿<div class="article">
 	<h2 class="title">
 		$macros.LoadThemeView("components/events/event-date.view")
-		<a class="title #if ($events.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$events.Title($post, ' am ', ', Sprecher: ')">
+		<a class="title #if ($events.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$events.Title($post, ' on ', ', speaker: ')">
 			$post.Title
 		</a>
 	</h2>
@@ -13,31 +13,31 @@
 		<div class="content upcoming-events">
 			<ul class="event-info">
 				<li>
-					<strong>Beginn:</strong>
+					<strong>Start:</strong>
 					$events.StartDate($post)
 				</li>
 				<li>
-					<strong>Ende:</strong>
+					<strong>End:</strong>
 					$events.EndDate($post)
 				</li>
 				<li>
-					<strong>Ort:</strong>
+					<strong>Location:</strong>
 					$events.Location($post)
 				</li>
 				<li>
-					<strong>Sprecher:</strong>
+					<strong>Speaker:</strong>
 					$events.Speaker($post)
 				</li>
 				#if ($events.CanCreateCalendarItem($post))
 				<li>
-					<strong>Kalendereintrag:</strong>
-					<a href="$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$post.ID" title="Kalendereintrag herunterladen"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Kalendereintrag" /></a>
+					<strong>Calendar:</strong>
+					<a href="$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$post.ID" title="Download calendar item"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Calendar item" /></a>
 				</li>
 				#end
 				#if ($events.RegistrationPossible($post))
 				<li>
-					<strong>Registrierung:</strong>
-					<a href="/anmeldung/?eventId=$post.ID">Registrierung ist erforderlich</a>
+					<strong>Registration:</strong>
+					<a href="/register/?eventId=$post.ID">Please register for this event</a>
 				</li>
 				#end
 			</ul>

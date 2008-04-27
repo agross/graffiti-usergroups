@@ -50,13 +50,8 @@
     <Content Include="components\events\events-for-year.html" />
     <Content Include="components\events\future-events.html" />
     <Content Include="components\events\past-events.html" />
-    <Content Include="components\posts\comments.html" />
     <Content Include="components\talks\talk.post.html" />
     <Content Include="components\talks\talk-date.html" />
-    <Content Include="components\posts\post.post.html" />
-    <Content Include="components\posts\post.html" />
-    <Content Include="components\posts\new-comment.html" />
-    <Content Include="components\posts\similar-posts.html" />
     <Content Include="components\site\menu.html" />
     <Content Include="components\site\footer.html" />
     <Content Include="components\talks\current-talks.html" />
@@ -64,10 +59,23 @@
     <Content Include="components\talks\talk.html" />
     <Content Include="components\talks\past-talks.html" />
     <Content Include="components\talks\talks-for-year.html" />
-    <Content Include="contact.html" />
     <Content Include="components\site\header.html" />
-    <Content Include="components\posts\footer.html" />
+    <Content Include="demosite\setup.html" />
+    <Content Include="images\ajax-loader.gif" />
+    <Content Include="images\calendar-with-year.png" />
+    <Content Include="images\calendar.png" />
+    <Content Include="images\feed-24x24.png" />
+    <Content Include="images\teaser-gray-bottom-left.png" />
+    <Content Include="images\teaser-gray-bottom-right.png" />
+    <Content Include="images\teaser-gray-bottom.png" />
+    <Content Include="images\teaser-gray-left.png" />
+    <Content Include="images\teaser-gray-right.png" />
+    <Content Include="images\teaser-gray-top-left.png" />
+    <Content Include="images\teaser-gray-top-right.png" />
+    <Content Include="images\teaser-gray-top.png" />
+    <Content Include="index.html" />
     <Content Include="register.html" />
+    <Content Include="demosite\DemoSite.js" />
     <Content Include="scripts\Register.js" />
     <Content Include="talks.post.html" />
     <Content Include="css\teaser.css" />
@@ -115,9 +123,6 @@
     <Content Include="events.html" />
     <Content Include="images\favicon.ico" />
     <Content Include="images\logo.png" />
-    <Content Include="index.html" />
-    <Content Include="page.html" />
-    <Content Include="post.html" />
     <Content Include="templates\register.html" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="handlers\Calendar.ashx" />
+    <None Include="demosite\DemoSite.ashx" />
     <None Include="handlers\Register.ashx" />
   </ItemGroup>
 </Project>

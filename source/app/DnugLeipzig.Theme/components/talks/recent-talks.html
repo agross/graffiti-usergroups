@@ -5,8 +5,8 @@
 	</div>
 	<div class="content recent-talks">
 		<h1 class="archive-head">
-			Letzte Vorträge
-			<a href="$talks.GetFeedUrl()" title="RSS-Feed für Vorträge abonnieren"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS-Feed" /></a>
+			Recent Talks
+			<a href="$talks.GetFeedUrl()" title="Subscribe to talks RSS feed"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS feed" /></a>
 		</h1>
 		
 		#set($lastTalks = $talks.GetRecent(3))
@@ -16,13 +16,13 @@
 			<ol>
 		#each
 			<li>
-				<a href="$post.Url" rel="bookmark" title="$talks.Title($post, ' am ', ', Sprecher: ')">
+				<a href="$post.Url" rel="bookmark" title="$talks.Title($post, ' on ', ', speaker: ')">
 					$talks.Date($post, "", ":") $post.Title
 				</a>
 			</li>
 		#afterall
 			</ol>
-			<a href="$talks.GetCategoryLink()" class="more" rel="bookmark">Mehr Vorträge anzeigen &raquo;</a>
+			<a href="$talks.GetCategoryLink()" class="more" rel="bookmark">Show more talks &raquo;</a>
 		#nodata
 			$macros.LoadThemeView("components/no-data.view")
 		#end

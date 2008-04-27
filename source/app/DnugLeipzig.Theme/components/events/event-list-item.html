@@ -1,9 +1,9 @@
 ﻿<input type="checkbox" id="event$post.Id" name="event$post.Id" #if ($request.QueryString.get_Item("eventId") == $post.Id) checked="checked" #end />
 <label for="event$post.Id">
-	<span title="$events.Title($post, ' am ', ', Sprecher: ')">
+	<span title="$events.Title($post, ' on ', ', speaker: ')">
 		$!events.Date($post, "", ":") $post.Title
 	</span>
 </label>
-<a href="$post.Url" rel="bookmark" title="Weitere Informationen" target="_blank">
+<a href="$post.Url" rel="bookmark" title="More information" target="_blank">
 	&raquo;
 </a>

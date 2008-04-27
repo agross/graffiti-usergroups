@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<project name="DNUG"
+<project name="Graffiti-UserGroups"
 		 default="all"
 		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
@@ -242,6 +242,15 @@
 			<arg value="/p:NAntCall=true" />
 			<arg value="/maxcpucount" />
 		</msbuild>
+		
+		<msbuild project="${basedir.app}\DnugLeipzig.DemoSite\DnugLeipzig.DemoSite.csproj"
+				 target="${build.msbuild.target}"
+				 verbosity="${build.msbuild.verbosity}">
+			<arg value="/p:Configuration=${build.msbuild.configuration}" />
+			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
+			<arg value="/p:NAntCall=true" />
+			<arg value="/maxcpucount" />
+		</msbuild>
 	</target>
 
 	<target name="init-build-theme"
@@ -279,29 +288,6 @@
 			<do>
 				<move file="${filename}"
 					  tofile="${path::change-extension(filename, '.view')}" />
-			</do>
-		</foreach>
-
-		<!-- Rename category-specific view files. -->
-		<foreach item="File"
-				 property="filename">
-			<in>
-				<items basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
-					<include name="*.view" />
-				</items>
-			</in>
-			<do>
-				<move file="${filename}"
-					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'events', theme.category.events))}"
-					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'events')}"/>
-
-				<move file="${filename}"
-					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'talks', theme.category.talks))}"
-					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'talks')}"/>
-
-				<move file="${filename}"
-					  tofile="${path::combine(path::get-directory-name(filename), string::replace(path::get-file-name(filename), 'register', theme.post.register))}"
-					  if="${string::starts-with(path::get-file-name-without-extension(filename), 'register')}"/>
 			</do>
 		</foreach>
 	</target>
@@ -387,6 +373,12 @@
 
 			<!-- Plugins. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Plugins\bin\${build.msbuild.configuration}"
+					 prefix="bin">
+				<include name="DnugLeipzig.*" />
+			</fileset>
+			
+			<!-- Demo site. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.DemoSite\bin\${build.msbuild.configuration}"
 					 prefix="bin">
 				<include name="DnugLeipzig.*" />
 			</fileset>
