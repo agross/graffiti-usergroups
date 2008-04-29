@@ -12,8 +12,8 @@ namespace DnugLeipzig.Extensions.Macros
 	public abstract class Macros
 	{
 		protected static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
-		readonly IPluginConfiguration Configuration;
-		protected ICategoryEnabledRepository Repository;
+		readonly IPluginConfiguration _configuration;
+		protected ICategoryEnabledRepository _repository;
 
 		protected Macros(IPluginConfiguration configuration)
 		{
@@ -22,12 +22,12 @@ namespace DnugLeipzig.Extensions.Macros
 				throw new ArgumentNullException("configuration");
 			}
 
-			Configuration = configuration;
+			_configuration = configuration;
 		}
 
 		public virtual string GetFeedUrl()
 		{
-			Category c = Repository.GetCategory();
+			Category c = _repository.GetCategory();
 			if (!String.IsNullOrEmpty(c.FeedUrlOverride))
 			{
 				return c.FeedUrlOverride;
@@ -38,24 +38,24 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public virtual string GetCategoryLink()
 		{
-			Category c = Repository.GetCategory();
+			Category c = _repository.GetCategory();
 			return c.Url;
 		}
 
 		public virtual int? GetYearOfView()
 		{
-			return Util.GetYearOfView(Configuration.YearQueryString);
+			return Util.GetYearOfView(_configuration.YearQueryString);
 		}
 
 		#region Date
 		public bool HasDate(Post post)
 		{
-			return post[Configuration.SortRelevantDateField].IsDate();
+			return post[_configuration.SortRelevantDateField].IsDate();
 		}
 
 		public bool IsInCurrentYear(Post post)
 		{
-			return post[Configuration.SortRelevantDateField].AsEventDate().Year == DateTime.Now.Year;
+			return post[_configuration.SortRelevantDateField].AsEventDate().Year == DateTime.Now.Year;
 		}
 
 		public string Date(Post post)
@@ -75,7 +75,7 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public virtual string Date(Post post, string format, string prefix, string suffix)
 		{
-			if (!post[Configuration.SortRelevantDateField].IsDate())
+			if (!post[_configuration.SortRelevantDateField].IsDate())
 			{
 				return null;
 			}
@@ -83,11 +83,11 @@ namespace DnugLeipzig.Extensions.Macros
 			string formattedDate;
 			if (String.IsNullOrEmpty(format))
 			{
-				formattedDate = GraffitiMacros.FormattedDate(post[Configuration.SortRelevantDateField].AsEventDate());
+				formattedDate = GraffitiMacros.FormattedDate(post[_configuration.SortRelevantDateField].AsEventDate());
 			}
 			else
 			{
-				formattedDate = post[Configuration.SortRelevantDateField].AsEventDate().ToString(format);
+				formattedDate = post[_configuration.SortRelevantDateField].AsEventDate().ToString(format);
 			}
 
 			return HttpUtility.HtmlEncode(String.Format("{0}{1}{2}", prefix, formattedDate, suffix));
@@ -107,7 +107,7 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public virtual string Speaker(Post post, string defaultValue, string prefix, string suffix)
 		{
-			string speaker = post[Configuration.SpeakerField];
+			string speaker = post[_configuration.SpeakerField];
 			if (String.IsNullOrEmpty(speaker))
 			{
 				speaker = defaultValue;

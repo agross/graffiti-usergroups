@@ -10,8 +10,8 @@ namespace DnugLeipzig.Plugins.Migration
 {
 	internal class FieldMigrator
 	{
-		readonly ICategoryRepository CategoryRepository;
-		readonly IPostRepository PostRepository;
+		readonly ICategoryRepository _categoryRepository;
+		readonly IPostRepository _postRepository;
 
 		#region Ctors
 		public FieldMigrator() : this(new CategoryRepository(), new PostRepository())
@@ -30,8 +30,8 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentNullException("postRepository");
 			}
 
-			CategoryRepository = categoryRepository;
-			PostRepository = postRepository;
+			_categoryRepository = categoryRepository;
+			_postRepository = postRepository;
 		}
 		#endregion
 
@@ -71,14 +71,14 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			Category category = CategoryRepository.GetCategory(categoryName);
+			Category category = _categoryRepository.GetCategory(categoryName);
 			if (category != null)
 			{
 				return;
 			}
 
 			category = new Category { Name = categoryName, ParentId = -1 };
-			CategoryRepository.AddCategory(category);
+			_categoryRepository.AddCategory(category);
 		}
 
 		/// <summary>
@@ -93,18 +93,13 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			if (fields == null)
-			{
-				throw new ArgumentNullException("fields");
-			}
-
-			if (fields.Count == 0)
+			if (fields == null || fields.Count == 0)
 			{
 				// Nothing to to.
 				return;
 			}
 
-			CustomFormSettings formSettings = CategoryRepository.GetFormSettings(categoryName);
+			CustomFormSettings formSettings = _categoryRepository.GetFormSettings(categoryName);
 
 			// Ensure that the fields exist.
 			foreach (var field in fields)
@@ -118,7 +113,7 @@ namespace DnugLeipzig.Plugins.Migration
 				CustomField newField = new CustomField
 				                       { Name = field.Key, Enabled = true, Id = Guid.NewGuid(), FieldType = field.Value };
 
-				CategoryRepository.AddField(formSettings, newField);
+				_categoryRepository.AddField(formSettings, newField);
 			}
 
 			// Order the fields according the order of the fields in the "fields" variable.
@@ -151,7 +146,7 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			CategoryRepository.DeleteCategory(categoryName);
+			_categoryRepository.DeleteCategory(categoryName);
 		}
 
 		/// <summary>
@@ -166,17 +161,17 @@ namespace DnugLeipzig.Plugins.Migration
 				throw new ArgumentOutOfRangeException("categoryName");
 			}
 
-			if (fieldNames.Count == 0)
+			if (fieldNames == null || fieldNames.Count == 0)
 			{
 				// Nothing to do.
 				return;
 			}
 
-			CustomFormSettings formSettings = CategoryRepository.GetFormSettings(categoryName);
+			CustomFormSettings formSettings = _categoryRepository.GetFormSettings(categoryName);
 
 			foreach (string field in fieldNames)
 			{
-				CategoryRepository.DeleteField(formSettings, field);
+				_categoryRepository.DeleteField(formSettings, field);
 			}
 		}
 
@@ -189,7 +184,8 @@ namespace DnugLeipzig.Plugins.Migration
 		{
 			if (changedFieldNames == null)
 			{
-				throw new ArgumentNullException("changedFieldNames");
+				// Nothing to do.
+				return;
 			}
 
 			if (String.Equals(sourceCategoryName, targetCategoryName, StringComparison.OrdinalIgnoreCase) && changedFieldNames.Count == 0)
@@ -198,8 +194,8 @@ namespace DnugLeipzig.Plugins.Migration
 				return;
 			}
 
-			IList<Post> posts = PostRepository.GetByCategory(sourceCategoryName);
-			Category targetCategory = CategoryRepository.GetCategory(targetCategoryName);
+			IList<Post> posts = _postRepository.GetByCategory(sourceCategoryName);
+			Category targetCategory = _categoryRepository.GetCategory(targetCategoryName);
 
 			foreach (Post post in posts)
 			{
@@ -216,7 +212,7 @@ namespace DnugLeipzig.Plugins.Migration
 					post.CustomFields().Remove(fieldNames.Key);
 				}
 
-				PostRepository.Save(post);
+				_postRepository.Save(post);
 			}
 		}
 	}
