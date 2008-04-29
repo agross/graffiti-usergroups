@@ -116,6 +116,13 @@ namespace DnugLeipzig.Plugins
 		}
 		#endregion
 
+		public override void EventDisabled()
+		{
+			base.EventDisabled();
+
+			HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
+		}
+
 		public override void Init(GraffitiApplication ga)
 		{
 			Debug.WriteLine("Init Talk Plugin");
@@ -233,9 +240,9 @@ namespace DnugLeipzig.Plugins
 				EnableEventHandlers = false;
 
 				PluginMigrator.MigrateSettings(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
-						nvc[Form_MigrateFieldValues].IsChecked(),
-						newState,
-						oldState);
+				                               nvc[Form_MigrateFieldValues].IsChecked(),
+				                               newState,
+				                               oldState);
 				return StatusType.Success;
 			}
 			catch (Exception ex)

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Web;
 using System.Web.Caching;
@@ -170,11 +171,16 @@ namespace DnugLeipzig.Definitions.Configuration
 
 			Debug.WriteLine("--> Not cached");
 
-			// Ensure Plugin initialization occurs before we query the Plugin settings.
+			// Ensure plugin initialization occurs before we query the plugin settings.
 			Events.Instance();
 
-			PluginInstance =
-				Events.GetEvent("DnugLeipzig.Plugins.EventPlugin, DnugLeipzig.Plugins").Event as IEventPluginConfiguration;
+			EventDetails eventDetails = Events.GetEvent("DnugLeipzig.Plugins.EventPlugin, DnugLeipzig.Plugins");
+			if (!eventDetails.Enabled)
+			{
+				throw new InvalidOperationException("The Events Plugin has not been enabled.");
+			}
+
+			PluginInstance = eventDetails.Event as IEventPluginConfiguration;
 
 			HttpContext.Current.Cache.Add(CacheKey,
 			                              PluginInstance,
