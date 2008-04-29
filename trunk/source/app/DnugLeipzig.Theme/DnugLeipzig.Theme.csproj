@@ -66,7 +66,6 @@
     <Content Include="demosite\setup.html" />
     <Content Include="demosite\images\success.png" />
     <Content Include="demosite\images\todo.png" />
-    <Content Include="images\ajax-loader.gif" />
     <Content Include="images\calendar-with-year.png" />
     <Content Include="images\calendar.png" />
     <Content Include="images\feed-24x24.png" />

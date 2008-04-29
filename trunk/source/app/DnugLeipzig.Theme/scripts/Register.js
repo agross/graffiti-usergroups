@@ -8,7 +8,7 @@ Register.submitMessage = function(url)
 		pageTracker._trackPageview("/funnel-registration/register-clicked.html")
 	}
 	
-	GraffitiHelpers.statusMessage('registration-status', 'Sende Anfrage... Bitte warten.', true);
+	GraffitiHelpers.statusMessage('registration-status', 'Sending request, please wait.', true);
 	
 	new Ajax.Request(url + '?command=register',
 	{
@@ -16,12 +16,12 @@ Register.submitMessage = function(url)
 		parameters: Form.serialize('registationForm'),
 		onSuccess: function(transport)
 		{
-			var response = transport.responseText || "Keine Antwort";
-			GraffitiHelpers.statusMessage('registration-status', response, true);
+			var response = transport.responseText;
+			GraffitiHelpers.statusMessage('registration-status', response, false);
 		},
 		onFailure: function()
 		{
-			GraffitiHelpers.statusMessage('registration-status', 'Beim Verarbeiten der Anforderung ist ein Fehler aufgetreten. Die Anmeldung wurde wahrscheinlich nicht gesendet.', true);
+			GraffitiHelpers.statusMessage('registration-status', 'An error occured while processing your request. It is likely that the request has not been sent.', true);
 		}
 	});
 }
