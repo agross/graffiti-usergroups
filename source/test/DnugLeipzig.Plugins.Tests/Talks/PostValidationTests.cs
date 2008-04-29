@@ -1,8 +1,12 @@
 using System;
 
+using DnugLeipzig.Definitions.Repositories;
+
 using Graffiti.Core;
 
 using MbUnit.Framework;
+
+using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Talks
 {
@@ -10,20 +14,24 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 	public class PostValidationTests
 	{
 		const string DateField = "Date field";
-		const int TalkCategoryId = 3;
-		const string TalksCategoryName = "Talks";
+		readonly MockRepository _mocks = new MockRepository();
 		TalkPlugin _plugin;
 		Post _post;
+		IPostRepository _postRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_plugin = new TalkPlugin();
-			_plugin.CategoryName = TalksCategoryName;
+			ICategoryRepository categoryRepository;
+			ISettingsRepository settingsRepository;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+			                                                  out categoryRepository,
+			                                                  out settingsRepository,
+			                                                  out _postRepository);
 			_plugin.DateField = DateField;
 
 			_post = new Post();
-			_post.CategoryId = TalkCategoryId;
+			_post.CategoryId = SetupHelper.TalkCategoryId;
 		}
 
 		[RowTest]
@@ -36,9 +44,17 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Row("invalid value", ExpectedException = typeof(ValidationException))]
 		public void ShouldValidateDateIfSet(string dateValue)
 		{
-			_post.CustomFields().Add(DateField, dateValue);
+			_post[DateField] = dateValue;
 
-			_plugin.Post_Validate(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
+
+			using (_mocks.Playback())
+			{
+				_plugin.Post_Validate(_post, EventArgs.Empty);
+			}
 		}
 	}
 }

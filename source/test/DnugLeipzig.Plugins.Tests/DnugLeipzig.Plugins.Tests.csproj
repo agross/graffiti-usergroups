@@ -84,6 +84,7 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Events\SettingsValidationTests.cs" />
+    <Compile Include="Events\SetupHelper.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
     <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
     <Compile Include="HttpMocks\ReflectionHelper.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="FieldMigratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Talks\SettingsValidationTests.cs" />
+    <Compile Include="Talks\SetupHelper.cs" />
     <Compile Include="ValidationExceptionTests.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,10 +114,6 @@
       <Name>DnugLeipzig.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="App.config.template" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -125,8 +123,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>if "$(NantCall)" EQU "" (
-"$(SolutionDir)..\tools\NAnt\nant.exe" -buildfile:"$(SolutionDir)..\default.build" init-run-tests
-)</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
 </Project>

@@ -16,7 +16,6 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 	[TestFixture]
 	public class SettingsValidationTests
 	{
-		const string TalksCategoryName = "Talks";
 		readonly MockRepository _mocks = new MockRepository();
 		ICategoryRepository _categoryRepository;
 		TalkPlugin _plugin;
@@ -25,11 +24,15 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[SetUp]
 		public void SetUp()
 		{
-			_categoryRepository = _mocks.CreateMock<ICategoryRepository>();
-			_plugin = new TalkPlugin(_categoryRepository);
+			IPostRepository postRepository;
+			ISettingsRepository settingsRepository;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+															  out _categoryRepository,
+															  out settingsRepository,
+															  out postRepository);
 
 			values = new NameValueCollection();
-			values.Add(TalkPlugin.Form_CategoryName, TalksCategoryName);
+			values.Add(TalkPlugin.Form_CategoryName, _plugin.CategoryName);
 			values.Add(TalkPlugin.Form_YearQueryString, "year query string");
 			values.Add(TalkPlugin.Form_CreateTargetCategoryAndFields, "off");
 		}
@@ -45,14 +48,14 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Row(null, StatusType.Error)]
 		[Row("", StatusType.Error)]
 		[Row("    ", StatusType.Error)]
-		[Row(TalksCategoryName, StatusType.Success)]
+		[Row(SetupHelper.TalkCategoryName, StatusType.Success)]
 		public void RequiresCategoryName(string categoryName, StatusType expectedStatus)
 		{
 			values[TalkPlugin.Form_CategoryName] = categoryName;
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(TalksCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -73,11 +76,11 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Test]
 		public void ShowsWarningOnNonExistingCategoryWhenCreateTargetCategoryAndFieldsIsNotChecked()
 		{
-			values[EventPlugin.Form_CategoryName] = TalksCategoryName;
+			values[TalkPlugin.Form_CategoryName] = _plugin.CategoryName;
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(TalksCategoryName)).Return(false);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -88,7 +91,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 
 					Assert.AreEqual(StatusType.Warning, status, "Should have set warning status due to non-existing category.");
 					Assert.AreEqual(HttpContext.Current.Items["PostType-Status-Message"],
-					                String.Format("The category '{0}' does not exist.", TalksCategoryName));
+					                String.Format("The category '{0}' does not exist.", _plugin.CategoryName));
 				}
 			}
 		}
@@ -100,11 +103,11 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Row("year query string", StatusType.Success)]
 		public void RequiresYearQueryString(string queryString, StatusType expectedStatus)
 		{
-			values[EventPlugin.Form_YearQueryString] = queryString;
+			values[TalkPlugin.Form_YearQueryString] = queryString;
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(TalksCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())

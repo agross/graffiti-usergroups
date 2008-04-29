@@ -36,6 +36,16 @@ namespace DnugLeipzig.Runtime.Repositories
 		{
 			return Data.PostsByCategory(categoryName, int.MaxValue);
 		}
+
+		public string GetCategoryName(Post post)
+		{
+			if (post == null)
+			{
+				throw new ArgumentNullException("post");
+			}
+
+			return post.Category.Name;
+		}
 		#endregion
 	}
 }

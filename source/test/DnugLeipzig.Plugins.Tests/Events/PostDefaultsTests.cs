@@ -1,8 +1,12 @@
 using System;
 
+using DnugLeipzig.Definitions.Repositories;
+
 using Graffiti.Core;
 
 using MbUnit.Framework;
+
+using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Events
 {
@@ -12,19 +16,25 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		const string DefaultLocation = "Default location value";
 		const string DefaultMaximumNumberOfRegistrations = "100";
 		const string DefaultRegistrationRecipient = "Default registration recipient";
-		const int EventCategoryId = 2;
 		const string LocationField = "Location field";
 		const string LocationUnknownField = "Location is unknown field";
 		const string MaximumNumberOfRegistrationsField = "Maximum number of registrations field";
 		const string RegistrationRecipientField = "Registration recipient field";
+		readonly MockRepository _mocks = new MockRepository();
 		EventPlugin _plugin;
 		Post _post;
+		IPostRepository _postRepository;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_plugin = new EventPlugin();
-			_plugin.CategoryName = "Events";
+			ICategoryRepository categoryRepository;
+			ISettingsRepository settingsRepository;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+			                                                  out categoryRepository,
+			                                                  out settingsRepository,
+			                                                  out _postRepository);
+
 			_plugin.LocationField = LocationField;
 			_plugin.LocationUnknownField = LocationUnknownField;
 			_plugin.RegistrationRecipientField = RegistrationRecipientField;
@@ -34,7 +44,14 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			_plugin.DefaultMaximumNumberOfRegistrations = DefaultMaximumNumberOfRegistrations;
 
 			_post = new Post();
-			_post.CategoryId = EventCategoryId;
+			_post.CategoryId = SetupHelper.EventCategoryId;
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			_mocks.ReplayAll();
+			_mocks.VerifyAll();
 		}
 
 		[RowTest]
@@ -43,36 +60,60 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row(null)]
 		public void SetsDefaultLocation(string location)
 		{
-			_post.CustomFields().Add(LocationField, location);
-			_post.CustomFields().Add(LocationUnknownField, "off");
+			_post[LocationField] = location;
+			_post[LocationUnknownField] = "off";
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[LocationField], "Location should be set to default value.");
-			Assert.AreEqual(_post[LocationField], DefaultLocation, "Location should be set to default value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[LocationField], "Location should be set to default value.");
+				Assert.AreEqual(_post[LocationField], DefaultLocation, "Location should be set to default value.");
+			}
 		}
 
 		[RowTest]
 		[Row("some location")]
 		public void DoesNotSetDefaultLocationIfGivenByUser(string location)
 		{
-			_post.CustomFields().Add(LocationField, location);
-			_post.CustomFields().Add(LocationUnknownField, "off");
+			_post[LocationField] = location;
+			_post[LocationUnknownField] = "off";
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[LocationField], "Location should be set to user-supplied value.");
-			Assert.AreEqual(_post[LocationField], location, "Location should be set to user-supplied value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[LocationField], "Location should be set to user-supplied value.");
+				Assert.AreEqual(_post[LocationField], location, "Location should be set to user-supplied value.");
+			}
 		}
 
 		[Test]
 		public void DoesNotSetDefaultLocationIfLocationIsUnknown()
 		{
-			_post.CustomFields().Add(LocationUnknownField, "on");
+			_post[LocationUnknownField] = "on";
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNull(_post[LocationField], "Location should be empty because it's unknown.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNull(_post[LocationField], "Location should be empty because it's unknown.");
+			}
 		}
 
 		[RowTest]
@@ -81,28 +122,44 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row(null)]
 		public void SetsDefaultRegistrationRecipient(string registrationRecipient)
 		{
-			_post.CustomFields().Add(RegistrationRecipientField, registrationRecipient);
+			_post[RegistrationRecipientField] = registrationRecipient;
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[RegistrationRecipientField], "Registration recipient should be set to default value.");
-			Assert.AreEqual(_post[RegistrationRecipientField],
-			                DefaultRegistrationRecipient,
-			                "Registration recipient should be set to default value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[RegistrationRecipientField], "Registration recipient should be set to default value.");
+				Assert.AreEqual(_post[RegistrationRecipientField],
+				                DefaultRegistrationRecipient,
+				                "Registration recipient should be set to default value.");
+			}
 		}
 
 		[RowTest]
 		[Row("some recipient")]
 		public void DoesNotSetDefaultRegistrationRecipientIfGivenByUser(string registrationRecipient)
 		{
-			_post.CustomFields().Add(RegistrationRecipientField, registrationRecipient);
+			_post[RegistrationRecipientField] = registrationRecipient;
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[RegistrationRecipientField], "Registration recipient should be set to user-supplied value.");
-			Assert.AreEqual(_post[RegistrationRecipientField],
-			                registrationRecipient,
-			                "Registration recipient should be set to user-supplied value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[RegistrationRecipientField], "Registration recipient should be set to user-supplied value.");
+				Assert.AreEqual(_post[RegistrationRecipientField],
+				                registrationRecipient,
+				                "Registration recipient should be set to user-supplied value.");
+			}
 		}
 
 		[RowTest]
@@ -111,30 +168,46 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row(null)]
 		public void SetsDefaultMaximumNumberOfRegistrations(string maximumNumberOfRegistrations)
 		{
-			_post.CustomFields().Add(MaximumNumberOfRegistrationsField, maximumNumberOfRegistrations);
+			_post[MaximumNumberOfRegistrationsField] = maximumNumberOfRegistrations;
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[MaximumNumberOfRegistrationsField],
-			                 "Maximum number of registrations should be set to default value.");
-			Assert.AreEqual(_post[MaximumNumberOfRegistrationsField],
-			                DefaultMaximumNumberOfRegistrations,
-			                "Maximum number of registrations should be set to default value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[MaximumNumberOfRegistrationsField],
+				                 "Maximum number of registrations should be set to default value.");
+				Assert.AreEqual(_post[MaximumNumberOfRegistrationsField],
+				                DefaultMaximumNumberOfRegistrations,
+				                "Maximum number of registrations should be set to default value.");
+			}
 		}
 
 		[RowTest]
 		[Row("42")]
 		public void DoesNotSetDefaultMaximumNumberOfRegistrationsIfGivenByUser(string maximumNumberOfRegistrations)
 		{
-			_post.CustomFields().Add(MaximumNumberOfRegistrationsField, maximumNumberOfRegistrations);
+			_post[MaximumNumberOfRegistrationsField] = maximumNumberOfRegistrations;
 
-			_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+			using (_mocks.Record())
+			{
+				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+			}
 
-			Assert.IsNotNull(_post[MaximumNumberOfRegistrationsField],
-			                 "Maximum number of registrations should be set to user-supplied value.");
-			Assert.AreEqual(_post[MaximumNumberOfRegistrationsField],
-			                maximumNumberOfRegistrations,
-			                "Maximum number of registrations should be set to user-supplied value.");
+			using (_mocks.Playback())
+			{
+				_plugin.Post_SetDefaultValues(_post, EventArgs.Empty);
+
+				Assert.IsNotNull(_post[MaximumNumberOfRegistrationsField],
+				                 "Maximum number of registrations should be set to user-supplied value.");
+				Assert.AreEqual(_post[MaximumNumberOfRegistrationsField],
+				                maximumNumberOfRegistrations,
+				                "Maximum number of registrations should be set to user-supplied value.");
+			}
 		}
 	}
 }

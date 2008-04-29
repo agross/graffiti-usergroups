@@ -262,7 +262,7 @@
 	</target>
 
 	<target name="build-theme"
-			depends="init-build-theme"
+			depends="build-app, init-build-theme"
 			description="Builds the theme.">
 		<!-- Copy content files. -->
 		<copy todir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
@@ -319,13 +319,12 @@
 		</foreach>
 	</target>
 
-	<target name="init-run-tests"
-			depends="import-testdata, create-config">
+	<target name="init-run-tests">
 		<mkdir dir="${test.results}" />
 	</target>
 
 	<target name="run-tests"
-			depends="init-run-tests, build-tests"
+			depends="build-tests, init-run-tests"
 			description="Runs the applications' unit tests.">
 		<foreach item="File"
 				 property="testproject">
@@ -354,7 +353,7 @@
 	</target>
 
 	<target name="build-setup"
-			depends="init-build-setup, build-app, build-theme, run-tests"
+			depends="build-app, build-theme, run-tests, init-build-setup"
 			description="Creates the applications' deployment package.">
 		<zip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
 			 ziplevel="9"
@@ -393,7 +392,7 @@
 	</target>
 
 	<target name="deploy"
-			depends="init-deploy, build-setup"
+			depends="build-setup, init-deploy"
 			description="Deploys the application.">
 		<unzip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
 			   todir="${basedir.deployment.targetpath}"/>

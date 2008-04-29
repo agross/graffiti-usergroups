@@ -16,7 +16,6 @@ namespace DnugLeipzig.Plugins.Tests.Events
 	[TestFixture]
 	public class SettingsValidationTests
 	{
-		const string EventsCategoryName = "Events";
 		readonly MockRepository _mocks = new MockRepository();
 		ICategoryRepository _categoryRepository;
 		EventPlugin _plugin;
@@ -25,11 +24,15 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[SetUp]
 		public void SetUp()
 		{
-			_categoryRepository = _mocks.CreateMock<ICategoryRepository>();
-			_plugin = new EventPlugin(_categoryRepository);
+			IPostRepository postRepository;
+			ISettingsRepository settingsRepository;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+			                                                  out _categoryRepository,
+			                                                  out settingsRepository,
+			                                                  out postRepository);
 
 			values = new NameValueCollection();
-			values.Add(EventPlugin.Form_CategoryName, EventsCategoryName);
+			values.Add(EventPlugin.Form_CategoryName, _plugin.CategoryName);
 			values.Add(EventPlugin.Form_YearQueryString, "year query string");
 			values.Add(EventPlugin.Form_DefaultMaximumNumberOfRegistrations, "100");
 			values.Add(EventPlugin.Form_CreateTargetCategoryAndFields, "off");
@@ -46,14 +49,14 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row(null, StatusType.Error)]
 		[Row("", StatusType.Error)]
 		[Row("    ", StatusType.Error)]
-		[Row(EventsCategoryName, StatusType.Success)]
+		[Row(SetupHelper.EventCategoryName, StatusType.Success)]
 		public void RequiresCategoryName(string categoryName, StatusType expectedStatus)
 		{
 			values[EventPlugin.Form_CategoryName] = categoryName;
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(EventsCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -74,11 +77,11 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Test]
 		public void ShowsWarningOnNonExistingCategoryWhenCreateTargetCategoryAndFieldsIsNotChecked()
 		{
-			values[EventPlugin.Form_CategoryName] = EventsCategoryName;
+			values[EventPlugin.Form_CategoryName] = _plugin.CategoryName;
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(EventsCategoryName)).Return(false);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -89,7 +92,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 					Assert.AreEqual(StatusType.Warning, status, "Should have set warning status due to non-existing category.");
 					Assert.AreEqual(HttpContext.Current.Items["PostType-Status-Message"],
-					                String.Format("The category '{0}' does not exist.", EventsCategoryName));
+					                String.Format("The category '{0}' does not exist.", _plugin.CategoryName));
 				}
 			}
 		}
@@ -105,7 +108,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(EventsCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -133,9 +136,10 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		public void RequiresEmptyOrValidDefaultRegistrationRecipientAddress(string email, StatusType expectedStatus)
 		{
 			values[EventPlugin.Form_DefaultRegistrationRecipient] = email;
+
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(EventsCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -168,7 +172,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				SetupResult.For(_categoryRepository.IsExistingCategory(EventsCategoryName)).Return(true);
+				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
 			using (_mocks.Playback())

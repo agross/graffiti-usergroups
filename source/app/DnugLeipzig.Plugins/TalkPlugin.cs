@@ -22,21 +22,42 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_SpeakerField = "speakerField";
 		internal const string Form_YearQueryString = "yearQueryString";
 		readonly ICategoryRepository _categoryRepository;
+		readonly IPostRepository _postRepository;
 
-		public TalkPlugin() : this(new CategoryRepository())
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TalkPlugin"/> class.
+		/// </summary>
+		public TalkPlugin() : this(new CategoryRepository(), new PostRepository())
 		{
 			// Initialize with default values.
 			CategoryName = "Talks";
 			DateField = "Date";
 			SpeakerField = "Speaker";
 			YearQueryString = "year";
-
-			EnableEventHandlers = true;
 		}
 
-		public TalkPlugin(ICategoryRepository categoryRepository)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TalkPlugin"/> class.
+		/// This constructor is used for dependency injection in unit testing scenarios.
+		/// </summary>
+		/// <param name="categoryRepository">The category repository.</param>
+		/// <param name="postRepository">The post repository.</param>
+		internal TalkPlugin(ICategoryRepository categoryRepository, IPostRepository postRepository)
 		{
+			if (categoryRepository == null)
+			{
+				throw new ArgumentNullException("categoryRepository");
+			}
+
+			if (postRepository == null)
+			{
+				throw new ArgumentNullException("postRepository");
+			}
+
 			_categoryRepository = categoryRepository;
+			_postRepository = postRepository;
+
+			EnableEventHandlers = true;
 		}
 
 		public override string Name
@@ -115,7 +136,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (post.Category.Name != CategoryName)
+			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}

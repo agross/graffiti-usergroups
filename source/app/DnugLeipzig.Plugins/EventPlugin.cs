@@ -36,8 +36,13 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_UnknownText = "unknownText";
 		internal const string Form_YearQueryString = "yearQueryString";
 		readonly ICategoryRepository _categoryRepository;
+		readonly ISettingsRepository _settingsRepository;
+		readonly IPostRepository _postRepository;
 
-		public EventPlugin() : this(new CategoryRepository())
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EventPlugin"/> class.
+		/// </summary>
+		public EventPlugin() : this(new CategoryRepository(), new PostRepository(), new SettingsRepository())
 		{
 			// Initialize with default values.
 			CategoryName = "Events";
@@ -55,14 +60,39 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			NumberOfRegistrationsField = "Number of registrations";
 			RegistrationMailSubject = "New Registration";
-			DefaultRegistrationRecipient = CommentSettings.Get().Email;
-
-			EnableEventHandlers = true;
+			DefaultRegistrationRecipient = _settingsRepository.CommentSettings.Email;
 		}
 
-		public EventPlugin(ICategoryRepository categoryRepository)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="EventPlugin"/> class.
+		/// This constructor is used for dependency injection in unit testing scenarios.
+		/// </summary>
+		/// <param name="categoryRepository">The category repository.</param>
+		/// <param name="postRepository">The post repository.</param>
+		/// <param name="settingsRepository">The settings repository.</param>
+		internal EventPlugin(ICategoryRepository categoryRepository, IPostRepository postRepository, ISettingsRepository settingsRepository)
 		{
+			if (categoryRepository == null)
+			{
+				throw new ArgumentNullException("categoryRepository");
+			}
+
+			if (postRepository == null)
+			{
+				throw new ArgumentNullException("postRepository");
+			}
+
+
+			if (settingsRepository == null)
+			{
+				throw new ArgumentNullException("settingsRepository");
+			}
+
 			_categoryRepository = categoryRepository;
+			_postRepository = postRepository;
+			_settingsRepository = settingsRepository;
+
+			EnableEventHandlers = true;
 		}
 
 		public override string Name
@@ -227,7 +257,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (post.Category.Name != CategoryName)
+			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}
@@ -334,7 +364,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (post.Category.Name != CategoryName)
+			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}

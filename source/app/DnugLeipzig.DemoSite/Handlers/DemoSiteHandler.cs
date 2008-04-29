@@ -185,6 +185,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			{
 				Post post = CreatePost(user);
 				post.Title = String.Format("Sample Event {0}", i);
+				post.PostBody = String.Format("Sample Event {0} contents", i);
 				post.CategoryId = eventCategory.Id;
 
 				// One event from 9 AM to 6 PM every two months.
