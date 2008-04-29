@@ -1,4 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿##
+## home.layout.setupcomplete.view - Rename this file to home.layout.view once you complete the demo site setup. 
+##
+
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -20,6 +24,7 @@
 		<div id="header">
 			<div class="wrapper">
 				$macros.LoadThemeView("components/site/header.view")
+				
 				$macros.LoadThemeView("components/site/menu.view")
 			</div>
 		</div>
@@ -29,18 +34,20 @@
 				<div id="content-wrapper" class="clearfix">
 					<div id="content">
 						<div id="inner-wrapper">
+							$macros.LoadThemeView("components/events/upcoming-events.view")
+							$macros.LoadThemeView("components/talks/recent-talks.view")
 							$childContent
 						</div>
 					</div>
 					<div id="sidebar">
-						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy short\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
 					</div>
 				</div>
-				
+
 				$macros.LoadThemeView("components/site/footer.view")
 			</div>
 		</div>
-		
+
 		$!data.Site.WebStatistics
 	</body>
 </html>

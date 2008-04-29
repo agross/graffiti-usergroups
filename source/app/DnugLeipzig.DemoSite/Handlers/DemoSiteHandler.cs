@@ -1,6 +1,5 @@
 using System;
 using System.Security;
-using System.Threading;
 using System.Web;
 
 using DnugLeipzig.Definitions.Configuration;
@@ -16,6 +15,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 {
 	public class DemoSiteHandler : IHttpHandler
 	{
+		const string RegisterPostTitle = "Register";
 		readonly ICategoryRepository _categoryRepository;
 		readonly IPostRepository _postRepository;
 
@@ -85,27 +85,29 @@ namespace DnugLeipzig.DemoSite.Handlers
 						break;
 
 					case "create-talk-category":
-						//CreateCategory<TalkPlugin>();
-						Thread.Sleep(1000);
+						CreateCategory<TalkPlugin>();
 						break;
 
 					case "configure-talk-plugin":
-						//ConfigurePlugin<TalkPlugin>();
-						Thread.Sleep(1000);
+						ConfigurePlugin<TalkPlugin>();
 						break;
 
 					case "enable-talk-plugin":
 						EnablePlugin<TalkPlugin>();
-						Thread.Sleep(1000);
 						break;
 
 					case "create-sample-talks":
-						//CreateSampleTalks(15, currentUser);
-						Thread.Sleep(1000);
+						CreateSampleTalks(15, currentUser);
 						break;
 
 					case "create-navigation-links":
-						Thread.Sleep(1000);
+						CreateNavigationLink<EventPlugin>();
+						CreateNavigationLink<TalkPlugin>();
+						CreateNavigationLink(RegisterPostTitle);
+						break;
+		
+					case "load-navigation":
+						context.Response.Write(RenderNavigation());
 						break;
 
 					default:
@@ -130,16 +132,15 @@ namespace DnugLeipzig.DemoSite.Handlers
 		}
 		#endregion
 
-		static TPlugin GetPluginWithCurrentSettings<TPlugin>()
-			where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
+		static string RenderNavigation()
 		{
-			EventDetails eventDetails = Events.GetEvent(typeof(TPlugin).GetPluginName());
-			return eventDetails.Event as TPlugin;
+			Graffiti.Core.Macros macros = new Graffiti.Core.Macros();
+			return macros.LoadThemeView("components/site/menu.view");
 		}
 
 		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
 		{
-			TPlugin plugin = GetPluginWithCurrentSettings<TPlugin>();
+			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 
 			if (_categoryRepository.GetCategory(plugin.CategoryName) != null)
 			{
@@ -153,7 +154,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 		static void ConfigurePlugin<TPlugin>()
 			where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, ISupportsMemento, new()
 		{
-			TPlugin plugin = GetPluginWithCurrentSettings<TPlugin>();
+			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 			IMemento state = plugin.CreateMemento();
 
 			PluginMigrator.MigrateSettings(true, false, state, state);
@@ -170,11 +171,14 @@ namespace DnugLeipzig.DemoSite.Handlers
 		void CreateRegistrationPost(IUser user)
 		{
 			Post post = CreatePost(user);
+			post.Title = RegisterPostTitle;
+			// Uncategorized.
+			post.CategoryId = 1;
 
 			_postRepository.Save(post);
 		}
 
-		void CreateSampleEvents(int count, IGraffitiUser user)
+		void CreateSampleEvents(int count, IUser user)
 		{
 			EventPlugin eventPlugin = new EventPlugin();
 			Category eventCategory = _categoryRepository.GetCategory("Events");
@@ -189,7 +193,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 				post.CategoryId = eventCategory.Id;
 
 				// One event from 9 AM to 6 PM every two months.
-				startDate = startDate.AddMonths(2);
+				startDate = startDate.AddMonths(2).AddDays(1);
 				post[eventPlugin.StartDateField] = startDate.AddHours(9).ToString();
 				post[eventPlugin.EndDateField] = startDate.AddHours(18).ToString();
 				if (i % 2 == 0)
@@ -198,6 +202,29 @@ namespace DnugLeipzig.DemoSite.Handlers
 					post[eventPlugin.SpeakerField] = "Sample speaker";
 					post[eventPlugin.RegistrationNeededField] = "on";
 				}
+
+				_postRepository.Save(post);
+			}
+		}
+
+		void CreateSampleTalks(int count, IUser user)
+		{
+			TalkPlugin talkPlugin = new TalkPlugin();
+			Category talkCategory = _categoryRepository.GetCategory("Talks");
+
+			DateTime date = DateTime.Today.AddMonths(-count / 2).AddDays(1);
+
+			for (int i = 1; i <= count; i++)
+			{
+				Post post = CreatePost(user);
+				post.Title = String.Format("Sample Talk {0}", i);
+				post.PostBody = String.Format("Sample Talk {0} contents", i);
+				post.CategoryId = talkCategory.Id;
+
+				// One talk every two months.
+				date = date.AddMonths(2).AddDays(1);
+				post[talkPlugin.DateField] = date.ToString();
+				post[talkPlugin.SpeakerField] = "Sample speaker";
 
 				_postRepository.Save(post);
 			}
@@ -213,14 +240,49 @@ namespace DnugLeipzig.DemoSite.Handlers
 			       	CreatedOn = DateTime.Now,
 			       	ModifiedOn = DateTime.Now,
 			       	Published = DateTime.Now,
-			       	// Uncategorized.
-			       	CategoryId = 1,
-			       	Title = "Register",
 			       	PostBody = String.Empty,
 			       	PostStatus = PostStatus.Publish,
 			       	ContentType = "text/html",
-			       	IsPublished = true
+			       	IsPublished = true,
+					
 			       };
+		}
+
+		void CreateNavigationLink<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
+		{
+			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
+			Category category = _categoryRepository.GetCategory(plugin.CategoryName);
+
+			// Dynamic navigation items for categories are automatically created if the dynamic navigation items are empty.
+            NavigationSettings settings = NavigationSettings.Get();
+			if(settings.SafeItems().Exists(dni => dni.NavigationType == DynamicNavigationType.Category && dni.CategoryId == category.Id))
+			{
+				// The dynamic navigation item already exists.
+				return;
+			}
+			
+			DynamicNavigationItem item = new DynamicNavigationItem
+			                             {
+			                             	NavigationType = DynamicNavigationType.Category,
+			                             	CategoryId = category.Id,
+			                             	Id = Guid.NewGuid()
+			                             };
+
+			NavigationSettings.Add(item);
+		}
+
+		void CreateNavigationLink(string postName)
+		{
+			Post post = _postRepository.GetByName(postName);
+
+			DynamicNavigationItem item = new DynamicNavigationItem
+			                             {
+			                             	NavigationType = DynamicNavigationType.Post,
+			                             	PostId = post.Id,
+			                             	Id = Guid.NewGuid()
+			                             };
+
+			NavigationSettings.Add(item);
 		}
 	}
 }

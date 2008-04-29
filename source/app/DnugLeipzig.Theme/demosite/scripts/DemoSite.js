@@ -2,6 +2,7 @@
 
 DemoSite.setupDemoSite = function(url)
 {
+	Form.Element.disable('start')
 	DemoSite.actionIndex = 0;
 	DemoSite.runNextAction(url);
 }
@@ -26,7 +27,7 @@ DemoSite.runNextAction = function(url)
 	
 	if (DemoSite.actionIndex >= DemoSite.actionList.length)
 	{
-		DemoSite.runAction(url, DemoSite.actionList[index]);
+		DemoSite.runAction(url, DemoSite.actionList[index], function() { DemoSite.setupComplete(url); });
 	}
 	else
 	{
@@ -48,8 +49,6 @@ DemoSite.runAction = function(url, action, successAction)
 		},
 		onSuccess: function(transport)
 		{
-			var response = transport.responseText;
-			GraffitiHelpers.statusMessage('registration-status', response, false);
 			$(action + '-success').show();
 			
 			if(typeof(successAction) !== "undefined")
@@ -60,7 +59,7 @@ DemoSite.runAction = function(url, action, successAction)
 		onFailure: function(transport)
 		{
 			var response = transport.responseText
-			GraffitiHelpers.statusMessage('registration-status', 'An error occured while processing your request. ' + response, false);
+			GraffitiHelpers.statusMessage('setup-status', 'An error occured while processing your request. ' + response, false);
 			$(action + '-error').show();
 		},
 		onComplete: function()
@@ -68,4 +67,23 @@ DemoSite.runAction = function(url, action, successAction)
 			$(action).hide();
 		}
 	});
+}
+
+DemoSite.setupComplete = function(url)
+{
+	new Ajax.Updater('navigation-ajax', url + '?command=load-navigation',
+	{
+		method: 'post',
+		onFailure: function(transport)
+		{
+			var response = transport.responseText
+			GraffitiHelpers.statusMessage('setup-status', 'An error occured while processing your request. ' + response, false);
+		}
+	});
+	
+	$('start').hide();
+	
+	$('navigation-ajax').show();
+	$('your-turn').show();
+	$('proceed').show();
 }

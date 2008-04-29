@@ -1,85 +1,98 @@
 ﻿<script type="text/javascript" src="$macros.ThemeFile('demosite/scripts/DemoSite.js')"></script>
-
-<h1>
-	Hi!
-</h1>
-<h2>
-	Thank you for downloading and installing <a href="http://code.google.com/p/graffiti-usergroups/">Graffiti-UserGroups</a>.
-</h2>
-<p>
-	This site helps you to set up Graffiti-UserGroups for your site. It's a good way to try out Graffiti-UserGroups on a new
-	and empty Graffiti site. We will set up everything you need so you can play around with the user group plugins and macros.
-</p>
-<ul>
-	<li>
-		#set($action = "create-event-category")
-		$macros.LoadThemeView("demosite/ajax-status.view") Create category for events.
-		<div>
-			The category will be named "Events".</div>
-	</li>
-	<li>
-		#set($action = "configure-event-plugin")
-		$macros.LoadThemeView("demosite/ajax-status.view") Configure Event plugin.
-		<div>
-			We will set up all plugin properties such that the theme works.</div>
-	</li>
-	<li>
-		#set($action = "enable-event-plugin")
-		$macros.LoadThemeView("demosite/ajax-status.view") Enable Event plugin.
-		<div>
-			Enabling the plugin is a mandatory step to make the macros work.</div>
-	</li>
-	<li>
-		#set($action = "create-registration-post") 
-		$macros.LoadThemeView("demosite/ajax-status.view") Create registration post.
-		<div>
-			We will create post called "Register" to enable registration for your events.</div>
-	</li>
-	<li>
-		#set($action = "create-sample-events") 
-		$macros.LoadThemeView("demosite/ajax-status.view") Create sample events.
-		<div>
-			We will create a couple of sample posts so you can play around.</div>
-	</li>
-	<li>
-		#set($action = "create-talk-category")
-		$macros.LoadThemeView("demosite/ajax-status.view") create-talk-category
-		<div>
-			TODO.</div>
-	</li>
-	<li>
-		#set($action = "configure-talk-plugin")
-		$macros.LoadThemeView("demosite/ajax-status.view") configure-talk-plugin
-		<div>
-			TODO.</div>
-	</li>
-	<li>
-		#set($action = "enable-talk-plugin")
-		$macros.LoadThemeView("demosite/ajax-status.view") enable-talk-plugin
-		<div>
-			TODO.</div>
-	</li>
-	<li>
-		#set($action = "create-sample-talks") 
-		$macros.LoadThemeView("demosite/ajax-status.view") create-sample-talks
-		<div>
-			TODO.</div>
-	</li>
-	<li>
-		#set($action = "create-navigation-links")
-		$macros.LoadThemeView("demosite/ajax-status.view") create-navigation-links
-		<div>
-			TODO.</div>
-	</li>
-	<li class="your-turn">
-		Your turn!
-		<div>
-			Read the documentation or <a href="http://code.google.com/p/graffiti-usergroups/source/browse/trunk">browse the source code</a>
-			to become familiar with what Graffiti-UserGroups provides. Then, create or customize your own theme.</div>
-	</li>
-</ul>
-<p>
-	$demoSite.RegisterButton("%{id = 'register' class = 'submit', value = 'Go!'}")
-	<div style="display: none;" id="registration-status">
+<div id="demosite-setup">
+	<h1>
+		Hi!
+	</h1>
+	<h2>
+		Thank you for installing <a href="http://code.google.com/p/graffiti-usergroups/">Graffiti-UserGroups</a>.
+	</h2>
+	<p>
+		This site helps you to set up Graffiti-UserGroups on your site. We recommend trying out Graffiti-UserGroups on a new
+		and empty Graffiti site. We will set up everything you need so you can play around with the user group plugins and macros.
+	</p>
+	<ul>
+		<li>
+			#set($action = "create-event-category")
+			$macros.LoadThemeView("demosite/ajax-status.view") Create category for events.
+			<div>
+				The category will be named "$demoSite.EventCategoryName()".</div>
+		</li>
+		<li>
+			#set($action = "configure-event-plugin")
+			$macros.LoadThemeView("demosite/ajax-status.view") Configure Event plugin.
+			<div>
+				We will set up all plugin properties such that the theme works.</div>
+		</li>
+		<li>
+			#set($action = "enable-event-plugin")
+			$macros.LoadThemeView("demosite/ajax-status.view") Enable Event plugin.
+			<div>
+				Enabling the plugin is a mandatory step to make the event macros work.</div>
+		</li>
+		<li>
+			#set($action = "create-registration-post") 
+			$macros.LoadThemeView("demosite/ajax-status.view") Create registration post.
+			<div>
+				We will create post called "Register" to enable registration for your events.</div>
+		</li>
+		<li>
+			#set($action = "create-sample-events") 
+			$macros.LoadThemeView("demosite/ajax-status.view") Create sample events.
+			<div>
+				We will create a couple of sample events so you can play around.</div>
+		</li>
+		<li>
+			#set($action = "create-talk-category")
+			$macros.LoadThemeView("demosite/ajax-status.view") Create category for events.
+			<div>
+				The category will be named "$demoSite.TalkCategoryName()".</div>
+		</li>
+		<li>
+			#set($action = "configure-talk-plugin")
+			$macros.LoadThemeView("demosite/ajax-status.view") Configure Talk plugin.
+			<div>
+				We will set up all plugin properties such that the theme works.</div>
+		</li>
+		<li>
+			#set($action = "enable-talk-plugin")
+			$macros.LoadThemeView("demosite/ajax-status.view") Enable Talk plugin.
+			<div>
+				Enabling the plugin is a mandatory step to make the talk macros work.</div>
+		</li>
+		<li>
+			#set($action = "create-sample-talks") 
+			$macros.LoadThemeView("demosite/ajax-status.view") Create sample talks.
+			<div>
+				We will create a couple of sample talks so you can play around.</div>
+		</li>
+		<li>
+			#set($action = "create-navigation-links")
+			$macros.LoadThemeView("demosite/ajax-status.view") Create navigation links.
+			<div>
+				We will add navigation links (to be found on top of the home page) so you can navigate through events and talks and also register for events.</div>
+		</li>
+	</ul>
+	<div class="teaser gray" id="your-turn" style="display: none">
+		<div class="top">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+		<div class="content">
+			<h2>Your turn!</h2>
+			<div>
+				Read the documentation or <a href="http://code.google.com/p/graffiti-usergroups/source/browse/trunk">browse the source code</a>
+				to become familiar with what Graffiti-UserGroups provides. Then, create or customize your own theme.</div>
+		</div>
+		<div class="bottom">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+	</div>	
+	<div class="action">
+		$demoSite.SetupButton("%{id = 'start' class = 'submit', value = 'Get me going!'}")
+		
+		<input type="button" id="proceed" style="display: none;" value="Go to home page &raquo;" onclick="window.location.reload()" />
 	</div>
-</p>
+	<div style="display: none;" id="setup-status">
+	</div>
+</div>

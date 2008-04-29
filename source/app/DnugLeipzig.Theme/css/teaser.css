@@ -77,10 +77,6 @@
 	margin-left: 1.5em;
 }
 
-.teaser .content a {
-	color: #000;
-}
-
 /* Orange teaser. */
 .teaser.orange {
 	background-color: #FBE2A4;
@@ -115,6 +111,11 @@
 	background-image: url(../images/teaser-orange-bottom-right.png);
 }
 
+.teaser.orange .content,
+.teaser.orange .content a {
+	color: #000;
+}
+
 /* Red teaser. */
 .teaser.red {
 	background-color: #F34949;
@@ -147,6 +148,11 @@
 
 .teaser.red .bottom .right {
 	background-image: url(../images/teaser-red-bottom-right.png);
+}
+
+.teaser.red .content,
+.teaser.red .content a {
+	color: #FFF;
 }
 
 /* Blue teaser. */
@@ -220,4 +226,8 @@
 
 .teaser.gray .bottom .right {
 	background-image: url(../images/teaser-gray-bottom-right.png);
+}
+
+.teaser.blue .content {
+	color: #000;
 }
