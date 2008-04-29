@@ -36,8 +36,8 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_UnknownText = "unknownText";
 		internal const string Form_YearQueryString = "yearQueryString";
 		readonly ICategoryRepository _categoryRepository;
-		readonly ISettingsRepository _settingsRepository;
 		readonly IPostRepository _postRepository;
+		readonly ISettingsRepository _settingsRepository;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventPlugin"/> class.
@@ -70,7 +70,9 @@ namespace DnugLeipzig.Plugins
 		/// <param name="categoryRepository">The category repository.</param>
 		/// <param name="postRepository">The post repository.</param>
 		/// <param name="settingsRepository">The settings repository.</param>
-		internal EventPlugin(ICategoryRepository categoryRepository, IPostRepository postRepository, ISettingsRepository settingsRepository)
+		internal EventPlugin(ICategoryRepository categoryRepository,
+		                     IPostRepository postRepository,
+		                     ISettingsRepository settingsRepository)
 		{
 			if (categoryRepository == null)
 			{
@@ -81,7 +83,6 @@ namespace DnugLeipzig.Plugins
 			{
 				throw new ArgumentNullException("postRepository");
 			}
-
 
 			if (settingsRepository == null)
 			{
@@ -234,6 +235,20 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 		#endregion
+
+		#region ISupportsMemento Members
+		public IMemento CreateMemento()
+		{
+			return new EventPluginMemento(this);
+		}
+		#endregion
+
+		public override void EventDisabled()
+		{
+			base.EventDisabled();
+
+			HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
+		}
 
 		public override void Init(GraffitiApplication ga)
 		{
@@ -550,9 +565,9 @@ namespace DnugLeipzig.Plugins
 				EnableEventHandlers = false;
 
 				PluginMigrator.MigrateSettings(nvc[Form_CreateTargetCategoryAndFields].IsChecked(),
-				        nvc[Form_MigrateFieldValues].IsChecked(),
-				        newState,
-				        oldState);
+				                               nvc[Form_MigrateFieldValues].IsChecked(),
+				                               newState,
+				                               oldState);
 				return StatusType.Success;
 			}
 			catch (Exception ex)
@@ -590,13 +605,6 @@ namespace DnugLeipzig.Plugins
 			nvc[Form_RegistrationMailSubject] = RegistrationMailSubject;
 
 			return nvc;
-		}
-		#endregion
-
-		#region ISupportsMemento Members
-		public IMemento CreateMemento()
-		{
-			return new EventPluginMemento(this);
 		}
 		#endregion
 	}

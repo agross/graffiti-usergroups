@@ -95,7 +95,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 						break;
 
 					case "enable-talk-plugin":
-						//EnablePlugin<TalkPlugin>();
+						EnablePlugin<TalkPlugin>();
 						Thread.Sleep(1000);
 						break;
 
