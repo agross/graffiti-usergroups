@@ -46,6 +46,16 @@ namespace DnugLeipzig.Runtime.Repositories
 
 			return post.Category.Name;
 		}
+
+		public Post GetByName(string postName)
+		{
+			if (String.IsNullOrEmpty(postName))
+			{
+				throw new ArgumentOutOfRangeException("postName");
+			}
+
+			return GraffitiData.GetPost(postName);
+		}
 		#endregion
 	}
 }

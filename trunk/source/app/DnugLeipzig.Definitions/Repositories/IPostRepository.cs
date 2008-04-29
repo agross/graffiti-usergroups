@@ -8,5 +8,6 @@ namespace DnugLeipzig.Definitions.Repositories
 	{
 		IList<Post> GetByCategory(string categoryName);
 		string GetCategoryName(Post post);
+		Post GetByName(string postName);
 	}
 }

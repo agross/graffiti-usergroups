@@ -28,14 +28,10 @@
     <Content Include="css\hacks\IE.css" />
     <Content Include="css\graffiti.css" />
     <Content Include="images\bg.gif" />
-    <Content Include="images\comments.gif" />
     <Content Include="images\content-top-background.gif" />
     <Content Include="images\footer-background.gif" />
-    <Content Include="images\header-background.gif" />
     <Content Include="images\left_background.gif" />
     <Content Include="images\rss.gif" />
-    <Content Include="images\sidebar-box-short.gif" />
-    <Content Include="images\sidebar-box-tall.gif" />
     <Content Include="images\sidebar-background.gif" />
     <Content Include="layout.html" />
     <Content Include="preview.png" />
@@ -50,6 +46,8 @@
     <Content Include="components\events\events-for-year.html" />
     <Content Include="components\events\future-events.html" />
     <Content Include="components\events\past-events.html" />
+    <Content Include="components\posts\post.html" />
+    <Content Include="components\posts\post.post.html" />
     <Content Include="components\talks\talk.post.html" />
     <Content Include="components\talks\talk-date.html" />
     <Content Include="components\site\menu.html" />
@@ -60,15 +58,16 @@
     <Content Include="components\talks\past-talks.html" />
     <Content Include="components\talks\talks-for-year.html" />
     <Content Include="components\site\header.html" />
+    <Content Include="home.layout.setupcomplete.html" />
+    <Content Include="demosite\css\demosite.css" />
     <Content Include="demosite\images\ajax-loader.gif" />
     <Content Include="demosite\ajax-status.html" />
     <Content Include="demosite\images\error.png" />
     <Content Include="demosite\setup.html" />
     <Content Include="demosite\images\success.png" />
     <Content Include="demosite\images\todo.png" />
-    <Content Include="images\calendar-with-year.png" />
-    <Content Include="images\calendar.png" />
-    <Content Include="images\feed-24x24.png" />
+    <Content Include="images\date-background-other-year.gif" />
+    <Content Include="images\date-background.gif" />
     <Content Include="images\teaser-gray-bottom-left.png" />
     <Content Include="images\teaser-gray-bottom-right.png" />
     <Content Include="images\teaser-gray-bottom.png" />
@@ -78,24 +77,17 @@
     <Content Include="images\teaser-gray-top-right.png" />
     <Content Include="images\teaser-gray-top.png" />
     <Content Include="index.html" />
+    <Content Include="post.html" />
     <Content Include="register.html" />
     <Content Include="demosite\scripts\DemoSite.js" />
     <Content Include="scripts\Register.js" />
     <Content Include="talks.post.html" />
     <Content Include="css\teaser.css" />
     <Content Include="home.layout.html" />
-    <Content Include="css\first-menu-item-selected.css" />
-    <Content Include="images\badge-beta.png" />
     <Content Include="images\feed.png" />
     <Content Include="images\header-background.png" />
     <Content Include="images\menu-background-active.png" />
-    <Content Include="images\menu-background-bottom-active.png" />
-    <Content Include="images\menu-background-bottom-inactive.png" />
     <Content Include="images\menu-background-inactive.png" />
-    <Content Include="images\menu-corner-left-active.png" />
-    <Content Include="images\menu-corner-left-inactive.png" />
-    <Content Include="images\menu-corner-right-active.png" />
-    <Content Include="images\menu-corner-right-inactive.png" />
     <Content Include="images\menu-divider.png" />
     <Content Include="images\outlook-icon.png" />
     <Content Include="images\teaser-blue-bottom-left.png" />
@@ -125,7 +117,6 @@
     <Content Include="talks.html" />
     <Content Include="events.post.html" />
     <Content Include="events.html" />
-    <Content Include="images\logo.png" />
     <Content Include="templates\register.html" />
   </ItemGroup>
   <ItemGroup>

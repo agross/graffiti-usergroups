@@ -10,8 +10,9 @@
 		<!--[if IE]>
 			$macros.Style("css/hacks/IE.css", "screen")
 		<![endif]-->
-		#if ($ui.IsFirstNavigationLinkSelected())
-			$macros.Style("css/first-menu-item-selected.css", "screen")
+		
+		#if (!$demoSite.SetupComplete())
+			$macros.Style("demosite/css/demosite.css", "screen")
 		#end
 
 		$macros.MetaTags()
@@ -23,7 +24,13 @@
 		<div id="header">
 			<div class="wrapper">
 				$macros.LoadThemeView("components/site/header.view")
-				$macros.LoadThemeView("components/site/menu.view")
+				
+				#if ($demoSite.SetupComplete())
+					$macros.LoadThemeView("components/site/menu.view")
+				#else
+					<div id="navigation-ajax" style="display:none;">
+					</div>
+				#end
 			</div>
 		</div>
 
@@ -33,16 +40,16 @@
 					<div id="content">
 						<div id="inner-wrapper">
 							#if ($demoSite.SetupComplete())
-								$childContent
 								$macros.LoadThemeView("components/events/upcoming-events.view")
 								$macros.LoadThemeView("components/talks/recent-talks.view")
+								$childContent
 							#else
 								$macros.LoadThemeView("demosite/setup.view")
 							#end
 						</div>
 					</div>
 					<div id="sidebar">
-						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy short\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
 					</div>
 				</div>
 
