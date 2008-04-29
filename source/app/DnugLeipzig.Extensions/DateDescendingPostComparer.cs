@@ -9,19 +9,19 @@ namespace DnugLeipzig.Extensions
 {
 	internal class DateDescendingPostComparer : IComparer<Post>
 	{
-		readonly string DateFieldName;
+		readonly string _dateFieldName;
 
 		public DateDescendingPostComparer(string dateFieldName)
 		{
-			DateFieldName = dateFieldName;
+			_dateFieldName = dateFieldName;
 		}
 
 		#region IComparer<Post> Members
 		public int Compare(Post x, Post y)
 		{
 			// Posts without date are shown at the top (DateTime.MaxValue).
-			DateTime xDate = x[DateFieldName].AsEventDate();
-			DateTime yDate = y[DateFieldName].AsEventDate();
+			DateTime xDate = x[_dateFieldName].AsEventDate();
+			DateTime yDate = y[_dateFieldName].AsEventDate();
 
 			int dateResult = xDate.CompareTo(yDate) * -1;
 

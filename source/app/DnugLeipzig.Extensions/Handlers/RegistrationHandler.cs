@@ -17,8 +17,8 @@ namespace DnugLeipzig.Extensions.Handlers
 	public class RegistrationHandler : IHttpHandler
 	{
 		static readonly object _postLock = new object();
-		readonly IEventPluginConfiguration Configuration;
-		readonly ICategoryEnabledRepository Repository;
+		readonly IEventPluginConfiguration _configuration;
+		readonly ICategoryEnabledRepository _repository;
 
 		#region Ctors
 		public RegistrationHandler() : this(null, new EventPluginConfiguration())
@@ -32,14 +32,14 @@ namespace DnugLeipzig.Extensions.Handlers
 				throw new ArgumentNullException("configuration");
 			}
 
-			Configuration = configuration;
+			_configuration = configuration;
 
 			if (repository == null)
 			{
-				repository = new EventRepository(Configuration);
+				repository = new EventRepository(_configuration);
 			}
 
-			Repository = repository;
+			_repository = repository;
 		}
 		#endregion
 
@@ -109,7 +109,7 @@ namespace DnugLeipzig.Extensions.Handlers
 
 				EmailTemplate emailTemplate = new EmailTemplate
 				                              {
-				                              	Subject = Configuration.RegistrationMailSubject,
+				                              	Subject = _configuration.RegistrationMailSubject,
 				                              	Context = mailContext,
 				                              	From = attendeeEMail,
 				                              	TemplateName = "register.view"
@@ -138,21 +138,21 @@ namespace DnugLeipzig.Extensions.Handlers
 			{
 				foreach (int eventId in eventIds)
 				{
-					Post post = Repository.GetById(eventId);
+					Post post = _repository.GetById(eventId);
 
-					int numberOfRegistations = post[Configuration.NumberOfRegistrationsField].ToInt(0);
-					int maximumNumberOfRegistations = post[Configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
+					int numberOfRegistations = post[_configuration.NumberOfRegistrationsField].ToInt(0);
+					int maximumNumberOfRegistations = post[_configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
 
 					// Check for overflows (very unlikely).
 					checked
 					{
-						post[Configuration.NumberOfRegistrationsField] = (++numberOfRegistations).ToString();
+						post[_configuration.NumberOfRegistrationsField] = (++numberOfRegistations).ToString();
 					}
 
 					mailContext.Put("event", post);
 					mailContext.Put("isCcToAttendee", false);
 					mailContext.Put("isOnWaitingList", numberOfRegistations > maximumNumberOfRegistations);
-					emailTemplate.To = post[Configuration.RegistrationRecipientField];
+					emailTemplate.To = post[_configuration.RegistrationRecipientField];
 
 					try
 					{
@@ -172,7 +172,7 @@ namespace DnugLeipzig.Extensions.Handlers
 						throw;
 					}
 
-					Repository.Save(post);
+					_repository.Save(post);
 				}
 			}
 		}

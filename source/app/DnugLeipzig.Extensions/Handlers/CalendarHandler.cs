@@ -13,8 +13,8 @@ namespace DnugLeipzig.Extensions.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
-		readonly IEventPluginConfiguration Configuration;
-		readonly ICategoryEnabledRepository Repository;
+		readonly IEventPluginConfiguration _configuration;
+		readonly ICategoryEnabledRepository _repository;
 
 		#region Ctors
 		public CalendarHandler() : this(null, new EventPluginConfiguration())
@@ -28,14 +28,14 @@ namespace DnugLeipzig.Extensions.Handlers
 				throw new ArgumentNullException("configuration");
 			}
 
-			Configuration = configuration;
+			_configuration = configuration;
 
 			if (repository == null)
 			{
-				repository = new EventRepository(Configuration);
+				repository = new EventRepository(_configuration);
 			}
 
-			Repository = repository;
+			_repository = repository;
 		}
 		#endregion
 
@@ -55,7 +55,7 @@ namespace DnugLeipzig.Extensions.Handlers
 				Post post;
 				try
 				{
-					post = Repository.GetById(eventId);
+					post = _repository.GetById(eventId);
 				}
 				catch
 				{
@@ -64,7 +64,7 @@ namespace DnugLeipzig.Extensions.Handlers
 					return;
 				}
 
-				var events = new EventMacros(Repository, Configuration);
+				var events = new EventMacros(_repository, _configuration);
 
 				if (post == null || !events.CanCreateCalendarItem(post))
 				{
