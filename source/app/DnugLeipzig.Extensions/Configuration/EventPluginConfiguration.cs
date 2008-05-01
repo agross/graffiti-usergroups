@@ -1,16 +1,16 @@
 using System;
-using System.Diagnostics;
-using System.Web;
-using System.Web.Caching;
 
-using Graffiti.Core;
+using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Plugins;
 
-namespace DnugLeipzig.Definitions.Configuration
+namespace DnugLeipzig.Extensions.Configuration
 {
-	public class EventPluginConfiguration : IEventPluginConfiguration
+	public class EventPluginConfiguration : PluginConfiguration<EventPlugin>, IEventPluginConfiguration
 	{
-		public static readonly string CacheKey = typeof(EventPluginConfiguration).Name;
-		static IEventPluginConfiguration PluginInstance;
+		//protected override string CacheKey
+		//{
+		//    get { return String.Format("{0}-0243AF25-3CED-4c0f-8692-37D1B2B23DF6", GetType().Name); }
+		//}
 
 		#region IEventPluginConfiguration Members
 		public string CategoryName
@@ -157,38 +157,5 @@ namespace DnugLeipzig.Definitions.Configuration
 			}
 		}
 		#endregion
-
-		static void EnsureCurrentInstance()
-		{
-			Debug.WriteLine("EventPluginConfiguration.EnsureCurrentInstance");
-
-			PluginInstance = HttpContext.Current.Cache.Get(CacheKey) as IEventPluginConfiguration;
-			if (PluginInstance != null)
-			{
-				Debug.WriteLine("--> Cached");
-				return;
-			}
-
-			Debug.WriteLine("--> Not cached");
-
-			// Ensure plugin initialization occurs before we query the plugin settings.
-			Events.Instance();
-
-			EventDetails eventDetails = Events.GetEvent("DnugLeipzig.Plugins.EventPlugin, DnugLeipzig.Plugins");
-			if (!eventDetails.Enabled)
-			{
-				throw new InvalidOperationException("The Events Plugin has not been enabled.");
-			}
-
-			PluginInstance = eventDetails.Event as IEventPluginConfiguration;
-
-			HttpContext.Current.Cache.Add(CacheKey,
-			                              PluginInstance,
-			                              null,
-			                              Cache.NoAbsoluteExpiration,
-			                              Cache.NoSlidingExpiration,
-			                              CacheItemPriority.NotRemovable,
-			                              null);
-		}
 	}
 }

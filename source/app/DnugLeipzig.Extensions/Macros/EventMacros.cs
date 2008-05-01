@@ -13,6 +13,8 @@ using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
+using EventPluginConfiguration=DnugLeipzig.Extensions.Configuration.EventPluginConfiguration;
+
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("events")]

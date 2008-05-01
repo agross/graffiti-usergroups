@@ -1,47 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="DnugLeipzig.Definitions.Configuration.EventPluginConfigurationSource" Collapsed="true">
-    <Position X="5.25" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAIAAEAACAASAAQAAAACAgAAGAAIAAQEAACAAAAACA=</HashCode>
-      <FileName>Configuration\EventPluginConfigurationSource.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Class Name="DnugLeipzig.Definitions.Configuration.TalkPluginConfigurationSource" Collapsed="true">
-    <Position X="7" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAEAAAAAQAACAAAAAAgAAGAAAAAQAAAAAAAAACA=</HashCode>
-      <FileName>Configuration\TalkPluginConfigurationSource.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" />
-  </Class>
-  <Interface Name="DnugLeipzig.Definitions.Configuration.IEventPluginConfigurationSource">
+  <Interface Name="DnugLeipzig.Definitions.Configuration.IEventPluginConfiguration">
     <Position X="0.5" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAIAAAAACAACAAQAAAACAAAAAAAIAAAEAACAAAAAAA=</HashCode>
-      <FileName>Configuration\IEventPluginConfigurationSource.cs</FileName>
+      <HashCode>AAAIBIAAACAACAAwAAAACQAAAAAAIAAAEAACAAAAAAA=</HashCode>
+      <FileName>Configuration\IEventPluginConfiguration.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DnugLeipzig.Definitions.Configuration.ITalkPluginConfigurationSource">
+  <Interface Name="DnugLeipzig.Definitions.Configuration.ITalkPluginConfiguration">
     <Position X="2.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Configuration\ITalkPluginConfigurationSource.cs</FileName>
+      <FileName>Configuration\ITalkPluginConfiguration.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DnugLeipzig.Definitions.Configuration.ICategoryEnabledRepositoryConfigurationSource">
+  <Interface Name="DnugLeipzig.Definitions.Configuration.ICategoryEnabledRepositoryConfiguration">
     <Position X="1.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAgAACAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Configuration\ICategoryEnabledRepositoryConfigurationSource.cs</FileName>
+      <FileName>Configuration\ICategoryEnabledRepositoryConfiguration.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="DnugLeipzig.Definitions.Configuration.IPluginConfigurationSource">
+  <Interface Name="DnugLeipzig.Definitions.Configuration.IPluginConfiguration">
     <Position X="1.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
-      <FileName>Configuration\IPluginConfigurationSource.cs</FileName>
+      <FileName>Configuration\IPluginConfiguration.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />
