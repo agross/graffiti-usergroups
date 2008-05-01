@@ -36,7 +36,11 @@ Register.submitMessage = function(url)
 			{
 				$('error').show();
 				
-				GraffitiHelpers.statusMessage('registration-status', "Error", false);
+				var message = 'An error has occured. Please check the following form fields:<ul>';
+				response.ValidationErrors.each(function(item) { message += '<li>' + item + '</li>'; });
+				message += '</ol>';
+				
+				GraffitiHelpers.statusMessage('registration-status', message, false);
 			}
 		},
 		onFailure: function()

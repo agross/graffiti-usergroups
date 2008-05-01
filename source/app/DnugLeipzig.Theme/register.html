@@ -23,7 +23,7 @@
 			</li>
 		#afterall
 			</ol>
-			<div id="advice-select-event-event-$post.Id" class="custom-advice">Please select an event to register for.</div>
+			<div id="advice-select-event-event-$post.Id" class="custom-advice">Please select at least one event to register for.</div>
 			
 			<script type="text/javascript">
 				$('event-$post.Id').addClassName('select-event');
@@ -96,14 +96,14 @@
 			Validation.add('select-event', null, function (v, elm) {
 				var p = $('event-list');
 				var options = p.getElementsByTagName('INPUT');
-				return $A(options).any(function(elm) {
+				return $A(options).any(function(elm)
+				{
 					return $F(elm);
 				});
 			});
 			
 			$('register').observe('click', function(event)
 			{
-				validation.onSubmit(event);
 				if(validation.validate())
 				{
 					Register.submitMessage('$events.RegistrationHandler');
