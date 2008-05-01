@@ -22,7 +22,7 @@ namespace DnugLeipzig.Extensions.Macros
 
 		static UiMacros()
 		{
-			// TODO
+			// TODO: German
 			// Not perfect as there may be languages where there's no simple singular/plural forms.
 			NoComments = ConfigurationManager.AppSettings.GetOrDefault("Ui:Comments:NoComments", "Keine Kommentare");
 			SingleComment = ConfigurationManager.AppSettings.GetOrDefault("Ui:Comments:SingleComment", "1 Kommentar");

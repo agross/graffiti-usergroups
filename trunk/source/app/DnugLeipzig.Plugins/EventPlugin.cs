@@ -98,7 +98,7 @@ namespace DnugLeipzig.Plugins
 
 		public override string Name
 		{
-			get { return "Events Plugin"; }
+			get { return "Event Plugin"; }
 		}
 
 		public override bool IsEditable
@@ -242,13 +242,6 @@ namespace DnugLeipzig.Plugins
 			return new EventPluginMemento(this);
 		}
 		#endregion
-
-		public override void EventDisabled()
-		{
-			base.EventDisabled();
-
-			HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
-		}
 
 		public override void Init(GraffitiApplication ga)
 		{
@@ -483,8 +476,6 @@ namespace DnugLeipzig.Plugins
 
 			try
 			{
-				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
-
 				// Validation.
 				if (!Validator.ValidateExisting(nvc[Form_CategoryName]))
 				{

@@ -11,6 +11,8 @@ using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
+using TalkPluginConfiguration=DnugLeipzig.Extensions.Configuration.TalkPluginConfiguration;
+
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("talks")]

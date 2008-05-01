@@ -62,7 +62,7 @@ namespace DnugLeipzig.Plugins
 
 		public override string Name
 		{
-			get { return "Talks Plugin"; }
+			get { return "Talk Plugin"; }
 		}
 
 		public override bool IsEditable
@@ -115,13 +115,6 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 		#endregion
-
-		public override void EventDisabled()
-		{
-			base.EventDisabled();
-
-			HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
-		}
 
 		public override void Init(GraffitiApplication ga)
 		{
@@ -193,11 +186,7 @@ namespace DnugLeipzig.Plugins
 
 			try
 			{
-				HttpContext.Current.Cache.Remove(EventPluginConfiguration.CacheKey);
-
 				// Validation.
-				HttpContext.Current.Cache.Remove(TalkPluginConfiguration.CacheKey);
-
 				if (!Validator.ValidateExisting(nvc[Form_CategoryName]))
 				{
 					throw new ValidationException("Please enter a category name.");

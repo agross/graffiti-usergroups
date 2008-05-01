@@ -12,6 +12,8 @@ using Graffiti.Core;
 
 using NVelocity.Context;
 
+using EventPluginConfiguration=DnugLeipzig.Extensions.Configuration.EventPluginConfiguration;
+
 namespace DnugLeipzig.Extensions.Handlers
 {
 	public class RegistrationHandler : IHttpHandler
@@ -118,6 +120,7 @@ namespace DnugLeipzig.Extensions.Handlers
 				Log.Info("Event registration received", String.Format("Sender: {0}", attendeeEMail));
 				SendEMail(mailContext, emailTemplate, eventIds, attendeeEMail, ccToAttendee);
 
+				// TODO: German
 				context.Response.Write("Vielen Dank für Ihre Anmeldung.");
 			}
 			catch (Exception ex)
