@@ -26,11 +26,9 @@
   <ItemGroup>
     <Content Include="css\base.css" />
     <Content Include="css\hacks\IE.css" />
-    <Content Include="css\graffiti.css" />
     <Content Include="images\bg.gif" />
     <Content Include="images\content-top-background.gif" />
     <Content Include="images\footer-background.gif" />
-    <Content Include="images\left_background.gif" />
     <Content Include="images\rss.gif" />
     <Content Include="images\sidebar-background.gif" />
     <Content Include="layout.html" />
@@ -60,12 +58,12 @@
     <Content Include="components\site\header.html" />
     <Content Include="home.layout.setupcomplete.html" />
     <Content Include="demosite\css\demosite.css" />
-    <Content Include="demosite\images\ajax-loader.gif" />
+    <Content Include="images\ajax-loader.gif" />
     <Content Include="demosite\ajax-status.html" />
-    <Content Include="demosite\images\error.png" />
+    <Content Include="images\error.png" />
     <Content Include="demosite\setup.html" />
-    <Content Include="demosite\images\success.png" />
-    <Content Include="demosite\images\todo.png" />
+    <Content Include="images\success.png" />
+    <Content Include="images\todo.png" />
     <Content Include="images\date-background-other-year.gif" />
     <Content Include="images\date-background.gif" />
     <Content Include="images\teaser-gray-bottom-left.png" />
@@ -76,11 +74,13 @@
     <Content Include="images\teaser-gray-top-left.png" />
     <Content Include="images\teaser-gray-top-right.png" />
     <Content Include="images\teaser-gray-top.png" />
+    <Content Include="images\warning.png" />
     <Content Include="index.html" />
     <Content Include="post.html" />
     <Content Include="register.html" />
     <Content Include="demosite\scripts\DemoSite.js" />
     <Content Include="scripts\Register.js" />
+    <Content Include="scripts\validation.js" />
     <Content Include="talks.post.html" />
     <Content Include="css\teaser.css" />
     <Content Include="home.layout.html" />

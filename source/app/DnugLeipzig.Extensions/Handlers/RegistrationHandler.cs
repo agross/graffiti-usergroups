@@ -2,17 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Web;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.Macros;
+using DnugLeipzig.Runtime;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
 using NVelocity.Context;
-
-using EventPluginConfiguration=DnugLeipzig.Extensions.Configuration.EventPluginConfiguration;
 
 namespace DnugLeipzig.Extensions.Handlers
 {
@@ -21,13 +22,24 @@ namespace DnugLeipzig.Extensions.Handlers
 		static readonly object _postLock = new object();
 		readonly IEventPluginConfiguration _configuration;
 		readonly ICategoryEnabledRepository _repository;
+		readonly IEmailSender _emailSender;
 
 		#region Ctors
-		public RegistrationHandler() : this(null, new EventPluginConfiguration())
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RegistrationHandler"/> class.
+		/// </summary>
+		public RegistrationHandler() : this(null, new EventPluginConfiguration(), new GraffitiEmailSender())
 		{
 		}
 
-		public RegistrationHandler(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RegistrationHandler"/> class.
+		/// This constructor is used for dependency injection in unit testing scenarios.
+		/// </summary>
+		/// <param name="repository">The repository.</param>
+		/// <param name="configuration">The configuration.</param>
+		/// <param name="emailSender">The email sender.</param>
+		public RegistrationHandler(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration, IEmailSender emailSender)
 		{
 			if (configuration == null)
 			{
@@ -42,6 +54,13 @@ namespace DnugLeipzig.Extensions.Handlers
 			}
 
 			_repository = repository;
+
+			if (emailSender == null)
+			{
+				throw new ArgumentNullException("emailSender");
+			}
+
+			_emailSender = emailSender;
 		}
 		#endregion
 
@@ -56,23 +75,25 @@ namespace DnugLeipzig.Extensions.Handlers
 				return;
 			}
 
-			context.Response.ContentType = "text/plain";
-
 			try
 			{
 				switch (context.Request.QueryString["command"])
 				{
 					case "register":
-						ProcessRegistration(context);
+						RegistrationResponse response = ProcessRegistration(context);
+						context.Response.ContentType = "application/json";
+						context.Response.Write(response.ToJson());
 						break;
+
 					default:
 						throw new HttpException(500, String.Format("Unknown command '{0}'", context.Request.QueryString["command"]));
 				}
 			}
 			catch (Exception ex)
 			{
-				Log.Error(String.Format("{0}: Could not process request", GetType().Name), ex.Message);
+				Log.Error(String.Format("{0}: Could not process request", GetType().Name), ex.ToString());
 
+				context.Response.ContentType = "text/plain";
 				context.Response.StatusCode = 500;
 				context.Response.StatusDescription = "Internal server error";
 
@@ -87,96 +108,129 @@ namespace DnugLeipzig.Extensions.Handlers
 		}
 		#endregion
 
-		void ProcessRegistration(HttpContext context)
+		RegistrationResponse ProcessRegistration(HttpContext context)
 		{
-			// TODO: Form validation
-
 			try
 			{
-				string[] events = Array.FindAll(context.Request.Form.AllKeys, key => key.StartsWith("event"));
-				int[] eventIds = Array.ConvertAll(events, e => Convert.ToInt32(e.Replace("event", String.Empty)));
+				string[] events = Array.FindAll(context.Request.Form.AllKeys, key => key.StartsWith("event-"));
 
-				string formOfAddress = context.Request.Form["formOfAddress"];
-				string name = context.Request.Form["name"];
-				string occupation = context.Request.Form["occupation"];
-				string attendeeEMail = context.Request.Form["attendeeEMail"];
-				bool ccToAttendee = context.Request.Form["ccToAttendee"].IsChecked();
+				RegistrationRequest request = new RegistrationRequest
+				                              {
+				                              	RegisteredEvents =
+				                              		Array.ConvertAll(events, e => Convert.ToInt32(e.Replace("event-", String.Empty))),
+				                              	FormOfAddress = context.Request.Form["formOfAddress"],
+				                              	Name = context.Request.Form["name"],
+				                              	Occupation = context.Request.Form["occupation"],
+				                              	AttendeeEMail = context.Request.Form["attendeeEMail"],
+				                              	CcToAttendee = context.Request.Form["ccToAttendee"].IsChecked()
+				                              };
+
+				ICollection<string> validationErrors = request.Validate();
+				if (validationErrors.Count != 0)
+				{
+					return new RegistrationResponse { ValidationErrors = validationErrors };
+				}
+
+				Log.Info("Event registration received", String.Format("Sender: {0}", request.AttendeeEMail));
+
+				RegistrationResponse response = new RegistrationResponse();
 
 				EmailTemplateToolboxContext mailContext = new EmailTemplateToolboxContext();
+				mailContext.Put("request", context.Request);
 				mailContext.Put("events", new EventMacros());
-				mailContext.Put("formOfAddress", context.Server.HtmlEncode(formOfAddress));
-				mailContext.Put("name", context.Server.HtmlEncode(name));
-				mailContext.Put("occupation", context.Server.HtmlEncode(occupation));
-				mailContext.Put("attendeeEMail", context.Server.HtmlEncode(attendeeEMail));
+				mailContext.Put("formOfAddress", context.Server.HtmlEncode(request.FormOfAddress));
+				mailContext.Put("name", context.Server.HtmlEncode(request.Name));
+				mailContext.Put("occupation", context.Server.HtmlEncode(request.Occupation));
+				mailContext.Put("attendeeEMail", context.Server.HtmlEncode(request.AttendeeEMail));
 
 				EmailTemplate emailTemplate = new EmailTemplate
 				                              {
 				                              	Subject = _configuration.RegistrationMailSubject,
 				                              	Context = mailContext,
-				                              	From = attendeeEMail,
 				                              	TemplateName = "register.view"
 				                              };
 
-				Log.Info("Event registration received", String.Format("Sender: {0}", attendeeEMail));
-				SendEMail(mailContext, emailTemplate, eventIds, attendeeEMail, ccToAttendee);
+				// Only a single thread can work with posts such that two threads don't mess with the number of received registrations.
+				lock (_postLock)
+				{
+					foreach (int eventId in request.RegisteredEvents)
+					{
+						Post post = _repository.GetById(eventId);
 
-				// TODO: German
-				context.Response.Write("Vielen Dank für Ihre Anmeldung.");
+						bool isOnWaitingList = ProcessSingleRegistration(post);
+						if(isOnWaitingList)
+						{
+							response.WaitingListEvents.Add(eventId);
+						}
+
+						PrepareEmail(mailContext, emailTemplate, post, request, isOnWaitingList, false);
+						SendEmail(emailTemplate);
+
+						if (request.CcToAttendee)
+						{
+							PrepareEmail(mailContext, emailTemplate, post, request, isOnWaitingList, true);
+							SendEmail(emailTemplate);
+						}
+
+						_repository.Save(post);
+					}
+				}
+
+				response.Success = true;
+				return response;
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Could not process registration", ex.Message);
+				Log.Error("Could not process registration", ex.ToString());
 				throw;
 			}
 		}
 
-		void SendEMail(IContext mailContext,
-		               EmailTemplate emailTemplate,
-		               IEnumerable<int> eventIds,
-		               string attendeeEMail,
-		               bool ccToAttendee)
+		bool ProcessSingleRegistration(Post post)
 		{
-			// Only a single thread can work with posts such that two threads don't mess with the number of received registrations.
-			lock (_postLock)
+			int numberOfRegistations = post[_configuration.NumberOfRegistrationsField].ToInt(0);
+			int maximumNumberOfRegistations = post[_configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
+
+			// Check for overflows (very unlikely).
+			checked
 			{
-				foreach (int eventId in eventIds)
-				{
-					Post post = _repository.GetById(eventId);
+				post[_configuration.NumberOfRegistrationsField] = (++numberOfRegistations).ToString();
+			}
 
-					int numberOfRegistations = post[_configuration.NumberOfRegistrationsField].ToInt(0);
-					int maximumNumberOfRegistations = post[_configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
+			return numberOfRegistations > maximumNumberOfRegistations;
+		}
 
-					// Check for overflows (very unlikely).
-					checked
-					{
-						post[_configuration.NumberOfRegistrationsField] = (++numberOfRegistations).ToString();
-					}
+		void PrepareEmail(IContext mailContext,
+		                  EmailTemplate emailTemplate,
+		                  Post post,
+		                  RegistrationRequest request,
+		                  bool isOnWaitingList,
+		                  bool isCcToAttendee)
+		{
+			mailContext.Put("event", post);
+			mailContext.Put("isCcToAttendee", isCcToAttendee);
+			mailContext.Put("isOnWaitingList", isOnWaitingList);
 
-					mailContext.Put("event", post);
-					mailContext.Put("isCcToAttendee", false);
-					mailContext.Put("isOnWaitingList", numberOfRegistations > maximumNumberOfRegistations);
-					emailTemplate.To = post[_configuration.RegistrationRecipientField];
+			emailTemplate.From = request.AttendeeEMail;
+			emailTemplate.To = post[_configuration.RegistrationRecipientField];
 
-					try
-					{
-						MailHelper.Send(emailTemplate);
+			if (request.CcToAttendee)
+			{
+				emailTemplate.From = null;
+				emailTemplate.To = request.AttendeeEMail;
+			}
+		}
 
-						if (ccToAttendee)
-						{
-							mailContext.Put("isCcToAttendee", true);
-							emailTemplate.From = null;
-							emailTemplate.To = attendeeEMail;
-							MailHelper.Send(emailTemplate);
-						}
-					}
-					catch (Exception ex)
-					{
-						Log.Error("Could not send registration message", ex.Message);
-						throw;
-					}
-
-					_repository.Save(post);
-				}
+		void SendEmail(EmailTemplate emailTemplate)
+		{
+			try
+			{
+				_emailSender.Send(emailTemplate);
+			}
+			catch (Exception ex)
+			{
+				Log.Error("Could not send registration message", ex.ToString());
+				throw;
 			}
 		}
 	}

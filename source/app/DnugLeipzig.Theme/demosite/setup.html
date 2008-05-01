@@ -80,8 +80,16 @@
 		<div class="content">
 			<h2>Your turn!</h2>
 			<div>
+				<p>
 				Read the documentation or <a href="http://code.google.com/p/graffiti-usergroups/source/browse/trunk">browse the source code</a>
-				to become familiar with what Graffiti-UserGroups provides. Then, create or customize your own theme.</div>
+				to become familiar with what Graffiti-UserGroups provides. Then, create or customize your own theme.
+				</p>
+				<p>
+				You can now rename "home.layout.setupcomplete.view" to "home.layout.view" to disable this setup page. <strong>If you rename the category
+				of events and talks, be sure to also rename the according view files "events.view", "events.post.view", "talks.view"
+				and "talks.post.view", respectively.</strong>
+				</p>
+			</div>
 		</div>
 		<div class="bottom">
 			<div class="left"></div>
@@ -91,8 +99,10 @@
 	<div class="action">
 		$demoSite.SetupButton("%{id = 'start' class = 'submit', value = 'Get me going!'}")
 		
-		<input type="button" id="proceed" style="display: none;" value="Go to home page &raquo;" onclick="window.location.reload()" />
+		<input type="button" id="proceed" style="display: none;" value="Take me to the home page &raquo;" onclick="window.location = window.location" />
 	</div>
-	<div style="display: none;" id="setup-status">
+	<div class="status">
+		<div style="display: none;" id="setup-status">
+		</div>
 	</div>
 </div>

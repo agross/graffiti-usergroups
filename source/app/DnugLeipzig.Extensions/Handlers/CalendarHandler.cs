@@ -88,7 +88,7 @@ namespace DnugLeipzig.Extensions.Handlers
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Could not generate calendar item", ex.Message);
+				Log.Error("Could not generate calendar item", ex.ToString());
 				context.Response.Clear();
 				throw;
 			}
