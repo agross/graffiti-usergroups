@@ -71,12 +71,15 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationRequest.cs" />
+    <Compile Include="RegistrationResponse.cs" />
     <Compile Include="Repositories\CategoryEnabledRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
     <Compile Include="Repositories\EventRepository.cs" />
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Repositories\TalkRepository.cs" />
+    <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">

@@ -77,7 +77,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 						break;
 
 					case "create-sample-events":
-						CreateSampleEvents(15, currentUser);
+						CreateSampleEvents(10, currentUser);
 						break;
 
 					case "create-registration-post":
@@ -97,7 +97,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 						break;
 
 					case "create-sample-talks":
-						CreateSampleTalks(15, currentUser);
+						CreateSampleTalks(10, currentUser);
 						break;
 
 					case "create-navigation-links":
@@ -138,7 +138,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			return macros.LoadThemeView("components/site/menu.view");
 		}
 
-		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
+		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 
@@ -152,7 +152,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 		}
 
 		static void ConfigurePlugin<TPlugin>()
-			where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, ISupportsMemento, new()
+			where TPlugin : GraffitiEvent, ISupportsMemento
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 			IMemento state = plugin.CreateMemento();
@@ -180,8 +180,8 @@ namespace DnugLeipzig.DemoSite.Handlers
 
 		void CreateSampleEvents(int count, IUser user)
 		{
-			EventPlugin eventPlugin = new EventPlugin();
-			Category eventCategory = _categoryRepository.GetCategory("Events");
+			EventPlugin eventPlugin = PluginHelper.GetPluginWithCurrentSettings<EventPlugin>();
+			Category eventCategory = _categoryRepository.GetCategory(eventPlugin.CategoryName);
 
 			DateTime startDate = DateTime.Today.AddMonths(-count / 2);
 
@@ -189,7 +189,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			{
 				Post post = CreatePost(user);
 				post.Title = String.Format("Sample Event {0}", i);
-				post.PostBody = String.Format("Sample Event {0} contents", i);
+				post.PostBody = String.Format("<h3>Sample Event {0} Heading</h3><p>Sample Event {0} contents</p>", i);
 				post.CategoryId = eventCategory.Id;
 
 				// One event from 9 AM to 6 PM every two months.
@@ -209,8 +209,8 @@ namespace DnugLeipzig.DemoSite.Handlers
 
 		void CreateSampleTalks(int count, IUser user)
 		{
-			TalkPlugin talkPlugin = new TalkPlugin();
-			Category talkCategory = _categoryRepository.GetCategory("Talks");
+			TalkPlugin talkPlugin = PluginHelper.GetPluginWithCurrentSettings<TalkPlugin>(); 
+			Category talkCategory = _categoryRepository.GetCategory(talkPlugin.CategoryName);
 
 			DateTime date = DateTime.Today.AddMonths(-count / 2).AddDays(1);
 
@@ -218,7 +218,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			{
 				Post post = CreatePost(user);
 				post.Title = String.Format("Sample Talk {0}", i);
-				post.PostBody = String.Format("Sample Talk {0} contents", i);
+				post.PostBody = String.Format("<h3>Sample Talk {0} Heading</h3><p>Sample Talk {0} contents</p>", i);
 				post.CategoryId = talkCategory.Id;
 
 				// One talk every two months.

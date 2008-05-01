@@ -19,40 +19,36 @@
 
 	#if ($isCcToAttendee)
 		<p>
-			#if($formOfAddress == "mr")
-				Dear Mr $name,
-			#else
-				Dear Mrs $name,
-			#end
+			Dear $formOfAddressText $name,
 		</p>
 		<p>
-			as requested you receive a copy of your registration to the following event.
+			As requested you receive a copy of your registration for the following event.
 			
 			#if ($isOnWaitingList)
-				<strong>Please note that we can accept only a limited number of registrations. Your request for registration is on out waiting list.
-				If it is possible that you can attend to the event, we will contact you directly.</strong>
+				<strong>Please note that we can accept only a limited number of registrations. Your request for registration was put on our waiting list.
+				Should it become possible that you can attend to the event, we will contact you directly.</strong>
 			#end
 		</p>
 	#else
 		<h2>
-			New registration
+			New Registration
 		</h2>
 	#end
 
 	<h3>
-		Registration for event</h3>
+		Event Registration</h3>
 	<p>
-		We received your request for registration: <a href="$settings.BaseUrl$event.Url" title="Go to event page">
+		We confirm your registration for <a href="$settings.BaseUrl$event.Url" title="Go to event page">
 			$event.Title
 		</a>
 	</p>
 	#if ($events.CanCreateCalendarItem($event))
 		<p>
-			For this event 
+			For this event a 
 			<a href="$settings.BaseUrl$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$event.ID">
-				a calendar item download
+				calendar item download is available
 			</a>
-			is available.
+			.
 		</p>
 	#end
 
@@ -65,7 +61,7 @@
 			<li>
 				Name: $name</li>
 			<li>
-				Status: $occupationText</li>
+				Occupation: $occupationText</li>
 			<li>
 				E-mail: <a href="mailto:$attendeeEMail">$attendeeEMail</a></li>
 			<li>

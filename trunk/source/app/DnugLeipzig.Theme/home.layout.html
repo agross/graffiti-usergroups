@@ -6,7 +6,6 @@
 		<title>$title</title>
 		$macros.Style("css/base.css", "screen")
 		$macros.Style("css/teaser.css", "screen")
-		$macros.Style("css/graffiti.css", "screen")
 		<!--[if IE]>
 			$macros.Style("css/hacks/IE.css", "screen")
 		<![endif]-->
@@ -35,26 +34,24 @@
 		</div>
 
 		<div class="wrapper">
-			<div id="content-shadow">
-				<div id="content-wrapper" class="clearfix">
-					<div id="content">
-						<div id="inner-wrapper">
-							#if ($demoSite.SetupComplete())
-								$macros.LoadThemeView("components/events/upcoming-events.view")
-								$macros.LoadThemeView("components/talks/recent-talks.view")
-								$childContent
-							#else
-								$macros.LoadThemeView("demosite/setup.view")
-							#end
-						</div>
-					</div>
-					<div id="sidebar">
-						$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+			<div id="content-wrapper" class="clearfix">
+				<div id="content">
+					<div id="inner-wrapper">
+						#if ($demoSite.SetupComplete())
+							$macros.LoadThemeView("components/events/upcoming-events.view")
+							$macros.LoadThemeView("components/talks/recent-talks.view")
+							$childContent
+						#else
+							$macros.LoadThemeView("demosite/setup.view")
+						#end
 					</div>
 				</div>
-
-				$macros.LoadThemeView("components/site/footer.view")
+				<div id="sidebar">
+					$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+				</div>
 			</div>
+
+			$macros.LoadThemeView("components/site/footer.view")
 		</div>
 
 		$!data.Site.WebStatistics

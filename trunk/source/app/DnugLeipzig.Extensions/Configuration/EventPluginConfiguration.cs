@@ -1,5 +1,3 @@
-using System;
-
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Plugins;
 
@@ -7,11 +5,6 @@ namespace DnugLeipzig.Extensions.Configuration
 {
 	public class EventPluginConfiguration : PluginConfiguration<EventPlugin>, IEventPluginConfiguration
 	{
-		//protected override string CacheKey
-		//{
-		//    get { return String.Format("{0}-0243AF25-3CED-4c0f-8692-37D1B2B23DF6", GetType().Name); }
-		//}
-
 		#region IEventPluginConfiguration Members
 		public string CategoryName
 		{

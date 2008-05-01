@@ -3,13 +3,15 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 
+using DnugLeipzig.Definitions;
+
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions
 {
-	internal class MailHelper
+	internal class GraffitiEmailSender : IEmailSender
 	{
-		public static void Send(EmailTemplate template)
+		public void Send(EmailTemplate template)
 		{
 			OnBeforeEmailSent(template);
 
@@ -32,7 +34,7 @@ namespace DnugLeipzig.Extensions
 			OnAfterEmailSent(template);
 		}
 
-		public static void SendMailMessage(MailMessage mailMessage)
+		public void SendMailMessage(MailMessage mailMessage)
 		{
 			using (mailMessage)
 			{

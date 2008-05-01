@@ -11,7 +11,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Macros
 {
-	// TODO: Refactor into a plugin and let the user define the values of the various fields using the Graffiti UI.
+	// Refactor: into a plugin and let the user define the values of the various fields using the Graffiti UI.
 	[Chalk("ui")]
 	public class UiMacros
 	{

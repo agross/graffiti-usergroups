@@ -7,6 +7,7 @@ using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;

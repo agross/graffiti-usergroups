@@ -1,4 +1,6 @@
 ﻿<script type="text/javascript" src="$macros.ThemeFile('scripts/Register.js')"></script>
+<script type="text/javascript" src="$macros.ThemeFile('scripts/Validation.js')"></script>
+
 <div class="article">
 	<h1 class="title">
 		$post.Title</h1>
@@ -6,9 +8,10 @@
 		$post.Body
 	</div>
 </div>
-<form action="$url" method="post" id="registationForm">
+
+<form method="post" id="registration">
 	<h2>Events</h2>
-	<div class="list">
+	<div class="list" id="event-list">
 		#set($futureEvents = $events.GetForRegistration())
 
 		#foreach($post in $futureEvents)
@@ -20,6 +23,11 @@
 			</li>
 		#afterall
 			</ol>
+			<div id="advice-select-event-event-$post.Id" class="custom-advice">Please select an event to register for.</div>
+			
+			<script type="text/javascript">
+				$('event-$post.Id').addClassName('select-event');
+			</script>
 		#nodata
 			$macros.LoadThemeView("components/no-data.view")
 		#end
@@ -30,38 +38,78 @@
 		<fieldset>
 			<dl>
 				<dt>
-					<label for="formOfAddressMr">Form Of Address:</label>
+					Form Of Address:
 				</dt>
 				<dd>
 					<input type="radio" name="formOfAddress" id="formOfAddressMr" value="mr" /> <label for="formOfAddressMr">Mr</label>
-					<input type="radio" name="formOfAddress" id="formOfAddressMrs" value="mrs" /> <label for="formOfAddressMrs">Mrs</label>
+					<input type="radio" name="formOfAddress" id="formOfAddressMrs" value="mrs" class="validate-one-required" /> <label for="formOfAddressMrs">Mrs</label>
+					<div id="advice-validate-one-required-formOfAddressMrs" class="custom-advice">Please select a form of address.</div>
 				</dd>
 				<dt>
 					<label for="name">Name:</label>
 				</dt>
 				<dd>
-					<input type="text" name="name" id="name" />
+					<input type="text" name="name" id="name" class="required" />
+					<div id="advice-required-name" class="custom-advice">Please enter your name.</div>
 				</dd>
 				<dt>
-					<label for="statusStudent">Status:</label>
+					Occupation:
 				</dt>
 				<dd>
 					<input type="radio" name="occupation" id="occupationStudent" value="student" /> <label for="occupationStudent">Student</label>
 					<input type="radio" name="occupation" id="occupationResearcher" value="researcher" /> <label for="occupationResearcher">Researcher</label>
-					<input type="radio" name="occupation" id="occupationOther" value="other" /> <label for="occupationOther">Other</label>
+					<input type="radio" name="occupation" id="occupationOther" value="other" class="validate-one-required" /> <label for="occupationOther">Other</label>
+					<div id="advice-validate-one-required-occupationOther" class="custom-advice">Please select your occupation.</div>
 				</dd>				
 				<dt>
-					<label for="email">E-Mail-Adresse:</label>
+					<label for="attendeeEMail">E-mail address:</label>
 				</dt>
 				<dd>
-					<input type="text" name="attendeeEMail" id="attendeeEMail" />
+					<input type="text" name="attendeeEMail" id="attendeeEMail" class="required validate-email" />
+					<div id="advice-required-attendeeEMail" class="custom-advice">Please enter your e-mail address.</div>
+					<div id="advice-validate-email-attendeeEMail" class="custom-advice">Please enter a valid e-mail address.</div>
 					<input type="checkbox" name="ccToAttendee" id="ccToAttendee" /> <label for="ccToAttendee">Send a copy of my registration to this address</label>
 				</dd>
 			</dl>
 		</fieldset>
+		<div class="action">
+			$events.RegisterButton("%{id = 'register' class = 'submit', value = 'Register'}", false)
+		</div>
 		
-		$events.RegisterButton("%{id = 'register' class = 'submit', value = 'Register'}")
-		<div style="display: none;" id="registration-status">
+		<div class="status">
+			<span id="working" class="status" style="display: none;">
+				<img src="$macros.ThemeFile('/images/ajax-loader.gif')" alt="Working" />
+			</span>
+			<span id="success" class="status" style="display: none;">
+				<img src="$macros.ThemeFile('/images/success.png')" alt="Success" />
+			</span>
+			<span id="error" class="status" style="display: none;">
+				<img src="$macros.ThemeFile('/images/error.png')" alt="Error" />
+			</span>
+			<span style="display: none;" id="registration-status">
+			</span>
 		</div>
 	#end
 </form>
+
+<script type="text/javascript">
+	var validation = new Validation('registration', { immediate: true });
+	
+	Validation.add('select-event', null, function (v, elm) {
+		var p = $('event-list');
+		var options = p.getElementsByTagName('INPUT');
+		return $A(options).any(function(elm) {
+			return $F(elm);
+		});
+	});
+	
+	$('register').observe('click', function(event)
+	{
+		validation.onSubmit(event);
+		if(validation.validate())
+		{
+			Register.submitMessage('$events.RegistrationHandler');
+		}
+	}
+	, false);
+</script>

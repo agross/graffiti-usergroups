@@ -37,16 +37,14 @@ DemoSite.runNextAction = function(url)
 
 DemoSite.runAction = function(url, action, successAction)
 {
+	$(action + '-success').hide();
+	$(action + '-error').hide();
+	$(action + '-todo').hide();
+	$(action).show();
+			
 	new Ajax.Request(url + '?command=' + action,
 	{
 		method: 'post',
-		onLoading: function()
-		{
-			$(action + '-success').hide();
-			$(action + '-error').hide();
-			$(action + '-todo').hide();
-			$(action).show();
-		},
 		onSuccess: function(transport)
 		{
 			$(action + '-success').show();

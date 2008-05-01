@@ -1,5 +1,8 @@
-﻿<input type="checkbox" id="event$post.Id" name="event$post.Id" #if ($request.QueryString.get_Item("eventId") == $post.Id) checked="checked" #end />
-<label for="event$post.Id">
+﻿<input type="checkbox" id="event-$post.Id" name="event-$post.Id" #if ($request.QueryString.get_Item("eventId") == $post.Id) checked="checked" #end />
+<span id="event-${post.Id}-waitinglist" class="status" style="display: none;">
+	<img src="$macros.ThemeFile('/images/warning.png')" alt="You are on the waiting list for this event" title="You are on the waiting list for this event" />
+</span>
+<label for="event-$post.Id">
 	<span title="$events.Title($post, ' on ', ', speaker: ')">
 		$!events.Date($post, "", ":") $post.Title
 	</span>

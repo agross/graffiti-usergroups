@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 using DnugLeipzig.Definitions.Extensions;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime
 {
-	internal static class Validator
+	public static class Validator
 	{
 		/// <summary>
 		///  A description of the regular expression:

@@ -165,21 +165,29 @@ namespace DnugLeipzig.Extensions.Macros
 			                                 _configuration.MaximumNumberOfRegistrationsField);
 		}
 
-		public string RegisterButton(IDictionary properties)
+		public string RegisterButton(IDictionary properties, bool generateOnClickHandler)
 		{
-			string scriptPath =
-				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
-				                                            GraffitiContext.Current.Theme));
-
 			string cssClass = properties.GetAsAttribute("class");
 			string text = properties.GetAsAttribute("value");
 			string id = properties.GetAsAttribute("id");
 
-			return string.Format("<input {0} {1} {2} type=\"button\" onclick=\"Register.submitMessage('{3}');\" />",
+			string onClickHandler = null;
+			if (generateOnClickHandler)
+			{
+				onClickHandler = String.Format("onclick=\"Register.submitMessage('{0}');\"", RegistrationHandler());
+			}
+
+			return string.Format("<input {0} {1} {2} type=\"button\" {3}/>",
 			                     id,
 			                     cssClass,
 			                     text,
-			                     scriptPath);
+								 onClickHandler);
+		}
+		
+		public string RegistrationHandler()
+		{
+			return VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
+				                                            GraffitiContext.Current.Theme));
 		}
 
 		public bool CanCreateCalendarItem(Post post)
