@@ -89,27 +89,27 @@
 			<span style="display: none;" id="registration-status">
 			</span>
 		</div>
+		
+		<script type="text/javascript">
+			var validation = new Validation('registration', { immediate: true });
+			
+			Validation.add('select-event', null, function (v, elm) {
+				var p = $('event-list');
+				var options = p.getElementsByTagName('INPUT');
+				return $A(options).any(function(elm) {
+					return $F(elm);
+				});
+			});
+			
+			$('register').observe('click', function(event)
+			{
+				validation.onSubmit(event);
+				if(validation.validate())
+				{
+					Register.submitMessage('$events.RegistrationHandler');
+				}
+			}
+			, false);
+		</script>
 	#end
 </form>
-
-<script type="text/javascript">
-	var validation = new Validation('registration', { immediate: true });
-	
-	Validation.add('select-event', null, function (v, elm) {
-		var p = $('event-list');
-		var options = p.getElementsByTagName('INPUT');
-		return $A(options).any(function(elm) {
-			return $F(elm);
-		});
-	});
-	
-	$('register').observe('click', function(event)
-	{
-		validation.onSubmit(event);
-		if(validation.validate())
-		{
-			Register.submitMessage('$events.RegistrationHandler');
-		}
-	}
-	, false);
-</script>
