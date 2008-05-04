@@ -394,6 +394,8 @@
 	<target name="deploy"
 			depends="build-setup, init-deploy"
 			description="Deploys the application.">
+		<delete dir="${basedir.deployment.targetpath}\files\themes\${project::get-name()}"
+				failonerror="false" />
 		<unzip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
 			   todir="${basedir.deployment.targetpath}"/>
 	</target>
