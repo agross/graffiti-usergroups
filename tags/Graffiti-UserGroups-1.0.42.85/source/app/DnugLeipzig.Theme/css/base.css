@@ -1,0 +1,382 @@
+﻿/* Change default HTML styles. */
+* {
+	margin: 0;
+	padding: 0;
+	font-family: "Segoe UI" , "Lucida Grande" , "Lucida Sans Unicode" , "Lucida Sans" , "Trebuchet MS" , Tahoma, Verdana, sans-serif;
+}
+
+li {
+	list-style-type: none;
+}
+
+a img {
+	border-style: none;
+}
+
+label {
+	cursor: pointer;
+}
+
+.clearfix {
+	clear: both;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+div.status {
+	margin: 1em 0 1em 0;
+}
+
+/* Validation. */
+div.custom-advice {
+	display: none;
+	color: Red;
+}
+
+div.custom-advice {
+	display: none;
+	color: Red;
+}
+
+input[type="text"].validation-failed {
+	border: 1px solid Red;
+	}
+
+/* General styling. */
+body {
+	background: #E3E3E3 url(../images/bg.gif) repeat-x;
+	color: #1B1B1B;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;
+	margin-bottom: 0.25em;
+	font-weight: normal;
+}
+
+p {
+	margin-bottom: 1em;
+	line-height: 1.3;
+}
+
+p.meta {
+	border: 1px solid #FF7500;
+	padding: 0.5em;
+	font-size: 0.9em;
+	background-color: #FFDC7F;
+	margin-bottom: 2em;
+}
+
+p.meta a {
+	font-weight: bold;
+}
+
+a {
+	color: #1D6D05;
+	text-decoration: none;
+}
+
+a.more, span.more {
+	display: block;
+	margin-top: 0.5em;
+	margin-bottom: 0.2em;
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+/* Lists. */
+ul.list, ol.list {
+	margin-left: 3em;
+	margin-bottom: 1em;
+}
+
+.list li {
+	margin-bottom: .5em;
+	color: #1B1B1B;
+}
+
+ul.list li {
+	list-style-type: disc;
+}
+
+ol.list li {
+	list-style-type: decimal;
+}
+
+/* Layout. */
+html {
+	height: 100.01%;
+}
+
+.wrapper {
+	position: relative;
+	width: 980px;
+	margin: 0 auto;
+	font-size: 1em;
+}
+
+#content-wrapper {
+	background: #FFF url(../images/sidebar-background.gif) repeat-y scroll right top;
+	border-left: 1px solid #9A9A9A;
+	border-right: 1px solid #9A9A9A;
+}
+
+#content {
+	float: left;
+	width: 100%;
+	margin-right: -290px;
+	background: url(../images/content-top-background.gif) repeat-x;
+}
+
+#inner-wrapper {
+	margin: 2em 330px 3em 2em;
+}
+
+/* Header. */
+#header {
+	clear: both;
+	padding: 1em 1em 0 1em;
+	border-bottom: solid 1px #9A9A9A;
+	background: #FFF url(../images/header-background.png) repeat-x left bottom;
+	color: #000;
+}
+
+#header h1 {
+	margin-bottom: 0;
+	font-size: 2.2em;
+}
+
+#header h1 a {
+	color: #1D6D05;
+	font-weight: bold;
+}
+
+#tag-line {
+	clear: both;
+}
+
+#header h1 a:hover {
+	text-decoration: none;
+}
+
+#header .badge {
+	margin-left: 0.5em;
+	margin-top: -20px;
+	vertical-align: bottom;
+}
+
+/* Menu. */
+#navigation {
+	background: #011220 url(../images/menu-background-inactive.png) repeat-x left top;
+	height: 35px;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	font-size: 1.25em;
+}
+
+#navigation h2 {
+	display: none;
+}
+
+#menu {
+	clear: both;
+	display: inline;
+}
+
+#menu li {
+	background: url(../images/menu-divider.png) no-repeat right top;
+	display: block;
+	float: left;
+	padding: 0.1em 1em 0 1em;
+	height: 100%;
+	overflow: hidden;
+}
+
+#menu li.selectedli {
+	background: url(../images/menu-background-active.png) repeat-x left top;
+}
+
+#menu li.rss {
+	background-image: none;
+}
+
+#menu a {
+	color: #FFF;
+	font-weight: normal;
+}
+
+#menu a:hover {
+	text-decoration: none;
+}
+
+#menu-bottom {
+	width: 100%;
+	height: 10px;
+	background: #011220 url(../images/menu-background-bottom-inactive.png) repeat-x scroll left top;
+}
+
+#menu-bottom.active {
+	background-image: url(../images/menu-background-bottom-active.png);
+}
+
+/* Sidebar. */
+#sidebar {
+	overflow: hidden;
+	float: right;
+	width: 290px;
+	padding-top: 1em;
+	padding-bottom: 2em;
+	background: #0870C9 url(../images/sidebar-background.gif) right top repeat-y;
+	color: #FFF;
+}
+
+#sidebar h1 a, #sidebar h2 a, #sidebar h3 a, #sidebar h4 a, #sidebar h5 a, #sidebar h6 a {
+	font-weight: normal;
+}
+
+/* Sidebar boxes. */
+#sidebar .boxy {
+	margin: 1em;
+	padding: 0.3em 1em 1em 1em;
+}
+
+.boxy a {
+	color: #FFF;
+}
+
+.boxy li {
+	margin-left: 1em;
+}
+
+.boxy h3 {
+	border-bottom: 1px solid #FFF;
+	margin-bottom: 1em;
+}
+
+/* Footer. */
+#footer {
+	padding: 1em 2em;
+	border-top: solid 1px #343434;
+	background: #272727 url(../images/footer-background.gif) left bottom repeat-x;
+	color: #BABABA;
+	font-size: .8em;
+}
+
+#footer a {
+	color: #BABABA;
+	font-weight: bold;
+}
+
+#footer a:hover {
+	color: #EAEAEA;
+}
+
+#footer .logo {
+	float: right;
+}
+
+/* Article. */
+.article h2.title {
+	position: relative;
+}
+
+.article .title a.date {
+	font-weight: normal;
+	color: #000;
+}
+
+.article .title a.date:hover {
+	color: #000;
+	font-weight: normal;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.article .title span.date {
+	background: transparent url(../images/date-background.gif) no-repeat scroll top left;
+	position: absolute;
+	min-height: 44px;
+	width: 49px;
+	top: -5px;
+	font-size: 0.7em;
+	text-align: center;
+	display: block;
+}
+
+.article .title span.date.other-year {
+	background: transparent url(../images/date-background-other-year.gif) no-repeat scroll top left;
+}
+
+.article .title span.date span {
+	display: block;
+	width: 42px;
+}
+
+.article .title span.date span.month-year {
+	color: #FFF;
+	font-size: 0.7em;
+}
+
+.article .title span.date span.day {
+	font-weight: bold;
+}
+
+.article .title a.title.with-date {
+	padding-left: 50px;
+}
+
+.article {
+	margin-bottom: 2em;
+}
+
+.article h2.title {
+	clear: both;
+	margin-bottom: 0.6em;
+}
+
+.article .body {
+	margin-bottom: 1em;
+}
+
+.article .body a {
+	font-weight: bold;
+}
+
+fieldset {
+	margin-bottom: 1em;
+	border-style: none;
+}
+
+fieldset dt {
+	margin-bottom: .25em;
+	color: #838383;
+	font-weight: bold;
+}
+
+fieldset dd {
+	margin-bottom: 1em;
+}
+
+input {
+	padding: 0.2em 0.4em;
+	vertical-align: baseline;
+}
+
+input[type="text"] {
+	width: 100%;
+}
+
+fieldset label {
+	margin-right: 1em;
+}

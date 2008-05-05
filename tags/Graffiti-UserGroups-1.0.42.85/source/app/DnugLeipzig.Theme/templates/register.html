@@ -1,0 +1,72 @@
+﻿<html>
+<head>
+<title></title>
+</head>
+<body>
+	#if($formOfAddress == "mr")
+		#set($formOfAddressText = "Mr")
+	#else
+		#set($formOfAddressText = "Mrs")
+	#end
+	
+	#if($occupation == "student")
+		#set($occupationText = "Student")
+	#elseif($occupation == "researcher")
+		#set($occupationText = "Researcher")
+	#else
+		#set($occupationText = "Other")
+	#end
+
+	#if ($isCcToAttendee)
+		<p>
+			Dear $formOfAddressText $name,
+		</p>
+		<p>
+			As requested you receive a copy of your registration for the following event.
+			
+			#if ($isOnWaitingList)
+				<strong>Please note that we can accept only a limited number of registrations. Your request for registration was put on our waiting list.
+				Should it become possible that you can attend to the event, we will contact you directly.</strong>
+			#end
+		</p>
+	#else
+		<h2>
+			New Registration
+		</h2>
+	#end
+
+	<h3>
+		Event Registration</h3>
+	<p>
+		We confirm your registration for <a href="$settings.BaseUrl$event.Url" title="Go to event page">
+			$event.Title
+		</a>
+	</p>
+	#if ($events.CanCreateCalendarItem($event))
+		<p>
+			For this event a 
+			<a href="$settings.BaseUrl$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$event.ID">
+				calendar item download is available
+			</a>
+			.
+		</p>
+	#end
+
+	<h3>
+		Attendee</h3>
+	<p>
+		<ul>
+			<li>
+				Form of address: $formOfAddressText</li>
+			<li>
+				Name: $name</li>
+			<li>
+				Occupation: $occupationText</li>
+			<li>
+				E-mail: <a href="mailto:$attendeeEMail">$attendeeEMail</a></li>
+			<li>
+				Waiting list: #if($isOnWaitingList) Yes #else No #end</li>
+		</ul>
+	</p>
+</body>
+</html>

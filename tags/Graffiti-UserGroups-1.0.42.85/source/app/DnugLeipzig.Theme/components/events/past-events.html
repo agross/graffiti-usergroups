@@ -1,0 +1,16 @@
+﻿<h1 class="archive-head">
+	Past Events
+</h1>
+
+#set($pastEvents = $events.GetPastYearOverview())
+
+#foreach($post in $pastEvents)
+#beforeall
+	<ul class="archive">
+#each
+	<li><a href="$post.Url">$post.Year</a></li>
+#afterall
+	</ul>
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
