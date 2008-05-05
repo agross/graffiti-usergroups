@@ -214,8 +214,9 @@ namespace DnugLeipzig.Extensions.Handlers
 			emailTemplate.From = request.AttendeeEMail;
 			emailTemplate.To = post[_configuration.RegistrationRecipientField];
 
-			if (request.CcToAttendee)
+			if (isCcToAttendee)
 			{
+				// Send from site's e-mail address.
 				emailTemplate.From = null;
 				emailTemplate.To = request.AttendeeEMail;
 			}
