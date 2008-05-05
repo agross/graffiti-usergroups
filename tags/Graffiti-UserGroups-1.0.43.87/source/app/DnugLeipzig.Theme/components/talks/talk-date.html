@@ -1,0 +1,13 @@
+﻿#if ($talks.HasDate($post))
+	<a href="$post.Url" class="date" rel="bookmark" title="$talks.Title($post, ' on ', ', speaker: ')">
+		<span class="date #if (!$talks.IsInCurrentYear($post)) other-year #end">
+			<span class="month-year">
+				$talks.Date($post, "MMM")
+				#if (!$talks.IsInCurrentYear($post))
+					$talks.Date($post, "yy")
+				#end
+			</span>
+			<span class="day">$talks.Date($post, "dd")</span>
+		</span>
+	</a>
+#end

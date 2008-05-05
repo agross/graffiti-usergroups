@@ -1,0 +1,12 @@
+﻿<h1 class="archive-head">
+	Events
+	<a href="$events.GetFeedUrl()" title="Subscribe to events RSS feed"><img src="$macros.ThemeFile('/images/feed.png')" alt="RSS feed" /></a>
+</h1>
+
+#set($futureEvents = $events.GetForFuture())
+
+#foreach($post in $futureEvents)
+	$macros.LoadThemeView("components/events/event.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
