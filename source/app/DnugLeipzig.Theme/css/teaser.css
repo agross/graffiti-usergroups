@@ -34,6 +34,7 @@
 
 .teaser .top .right {
 	background-position: right top;
+	z-index: 1;
 }
 
 .teaser .bottom,
