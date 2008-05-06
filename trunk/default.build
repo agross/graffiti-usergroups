@@ -242,7 +242,7 @@
 			<arg value="/p:NAntCall=true" />
 			<arg value="/maxcpucount" />
 		</msbuild>
-		
+
 		<msbuild project="${basedir.app}\DnugLeipzig.DemoSite\DnugLeipzig.DemoSite.csproj"
 				 target="${build.msbuild.target}"
 				 verbosity="${build.msbuild.verbosity}">
@@ -355,7 +355,7 @@
 	<target name="build-setup"
 			depends="build-app, build-theme, run-tests, init-build-setup"
 			description="Creates the applications' deployment package.">
-		<zip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
+		<zip zipfile="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
 			 ziplevel="9"
 			 duplicate="Preserve">
 			<!-- Theme. -->
@@ -375,7 +375,7 @@
 					 prefix="bin">
 				<include name="DnugLeipzig.*" />
 			</fileset>
-			
+
 			<!-- Demo site. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.DemoSite\bin\${build.msbuild.configuration}"
 					 prefix="bin">
@@ -387,7 +387,7 @@
 	<target name="init-deploy">
 		<fail message="Cannot deploy, property 'basedir.deployment.targetpath' is empty or does not exist. Enter it in your local.properties file (see local.properties.template for more information)."
 			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
-		
+
 		<mkdir dir="${basedir.deployment.targetpath}" />
 	</target>
 
@@ -396,7 +396,21 @@
 			description="Deploys the application.">
 		<delete dir="${basedir.deployment.targetpath}\files\themes\${project::get-name()}"
 				failonerror="false" />
-		<unzip zipfile="${basedir.deployment.artifacts}\Web-${build.number}.zip"
+		<unzip zipfile="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
 			   todir="${basedir.deployment.targetpath}"/>
+	</target>
+
+	<target name="upload-setup"
+			depends="build-setup"
+			description="Upload the deployment package to Google Code.">
+		<fail message="Cannot upload deployment package to Google Code, property 'googlecode.username' and/or property 'googlecode.password' is empty or does not exist."
+			  if="${not property::exists('googlecode.username') or string::get-length(property::get-value('googlecode.username')) == 0 or not property::exists('googlecode.password') or string::get-length(property::get-value('googlecode.password')) == 0}" />
+
+		<gcupload username="${googlecode.username}"
+				  password="${googlecode.password}"
+				  filename="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
+				  targetfilename="${project::get-name()}-${build.number}"
+				  summary="${project::get-name()}-${build.number}.zip"
+				  projectname="${project::get-name()}"/>
 	</target>
 </project>
