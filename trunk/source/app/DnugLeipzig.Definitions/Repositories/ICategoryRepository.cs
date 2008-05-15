@@ -7,9 +7,10 @@ namespace DnugLeipzig.Definitions.Repositories
 		Category GetCategory(string categoryName);
 		void AddCategory(Category category);
 		CustomFormSettings GetFormSettings(string categoryName);
-		void AddField(CustomFormSettings settings, CustomField field);
 		void DeleteCategory(string categoryName);
-		void DeleteField(CustomFormSettings settings, string fieldName);
 		bool IsExistingCategory(string categoryName);
+		void AddField(CustomFormSettings settings, CustomField field);
+		void DeleteField(CustomFormSettings settings, string fieldName);
+		void SaveFormSettings(CustomFormSettings settings);
 	}
 }

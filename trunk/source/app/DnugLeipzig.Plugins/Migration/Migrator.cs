@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Runtime.Repositories;
 
@@ -8,17 +9,17 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins.Migration
 {
-	internal class FieldMigrator
+	internal class Migrator
 	{
 		readonly ICategoryRepository _categoryRepository;
 		readonly IPostRepository _postRepository;
 
 		#region Ctors
-		public FieldMigrator() : this(new CategoryRepository(), new PostRepository())
+		public Migrator() : this(new CategoryRepository(), new PostRepository())
 		{
 		}
 
-		public FieldMigrator(ICategoryRepository categoryRepository, IPostRepository postRepository)
+		public Migrator(ICategoryRepository categoryRepository, IPostRepository postRepository)
 		{
 			if (categoryRepository == null)
 			{
@@ -86,7 +87,7 @@ namespace DnugLeipzig.Plugins.Migration
 		/// </summary>
 		/// <param name="categoryName">Name of the category.</param>
 		/// <param name="fields">The fields.</param>
-		internal void EnsureFields(string categoryName, Dictionary<string, FieldType> fields)
+		internal void EnsureFields(string categoryName, List<FieldInfo> fields)
 		{
 			if (String.IsNullOrEmpty(categoryName))
 			{
@@ -104,21 +105,64 @@ namespace DnugLeipzig.Plugins.Migration
 			// Ensure that the fields exist.
 			foreach (var field in fields)
 			{
-				KeyValuePair<string, FieldType> pair = field;
-				if (formSettings.Fields.Exists(f => Graffiti.Core.Util.AreEqualIgnoreCase(pair.Key, f.Name)))
+				FieldInfo field1 = field;
+				CustomField customField =
+					formSettings.Fields.Find(f => Graffiti.Core.Util.AreEqualIgnoreCase(field1.FieldName, f.Name));
+
+				if (customField != null)
 				{
+					EnsureFieldDescription(field, formSettings);
 					continue;
 				}
 
-				CustomField newField = new CustomField
-				                       { Name = field.Key, Enabled = true, Id = Guid.NewGuid(), FieldType = field.Value };
-
-				_categoryRepository.AddField(formSettings, newField);
+				CreateField(field, formSettings);
 			}
 
-			// Order the fields according the order of the fields in the "fields" variable.
-			string[] fieldNames = new string[fields.Keys.Count];
-			fields.Keys.CopyTo(fieldNames, 0);
+			SortFields(fields, formSettings);
+		}
+
+		void EnsureFieldDescription(FieldInfo field, CustomFormSettings formSettings)
+		{
+			CustomField customField =
+				formSettings.Fields.Find(f => Graffiti.Core.Util.AreEqualIgnoreCase(field.FieldName, f.Name));
+
+			if (!customField.Description.IsNullOrEmptyTrimmed())
+			{
+				return;
+			}
+
+			if (String.Equals(customField.Description, field.Description, StringComparison.Ordinal))
+			{
+				return;
+			}
+
+			customField.Description = field.Description;
+			_categoryRepository.SaveFormSettings(formSettings);
+		}
+
+		void CreateField(FieldInfo field, CustomFormSettings formSettings)
+		{
+			CustomField newField = new CustomField
+			                       {
+			                       	Id = Guid.NewGuid(),
+			                       	Enabled = true,
+			                       	Name = field.FieldName,
+			                       	FieldType = field.FieldType,
+			                       	Description = field.Description
+			                       };
+
+			_categoryRepository.AddField(formSettings, newField);
+		}
+
+		/// <summary>
+		/// Sorts the fields according the order of the fields in the <paramref name="fields"/> list.
+		/// </summary>
+		/// <param name="fields">The fields.</param>
+		/// <param name="formSettings">The form settings.</param>
+		void SortFields(List<FieldInfo> fields, CustomFormSettings formSettings)
+		{
+			string[] fieldNames = fields.ConvertAll(field => field.FieldName).ToArray();
+
 			formSettings.Fields.Sort(delegate(CustomField x, CustomField y)
 				{
 					if (Array.IndexOf(fieldNames, x.Name) < Array.IndexOf(fieldNames, y.Name))
@@ -180,7 +224,7 @@ namespace DnugLeipzig.Plugins.Migration
 		/// </summary>
 		void MigratePostsAndFieldValues(string sourceCategoryName,
 		                                string targetCategoryName,
-		                                Dictionary<string, string> changedFieldNames)
+		                                ICollection<KeyValuePair<string, string>> changedFieldNames)
 		{
 			if (changedFieldNames == null)
 			{
@@ -188,7 +232,8 @@ namespace DnugLeipzig.Plugins.Migration
 				return;
 			}
 
-			if (String.Equals(sourceCategoryName, targetCategoryName, StringComparison.OrdinalIgnoreCase) && changedFieldNames.Count == 0)
+			if (String.Equals(sourceCategoryName, targetCategoryName, StringComparison.OrdinalIgnoreCase) &&
+			    changedFieldNames.Count == 0)
 			{
 				// Nothing to do.
 				return;

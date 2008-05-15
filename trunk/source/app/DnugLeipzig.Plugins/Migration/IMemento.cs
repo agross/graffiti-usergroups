@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DnugLeipzig.Plugins.Migration
@@ -9,7 +10,7 @@ namespace DnugLeipzig.Plugins.Migration
 			get;
 		}
 
-		HashSet<FieldInfo> Fields
+		IDictionary<Guid, FieldInfo> Fields
 		{
 			get;
 		}

@@ -1,19 +1,21 @@
+using System;
 using System.Collections.Generic;
+
+using DnugLeipzig.Plugins.Migration;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins.Tests.Extensions
 {
-	static class ListExtensions
+	internal static class ListExtensions
 	{
-		internal static Dictionary<string, FieldType> ToCustomFieldDictionary(this List<CustomField> fields)
+		internal static List<CustomField> ToCustomFieldList(this List<FieldInfo> fields)
 		{
-			Dictionary<string, FieldType> result = new Dictionary<string, FieldType>();
+			List<CustomField> result = new List<CustomField>();
 
-			foreach (CustomField field in fields)
-			{
-				result.Add(field.Name, field.FieldType);
-			}
+			fields.ForEach(
+				info =>
+				result.Add(new CustomField { Description = info.Description, Name = info.FieldName, FieldType = info.FieldType }));
 
 			return result;
 		}
