@@ -5,13 +5,12 @@ using System.Linq;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
-
-using TalkPluginConfiguration=DnugLeipzig.Extensions.Configuration.TalkPluginConfiguration;
 
 namespace DnugLeipzig.Extensions.Macros
 {

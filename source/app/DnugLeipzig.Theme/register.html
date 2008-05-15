@@ -1,7 +1,4 @@
-﻿<script type="text/javascript" src="$macros.ThemeFile('scripts/Register.js')"></script>
-<script type="text/javascript" src="$macros.ThemeFile('scripts/Validation.js')"></script>
-
-<div class="article">
+﻿<div class="article">
 	<h1 class="title">
 		$post.Title</h1>
 	<div class="body">
@@ -9,7 +6,7 @@
 	</div>
 </div>
 
-<form method="post" id="registration">
+<form method="post" id="registration" action="$events.RegistrationHandler()">
 	<h2>Events</h2>
 	<div class="list" id="event-list">
 		#set($futureEvents = $events.GetForRegistration())
@@ -89,27 +86,8 @@
 			<span style="display: none;" id="registration-status">
 			</span>
 		</div>
-		
-		<script type="text/javascript">
-			var validation = new Validation('registration', { immediate: true });
-			
-			Validation.add('select-event', null, function (v, elm) {
-				var p = $('event-list');
-				var options = p.getElementsByTagName('INPUT');
-				return $A(options).any(function(elm)
-				{
-					return $F(elm);
-				});
-			});
-			
-			$('register').observe('click', function(event)
-			{
-				if(validation.validate())
-				{
-					Register.submitMessage('$events.RegistrationHandler');
-				}
-			}
-			, false);
-		</script>
 	#end
 </form>
+
+<script type="text/javascript" src="$macros.ThemeFile('scripts/Validation.js')"></script>
+<script type="text/javascript" src="$macros.ThemeFile('scripts/Register.js')"></script>

@@ -9,7 +9,7 @@ namespace DnugLeipzig.Plugins.Migration
 			get;
 		}
 
-		Dictionary<string, FieldInfo> Fields
+		HashSet<FieldInfo> Fields
 		{
 			get;
 		}
