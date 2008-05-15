@@ -35,14 +35,20 @@ namespace DnugLeipzig.Plugins.Migration
 			protected set;
 		}
 
-		public HashSet<FieldInfo> Fields
+		public IDictionary<Guid, FieldInfo> Fields
 		{
 			get
 			{
-				return new HashSet<FieldInfo>
+				return new Dictionary<Guid, FieldInfo>
 				       {
-				       	new FieldInfo(DateField, FieldType.TextBox, "The date of the talk."),
-				       	new FieldInfo(SpeakerField, FieldType.TextBox, "Talk speaker(s).")
+				       	{
+				       		new Guid("{7DEF5E58-C778-4d0d-A112-2CC9C5E4B5E0}"),
+				       		new FieldInfo(DateField, FieldType.TextBox, "Date (and, optionally, time) of the talk.")
+				       		},
+				       	{
+				       		new Guid("{463D826E-BAF8-4ebd-B401-FE6FABDBD38E}"),
+				       		new FieldInfo(SpeakerField, FieldType.TextBox, "Event speaker(s).")
+				       		}
 				       };
 			}
 		}

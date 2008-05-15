@@ -37,22 +37,6 @@ namespace DnugLeipzig.Runtime.Repositories
 			return CustomFormSettings.Get(category);
 		}
 
-		public void AddField(CustomFormSettings settings, CustomField field)
-		{
-			if (settings == null)
-			{
-				throw new ArgumentNullException("settings");
-			}
-
-			if (field == null)
-			{
-				throw new ArgumentNullException("field");
-			}
-
-			settings.Add(field);
-			settings.Save();
-		}
-
 		public void DeleteCategory(string categoryName)
 		{
 			if (String.IsNullOrEmpty(categoryName))
@@ -74,16 +58,6 @@ namespace DnugLeipzig.Runtime.Repositories
 			CategoryController.Reset();
 		}
 
-		public void DeleteField(CustomFormSettings settings, string fieldName)
-		{
-			CustomField field = settings.Fields.Find(cf => cf.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
-			if (field != null)
-			{
-				settings.Fields.Remove(field);
-				settings.Save();
-			}
-		}
-
 		public bool IsExistingCategory(string categoryName)
 		{
 			return GraffitiData.GetCategory(categoryName) != null;
@@ -102,6 +76,44 @@ namespace DnugLeipzig.Runtime.Repositories
 		public void Save(Category instance)
 		{
 			throw new NotImplementedException();
+		}
+		#endregion
+
+		#region Custom Fields
+		public void AddField(CustomFormSettings settings, CustomField field)
+		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException("settings");
+			}
+
+			if (field == null)
+			{
+				throw new ArgumentNullException("field");
+			}
+
+			settings.Add(field);
+			settings.Save();
+		}
+
+		public void SaveFormSettings(CustomFormSettings settings)
+		{
+			if (settings == null)
+			{
+				throw new ArgumentNullException("settings");
+			}
+
+			settings.Save();
+		}
+
+		public void DeleteField(CustomFormSettings settings, string fieldName)
+		{
+			CustomField field = settings.Fields.Find(cf => cf.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
+			if (field != null)
+			{
+				settings.Fields.Remove(field);
+				settings.Save();
+			}
 		}
 		#endregion
 	}

@@ -9,7 +9,7 @@ namespace DnugLeipzig.Plugins
 		                           IMemento newState,
 		                           IMemento oldState)
 		{
-			FieldMigrator migrator = new FieldMigrator();
+			Migrator migrator = new Migrator();
 
 			if (createTargetCategoryAndFields)
 			{

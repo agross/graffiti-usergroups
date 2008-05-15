@@ -77,10 +77,11 @@
     </Compile>
     <Compile Include="EventPlugin.cs" />
     <Compile Include="Migration\ISupportsMemento.cs" />
+    <Compile Include="Migration\MementoHelper.cs" />
     <Compile Include="Migration\TalkPluginMemento.cs" />
     <Compile Include="Migration\EventPluginMemento.cs" />
     <Compile Include="Migration\FieldInfo.cs" />
-    <Compile Include="Migration\FieldMigrator.cs" />
+    <Compile Include="Migration\Migrator.cs" />
     <Compile Include="Migration\IMemento.cs" />
     <Compile Include="Migration\MigrationInfo.cs" />
     <Compile Include="PluginHelper.cs" />

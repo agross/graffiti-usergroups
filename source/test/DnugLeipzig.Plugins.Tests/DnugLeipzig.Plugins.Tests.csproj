@@ -83,6 +83,7 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="MigratorTests.CustomFields.cs" />
     <Compile Include="Events\SettingsValidationTests.cs" />
     <Compile Include="Events\SetupHelper.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
@@ -94,7 +95,7 @@
     <Compile Include="Events\PostValidationTests.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
-    <Compile Include="FieldMigratorTests.cs" />
+    <Compile Include="MigratorTests.Categories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Talks\SettingsValidationTests.cs" />
     <Compile Include="Talks\SetupHelper.cs" />
