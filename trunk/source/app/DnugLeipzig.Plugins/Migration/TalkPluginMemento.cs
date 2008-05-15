@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Configuration;
@@ -34,14 +35,14 @@ namespace DnugLeipzig.Plugins.Migration
 			protected set;
 		}
 
-		public Dictionary<string, FieldInfo> Fields
+		public HashSet<FieldInfo> Fields
 		{
 			get
 			{
-				return new Dictionary<string, FieldInfo>
+				return new HashSet<FieldInfo>
 				       {
-				       	{ "{7DEF5E58-C778-4d0d-A112-2CC9C5E4B5E0}", new FieldInfo(DateField, FieldType.TextBox) },
-				       	{ "{463D826E-BAF8-4ebd-B401-FE6FABDBD38E}", new FieldInfo(SpeakerField, FieldType.TextBox) }
+				       	new FieldInfo(DateField, FieldType.TextBox, "The date of the talk."),
+				       	new FieldInfo(SpeakerField, FieldType.TextBox, "Talk speaker(s).")
 				       };
 			}
 		}

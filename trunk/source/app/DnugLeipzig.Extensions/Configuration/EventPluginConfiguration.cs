@@ -132,12 +132,12 @@ namespace DnugLeipzig.Extensions.Configuration
 			}
 		}
 
-		public string NumberOfRegistrationsField
+		public string RegistrationListField
 		{
 			get
 			{
 				EnsureCurrentInstance();
-				return PluginInstance.NumberOfRegistrationsField;
+				return PluginInstance.RegistrationListField;
 			}
 		}
 

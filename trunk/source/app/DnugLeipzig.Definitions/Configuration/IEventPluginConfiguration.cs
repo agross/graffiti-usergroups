@@ -52,7 +52,7 @@ namespace DnugLeipzig.Definitions.Configuration
 			get;
 		}
 
-		string NumberOfRegistrationsField
+		string RegistrationListField
 		{
 			get;
 		}

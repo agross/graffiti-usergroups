@@ -7,13 +7,12 @@ using System.Web;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
-
-using EventPluginConfiguration=DnugLeipzig.Extensions.Configuration.EventPluginConfiguration;
 
 namespace DnugLeipzig.Extensions.Macros
 {
@@ -122,7 +121,7 @@ namespace DnugLeipzig.Extensions.Macros
 			return
 				_repository.GetAll().HasDate(_configuration.StartDateField).IsInFuture(_configuration.StartDateField).
 					RegistrationNeeded(_configuration.RegistrationNeededField).RegistrationPossible(
-					_configuration.NumberOfRegistrationsField, _configuration.MaximumNumberOfRegistrationsField).SortAscending(
+					_configuration.RegistrationListField, _configuration.MaximumNumberOfRegistrationsField).SortAscending(
 					_configuration.StartDateField).ToList();
 		}
 
@@ -161,7 +160,7 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return post.HasDate(_configuration.StartDateField) && post.IsInFuture(_configuration.StartDateField) &&
 			       post.RegistrationNeeded(_configuration.RegistrationNeededField) &&
-			       post.RegistrationPossible(_configuration.NumberOfRegistrationsField,
+			       post.RegistrationPossible(_configuration.RegistrationListField,
 			                                 _configuration.MaximumNumberOfRegistrationsField);
 		}
 
@@ -177,16 +176,13 @@ namespace DnugLeipzig.Extensions.Macros
 				onClickHandler = String.Format("onclick=\"Register.submitMessage('{0}');\"", RegistrationHandler());
 			}
 
-			return string.Format("<input {0} {1} {2} type=\"button\" {3}/>",
-			                     id,
-			                     cssClass,
-			                     text,
-								 onClickHandler);
+			return string.Format("<input {0} {1} {2} type=\"submit\" {3}/>", id, cssClass, text, onClickHandler);
 		}
-		
+
 		public string RegistrationHandler()
 		{
-			return VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
+			return
+				VirtualPathUtility.ToAbsolute(String.Format("~/files/themes/{0}/handlers/Register.ashx",
 				                                            GraffitiContext.Current.Theme));
 		}
 

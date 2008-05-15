@@ -6,5 +6,5 @@ using System.Reflection;
 // associated with an assembly.
 
 [assembly: AssemblyCompany("Alexander Groß")]
-[assembly: AssemblyProduct(".NET User Group Leipzig Extensions for Graffiti CMS")]
+[assembly: AssemblyProduct("User Group Extensions for Graffiti CMS")]
 [assembly: AssemblyCopyright("Copyright © Alexander Groß 2008")]

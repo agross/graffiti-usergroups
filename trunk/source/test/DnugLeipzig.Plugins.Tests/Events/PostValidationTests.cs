@@ -17,7 +17,6 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		const string LocationField = "Location field";
 		const string LocationUnknownField = "Location is unknown field";
 		const string MaximumNumberOfRegistrationsField = "Maximum number of registrations field";
-		const string NumberOfRegistrationsField = "Number of registrations field";
 		const string RegistrationRecipientField = "Registration recipient field";
 		const string StartDateField = "Start date field";
 		readonly MockRepository _mocks = new MockRepository();
@@ -40,7 +39,6 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			_plugin.LocationField = LocationField;
 			_plugin.LocationUnknownField = LocationUnknownField;
 			_plugin.MaximumNumberOfRegistrationsField = MaximumNumberOfRegistrationsField;
-			_plugin.NumberOfRegistrationsField = NumberOfRegistrationsField;
 			_plugin.RegistrationRecipientField = RegistrationRecipientField;
 
 			_post = new Post();
@@ -171,28 +169,6 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		public void MaximumNumberOfRegistrationsMustBePositiveInteger(string maximumNumberOfRegistrationsValue)
 		{
 			_post[MaximumNumberOfRegistrationsField] = maximumNumberOfRegistrationsValue;
-
-			using (_mocks.Record())
-			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
-			}
-
-			using (_mocks.Playback())
-			{
-				_plugin.Post_Validate(_post, EventArgs.Empty);
-			}
-		}
-
-		[RowTest]
-		[Row("")]
-		[Row(null)]
-		[Row("0")]
-		[Row("100")]
-		[Row("-100", ExpectedException = typeof(ValidationException))]
-		[Row("invalid", ExpectedException = typeof(ValidationException))]
-		public void NumberOfRegistrationsMustBePositiveInteger(string numberOfRegistrationsValue)
-		{
-			_post[NumberOfRegistrationsField] = numberOfRegistrationsValue;
 
 			using (_mocks.Record())
 			{

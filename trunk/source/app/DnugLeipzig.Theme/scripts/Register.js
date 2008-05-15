@@ -55,3 +55,26 @@ Register.submitMessage = function(url)
 		}
 	});
 }
+
+var validation = new Validation('registration', { immediate: true });
+
+Validation.add('select-event', null, function (v, elm)
+	{
+		var p = $('event-list');
+		var options = p.getElementsByTagName('INPUT');
+		return $A(options).any(function(elm)
+		{
+			return $F(elm);
+		});
+	});
+
+$('register').observe('click', function(event)
+	{
+		if(validation.validate())
+		{
+			Register.submitMessage($('registration').action);
+		}
+		
+		Event.stop(event);
+	}
+	, false);

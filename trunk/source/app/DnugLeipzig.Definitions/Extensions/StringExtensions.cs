@@ -56,5 +56,15 @@ namespace DnugLeipzig.Definitions.Extensions
 		{
 			return url.Replace("default.aspx", "");
 		}
+
+		public static int LineCount(this string value)
+		{
+			if (value.IsNullOrEmptyTrimmed())
+			{
+				return 0;
+			}
+
+			return value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length;
+		}
 	}
 }

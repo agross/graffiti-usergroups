@@ -7,7 +7,7 @@ namespace DnugLeipzig.Plugins
 	public static class PluginHelper
 	{
 		/// <summary>
-		/// Ensure plugin initialization occurs before querying the plugin settings.
+		/// Ensure plugiin initialization occurs before querying the plugiin settings.
 		/// </summary>
 		static void EnsureInitialized()
 		{
@@ -15,11 +15,11 @@ namespace DnugLeipzig.Plugins
 		}
 
 		/// <summary>
-		/// Determines whether the plugin is enabled.
+		/// Determines whether the plug-in is enabled.
 		/// </summary>
-		/// <typeparam name="TPlugin">The type of the plugin.</typeparam>
+		/// <typeparam name="TPlugin">The type of the plug-in.</typeparam>
 		/// <returns>
-		/// 	<c>true</c> if the plugin is enabled; otherwise, <c>false</c>.
+		/// 	<c>true</c> if the plug-in is enabled; otherwise, <c>false</c>.
 		/// </returns>
 		public static bool IsPluginEnabled<TPlugin>()
 			where TPlugin : GraffitiEvent
@@ -32,9 +32,9 @@ namespace DnugLeipzig.Plugins
 		}
 
 		/// <summary>
-		/// Returns the plugin with current settings.
+		/// Returns the plug-in with current settings.
 		/// </summary>
-		/// <typeparam name="TPlugin">The type of the plugin.</typeparam>
+		/// <typeparam name="TPlugin">The type of the plug-in.</typeparam>
 		/// <returns></returns>
 		public static TPlugin GetPluginWithCurrentSettings<TPlugin>()
 			where TPlugin : GraffitiEvent

@@ -10,11 +10,13 @@ namespace DnugLeipzig.Plugins
 		                           IMemento oldState)
 		{
 			FieldMigrator migrator = new FieldMigrator();
+
 			if (createTargetCategoryAndFields)
 			{
 				migrator.EnsureTargetCategory(newState.CategoryName);
 				migrator.EnsureFields(newState.CategoryName, new MigrationInfo(oldState, newState).AllFields);
 			}
+
 			if (migrateFieldValues)
 			{
 				migrator.Migrate(new MigrationInfo(oldState, newState));

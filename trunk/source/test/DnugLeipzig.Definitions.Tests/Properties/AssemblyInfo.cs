@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Runtime library for user group macros and plug-ins for Graffiti CMS")]
+[assembly: AssemblyTitle("Unit tests for user group definitions for Graffiti CMS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
@@ -19,4 +19,4 @@ using System.Runtime.InteropServices;
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 
-[assembly: Guid("1a7d347a-054c-4695-a3a7-2826ac0dd8bb")]
+[assembly: Guid("1F476584-36D2-458a-9F15-FD92FD175E73")]

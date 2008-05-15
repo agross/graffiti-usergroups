@@ -19,10 +19,10 @@ namespace DnugLeipzig.Extensions.Handlers
 {
 	public class RegistrationHandler : IHttpHandler
 	{
-		static readonly object _postLock = new object();
-		readonly IEventPluginConfiguration _configuration;
-		readonly ICategoryEnabledRepository _repository;
+		static readonly object PostLock = new object();
+
 		readonly IEmailSender _emailSender;
+		readonly ICategoryEnabledRepository _repository;
 
 		#region Ctors
 		/// <summary>
@@ -39,18 +39,20 @@ namespace DnugLeipzig.Extensions.Handlers
 		/// <param name="repository">The repository.</param>
 		/// <param name="configuration">The configuration.</param>
 		/// <param name="emailSender">The email sender.</param>
-		public RegistrationHandler(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration, IEmailSender emailSender)
+		public RegistrationHandler(ICategoryEnabledRepository repository,
+		                           IEventPluginConfiguration configuration,
+		                           IEmailSender emailSender)
 		{
 			if (configuration == null)
 			{
 				throw new ArgumentNullException("configuration");
 			}
 
-			_configuration = configuration;
+			Configuration = configuration;
 
 			if (repository == null)
 			{
-				repository = new EventRepository(_configuration);
+				repository = new EventRepository(Configuration);
 			}
 
 			_repository = repository;
@@ -63,6 +65,12 @@ namespace DnugLeipzig.Extensions.Handlers
 			_emailSender = emailSender;
 		}
 		#endregion
+
+		protected IEventPluginConfiguration Configuration
+		{
+			get;
+			private set;
+		}
 
 		#region IHttpHandler Members
 		public void ProcessRequest(HttpContext context)
@@ -145,20 +153,20 @@ namespace DnugLeipzig.Extensions.Handlers
 
 				EmailTemplate emailTemplate = new EmailTemplate
 				                              {
-				                              	Subject = _configuration.RegistrationMailSubject,
+				                              	Subject = Configuration.RegistrationMailSubject,
 				                              	Context = mailContext,
 				                              	TemplateName = "register.view"
 				                              };
 
 				// Only a single thread can work with posts such that two threads don't mess with the number of received registrations.
-				lock (_postLock)
+				lock (PostLock)
 				{
 					foreach (int eventId in request.RegisteredEvents)
 					{
 						Post post = _repository.GetById(eventId);
 
-						bool isOnWaitingList = ProcessSingleRegistration(post);
-						if(isOnWaitingList)
+						bool isOnWaitingList = ProcessSingleRegistration(post, request);
+						if (isOnWaitingList)
 						{
 							response.WaitingListEvents.Add(eventId);
 						}
@@ -186,16 +194,12 @@ namespace DnugLeipzig.Extensions.Handlers
 			}
 		}
 
-		bool ProcessSingleRegistration(Post post)
+		protected virtual bool ProcessSingleRegistration(Post post, RegistrationRequest request)
 		{
-			int numberOfRegistations = post[_configuration.NumberOfRegistrationsField].ToInt(0);
-			int maximumNumberOfRegistations = post[_configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
+			post[Configuration.RegistrationListField] += request.AttendeeEMail + Environment.NewLine;
 
-			// Check for overflows (very unlikely).
-			checked
-			{
-				post[_configuration.NumberOfRegistrationsField] = (++numberOfRegistations).ToString();
-			}
+			int numberOfRegistations = post[Configuration.RegistrationListField].LineCount();
+			int maximumNumberOfRegistations = post[Configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
 
 			return numberOfRegistations > maximumNumberOfRegistations;
 		}
@@ -212,7 +216,7 @@ namespace DnugLeipzig.Extensions.Handlers
 			mailContext.Put("isOnWaitingList", isOnWaitingList);
 
 			emailTemplate.From = request.AttendeeEMail;
-			emailTemplate.To = post[_configuration.RegistrationRecipientField];
+			emailTemplate.To = post[Configuration.RegistrationRecipientField];
 
 			if (isCcToAttendee)
 			{

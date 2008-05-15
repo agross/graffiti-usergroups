@@ -27,7 +27,7 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_LocationUnknownField = "locationUnknown";
 		internal const string Form_MaximumNumberOfRegistrationsField = "maximumNumberOfRegistrations";
 		internal const string Form_MigrateFieldValues = "migrate";
-		internal const string Form_NumberOfRegistrationsField = "numberOfRegistrations";
+		internal const string Form_RegistrationListField = "numberOfRegistrations";
 		internal const string Form_RegistrationMailSubject = "registrationMailSubject";
 		internal const string Form_RegistrationNeededField = "registrationNeeded";
 		internal const string Form_RegistrationRecipientField = "registrationRecipient";
@@ -59,7 +59,7 @@ namespace DnugLeipzig.Plugins
 			RegistrationNeededField = "Registration needed";
 			RegistrationRecipientField = "Registration recipient e-mail address";
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
-			NumberOfRegistrationsField = "Number of registrations";
+			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
 			DefaultRegistrationRecipient = _settingsRepository.CommentSettings.Email;
 		}
@@ -224,7 +224,7 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
-		public string NumberOfRegistrationsField
+		public string RegistrationListField
 		{
 			get;
 			set;
@@ -332,22 +332,6 @@ namespace DnugLeipzig.Plugins
 				{
 					throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
 					                              MaximumNumberOfRegistrationsField);
-				}
-			}
-
-			if (!post[NumberOfRegistrationsField].IsNullOrEmptyTrimmed())
-			{
-				if (!Validator.ValidateInt(post[NumberOfRegistrationsField]))
-				{
-					throw new ValidationException("Please enter a valid integer value.", NumberOfRegistrationsField);
-				}
-
-				int numberOfRegistrations = int.Parse(post[NumberOfRegistrationsField]);
-
-				if (!Validator.ValidateRange(numberOfRegistrations, 0, int.MaxValue))
-				{
-					throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
-					                              NumberOfRegistrationsField);
 				}
 			}
 
@@ -461,9 +445,9 @@ namespace DnugLeipzig.Plugins
 			       	new TextFormElement(Form_DefaultMaximumNumberOfRegistrations,
 			       	                    "Default maximum number of registrations",
 			       	                    "Enter the default maximum number of registrations, e.g. \"100\". If that number is reached, new registrations will not be possible. Leave blank to allow unlimited registrations."),
-			       	new TextFormElement(Form_NumberOfRegistrationsField,
-			       	                    "\"Number of registrations\" field",
-			       	                    "Enter the name of the custom textbox field to store the number of received registrations for the event, e.g. \"Number of registrations\"."),
+			       	new TextFormElement(Form_RegistrationListField,
+			       	                    "\"Registration list\" field",
+			       	                    "Enter the name of the custom multi-line textbox field to store registration information like the attendees' e-mail addresses, e.g. \"Registration list\"."),
 			       	new TextFormElement(Form_YearQueryString,
 			       	                    "Query string parameter for paging by year",
 			       	                    "Enter a value for the query string parameter used to display talks of a specific year.")
@@ -536,7 +520,7 @@ namespace DnugLeipzig.Plugins
 				DefaultRegistrationRecipient = nvc[Form_DefaultRegistrationRecipient];
 				MaximumNumberOfRegistrationsField = nvc[Form_MaximumNumberOfRegistrationsField];
 				DefaultMaximumNumberOfRegistrations = nvc[Form_DefaultMaximumNumberOfRegistrations];
-				NumberOfRegistrationsField = nvc[Form_NumberOfRegistrationsField];
+				RegistrationListField = nvc[Form_RegistrationListField];
 				RegistrationMailSubject = nvc[Form_RegistrationMailSubject];
 
 				newState = CreateMemento();
@@ -593,7 +577,7 @@ namespace DnugLeipzig.Plugins
 			nvc[Form_DefaultRegistrationRecipient] = DefaultRegistrationRecipient;
 			nvc[Form_MaximumNumberOfRegistrationsField] = MaximumNumberOfRegistrationsField;
 			nvc[Form_DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
-			nvc[Form_NumberOfRegistrationsField] = NumberOfRegistrationsField;
+			nvc[Form_RegistrationListField] = RegistrationListField;
 			nvc[Form_RegistrationMailSubject] = RegistrationMailSubject;
 
 			return nvc;

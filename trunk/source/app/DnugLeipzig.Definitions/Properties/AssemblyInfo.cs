@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 
-[assembly: AssemblyTitle("Definitions for .NET User Group Leipzig Extensions and Plugins for Graffiti CMS")]
+[assembly: AssemblyTitle("Definitions for user group macros and plug-ins for Graffiti CMS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
