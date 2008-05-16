@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>$title</title>
+		$macros.Style("css/base.css", "screen")
+		$macros.Style("css/teaser.css", "screen")
+		<!--[if IE]>
+			$macros.Style("css/hacks/IE.css", "screen")
+		<![endif]-->
+		
+		#if (!$demoSite.SetupComplete())
+			$macros.Style("demosite/css/demosite.css", "screen")
+		#end
+
+		$macros.MetaTags()
+		$macros.RssAutodiscovery()
+		$macros.RSD()
+		$macros.GraffitiJavaScript()
+	</head>
+	<body>
+		<div id="header">
+			<div class="wrapper">
+				$macros.LoadThemeView("components/site/header.view")
+				
+				#if ($demoSite.SetupComplete())
+					$macros.LoadThemeView("components/site/menu.view")
+				#else
+					<div id="navigation-ajax" style="display:none;">
+					</div>
+				#end
+			</div>
+		</div>
+
+		<div class="wrapper">
+			<div id="content-wrapper" class="clearfix">
+				<div id="content">
+					<div id="inner-wrapper">
+						#if ($demoSite.SetupComplete())
+							$macros.LoadThemeView("components/events/upcoming-events.view")
+							$macros.LoadThemeView("components/talks/recent-talks.view")
+							$childContent
+						#else
+							$macros.LoadThemeView("demosite/setup.view")
+						#end
+					</div>
+				</div>
+				<div id="sidebar">
+					$macros.RightSideBar("%{ beforeWidget = '<div class=\"boxy\">', afterWidget = '</div>', beforeTitle = '<h3>', afterTitle = '</h3>'}")
+				</div>
+			</div>
+
+			$macros.LoadThemeView("components/site/footer.view")
+		</div>
+
+		$!data.Site.WebStatistics
+	</body>
+</html>
