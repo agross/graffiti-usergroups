@@ -1,0 +1,53 @@
+﻿<div class="article">
+	<h2 class="title">
+		$macros.LoadThemeView("components/events/event-date.view")
+		<a class="title #if ($events.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$events.Title($post, ' on ', ', speaker: ')">
+			$post.Title
+		</a>
+	</h2>
+	<div class="teaser gray">
+		<div class="top">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+		<div class="content upcoming-events">
+			<ul class="event-info">
+				<li>
+					<strong>Start:</strong>
+					$events.StartDate($post)
+				</li>
+				<li>
+					<strong>End:</strong>
+					$events.EndDate($post)
+				</li>
+				<li>
+					<strong>Location:</strong>
+					$events.Location($post)
+				</li>
+				<li>
+					<strong>Speaker:</strong>
+					$events.Speaker($post)
+				</li>
+				#if ($events.CanCreateCalendarItem($post))
+				<li>
+					<strong>Calendar:</strong>
+					<a href="$macros.ThemeFile('Handlers/Calendar.ashx')?eventId=$post.ID" title="Download calendar item"><img src="$macros.ThemeFile('/images/outlook-icon.png')" alt="Calendar item" /></a>
+				</li>
+				#end
+				#if ($events.RegistrationPossible($post))
+				<li>
+					<strong>Registration:</strong>
+					<a href="$urls.Home()register/?eventId=$post.ID">Please register for this event</a>
+				</li>
+				#end
+			</ul>
+		</div>
+		<div class="bottom">
+			<div class="left"></div>
+			<div class="right"></div>
+		</div>
+	</div>		
+	<div class="body">
+		$post.Body
+	</div>
+</div>

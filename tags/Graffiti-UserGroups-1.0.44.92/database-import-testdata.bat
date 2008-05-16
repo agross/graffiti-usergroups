@@ -1,0 +1,1 @@
+@build.bat import-testdata

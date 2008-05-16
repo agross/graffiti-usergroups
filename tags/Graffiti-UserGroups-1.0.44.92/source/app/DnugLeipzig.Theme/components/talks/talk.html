@@ -1,0 +1,8 @@
+﻿<div class="article">
+	<h2 class="title">
+		$macros.LoadThemeView("components/talks/talk-date.view")
+		<a class="title #if ($talks.HasDate($post)) with-date #end" href="$post.Url" rel="bookmark" title="$talks.Title($post, ' on ', ', speaker: ')">
+			$post.Title
+		</a>
+	</h2>
+</div>
