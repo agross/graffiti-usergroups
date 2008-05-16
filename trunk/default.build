@@ -409,8 +409,8 @@
 		<gcupload username="${googlecode.username}"
 				  password="${googlecode.password}"
 				  filename="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
-				  targetfilename="${project::get-name()}-${build.number}"
-				  summary="${project::get-name()}-${build.number}.zip"
+				  targetfilename="${project::get-name()}-${build.number}.zip"
+				  summary="${project::get-name()}-${build.number}"
 				  projectname="${project::get-name()}"/>
 	</target>
 </project>
