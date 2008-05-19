@@ -139,7 +139,7 @@ namespace DnugLeipzig.Extensions.Handlers
 					return new RegistrationResponse { ValidationErrors = validationErrors };
 				}
 
-				Log.Info("Event registration received", String.Format("Sender: {0}", request.AttendeeEMail));
+				Log.Info("Event registration received", "From: {0}", request.AttendeeEMail);
 
 				RegistrationResponse response = new RegistrationResponse();
 
@@ -164,6 +164,12 @@ namespace DnugLeipzig.Extensions.Handlers
 					foreach (int eventId in request.RegisteredEvents)
 					{
 						Post post = _repository.GetById(eventId);
+
+						Log.Info("Processing event registration",
+						         "From: {0}, Recipient: {1}, Event: {2}",
+						         request.AttendeeEMail,
+						         post[Configuration.RegistrationRecipientField],
+						         SiteSettings.BaseUrl + post.Url);
 
 						bool isOnWaitingList = ProcessSingleRegistration(post, request);
 						if (isOnWaitingList)
