@@ -52,7 +52,7 @@
 	<target name="clean"
 			depends="drop-database"
 			description="Removes build artifacts.">
-		<delete dir="${test.results}"
+		<delete dir="${basedir.test.results}"
 				failonerror="false" />
 		<delete dir="${basedir.deployment.artifacts}"
 				failonerror="false" />
@@ -320,7 +320,7 @@
 	</target>
 
 	<target name="init-run-tests">
-		<mkdir dir="${test.results}" />
+		<mkdir dir="${basedir.test.results}" />
 	</target>
 
 	<target name="run-tests"
@@ -333,18 +333,32 @@
 			</in>
 			<do>
 				<echo message="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"/>
-				<exec basedir="${tools.mbunit}"
-					  workingdir="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"
-					  managed="true"
-					  program="MbUnit.Cons.exe">
-					<arg value="${path::get-file-name-without-extension(testproject)}.dll" />
-					<arg value="/report-type:Html" />
-					<arg value="/verbose+" />
-					<arg value="/report-folder:${test.results}" />
-					<arg value="/report-name-format:${path::get-file-name-without-extension(testproject)}" />
-				</exec>
+				<mbunit report-types="${tools.mbunit.report.type}"
+						report-filename-format="${path::get-file-name-without-extension(testproject)}"
+						report-output-directory="${basedir.test.results}"
+						verbose="true"
+						workingdir="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}">
+					<assemblies>
+						<include name="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}\${path::get-file-name-without-extension(testproject)}.dll" />
+					</assemblies>
+				</mbunit>
 			</do>
 		</foreach>
+
+		<if test="${property::exists('teamcity.build.checkoutDir')}">
+			<tc-addstatistic key="MbUnitAsserts"
+							 value="${mbunit.asserts}"/>
+			<tc-addstatistic key="MbUnitFailedTests"
+							 value="${mbunit.failures}"/>
+			<tc-addstatistic key="MbUnitIgnoredTests"
+							 value="${mbunit.ignored}"/>
+			<tc-addstatistic key="MbUnitRunTests"
+							 value="${mbunit.run}"/>
+			<tc-addstatistic key="MbUnitSkippedTests"
+							 value="${mbunit.skipped}"/>
+			<tc-addstatistic key="MbUnitPassedTests"
+							 value="${mbunit.successes}"/>
+		</if>
 	</target>
 
 	<target name="init-build-setup"
