@@ -19,7 +19,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		readonly MockRepository _mocks = new MockRepository();
 		ICategoryRepository _categoryRepository;
 		TalkPlugin _plugin;
-		NameValueCollection values = new NameValueCollection();
+		NameValueCollection _values = new NameValueCollection();
 
 		[SetUp]
 		public void SetUp()
@@ -31,10 +31,10 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 															  out settingsRepository,
 															  out postRepository);
 
-			values = new NameValueCollection();
-			values.Add(TalkPlugin.Form_CategoryName, _plugin.CategoryName);
-			values.Add(TalkPlugin.Form_YearQueryString, "year query string");
-			values.Add(TalkPlugin.Form_CreateTargetCategoryAndFields, "off");
+			_values = new NameValueCollection();
+			_values.Add(TalkPlugin.Form_CategoryName, _plugin.CategoryName);
+			_values.Add(TalkPlugin.Form_YearQueryString, "year query string");
+			_values.Add(TalkPlugin.Form_CreateTargetCategoryAndFields, "off");
 		}
 
 		[TearDown]
@@ -51,7 +51,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Row(SetupHelper.TalkCategoryName, StatusType.Success)]
 		public void RequiresCategoryName(string categoryName, StatusType expectedStatus)
 		{
-			values[TalkPlugin.Form_CategoryName] = categoryName;
+			_values[TalkPlugin.Form_CategoryName] = categoryName;
 
 			using (_mocks.Record())
 			{
@@ -62,7 +62,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)
@@ -76,7 +76,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Test]
 		public void ShowsWarningOnNonExistingCategoryWhenCreateTargetCategoryAndFieldsIsNotChecked()
 		{
-			values[TalkPlugin.Form_CategoryName] = _plugin.CategoryName;
+			_values[TalkPlugin.Form_CategoryName] = _plugin.CategoryName;
 
 			using (_mocks.Record())
 			{
@@ -87,7 +87,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(StatusType.Warning, status, "Should have set warning status due to non-existing category.");
 					Assert.AreEqual(HttpContext.Current.Items["PostType-Status-Message"],
@@ -103,7 +103,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		[Row("year query string", StatusType.Success)]
 		public void RequiresYearQueryString(string queryString, StatusType expectedStatus)
 		{
-			values[TalkPlugin.Form_YearQueryString] = queryString;
+			_values[TalkPlugin.Form_YearQueryString] = queryString;
 
 			using (_mocks.Record())
 			{
@@ -114,7 +114,7 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)

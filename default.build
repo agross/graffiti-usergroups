@@ -3,6 +3,8 @@
 		 default="all"
 		 xmlns="http://nant.sf.net/release/0.86-beta1/nant.xsd">
 
+	<!-- Tasks that run on every build.
+	________________________________________________________________________________________________________________ -->
 	<!-- Load default configuration. -->
 	<if test="${file::exists('default.properties')}">
 		<echo message="Loading default.properties" />
@@ -49,31 +51,6 @@
 			description="Compiles the application, runs all unit tests and creates deployment packages.">
 	</target>
 
-	<target name="clean"
-			depends="drop-database"
-			description="Removes build artifacts.">
-		<delete dir="${basedir.test.results}"
-				failonerror="false" />
-		<delete dir="${basedir.deployment.artifacts}"
-				failonerror="false" />
-		<foreach item="Folder"
-				 property="folder">
-			<in>
-				<items>
-					<include name="${basedir.app}\**" />
-				</items>
-			</in>
-			<do>
-				<delete dir="${folder}\deploy"
-						failonerror="false" />
-				<delete dir="${folder}\bin"
-						failonerror="false" />
-				<delete dir="${folder}\obj"
-						failonerror="false" />
-			</do>
-		</foreach>
-	</target>
-
 	<target name="get-build-number-from-file"
 			description="Reads the version number from VersionInfo.cs.">
 		<script language="C#">
@@ -94,6 +71,36 @@
 		</script>
 	</target>
 
+	<!-- Cleanup.
+	________________________________________________________________________________________________________________ -->
+	<target name="clean"
+			depends="drop-database"
+			description="Removes build artifacts.">
+		<delete dir="${basedir.test.results}"
+				failonerror="false" />
+		<delete dir="${basedir.temp}"
+				failonerror="false" />
+		<delete dir="${basedir.deployment.artifacts}"
+				failonerror="false" />
+		<foreach item="Folder"
+				 property="folder">
+			<in>
+				<items>
+					<include name="${basedir.app}\**" />
+					<include name="${basedir.test}\**" />
+				</items>
+			</in>
+			<do>
+				<delete dir="${folder}\bin"
+						failonerror="false" />
+				<delete dir="${folder}\obj"
+						failonerror="false" />
+			</do>
+		</foreach>
+	</target>
+
+	<!-- Database-related tasks.
+	________________________________________________________________________________________________________________ -->
 	<target name="drop-database"
 			description="Drops the database.">
 		<echo message="Dropping database ${database.name}"/>
@@ -172,6 +179,8 @@
 		</exec>
 	</target>
 
+	<!-- Application.
+	________________________________________________________________________________________________________________ -->
 	<target name="init-build-app"
 			depends="clean"
 			description="Creates VersionInfo.cs from the value specified at the command line or leaves the file as-is.">
@@ -253,19 +262,19 @@
 		</msbuild>
 	</target>
 
+	<!-- Theme.
+	________________________________________________________________________________________________________________ -->
 	<target name="init-build-theme"
 			depends="clean"
 			description="Builds the theme.">
-		<delete dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
-				failonerror="false" />
-		<mkdir dir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}" />
+		<mkdir dir="${basedir.temp}\DnugLeipzig.Theme" />
 	</target>
 
 	<target name="build-theme"
 			depends="build-app, init-build-theme"
 			description="Builds the theme.">
 		<!-- Copy content files. -->
-		<copy todir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
+		<copy todir="${basedir.temp}\DnugLeipzig.Theme">
 			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
 				<include name="**\*.css" />
 				<include name="**\*.js" />
@@ -281,7 +290,7 @@
 		<foreach item="File"
 				 property="filename">
 			<in>
-				<items basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}">
+				<items basedir="${basedir.temp}\DnugLeipzig.Theme">
 					<include name="**\*.html" />
 				</items>
 			</in>
@@ -292,6 +301,8 @@
 		</foreach>
 	</target>
 
+	<!-- Tests.
+	________________________________________________________________________________________________________________ -->
 	<fileset id="test-projects">
 		<patternset>
 			<include name="${basedir.test}\**\*.Tests.csproj" />
@@ -361,6 +372,8 @@
 		</if>
 	</target>
 
+	<!-- Setup.
+	________________________________________________________________________________________________________________ -->
 	<target name="init-build-setup"
 			depends="clean">
 		<mkdir dir="${basedir.deployment.artifacts}" />
@@ -373,7 +386,7 @@
 			 ziplevel="9"
 			 duplicate="Preserve">
 			<!-- Theme. -->
-			<fileset basedir="${basedir.app}\DnugLeipzig.Theme\deploy\${build.msbuild.configuration}"
+			<fileset basedir="${basedir.temp}\DnugLeipzig.Theme"
 					 prefix="files\themes\${project::get-name()}">
 				<include name="**\*" />
 			</fileset>
@@ -398,6 +411,8 @@
 		</zip>
 	</target>
 
+	<!-- Deployment.
+	________________________________________________________________________________________________________________ -->
 	<target name="init-deploy">
 		<fail message="Cannot deploy, property 'basedir.deployment.targetpath' is empty or does not exist. Enter it in your local.properties file (see local.properties.template for more information)."
 			  if="${not property::exists('basedir.deployment.targetpath') or string::get-length(property::get-value('basedir.deployment.targetpath')) == 0}" />
