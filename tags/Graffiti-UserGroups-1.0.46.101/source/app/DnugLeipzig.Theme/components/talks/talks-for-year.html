@@ -1,0 +1,11 @@
+﻿<h1 class="archive-head">
+	Talk Downloads and Presentations of $talks.GetYearOfView()
+</h1>
+
+#set($posts = $talks.GetForYear($talks.GetYearOfView()))
+
+#foreach($post in $posts)
+ 	$macros.LoadThemeView("components/talks/talk.view")
+#nodata
+	$macros.LoadThemeView("components/no-data.view")
+#end
