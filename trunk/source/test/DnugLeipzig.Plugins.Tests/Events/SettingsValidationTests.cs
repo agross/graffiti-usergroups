@@ -19,7 +19,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		readonly MockRepository _mocks = new MockRepository();
 		ICategoryRepository _categoryRepository;
 		EventPlugin _plugin;
-		NameValueCollection values = new NameValueCollection();
+		NameValueCollection _values = new NameValueCollection();
 
 		[SetUp]
 		public void SetUp()
@@ -31,11 +31,11 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			                                                  out settingsRepository,
 			                                                  out postRepository);
 
-			values = new NameValueCollection();
-			values.Add(EventPlugin.Form_CategoryName, _plugin.CategoryName);
-			values.Add(EventPlugin.Form_YearQueryString, "year query string");
-			values.Add(EventPlugin.Form_DefaultMaximumNumberOfRegistrations, "100");
-			values.Add(EventPlugin.Form_CreateTargetCategoryAndFields, "off");
+			_values = new NameValueCollection();
+			_values.Add(EventPlugin.Form_CategoryName, _plugin.CategoryName);
+			_values.Add(EventPlugin.Form_YearQueryString, "year query string");
+			_values.Add(EventPlugin.Form_DefaultMaximumNumberOfRegistrations, "100");
+			_values.Add(EventPlugin.Form_CreateTargetCategoryAndFields, "off");
 		}
 
 		[TearDown]
@@ -52,7 +52,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row(SetupHelper.EventCategoryName, StatusType.Success)]
 		public void RequiresCategoryName(string categoryName, StatusType expectedStatus)
 		{
-			values[EventPlugin.Form_CategoryName] = categoryName;
+			_values[EventPlugin.Form_CategoryName] = categoryName;
 
 			using (_mocks.Record())
 			{
@@ -63,7 +63,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)
@@ -77,7 +77,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Test]
 		public void ShowsWarningOnNonExistingCategoryWhenCreateTargetCategoryAndFieldsIsNotChecked()
 		{
-			values[EventPlugin.Form_CategoryName] = _plugin.CategoryName;
+			_values[EventPlugin.Form_CategoryName] = _plugin.CategoryName;
 
 			using (_mocks.Record())
 			{
@@ -88,7 +88,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(StatusType.Warning, status, "Should have set warning status due to non-existing category.");
 					Assert.AreEqual(HttpContext.Current.Items["PostType-Status-Message"],
@@ -104,7 +104,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row("year query string", StatusType.Success)]
 		public void RequiresYearQueryString(string queryString, StatusType expectedStatus)
 		{
-			values[EventPlugin.Form_YearQueryString] = queryString;
+			_values[EventPlugin.Form_YearQueryString] = queryString;
 
 			using (_mocks.Record())
 			{
@@ -115,7 +115,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)
@@ -135,7 +135,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		[Row("invalid", StatusType.Error)]
 		public void RequiresEmptyOrValidDefaultRegistrationRecipientAddress(string email, StatusType expectedStatus)
 		{
-			values[EventPlugin.Form_DefaultRegistrationRecipient] = email;
+			_values[EventPlugin.Form_DefaultRegistrationRecipient] = email;
 
 			using (_mocks.Record())
 			{
@@ -146,7 +146,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)
@@ -168,7 +168,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		public void DefaultMaximumNumberOfRegistrationsMustEmptyOrBePositiveInteger(string maximumNumberOfRegistrations,
 		                                                                            StatusType expectedStatus)
 		{
-			values[EventPlugin.Form_DefaultMaximumNumberOfRegistrations] = maximumNumberOfRegistrations;
+			_values[EventPlugin.Form_DefaultMaximumNumberOfRegistrations] = maximumNumberOfRegistrations;
 
 			using (_mocks.Record())
 			{
@@ -179,7 +179,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
-					StatusType status = _plugin.SetValues(HttpContext.Current, values);
+					StatusType status = _plugin.SetValues(HttpContext.Current, _values);
 
 					Assert.AreEqual(expectedStatus, status, "Should have set correct status.");
 					if (expectedStatus == StatusType.Error)

@@ -52,6 +52,23 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			_mocks.VerifyAll();
 		}
 
+
+		[Test]
+		public void DoesNotValidateIfItemToBeSavedIsNotAPost()
+		{
+			DataBuddyBase baseObject = _mocks.PartialMock<DataBuddyBase>();
+
+			using (_mocks.Record())
+			{
+				// No methods should be called on the mocks.
+			}
+
+			using (_mocks.Playback())
+			{
+				_plugin.Post_Validate(baseObject, EventArgs.Empty);
+			}
+		}
+
 		[RowTest]
 		[Row("")]
 		[Row("     ")]

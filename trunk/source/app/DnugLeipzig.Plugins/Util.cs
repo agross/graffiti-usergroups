@@ -32,7 +32,7 @@ namespace DnugLeipzig.Plugins
 			MethodInfo method = Array.Find(methods,
 			                               m =>
 			                               m.ReturnType == typeof(void) && m.IsHideBySig && !m.IsFamily &&
-			                               m.GetParameters().Length == 0 && m.MetadataToken == 100663972);
+			                               m.GetParameters().Length == 0 && m.MetadataToken == 100664015);
 			method.Invoke(post, null);
 		}
 	}

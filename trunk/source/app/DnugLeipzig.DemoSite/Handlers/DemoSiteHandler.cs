@@ -57,7 +57,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			try
 			{
 				IGraffitiUser currentUser = GraffitiUsers.Current;
-				if (!context.Request.IsAuthenticated || currentUser == null || !GraffitiUsers.IsSiteTeamMember(currentUser))
+				if (!context.Request.IsAuthenticated || currentUser == null || !GraffitiUsers.IsAdmin(currentUser))
 				{
 					throw new SecurityException("Please log in using an administrative account before setting up Graffiti-UserGroups.");
 				}
