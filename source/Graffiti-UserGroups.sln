@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3223D8B5-B7B6-4C03-A840-E1145C8A8B0E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Scripts", "Build Scripts", "{3223D8B5-B7B6-4C03-A840-E1145C8A8B0E}"
 	ProjectSection(SolutionItems) = preProject
 		..\default.build = ..\default.build
 		..\default.properties = ..\default.properties

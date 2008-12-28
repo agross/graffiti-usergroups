@@ -313,6 +313,7 @@
 			<!-- Extensions. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
 					 prefix="bin">
+				<include name="Castle.*.dll" />
 				<include name="DnugLeipzig.*" />
 			</fileset>
 
