@@ -366,21 +366,18 @@ namespace DnugLeipzig.Plugins
 			if (!post[LocationUnknownField].IsChecked() && post[LocationField].IsNullOrEmptyTrimmed())
 			{
 				post[LocationField] = DefaultLocation;
-				Util.ForcePropertyUpdate(post);
 			}
 
 			// Set default number maximum number of registrations.
 			if (post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
 			{
 				post[MaximumNumberOfRegistrationsField] = DefaultMaximumNumberOfRegistrations;
-				Util.ForcePropertyUpdate(post);
 			}
 
 			// Set default registration recipient.
 			if (post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
 			{
 				post[RegistrationRecipientField] = DefaultRegistrationRecipient;
-				Util.ForcePropertyUpdate(post);
 			}
 		}
 
