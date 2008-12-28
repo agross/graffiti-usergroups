@@ -74,7 +74,6 @@
 	<!-- Cleanup.
 	________________________________________________________________________________________________________________ -->
 	<target name="clean"
-			depends="drop-database"
 			description="Removes build artifacts.">
 		<delete dir="${basedir.test.results}"
 				failonerror="false" />
@@ -97,86 +96,6 @@
 						failonerror="false" />
 			</do>
 		</foreach>
-	</target>
-
-	<!-- Database-related tasks.
-	________________________________________________________________________________________________________________ -->
-	<target name="drop-database"
-			description="Drops the database.">
-		<echo message="Dropping database ${database.name}"/>
-		<updateSqlDatabase action="Drop"
-						   database="${database.name}"
-						   server="${database.server}"
-						   integratedAuthentication="${database.auth.integrated}"
-						   username="${database.auth.username}"
-						   password="${database.auth.password}"
-						   failonerror="false" />
-	</target>
-
-	<target name="create-database"
-			depends="drop-database"
-			description="Creates the database baseline.">
-		<echo message="Creating database ${database.name}"/>
-		<updateSqlDatabase action="Create"
-						   scriptDirectory="${basedir.database}"
-						   database="${database.name}"
-						   server="${database.server}"
-						   integratedAuthentication="${database.auth.integrated}"
-						   username="${database.auth.username}"
-						   password="${database.auth.password}" />
-		<echo message="Current database version: ${usdDatabaseVersion}" />
-	</target>
-
-	<target name="update-database"
-			description="Updates the database.">
-		<echo message="Updating database ${database.name}"/>
-		<updateSqlDatabase action="Update"
-						   scriptDirectory="${basedir.database}"
-						   database="${database.name}"
-						   server="${database.server}"
-						   integratedAuthentication="${database.auth.integrated}"
-						   username="${database.auth.username}"
-						   password="${database.auth.password}" />
-		<echo message="Current database version: ${usdDatabaseVersion}" />
-	</target>
-
-	<target name="import-testdata"
-			depends="create-database, update-database"
-			description="Imports default test data.">
-		<echo message="Importing test data"/>
-		<foreach item="File"
-				 property="sqlfile">
-			<in>
-				<items>
-					<include name="${basedir.database}\Test Data\*.sql" />
-				</items>
-			</in>
-			<do>
-				<echo message="${sqlfile}" />
-				<sql connstring="${database.connectionstring.oledb}"
-					 transaction="true"
-					 delimiter="GO"
-					 delimstyle="Line"
-					 print="true"
-					 source="${sqlfile}"
-					 batch="false" />
-			</do>
-		</foreach>
-	</target>
-
-	<target name="export-testdata"
-			depends="update-database"
-			description="Exports test data to a file.">
-		<echo message="Exporting test data"/>
-		<exec basedir="${tools.sqlpub}"
-			  managed="true"
-			  program="SqlPubWiz.exe">
-			<arg value="script" />
-			<arg line='-C "${database.connectionstring}"' />
-			<arg value="${basedir.database}\Test Data\Test Data.sql" />
-			<arg value="-f" />
-			<arg value="-dataonly" />
-		</exec>
 	</target>
 
 	<!-- Application.
