@@ -1,26 +1,14 @@
 using System;
 
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.ForTesting;
 
 using MbUnit.Framework;
 
 namespace DnugLeipzig.Definitions.Tests
 {
-	[TestFixture]
-	public class StringExtensionsTests
+	public class StringExtensionsTests : Spec
 	{
-		#region Setup/Teardown
-		[SetUp]
-		public void SetUp()
-		{
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-		}
-		#endregion
-
 		[RowTest]
 		[Row("", true)]
 		[Row("    ", true)]
@@ -28,9 +16,13 @@ namespace DnugLeipzig.Definitions.Tests
 		[Row(" foo ", false)]
 		public void IsNullOrEmptyTrimmedRow(string value, bool expectedResult)
 		{
-			Assert.AreEqual(expectedResult, value.IsNullOrEmptyTrimmed(), "Should have returned {0} for value '{1}'.", expectedResult, value);
+			Assert.AreEqual(expectedResult,
+			                value.IsNullOrEmptyTrimmed(),
+			                "Should have returned {0} for value '{1}'.",
+			                expectedResult,
+			                value);
 		}
-		
+
 		[RowTest]
 		[Row("")]
 		[Row("    ")]
@@ -38,7 +30,10 @@ namespace DnugLeipzig.Definitions.Tests
 		[Row(" foo ")]
 		public void ShouldReturnDateTimeMaxValueWhenParsingInvalidEventDate(string value)
 		{
-			Assert.AreEqual(DateTime.MaxValue, value.AsEventDate(), "Should have returned DateTime.MaxValue because '{0}' is an invalid date.", value);
+			Assert.AreEqual(DateTime.MaxValue,
+			                value.AsEventDate(),
+			                "Should have returned DateTime.MaxValue because '{0}' is an invalid date.",
+			                value);
 		}
 
 		[RowTest]
@@ -54,7 +49,11 @@ namespace DnugLeipzig.Definitions.Tests
 		[Row("foo\r\nbar\r\n\r\nbaz\r\n\r\n\r\n", 3)]
 		public void ShouldReturnCorrectLineCount(string value, int expectedLineCount)
 		{
-			Assert.AreEqual(expectedLineCount, value.LineCount(), "Should have returned a line count of {0} for value '{1}'.", expectedLineCount, value);
+			Assert.AreEqual(expectedLineCount,
+			                value.LineCount(),
+			                "Should have returned a line count of {0} for value '{1}'.",
+			                expectedLineCount,
+			                value);
 		}
 	}
 }

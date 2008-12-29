@@ -1,6 +1,8 @@
 using System;
 
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.ForTesting;
 
 using Graffiti.Core;
 
@@ -10,41 +12,37 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Talks
 {
-	[TestFixture]
-	public class PostValidationTests
+	public class PostValidationTests : Spec
 	{
 		const string DateField = "Date field";
-		readonly MockRepository _mocks = new MockRepository();
 		TalkPlugin _plugin;
 		Post _post;
 		IPostRepository _postRepository;
 
-		[SetUp]
-		public void SetUp()
+		protected override void Before_each_spec()
 		{
 			ICategoryRepository categoryRepository;
-			ISettingsRepository settingsRepository;
-			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+			IGraffitiSettings settings;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(Mocks,
 			                                                  out categoryRepository,
-			                                                  out settingsRepository,
+			                                                  out settings,
 			                                                  out _postRepository);
 			_plugin.DateField = DateField;
 
-			_post = new Post();
-			_post.CategoryId = SetupHelper.TalkCategoryId;
+			_post = new Post { CategoryId = SetupHelper.TalkCategoryId };
 		}
 
 		[Test]
 		public void DoesNotValidateIfItemToBeSavedIsNotAPost()
 		{
-			DataBuddyBase baseObject = _mocks.PartialMock<DataBuddyBase>();
+			DataBuddyBase baseObject = Mocks.PartialMock<DataBuddyBase>();
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				// No methods should be called on the mocks.
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				_plugin.Post_Validate(baseObject, EventArgs.Empty);
 			}
@@ -62,12 +60,12 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 		{
 			_post[DateField] = dateValue;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				_plugin.Post_Validate(_post, EventArgs.Empty);
 			}

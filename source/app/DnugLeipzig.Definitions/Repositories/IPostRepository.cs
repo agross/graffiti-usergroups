@@ -7,7 +7,7 @@ namespace DnugLeipzig.Definitions.Repositories
 	public interface IPostRepository : IRepository<Post>
 	{
 		IList<Post> GetByCategory(string categoryName);
-		string GetCategoryName(Post post);
-		Post GetByName(string postName);
+		string GetCategoryNameOf(Post post);
+		Post GetByTitle(string title);
 	}
 }

@@ -4,28 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
-using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("events")]
-	public class EventMacros : Macros
+	public class EventMacros : Macros<IEventPluginConfiguration>
 	{
-		readonly IEventPluginConfiguration _configuration;
-
 		#region Ctors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventMacros"/> class.
 		/// </summary>
-		public EventMacros() : this(null, new EventPluginConfiguration())
+		public EventMacros() : this(IoC.Resolve<ICategorizedPostRepository<IEventPluginConfiguration>>())
 		{
 		}
 
@@ -34,57 +31,43 @@ namespace DnugLeipzig.Extensions.Macros
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
 		/// <param name="repository">The repository.</param>
-		/// <param name="configuration">The configuration.</param>
-		internal EventMacros(ICategoryEnabledRepository repository, IEventPluginConfiguration configuration)
-			: base(configuration)
+		internal EventMacros(ICategorizedPostRepository<IEventPluginConfiguration> repository)
+			: base(repository)
 		{
-			if (configuration == null)
-			{
-				throw new ArgumentNullException("configuration");
-			}
-
-			_configuration = configuration;
-
-			if (repository == null)
-			{
-				repository = new EventRepository(_configuration);
-			}
-
-			_repository = repository;
 		}
 		#endregion
 
 		#region Dates, Location
 		public string StartDate(Post post)
 		{
-			if (!post[_configuration.StartDateField].IsDate())
+			if (!post[Configuration.StartDateField].IsDate())
 			{
-				return HttpUtility.HtmlEncode(_configuration.UnknownText);
+				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
 
-			string dateFormat = _configuration.DateFormat;
+			string dateFormat = Configuration.DateFormat;
 			if (String.IsNullOrEmpty(dateFormat))
 			{
 				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
 			}
 
-			return HttpUtility.HtmlEncode(String.Format(dateFormat, post[_configuration.StartDateField].AsEventDate()));
+			return HttpUtility.HtmlEncode(String.Format(dateFormat, post[Configuration.StartDateField].AsEventDate()));
 		}
 
 		public string EndDate(Post post)
 		{
-			if (!post[_configuration.EndDateField].IsDate())
+			if (!post[Configuration.EndDateField].IsDate())
 			{
-				return HttpUtility.HtmlEncode(_configuration.UnknownText);
+				return HttpUtility.HtmlEncode(Configuration.UnknownText);
 			}
 
-			DateTime beginDate = post[_configuration.StartDateField].AsEventDate();
-			DateTime endDate = post[_configuration.EndDateField].AsEventDate();
+			DateTime beginDate = post[Configuration.StartDateField].AsEventDate();
+			DateTime endDate = post[Configuration.EndDateField].AsEventDate();
 
-			string dateFormat = _configuration.DateFormat;
-			if (beginDate.Date == endDate.Date && !String.IsNullOrEmpty(_configuration.ShortEndDateFormat))
+			string dateFormat = Configuration.DateFormat;
+			if (beginDate.Date == endDate.Date && !String.IsNullOrEmpty(Configuration.ShortEndDateFormat))
 			{
-				dateFormat = _configuration.ShortEndDateFormat;
+				dateFormat = Configuration.ShortEndDateFormat;
 			}
 			if (String.IsNullOrEmpty(dateFormat))
 			{
@@ -96,61 +79,73 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public string Location(Post post)
 		{
-			string location = post[_configuration.LocationField];
+			string location = post[Configuration.LocationField];
 			if (String.IsNullOrEmpty(location))
 			{
-				location = _configuration.UnknownText;
+				location = Configuration.UnknownText;
 			}
 			return HttpUtility.HtmlEncode(location);
 		}
 
 		public override string Speaker(Post post)
 		{
-			return Speaker(post, _configuration.UnknownText, null, null);
+			return Speaker(post, Configuration.UnknownText, null, null);
 		}
 		#endregion
 
 		public IList<Post> GetForFuture()
 		{
 			return
-				_repository.GetAll().IsInFuture(_configuration.StartDateField).SortAscending(_configuration.StartDateField).ToList();
+				Repository.GetAll()
+					.IsInFuture(Configuration.StartDateField)
+					.SortAscending(Configuration.StartDateField)
+					.ToList();
 		}
 
 		public IList<Post> GetForRegistration()
 		{
 			return
-				_repository.GetAll().HasDate(_configuration.StartDateField).IsInFuture(_configuration.StartDateField).
-					RegistrationNeeded(_configuration.RegistrationNeededField).RegistrationPossible(
-					_configuration.RegistrationListField, _configuration.MaximumNumberOfRegistrationsField).SortAscending(
-					_configuration.StartDateField).ToList();
+				Repository.GetAll()
+					.HasDate(Configuration.StartDateField)
+					.IsInFuture(Configuration.StartDateField)
+					.RegistrationNeeded(Configuration.RegistrationNeededField)
+					.RegistrationPossible(Configuration.RegistrationListField, Configuration.MaximumNumberOfRegistrationsField)
+					.SortAscending(Configuration.StartDateField).ToList();
 		}
 
 		public IList<Post> GetUpcoming(int numberOfEvents)
 		{
 			return
-				_repository.GetAll().HasDate(_configuration.StartDateField).IsInFuture(_configuration.StartDateField).SortAscending(
-					_configuration.StartDateField).LimitTo(numberOfEvents).ToList();
+				Repository.GetAll()
+					.HasDate(Configuration.StartDateField)
+					.IsInFuture(Configuration.StartDateField)
+					.SortAscending(Configuration.StartDateField)
+					.LimitTo(numberOfEvents)
+					.ToList();
 		}
 
 		public IList<Post> GetForYear(int year)
 		{
 			return
-				_repository.GetAll().IsInYear(_configuration.StartDateField, new DateTime(year, 1, 1)).IsInPast(
-					_configuration.StartDateField).SortAscending(_configuration.StartDateField).ToList();
+				Repository.GetAll()
+					.IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1))
+					.IsInPast(Configuration.StartDateField)
+					.SortAscending(Configuration.StartDateField)
+					.ToList();
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()
 		{
-			IEnumerable<Post> posts = _repository.GetAll().IsInPast(_configuration.StartDateField);
+			IEnumerable<Post> posts = Repository.GetAll().IsInPast(Configuration.StartDateField);
 
 			IEnumerable<PastPostInfo> pastEvents = from post in posts
-			                                       group post by post[_configuration.StartDateField].AsEventDate().Year
+			                                       group post by post[Configuration.StartDateField].AsEventDate().Year
 			                                       into years orderby years.Key descending
 			                                       	select
 			                                       	new PastPostInfo
 			                                       	{
 			                                       		Year = years.Key,
-			                                       		Url = Util.GetUrlForYearView(years.Key, _configuration.YearQueryString)
+			                                       		Url = Util.GetUrlForYearView(years.Key, Configuration.YearQueryString)
 			                                       	};
 
 			return pastEvents.ToList();
@@ -158,10 +153,10 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public bool RegistrationPossible(Post post)
 		{
-			return post.HasDate(_configuration.StartDateField) && post.IsInFuture(_configuration.StartDateField) &&
-			       post.RegistrationNeeded(_configuration.RegistrationNeededField) &&
-			       post.RegistrationPossible(_configuration.RegistrationListField,
-			                                 _configuration.MaximumNumberOfRegistrationsField);
+			return post.HasDate(Configuration.StartDateField) && post.IsInFuture(Configuration.StartDateField) &&
+			       post.RegistrationNeeded(Configuration.RegistrationNeededField) &&
+			       post.RegistrationPossible(Configuration.RegistrationListField,
+			                                 Configuration.MaximumNumberOfRegistrationsField);
 		}
 
 		public string RegisterButton(IDictionary properties, bool generateOnClickHandler)
@@ -196,13 +191,13 @@ namespace DnugLeipzig.Extensions.Macros
 		{
 			return new CalendarItem
 			       {
-			       	StartDate = post[_configuration.StartDateField].AsEventDate(),
-			       	EndDate = post[_configuration.EndDateField].AsEventDate(),
-			       	Location = post[_configuration.LocationField],
+			       	StartDate = post[Configuration.StartDateField].AsEventDate(),
+			       	EndDate = post[Configuration.EndDateField].AsEventDate(),
+			       	Location = post[Configuration.LocationField],
 			       	Subject = HttpUtility.HtmlDecode(post.Title),
 			       	Description = SiteSettings.BaseUrl + post.Url,
 			       	LastModified = post.Published,
-			       	Categories = HttpUtility.HtmlDecode(_repository.GraffitiData.Site.Title)
+			       	Categories = HttpUtility.HtmlDecode(Repository.GraffitiData.Site.Title)
 			       };
 		}
 	}

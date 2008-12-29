@@ -1,6 +1,8 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+
+using DnugLeipzig.ForTesting;
 
 using Graffiti.Core;
 
@@ -8,16 +10,14 @@ using MbUnit.Framework;
 
 namespace DnugLeipzig.Extensions.Tests
 {
-	[TestFixture]
-	public class EventSortingTests
+	public class EventSortingTests : Spec
 	{
 		const int PostSetsToGenerate = 4;
 		const string StartDateField = "StartDate";
-		PostCollection _posts;
 		PostCollection _originalPosts;
+		PostCollection _posts;
 
-		[SetUp]
-		public void SetUp()
+		protected override void Before_each_spec()
 		{
 			_posts = new PostCollection();
 			_originalPosts = new PostCollection();
@@ -40,13 +40,7 @@ namespace DnugLeipzig.Extensions.Tests
 
 		static Post CreatePost(string title, DateTime createdOn, DateTime? eventDate)
 		{
-			var post = new Post();
-			post.Title = title;
-
-			// "Veranstaltungen" in test database.
-			post.CategoryId = 2;
-
-			post.CreatedOn = createdOn;
+			var post = new Post { Title = title, CategoryId = 2, CreatedOn = createdOn };
 
 			if (eventDate.HasValue)
 			{
@@ -94,14 +88,14 @@ namespace DnugLeipzig.Extensions.Tests
 
 				if (firstDatePostReached && lastDate != null && hasDate)
 				{
-					Assert.LowerEqualThan(date, lastDate.Value, post.Title+ " " +lastPost.Title);
+					Assert.LowerEqualThan(date, lastDate.Value, post.Title + " " + lastPost.Title);
 				}
 
 				lastPost = post;
 				lastDate = hasDate ? date : (DateTime?) null;
 			}
 		}
-		
+
 		[Test]
 		public void SortsEventIndexAscending()
 		{

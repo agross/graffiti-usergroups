@@ -2,8 +2,8 @@ using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web;
-
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
@@ -28,7 +28,8 @@ namespace DnugLeipzig.Plugins
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TalkPlugin"/> class.
 		/// </summary>
-		public TalkPlugin() : this(new CategoryRepository(), new PostRepository())
+		public TalkPlugin()
+			: this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>())
 		{
 			// Initialize with default values.
 			CategoryName = "Talks";
@@ -137,7 +138,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
+			if (!_postRepository.GetCategoryNameOf(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}

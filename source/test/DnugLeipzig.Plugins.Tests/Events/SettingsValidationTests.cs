@@ -2,8 +2,10 @@ using System;
 using System.Collections.Specialized;
 using System.Web;
 
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Plugins.Tests.HttpMocks;
+using DnugLeipzig.ForTesting;
+using DnugLeipzig.ForTesting.HttpMocks;
 
 using Graffiti.Core;
 
@@ -13,36 +15,28 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Events
 {
-	[TestFixture]
-	public class SettingsValidationTests
+	public class SettingsValidationTests : Spec
 	{
-		readonly MockRepository _mocks = new MockRepository();
 		ICategoryRepository _categoryRepository;
 		EventPlugin _plugin;
 		NameValueCollection _values = new NameValueCollection();
 
-		[SetUp]
-		public void SetUp()
+		protected override void Before_each_spec()
 		{
 			IPostRepository postRepository;
-			ISettingsRepository settingsRepository;
-			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
+			IGraffitiSettings settings;
+			_plugin = SetupHelper.SetUpWithMockedDependencies(Mocks,
 			                                                  out _categoryRepository,
-			                                                  out settingsRepository,
+			                                                  out settings,
 			                                                  out postRepository);
 
-			_values = new NameValueCollection();
-			_values.Add(EventPlugin.Form_CategoryName, _plugin.CategoryName);
-			_values.Add(EventPlugin.Form_YearQueryString, "year query string");
-			_values.Add(EventPlugin.Form_DefaultMaximumNumberOfRegistrations, "100");
-			_values.Add(EventPlugin.Form_CreateTargetCategoryAndFields, "off");
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			_mocks.ReplayAll();
-			_mocks.VerifyAll();
+			_values = new NameValueCollection
+			          {
+			          	{ EventPlugin.Form_CategoryName, _plugin.CategoryName },
+			          	{ EventPlugin.Form_YearQueryString, "year query string" },
+			          	{ EventPlugin.Form_DefaultMaximumNumberOfRegistrations, "100" },
+			          	{ EventPlugin.Form_CreateTargetCategoryAndFields, "off" }
+			          };
 		}
 
 		[RowTest]
@@ -54,12 +48,12 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_values[EventPlugin.Form_CategoryName] = categoryName;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
@@ -79,12 +73,12 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_values[EventPlugin.Form_CategoryName] = _plugin.CategoryName;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(false);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
@@ -106,12 +100,12 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_values[EventPlugin.Form_YearQueryString] = queryString;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
@@ -137,12 +131,12 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_values[EventPlugin.Form_DefaultRegistrationRecipient] = email;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{
@@ -170,12 +164,12 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_values[EventPlugin.Form_DefaultMaximumNumberOfRegistrations] = maximumNumberOfRegistrations;
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
 				SetupResult.For(_categoryRepository.IsExistingCategory(_plugin.CategoryName)).Return(true);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				using (new HttpSimulator().SimulateRequest())
 				{

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{2FB6553B-34BA-4A75-9E88-E82F3D3C1891}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -39,8 +39,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionInfo.cs">
@@ -49,6 +48,11 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\Results\ErrorResultSpec.cs" />
+    <Compile Include="Commands\Results\ForbiddenResultSpec.cs" />
+    <Compile Include="Commands\Results\NotFoundResultSpec.cs" />
+    <Compile Include="Commands\Results\ValidationErrorResultSpec.cs" />
+    <Compile Include="Commands\Results\ValidationErrorResultSpec_Empty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensionsTests..cs" />
   </ItemGroup>
@@ -56,6 +60,10 @@
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
       <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
       <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DnugLeipzig.ForTesting\DnugLeipzig.ForTesting.csproj">
+      <Project>{6793C240-F450-448C-922D-B8D5AF771E98}</Project>
+      <Name>DnugLeipzig.ForTesting</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

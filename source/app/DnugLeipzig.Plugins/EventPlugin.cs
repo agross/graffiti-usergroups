@@ -2,12 +2,14 @@ using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Web;
-
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins.Migration;
 using DnugLeipzig.Runtime;
+using DnugLeipzig.Runtime.Configuration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
@@ -38,12 +40,12 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_YearQueryString = "yearQueryString";
 		readonly ICategoryRepository _categoryRepository;
 		readonly IPostRepository _postRepository;
-		readonly ISettingsRepository _settingsRepository;
+		readonly IGraffitiSettings _settings;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventPlugin"/> class.
 		/// </summary>
-		public EventPlugin() : this(new CategoryRepository(), new PostRepository(), new SettingsRepository())
+		public EventPlugin() : this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>(), IoC.Resolve<IGraffitiSettings>())
 		{
 			// Initialize with default values.
 			CategoryName = "Events";
@@ -61,7 +63,7 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-			DefaultRegistrationRecipient = _settingsRepository.CommentSettings.Email;
+			DefaultRegistrationRecipient = _settings.Comments.Email;
 		}
 
 		/// <summary>
@@ -70,10 +72,10 @@ namespace DnugLeipzig.Plugins
 		/// </summary>
 		/// <param name="categoryRepository">The category repository.</param>
 		/// <param name="postRepository">The post repository.</param>
-		/// <param name="settingsRepository">The settings repository.</param>
+		/// <param name="settings">The settings repository.</param>
 		internal EventPlugin(ICategoryRepository categoryRepository,
 		                     IPostRepository postRepository,
-		                     ISettingsRepository settingsRepository)
+		                     IGraffitiSettings settings)
 		{
 			if (categoryRepository == null)
 			{
@@ -85,14 +87,14 @@ namespace DnugLeipzig.Plugins
 				throw new ArgumentNullException("postRepository");
 			}
 
-			if (settingsRepository == null)
+			if (settings == null)
 			{
-				throw new ArgumentNullException("settingsRepository");
+				throw new ArgumentNullException("settings");
 			}
 
 			_categoryRepository = categoryRepository;
 			_postRepository = postRepository;
-			_settingsRepository = settingsRepository;
+			_settings = settings;
 
 			EnableEventHandlers = true;
 		}
@@ -266,7 +268,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
+			if (!_postRepository.GetCategoryNameOf(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}
@@ -357,7 +359,7 @@ namespace DnugLeipzig.Plugins
 				return;
 			}
 
-			if (!_postRepository.GetCategoryName(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
+			if (!_postRepository.GetCategoryNameOf(post).Equals(CategoryName, StringComparison.OrdinalIgnoreCase))
 			{
 				return;
 			}
@@ -366,18 +368,21 @@ namespace DnugLeipzig.Plugins
 			if (!post[LocationUnknownField].IsChecked() && post[LocationField].IsNullOrEmptyTrimmed())
 			{
 				post[LocationField] = DefaultLocation;
+				Util.ForcePropertyUpdate(post);
 			}
 
 			// Set default number maximum number of registrations.
 			if (post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
 			{
 				post[MaximumNumberOfRegistrationsField] = DefaultMaximumNumberOfRegistrations;
+				Util.ForcePropertyUpdate(post);
 			}
 
 			// Set default registration recipient.
 			if (post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
 			{
 				post[RegistrationRecipientField] = DefaultRegistrationRecipient;
+				Util.ForcePropertyUpdate(post);
 			}
 		}
 

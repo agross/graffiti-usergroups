@@ -22,14 +22,14 @@ namespace DnugLeipzig.Runtime.Repositories
 			return Data.GetPost(id);
 		}
 
-		public virtual void Save(Post instance)
+		public virtual void Save(Post post)
 		{
-			if (instance == null)
+			if (post == null)
 			{
-				throw new ArgumentNullException("instance");
+				throw new ArgumentNullException("post");
 			}
 
-			instance.Save();
+			post.Save();
 		}
 
 		public virtual IList<Post> GetByCategory(string categoryName)
@@ -37,7 +37,7 @@ namespace DnugLeipzig.Runtime.Repositories
 			return Data.PostsByCategory(categoryName, int.MaxValue);
 		}
 
-		public string GetCategoryName(Post post)
+		public string GetCategoryNameOf(Post post)
 		{
 			if (post == null)
 			{
@@ -47,14 +47,14 @@ namespace DnugLeipzig.Runtime.Repositories
 			return post.Category.Name;
 		}
 
-		public Post GetByName(string postName)
+		public Post GetByTitle(string title)
 		{
-			if (String.IsNullOrEmpty(postName))
+			if (String.IsNullOrEmpty(title))
 			{
-				throw new ArgumentOutOfRangeException("postName");
+				throw new ArgumentOutOfRangeException("title");
 			}
 
-			return GraffitiData.GetPost(postName);
+			return GraffitiData.GetPost(title);
 		}
 		#endregion
 	}

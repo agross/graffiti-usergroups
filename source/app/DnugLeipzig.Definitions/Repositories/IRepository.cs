@@ -10,6 +10,6 @@ namespace DnugLeipzig.Definitions.Repositories
 		}
 
 		T GetById(int id);
-		void Save(T instance);
+		void Save(T post);
 	}
 }
