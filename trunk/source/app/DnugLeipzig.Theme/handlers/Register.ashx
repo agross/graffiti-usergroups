@@ -1,3 +1,5 @@
 <%@ WebHandler Language="C#" Class="Register" %>
-public class Register : DnugLeipzig.Extensions.Handlers.RegistrationHandler
+using DnugLeipzig.Runtime.Handlers;
+
+public class Register : RegistrationHandler
 {}

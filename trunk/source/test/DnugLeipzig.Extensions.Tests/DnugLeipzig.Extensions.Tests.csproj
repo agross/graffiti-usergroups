@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{FC3CAE00-FF7B-4B38-AAE1-FA8F385D1242}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -31,26 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DataBuddy, Version=1.0.28.35361, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -64,16 +44,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\tools\MbUnit\MbUnit.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.3.0.906, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Rhino Mocks\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\..\tools\Rhino Tools\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\SolutionInfo.cs">
@@ -89,6 +67,10 @@
     <ProjectReference Include="..\..\app\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj">
       <Project>{43CDFC01-CED1-484C-A74B-B9746A670100}</Project>
       <Name>DnugLeipzig.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DnugLeipzig.ForTesting\DnugLeipzig.ForTesting.csproj">
+      <Project>{6793C240-F450-448C-922D-B8D5AF771E98}</Project>
+      <Name>DnugLeipzig.ForTesting</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

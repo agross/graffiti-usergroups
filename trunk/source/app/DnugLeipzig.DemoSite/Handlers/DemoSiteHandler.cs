@@ -2,7 +2,7 @@ using System;
 using System.Security;
 using System.Web;
 
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Plugins;
@@ -138,7 +138,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			return macros.LoadThemeView("components/site/menu.view");
 		}
 
-		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration
+		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfiguration
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 
@@ -248,7 +248,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			       };
 		}
 
-		void CreateNavigationLink<TPlugin>() where TPlugin : GraffitiEvent, ICategoryEnabledRepositoryConfiguration, new()
+		void CreateNavigationLink<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfiguration, new()
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 			Category category = _categoryRepository.GetCategory(plugin.CategoryName);
@@ -273,7 +273,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 
 		void CreateNavigationLink(string postName)
 		{
-			Post post = _postRepository.GetByName(postName);
+			Post post = _postRepository.GetByTitle(postName);
 
 			DynamicNavigationItem item = new DynamicNavigationItem
 			                             {

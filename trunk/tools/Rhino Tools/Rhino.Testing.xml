@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Rhino.Testing</name>
+    </assembly>
+    <members>
+        <member name="M:Rhino.Testing.AutoMocking.IAutoMockingRepository.Mark(System.Type)">
+            <summary>
+            Call this method to select the mock type (dynamic, stub, etc) that the container should use
+            when resolving instances of the specfied <paramref name="type"/>
+            </summary>
+            <returns><see cref="T:Rhino.Testing.AutoMocking.TypeMarker"/> that you can then used to select the mock type</returns>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Initialize">
+            <summary>
+            Initializes this instance. Must be called, before you can work with the instance.
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Create``1">
+            <summary>
+            Create an instance of type <typeparamref name="T"/> with its constructor declared
+            dependencies resolved as mocks
+            </summary>
+            <remarks>
+            For each constructor dependency that <typeparamref name="T"/> declares, use <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Mark(System.Type)"/> to determine the type of mock (stub, dynamic mock, etc) that will be
+            injected into the instance. The default is to inject a dynmaic mock.
+            <para>
+            Use <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.MarkMissing(System.Type)"/> for a constructor dependency that you do not want the
+            container to resolve. 
+            </para>
+            <para>
+            If you want a dependency to be resolved as an explicit type rather than as a mock, use
+            <see cref="M:Castle.Windsor.IWindsorContainer.AddComponent(System.String,System.Type,System.Type)"/> to register the explict
+            type that the container should use before calling this method.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Create``1(System.Collections.IDictionary)">
+            <summary>
+            See <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Create``1"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Get(System.Type)">
+            <summary>
+            Returns a mock of the specified <paramref name="type"/>
+            </summary>
+            <remarks>
+            Use <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Mark(System.Type)"/> to determine the type of mock (stub, dynamic mock, etc) that will be
+            returned. A dynamic mock will be returned by default
+            <para>
+            Only a single instance of the specified <paramref name="type"/> will be created and returned
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Get``1">
+            <summary>
+            See <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Get(System.Type)"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Mark(System.Type)">
+            <summary>
+            See <see cref="M:Rhino.Testing.AutoMocking.IAutoMockingRepository.Mark(System.Type)"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Mark``1">
+            <summary>
+            See <see cref="M:Rhino.Testing.AutoMocking.IAutoMockingRepository.Mark(System.Type)"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.MarkMissing``1">
+            <summary>
+            See <see cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.MarkMissing(System.Type)"/>
+            </summary>
+        </member>
+        <member name="M:Rhino.Testing.AutoMocking.AutoMockingContainer.MarkMissing(System.Type)">
+            <summary>
+            Indicate that instances of <paramref name="type"/> should not be resolved by the container
+            <seealso cref="M:Rhino.Testing.AutoMocking.AutoMockingContainer.Create``1"/>
+            </summary>
+        </member>
+        <member name="P:Rhino.Testing.AutoMocking.AutoMockingContainer.DefaultMockingStrategy">
+            <summary>
+            Gets or sets the default mocking strategy., which will be returned, if a <see cref="T:System.Type"/> was not explicitly marked via a <see cref="T:Rhino.Testing.AutoMocking.TypeMarker"/>.
+            The default is the <see cref="T:Rhino.Testing.AutoMocking.DynamicMockingStrategy"/>,
+            which will always be returned, if no other was defined.
+            </summary>
+            <value>The default mocking strategy.</value>
+        </member>
+        <member name="T:Rhino.Testing.AutoMocking.TypeMarker">
+            <summary>
+            Syntax sugar. Used in conjuction with <see cref="M:Rhino.Testing.AutoMocking.IAutoMockingRepository.Mark(System.Type)"/> to indicate
+            which type of mock (if any) should be created when the auto mocking container needs to resolve
+            dependencies
+            </summary>
+        </member>
+    </members>
+</doc>

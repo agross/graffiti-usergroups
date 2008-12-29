@@ -1,9 +1,10 @@
+using DnugLeipzig.ForTesting;
+
 using MbUnit.Framework;
 
 namespace DnugLeipzig.Plugins.Tests
 {
-	[TestFixture]
-	public class ValidationExceptionTests
+	public class ValidationExceptionTests : Spec
 	{
 		[Test]
 		public void ConstructsCorrectMessageWithNoAffectedFields()

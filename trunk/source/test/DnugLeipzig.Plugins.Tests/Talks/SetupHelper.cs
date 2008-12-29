@@ -1,3 +1,4 @@
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
 
 using Rhino.Mocks;
@@ -11,12 +12,12 @@ namespace DnugLeipzig.Plugins.Tests.Talks
 
 		public static TalkPlugin SetUpWithMockedDependencies(MockRepository mocks,
 		                                                      out ICategoryRepository categoryRepository,
-		                                                      out ISettingsRepository settingsRepository,
+		                                                      out IGraffitiSettings settings,
 		                                                      out IPostRepository postRepository)
 		{
-			categoryRepository = mocks.CreateMock<ICategoryRepository>();
-			settingsRepository = mocks.CreateMock<ISettingsRepository>();
-			postRepository = mocks.CreateMock<IPostRepository>();
+			categoryRepository = mocks.StrictMock<ICategoryRepository>();
+			settings = mocks.StrictMock<IGraffitiSettings>();
+			postRepository = mocks.StrictMock<IPostRepository>();
 
 			TalkPlugin plugin = new TalkPlugin(categoryRepository, postRepository);
 			plugin.CategoryName = TalkCategoryName;

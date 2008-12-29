@@ -1,6 +1,8 @@
 using System;
 
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.ForTesting;
 
 using Graffiti.Core;
 
@@ -10,8 +12,7 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Events
 {
-	[TestFixture]
-	public class PostValidationTests
+	public class PostValidationTests : Spec
 	{
 		const string EndDateField = "End date field";
 		const string LocationField = "Location field";
@@ -24,14 +25,13 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		Post _post;
 		IPostRepository _postRepository;
 
-		[SetUp]
-		public void SetUp()
+		protected override void Before_each_spec()
 		{
 			ICategoryRepository categoryRepository;
-			ISettingsRepository settingsRepository;
+			IGraffitiSettings settings;
 			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
 			                                                  out categoryRepository,
-			                                                  out settingsRepository,
+			                                                  out settings,
 			                                                  out _postRepository);
 
 			_plugin.StartDateField = StartDateField;
@@ -41,17 +41,8 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			_plugin.MaximumNumberOfRegistrationsField = MaximumNumberOfRegistrationsField;
 			_plugin.RegistrationRecipientField = RegistrationRecipientField;
 
-			_post = new Post();
-			_post.CategoryId = SetupHelper.EventCategoryId;
+			_post = new Post { CategoryId = SetupHelper.EventCategoryId };
 		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			_mocks.ReplayAll();
-			_mocks.VerifyAll();
-		}
-
 
 		[Test]
 		public void DoesNotValidateIfItemToBeSavedIsNotAPost()
@@ -83,7 +74,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -107,7 +98,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -124,7 +115,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -149,7 +140,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -167,7 +158,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -189,7 +180,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -209,7 +200,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())

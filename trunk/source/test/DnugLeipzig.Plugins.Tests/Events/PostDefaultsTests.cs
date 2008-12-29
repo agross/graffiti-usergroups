@@ -1,6 +1,8 @@
 using System;
 
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.ForTesting;
 
 using Graffiti.Core;
 
@@ -10,8 +12,7 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.Plugins.Tests.Events
 {
-	[TestFixture]
-	public class PostDefaultsTests
+	public class PostDefaultsTests : Spec
 	{
 		const string DefaultLocation = "Default location value";
 		const string DefaultMaximumNumberOfRegistrations = "100";
@@ -25,14 +26,13 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		Post _post;
 		IPostRepository _postRepository;
 
-		[SetUp]
-		public void SetUp()
+		protected override void Before_each_spec()
 		{
 			ICategoryRepository categoryRepository;
-			ISettingsRepository settingsRepository;
+			IGraffitiSettings settings;
 			_plugin = SetupHelper.SetUpWithMockedDependencies(_mocks,
 			                                                  out categoryRepository,
-			                                                  out settingsRepository,
+			                                                  out settings,
 			                                                  out _postRepository);
 
 			_plugin.LocationField = LocationField;
@@ -43,15 +43,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			_plugin.DefaultRegistrationRecipient = DefaultRegistrationRecipient;
 			_plugin.DefaultMaximumNumberOfRegistrations = DefaultMaximumNumberOfRegistrations;
 
-			_post = new Post();
-			_post.CategoryId = SetupHelper.EventCategoryId;
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			_mocks.ReplayAll();
-			_mocks.VerifyAll();
+			_post = new Post { CategoryId = SetupHelper.EventCategoryId };
 		}
 
 		[Test]
@@ -81,7 +73,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -102,7 +94,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -121,7 +113,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -142,7 +134,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -164,7 +156,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -188,7 +180,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())
@@ -211,7 +203,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_postRepository.GetCategoryName(_post)).Return(_plugin.CategoryName);
+				Expect.Call(_postRepository.GetCategoryNameOf(_post)).Return(_plugin.CategoryName);
 			}
 
 			using (_mocks.Playback())

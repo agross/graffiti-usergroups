@@ -1,4 +1,4 @@
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Plugins;
 
 namespace DnugLeipzig.Extensions.Configuration

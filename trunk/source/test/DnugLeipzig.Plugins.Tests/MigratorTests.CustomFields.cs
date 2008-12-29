@@ -27,9 +27,9 @@ namespace DnugLeipzig.Plugins.Tests
 			newFields.Add(new FieldInfo("newField1", FieldType.TextBox, "New field 1"));
 			newFields.Add(new FieldInfo("newField2", FieldType.CheckBox, "New field 2"));
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 
 				CustomFormSettings formSettings = new CustomFormSettings();
 				formSettings.Fields = new List<CustomField>();
@@ -48,7 +48,7 @@ namespace DnugLeipzig.Plugins.Tests
 				}
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, new PostRepository());
 				fm.EnsureFields(categoryName, newFields);
@@ -65,9 +65,9 @@ namespace DnugLeipzig.Plugins.Tests
 			existingFields.Add(new FieldInfo("existingField1", FieldType.TextBox, "Existing field 1"));
 			existingFields.Add(new FieldInfo("existingField2", FieldType.CheckBox, "Existing field 2"));
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 
 				CustomFormSettings formSettings = new CustomFormSettings();
 				formSettings.Fields = existingFields.ToCustomFieldList();
@@ -75,7 +75,7 @@ namespace DnugLeipzig.Plugins.Tests
 				Expect.Call(categoryRepository.GetFormSettings(categoryName)).Return(formSettings);
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, new PostRepository());
 				fm.EnsureFields(categoryName, existingFields);
@@ -96,9 +96,9 @@ namespace DnugLeipzig.Plugins.Tests
 			newFields.Add(new FieldInfo("newField1", FieldType.TextBox, "New field 1"));
 			newFields.Add(new FieldInfo("newField2", FieldType.CheckBox, "New field 2"));
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 
 				CustomFormSettings formSettings = new CustomFormSettings();
 				formSettings.Fields = existingFields.ToCustomFieldList();
@@ -117,7 +117,7 @@ namespace DnugLeipzig.Plugins.Tests
 				}
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				List<FieldInfo> merged = new List<FieldInfo>();
 				merged.AddRange(newFields);
@@ -142,9 +142,9 @@ namespace DnugLeipzig.Plugins.Tests
 			newFields.Add(new FieldInfo("existingField1", FieldType.TextBox, "Field description 1"));
 			newFields.Add(new FieldInfo("existingField2", FieldType.CheckBox, "Field description 2"));
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 
 				CustomFormSettings formSettings = new CustomFormSettings();
 				formSettings.Fields = existingFields.ToCustomFieldList();
@@ -172,7 +172,7 @@ namespace DnugLeipzig.Plugins.Tests
 					}));
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, new PostRepository());
 				fm.EnsureFields(categoryName, newFields);
@@ -188,9 +188,9 @@ namespace DnugLeipzig.Plugins.Tests
 			IMemento oldState;
 			const string categoryName = "category";
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				oldState = _mocks.CreateMock<IMemento>();
+				oldState = Mocks.StrictMock<IMemento>();
 				Expect.Call(oldState.CategoryName).Return(categoryName);
 				Expect.Call(oldState.Fields).Repeat.AtLeastOnce().Return(new Dictionary<Guid, FieldInfo>
 				                                                         {
@@ -202,7 +202,7 @@ namespace DnugLeipzig.Plugins.Tests
 				                                                         		}
 				                                                         });
 
-				newState = _mocks.CreateMock<IMemento>();
+				newState = Mocks.StrictMock<IMemento>();
 				Expect.Call(newState.CategoryName).Return(categoryName);
 				Expect.Call(newState.Fields).Repeat.AtLeastOnce().Return(new Dictionary<Guid, FieldInfo>
 				                                                         {
@@ -214,7 +214,7 @@ namespace DnugLeipzig.Plugins.Tests
 				                                                         		}
 				                                                         });
 
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 				Category targetCategory = new Category { Id = int.MaxValue, Name = categoryName };
 				Expect.Call(categoryRepository.GetCategory(categoryName)).Repeat.AtLeastOnce().Return(targetCategory);
 
@@ -229,11 +229,11 @@ namespace DnugLeipzig.Plugins.Tests
 				LastCall.Constraints(Is.Same(formSettings), Is.Equal("oldFieldName"));
 
 				// No posts to migrate.
-				postRepository = _mocks.CreateMock<IPostRepository>();
+				postRepository = Mocks.StrictMock<IPostRepository>();
 				Expect.Call(postRepository.GetByCategory(categoryName)).Return(new PostCollection());
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, postRepository);
 				fm.Migrate(new MigrationInfo(oldState, newState));

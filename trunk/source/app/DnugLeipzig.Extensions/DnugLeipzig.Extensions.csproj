@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{43CDFC01-CED1-484C-A74B-B9746A670100}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -30,26 +30,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DataBuddy, Version=1.0.28.35361, Culture=neutral, processorArchitecture=MSIL">
@@ -83,7 +63,6 @@
     <Compile Include="Configuration\EventPluginConfiguration.cs" />
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\TalkPluginConfiguration.cs" />
-    <Compile Include="Handlers\CalendarHandler.cs" />
     <Compile Include="DateAscendingPostComparer.cs" />
     <Compile Include="DataObjects\CalendarItem.cs" />
     <Compile Include="Extensions\PostExtensions.cs" />
@@ -94,9 +73,7 @@
     <Compile Include="DataObjects\PastPostInfo.cs" />
     <Compile Include="Macros\UiMacros.cs" />
     <Compile Include="Macros\EventMacros.cs" />
-    <Compile Include="GraffitiEmailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Handlers\RegistrationHandler.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

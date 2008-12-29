@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.ForTesting;
 using DnugLeipzig.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
@@ -14,34 +15,24 @@ using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Plugins.Tests
 {
-	[TestFixture]
-	public partial class MigratorTests
+	public partial class MigratorTests : Spec
 	{
-		readonly MockRepository _mocks = new MockRepository();
-
-		[TearDown]
-		public void TearDown()
-		{
-			_mocks.ReplayAll();
-			_mocks.VerifyAll();
-		}
-
 		[Test]
 		public void CreatesNewCategory()
 		{
 			ICategoryRepository categoryRepository;
 			const string categoryName = "new";
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 				Expect.Call(categoryRepository.GetCategory(categoryName)).Return(null);
 
 				categoryRepository.AddCategory(null);
 				LastCall.Constraints(Is.Matching((Category category) => category.Name == categoryName));
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, new PostRepository());
 				fm.EnsureTargetCategory(categoryName);
@@ -54,13 +45,13 @@ namespace DnugLeipzig.Plugins.Tests
 			ICategoryRepository categoryRepository;
 			const string categoryName = "existing";
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 				Expect.Call(categoryRepository.GetCategory(categoryName)).Return(new Category());
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, new PostRepository());
 				fm.EnsureTargetCategory(categoryName);
@@ -77,17 +68,17 @@ namespace DnugLeipzig.Plugins.Tests
 			const string sourceCategoryName = "old";
 			const string targetCategoryName = "new";
 
-			using (_mocks.Record())
+			using (Mocks.Record())
 			{
-				oldState = _mocks.CreateMock<IMemento>();
+				oldState = Mocks.StrictMock<IMemento>();
 				Expect.Call(oldState.CategoryName).Return(sourceCategoryName);
 				Expect.Call(oldState.Fields).Return(new Dictionary<Guid, FieldInfo>());
 
-				newState = _mocks.CreateMock<IMemento>();
+				newState = Mocks.StrictMock<IMemento>();
 				Expect.Call(newState.CategoryName).Return(targetCategoryName);
 				Expect.Call(newState.Fields).Return(new Dictionary<Guid, FieldInfo>());
 
-				categoryRepository = _mocks.CreateMock<ICategoryRepository>();
+				categoryRepository = Mocks.StrictMock<ICategoryRepository>();
 				Expect.Call(categoryRepository.GetCategory(targetCategoryName)).Return(null);
 
 				Category targetCategory = new Category { Id = int.MaxValue, Name = targetCategoryName };
@@ -100,11 +91,11 @@ namespace DnugLeipzig.Plugins.Tests
 				LastCall.Constraints(Is.Equal(sourceCategoryName));
 
 				// No posts to migrate.
-				postRepository = _mocks.CreateMock<IPostRepository>();
+				postRepository = Mocks.StrictMock<IPostRepository>();
 				Expect.Call(postRepository.GetByCategory(sourceCategoryName)).Return(new PostCollection());
 			}
 
-			using (_mocks.Playback())
+			using (Mocks.Playback())
 			{
 				Migrator fm = new Migrator(categoryRepository, postRepository);
 				fm.Migrate(new MigrationInfo(oldState, newState));

@@ -73,7 +73,7 @@ namespace DnugLeipzig.Runtime.Repositories
 			throw new NotSupportedException();
 		}
 
-		public void Save(Category instance)
+		public void Save(Category post)
 		{
 			throw new NotImplementedException();
 		}

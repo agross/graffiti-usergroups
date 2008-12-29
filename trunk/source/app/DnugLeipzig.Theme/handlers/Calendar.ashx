@@ -1,3 +1,5 @@
 <%@ WebHandler Language="C#" Class="Calendar" %>
-public class Calendar : DnugLeipzig.Extensions.Handlers.CalendarHandler
+using DnugLeipzig.Runtime.Handlers;
+
+public class Calendar : CalendarHandler
 {}
