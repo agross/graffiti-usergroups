@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Commands.Events;
 using DnugLeipzig.Definitions.Commands.Results;
 using DnugLeipzig.Definitions.Extensions;
 
@@ -14,6 +14,17 @@ namespace DnugLeipzig.Runtime.Handlers
 {
 	public class RegistrationHandler : IHttpHandler
 	{
+		readonly ICommandFactory _commandFactory;
+
+		public RegistrationHandler() : this(IoC.Resolve<ICommandFactory>())
+		{
+		}
+
+		public RegistrationHandler(ICommandFactory commandFactory)
+		{
+			_commandFactory = commandFactory;
+		}
+
 		#region IHttpHandler Members
 		public void ProcessRequest(HttpContext context)
 		{
@@ -33,12 +44,12 @@ namespace DnugLeipzig.Runtime.Handlers
 						                                     where key != null && key.StartsWith("event-")
 						                                     select Convert.ToInt32(key.Replace("event-", String.Empty));
 
-						command = new MultipleEventRegistrationCommand(eventsToSubscribe,
-						                                               context.Request.Form["formOfAddress"],
-						                                               context.Request.Form["name"],
-						                                               context.Request.Form["occupation"],
-						                                               context.Request.Form["attendeeEMail"],
-						                                               context.Request.Form["ccToAttendee"].IsChecked());
+						command = _commandFactory.MultipleEventRegistration(eventsToSubscribe,
+						                                                    context.Request.Form["formOfAddress"],
+						                                                    context.Request.Form["name"],
+						                                                    context.Request.Form["occupation"],
+						                                                    context.Request.Form["attendeeEMail"],
+						                                                    context.Request.Form["ccToAttendee"].IsChecked());
 						break;
 
 					default:
@@ -50,7 +61,8 @@ namespace DnugLeipzig.Runtime.Handlers
 			}
 			catch (Exception ex)
 			{
-				Log.Error(String.Format("{0}: Could not process registration request", GetType().Name), ex.ToString());
+				// TODO: Inject
+//				Log.Error(String.Format("{0}: Could not process registration request", GetType().Name), ex.ToString());
 				new ErrorResult().Render(HttpContext.Current.Response);
 			}
 		}

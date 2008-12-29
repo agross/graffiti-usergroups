@@ -5,6 +5,6 @@ namespace DnugLeipzig.Definitions.Services
 {
 	public interface ICalendarItemService
 	{
-		ICommandResult CreateCalendarItem(CreateCalendarItemCommand command);
+		ICommandResult CreateCalendarItem(ICreateCalendarItemCommand command);
 	}
 }

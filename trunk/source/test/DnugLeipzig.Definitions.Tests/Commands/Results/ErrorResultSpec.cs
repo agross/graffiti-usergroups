@@ -9,24 +9,31 @@ using MbUnit.Framework;
 
 namespace DnugLeipzig.Definitions.Tests.Commands.Results
 {
-	public class ErrorResultSpec : Spec
+	public class When_an_error_occurs : Spec
 	{
+		HttpSimulator _request;
 		ICommandResult _sut;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
 			_sut = new ErrorResult();
+			_request = new HttpSimulator().SimulateRequest();
+		}
+
+		protected override void Cleanup_after()
+		{
+			_request.Dispose();
+		}
+
+		protected override void Because()
+		{
+			_sut.Render(HttpContext.Current.Response);
 		}
 
 		[Test]
-		public void It_should_render_HTTP_500()
+		public void It_should_set_Http_500_status()
 		{
-			using (new HttpSimulator().SimulateRequest())
-			{
-				_sut.Render(HttpContext.Current.Response);
-
-				Assert.AreEqual(500, HttpContext.Current.Response.StatusCode);
-			}
+			Assert.AreEqual(500, HttpContext.Current.Response.StatusCode);
 		}
 	}
 }

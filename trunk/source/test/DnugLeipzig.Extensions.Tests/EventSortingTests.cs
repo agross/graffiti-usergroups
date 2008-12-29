@@ -17,7 +17,7 @@ namespace DnugLeipzig.Extensions.Tests
 		PostCollection _originalPosts;
 		PostCollection _posts;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
 			_posts = new PostCollection();
 			_originalPosts = new PostCollection();

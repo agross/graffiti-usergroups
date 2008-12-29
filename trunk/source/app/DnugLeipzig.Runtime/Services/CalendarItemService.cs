@@ -10,6 +10,7 @@ using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Runtime.Commands.Calendar;
 
 using Graffiti.Core;
 
@@ -29,7 +30,7 @@ namespace DnugLeipzig.Runtime.Services
 		}
 
 		#region ICalendarItemService Members
-		public ICommandResult CreateCalendarItem(CreateCalendarItemCommand command)
+		public ICommandResult CreateCalendarItem(ICreateCalendarItemCommand command)
 		{
 			Post post;
 			try

@@ -1,72 +1,148 @@
 using System;
+using System.Collections.Specialized;
 using System.Web;
 
-using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
 using DnugLeipzig.Runtime.Handlers;
 
 using MbUnit.Framework;
 
-using Rhino.Testing.AutoMocking;
+using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Runtime.Tests.Handlers
 {
-	public class RegistrationHandlerSpec : Spec
+	public abstract class With_registration_handler : Spec
 	{
-		AutoMockingContainer _container;
 		RegistrationHandler _sut;
 
-		protected override void Before_each_spec()
+		protected ICommandFactory CommandFactory
 		{
-			_sut = new RegistrationHandler();
-
-			_container = new AutoMockingContainer(Mocks);
-			_container.Initialize();
-			IoC.Initialize(_container);
+			get;
+			private set;
 		}
 
-		protected override void After_each_spec()
+		protected HttpSimulator Request
 		{
-			IoC.Container.Dispose();
-			IoC.Reset();
+			get;
+			private set;
+		}
+
+		protected override void Establish_context()
+		{
+			CommandFactory = MockRepository.GenerateStub<ICommandFactory>();
+			_sut = new RegistrationHandler(CommandFactory);
+
+			Request = CreateRequest();
+		}
+
+		protected override void Because()
+		{
+			_sut.ProcessRequest(HttpContext.Current);
+		}
+
+		protected override void Cleanup_after()
+		{
+			Request.Dispose();
+		}
+
+		protected abstract HttpSimulator CreateRequest();
+	}
+
+	public class When_the_registration_handler_is_called_via_Http_get : With_registration_handler
+	{
+		protected override HttpSimulator CreateRequest()
+		{
+			return new HttpSimulator().SimulateRequest(new Uri("http://foo"), HttpVerb.GET);
 		}
 
 		[Test]
-		public void ShouldReturn403ForbiddenIfNoUsingHttpPost()
+		public void It_should_set_Http_403_status()
 		{
-			using (new HttpSimulator().SimulateRequest(new Uri("http://foo"), HttpVerb.GET))
-			{
-				_sut.ProcessRequest(HttpContext.Current);
+			Assert.AreEqual(403, HttpContext.Current.Response.StatusCode);
+		}
+	}
 
-				Assert.AreEqual(403, HttpContext.Current.Response.StatusCode);
-			}
+	public class When_the_registration_handler_is_called_with_an_unknown_command : With_registration_handler
+	{
+		protected override HttpSimulator CreateRequest()
+		{
+			return new HttpSimulator().SimulateRequest(new Uri(String.Format("http://foo?command={0}",
+			                                                                 Guid.NewGuid())),
+			                                           HttpVerb.POST);
 		}
 
-		//		[Test]
-		//		public void ShouldReturn500InternalServerErrorForUnknownCommands()
-		//		{
-		//			using (new HttpSimulator().SimulateRequest(new Uri(String.Format("http://foo?command={0}",
-		//			                                                                 Guid.NewGuid())),
-		//			                                           HttpVerb.POST))
-		//			{
-		//				_sut.ProcessRequest(HttpContext.Current);
-		//
-		//				Assert.AreEqual(500, HttpContext.Current.Response.StatusCode);
-		//			}
-		//		}
+		[Test]
+		public void It_should_set_Http_500_status()
+		{
+			Assert.AreEqual(500, HttpContext.Current.Response.StatusCode);
+		}
+	}
 
-//		[RowTest]
-//		[Row("register")]
-//		public void ShouldReturn200OKForKnownCommands(string command)
-//		{
-//			using (new HttpSimulator().SimulateRequest(new Uri(String.Format("http://foo?command={0}", command)),
-//			                                           HttpVerb.POST))
-//			{
-//				_sut.ProcessRequest(HttpContext.Current);
-//
-//				Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
-//			}
-//		}
+	public class When_the_registration_handler_is_called_with_the_register_command : With_registration_handler
+	{
+		ICommandResult _commandResult;
+		ICommand _command;
+
+		protected override void Establish_context()
+		{
+			base.Establish_context();
+
+			_command = MockRepository.GenerateMock<ICommand>();
+			CommandFactory.Stub(x => x.MultipleEventRegistration(null, null, null, null, null, true))
+				.IgnoreArguments()
+				.Return(_command);
+
+			_commandResult = MockRepository.GenerateMock<ICommandResult>();
+			_command.Stub(x => x.Execute()).Return(_commandResult);
+		}
+
+		protected override HttpSimulator CreateRequest()
+		{
+			var form = new NameValueCollection
+			           {
+			           	{ "event-10", null },
+			           	{ "event-42", null },
+			           	{ "formOfAddress", "foo" },
+			           	{ "name", "bar" },
+			           	{ "occupation", "baz" },
+			           	{ "attendeeEMail", "foo@bar.com" },
+			           	{ "ccToAttendee", "on" }
+			           };
+
+			return new HttpSimulator().SimulateRequest(new Uri("http://foo?command=register"), form);
+		}
+
+		[Test]
+		public void It_should_create_a_registration_request_from_the_form_values()
+		{
+			CommandFactory.AssertWasCalled(x => x.MultipleEventRegistration(null, null, null, null, null, true),
+			                               x => x.Constraints(List.ContainsAll(new[] { 10, 42 }),
+			                                                  Is.Equal("foo"),
+			                                                  Is.Equal("bar"),
+			                                                  Is.Equal("baz"),
+			                                                  Is.Equal("foo@bar.com"),
+			                                                  Is.Equal(true)));
+		}
+
+		[Test]
+		public void It_should_execute_the_request()
+		{
+			_command.AssertWasCalled(x => x.Execute());
+		}
+
+		[Test]
+		public void It_should_render_the_request_result()
+		{
+			_commandResult.AssertWasCalled(x => x.Render(null), x => x.IgnoreArguments());
+		}
+
+		[Test]
+		public void It_should_set_Http_200_status()
+		{
+			Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
+		}
 	}
 }

@@ -10,47 +10,72 @@ using MbUnit.Framework;
 
 namespace DnugLeipzig.Definitions.Tests.Commands.Results
 {
-	public class ValidationErrorResultSpec : Spec
+	public class When_a_validation_error_result_is_rendered : Spec
 	{
+		HttpSimulator _request;
 		ICommandResult _sut;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
 			_sut = new ValidationErrorResult(new List<string> { "foo", "bar" });
+			_request = new HttpSimulator().SimulateRequest();
+		}
+
+		protected override void Cleanup_after()
+		{
+			_request.Dispose();
+		}
+
+		protected override void Because()
+		{
+			_sut.Render(HttpContext.Current.Response);
 		}
 
 		[Test]
-		public void It_should_render_HTTP_200()
+		public void It_should_set_Http_200_status()
 		{
-			using (new HttpSimulator().SimulateRequest())
-			{
-				_sut.Render(HttpContext.Current.Response);
-
-				Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
-			}
+			Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
 		}
 
 		[Test]
-		public void It_should_render_the_JSON_content_type()
+		public void It_should_render_the_Json_content_type()
 		{
-			using (new HttpSimulator().SimulateRequest())
-			{
-				_sut.Render(HttpContext.Current.Response);
-
-				Assert.AreEqual("application/json", HttpContext.Current.Response.ContentType);
-			}
+			Assert.AreEqual("application/json", HttpContext.Current.Response.ContentType);
 		}
 
 		[Test]
 		public void It_should_render_the_validation_error_messages()
 		{
-			using (HttpSimulator request = new HttpSimulator().SimulateRequest())
-			{
-				_sut.Render(HttpContext.Current.Response);
+			StringAssert.Contains(_request.ResponseText, "foo");
+			StringAssert.Contains(_request.ResponseText, "bar");
+		}
+	}
 
-				StringAssert.Contains(request.ResponseText, "foo");
-				StringAssert.Contains(request.ResponseText, "bar");
-			}
+	public class When_an_empty_validation_error_result_is_rendered : Spec
+	{
+		HttpSimulator _request;
+		ICommandResult _sut;
+
+		protected override void Establish_context()
+		{
+			_sut = new ValidationErrorResult(null);
+			_request = new HttpSimulator().SimulateRequest();
+		}
+
+		protected override void Cleanup_after()
+		{
+			_request.Dispose();
+		}
+
+		protected override void Because()
+		{
+			_sut.Render(HttpContext.Current.Response);
+		}
+
+		[Test]
+		public void It_should_render_an_empty_validation_error_message()
+		{
+			Assert.AreEqual("{\"ValidationErrors\":null}", _request.ResponseText);
 		}
 	}
 }

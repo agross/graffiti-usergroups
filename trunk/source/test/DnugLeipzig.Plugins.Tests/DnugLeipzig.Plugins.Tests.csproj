@@ -61,19 +61,17 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Events\PostBuilder.cs" />
     <Compile Include="MigratorTests.CustomFields.cs" />
-    <Compile Include="Events\SettingsValidationTests.cs" />
-    <Compile Include="Events\SetupHelper.cs" />
-    <Compile Include="Talks\PostValidationTests.cs" />
+    <Compile Include="Events\SettingsValidationSpec.cs" />
+    <Compile Include="Talks\PostValidationSpec.cs" />
     <Compile Include="Events\PostDefaultsTests.cs" />
-    <Compile Include="Events\PostValidationTests.cs" />
-    <Compile Include="Extensions\DictionaryExtensions.cs" />
+    <Compile Include="Events\PostValidationSpec.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="MigratorTests.Categories.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Talks\SettingsValidationTests.cs" />
-    <Compile Include="Talks\SetupHelper.cs" />
-    <Compile Include="ValidationExceptionTests.cs" />
+    <Compile Include="Talks\SettingsValidationSpec.cs" />
+    <Compile Include="ValidationExceptionSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">

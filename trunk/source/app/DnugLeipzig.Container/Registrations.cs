@@ -1,12 +1,17 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Castle.MicroKernel.Registration;
 
+using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Runtime.Commands;
+using DnugLeipzig.Runtime.Commands.Calendar;
 using DnugLeipzig.Runtime.Configuration;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
@@ -43,6 +48,14 @@ namespace DnugLeipzig.Container
 			yield return Component.For<ICategorizedPostRepository<IEventPluginConfiguration>>()
 				.ImplementedBy<CategorizedPostRepository<IEventPluginConfiguration>>();
 
+			// Commands.
+			yield return Component.For<ICommandFactory>()
+				.ImplementedBy<CommandFactory>();
+
+			yield return AllTypes.Of<ICommand>()
+				.FromAssembly(typeof(CreateCalendarItemCommand).Assembly)
+				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type));
+
 			// Services.
 			yield return Component.For<IEmailSender>()
 				.ImplementedBy<GraffitiEmailSender>();
@@ -57,6 +70,21 @@ namespace DnugLeipzig.Container
 				            	Parameter.ForKey("registrationEmailTemplate")
 				            		.Eq("register.view"),
 				            });
+		}
+
+		static Type[] DeepestInterfaceImplementation(Type type)
+		{
+			return new[]
+			       {
+			       	(type.GetInterfaces().Select(i => new
+			       	                                  {
+			       	                                  	InterfaceType = i,
+			       	                                  	ImplementedInterfaces = i.GetInterfaces().Length
+			       	                                  }))
+			       		.OrderBy(x => x.ImplementedInterfaces)
+			       		.Last()
+			       		.InterfaceType
+			       };
 		}
 	}
 }

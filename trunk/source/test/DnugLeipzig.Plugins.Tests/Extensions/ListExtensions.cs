@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Plugins.Migration;
@@ -13,9 +12,12 @@ namespace DnugLeipzig.Plugins.Tests.Extensions
 		{
 			List<CustomField> result = new List<CustomField>();
 
-			fields.ForEach(
-				info =>
-				result.Add(new CustomField { Description = info.Description, Name = info.FieldName, FieldType = info.FieldType }));
+			fields.ForEach(info => result.Add(new CustomField
+			                                  {
+			                                  	Description = info.Description,
+			                                  	Name = info.FieldName,
+			                                  	FieldType = info.FieldType
+			                                  }));
 
 			return result;
 		}
