@@ -2,6 +2,9 @@ using System;
 using System.Collections.Specialized;
 using System.Web;
 
+using Castle.Core.Logging;
+
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
@@ -33,7 +36,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		protected override void Establish_context()
 		{
 			CommandFactory = MockRepository.GenerateStub<ICommandFactory>();
-			_sut = new RegistrationHandler(CommandFactory);
+			_sut = new RegistrationHandler(CommandFactory, null);
 
 			Request = CreateRequest();
 		}

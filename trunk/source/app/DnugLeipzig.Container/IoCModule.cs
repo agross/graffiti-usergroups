@@ -1,9 +1,11 @@
 using System.Runtime.CompilerServices;
 using System.Web;
 
+using Castle.Facilities.Logging;
 using Castle.Windsor;
 
 using DnugLeipzig.Definitions;
+using DnugLeipzig.Runtime.Logging;
 
 namespace DnugLeipzig.Container
 {
@@ -59,6 +61,12 @@ namespace DnugLeipzig.Container
 		protected virtual IWindsorContainer CreateContainerWithMappings()
 		{
 			IWindsorContainer container = new WindsorContainer();
+
+			container.AddFacility("LoggingFacility",
+			                      new LoggingFacility(LoggerImplementation.Custom,
+			                                          typeof(GraffitiLoggerFactory).AssemblyQualifiedName,
+			                                          null));
+
 			foreach (var registration in Registrations.Get())
 			{
 				container.Register(registration);
