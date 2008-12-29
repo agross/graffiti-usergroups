@@ -7,6 +7,7 @@ using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Runtime.Commands.Events;
 
 using Graffiti.Core;
 
@@ -34,25 +35,25 @@ namespace DnugLeipzig.Runtime.Services
 		}
 
 		#region Implementation of IEventRegistrationService
-		public ICommandResult RegisterForEvents(MultipleEventRegistrationCommand command)
+		public ICommandResult RegisterForEvents(IMultipleEventRegistrationCommand command)
 		{
 			MultipleEventRegistrationResult result = new MultipleEventRegistrationResult();
 
 			foreach (var eventToRegister in command.EventsToRegister)
 			{
-				result.EventResults.Add(
-					RegisterForEvent(new SingleEventRegistrationCommand(eventToRegister,
-					                                                    command.Name,
-					                                                    command.FormOfAddress,
-					                                                    command.Occupation,
-					                                                    command.AttendeeEmail,
-					                                                    command.SendConfirmationToAttendee)));
+//				result.EventResults.Add(
+//					RegisterForEvent(new SingleEventRegistrationCommand(eventToRegister,
+//					                                                    command.Name,
+//					                                                    command.FormOfAddress,
+//					                                                    command.Occupation,
+//					                                                    command.AttendeeEmail,
+//					                                                    command.SendConfirmationToAttendee)));
 			}
 
 			return result;
 		}
 
-		public ICommandResult RegisterForEvent(SingleEventRegistrationCommand command)
+		public ICommandResult RegisterForEvent(ISingleEventRegistrationCommand command)
 		{
 			try
 			{

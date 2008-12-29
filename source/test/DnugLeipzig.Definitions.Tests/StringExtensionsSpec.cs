@@ -7,20 +7,33 @@ using MbUnit.Framework;
 
 namespace DnugLeipzig.Definitions.Tests
 {
-	public class StringExtensionsTests : Spec
+	public class When_a_string_is_tested_for_emptiness : Spec
 	{
+		protected static bool Because(string value)
+		{
+			return value.IsNullOrEmptyTrimmed();
+		}
+
 		[RowTest]
 		[Row("", true)]
 		[Row("    ", true)]
 		[Row(null, true)]
 		[Row(" foo ", false)]
-		public void IsNullOrEmptyTrimmedRow(string value, bool expectedResult)
+		public void It_should_indicate_if_the_string_is_empty(string value, bool expectedResult)
 		{
 			Assert.AreEqual(expectedResult,
-			                value.IsNullOrEmptyTrimmed(),
+			                Because(value),
 			                "Should have returned {0} for value '{1}'.",
 			                expectedResult,
 			                value);
+		}
+	}
+
+	public class When_an_invalid_date_value_is_converted_to_an_event_date : Spec
+	{
+		protected static DateTime Because(string value)
+		{
+			return value.AsEventDate();
 		}
 
 		[RowTest]
@@ -28,12 +41,37 @@ namespace DnugLeipzig.Definitions.Tests
 		[Row("    ")]
 		[Row(null)]
 		[Row(" foo ")]
-		public void ShouldReturnDateTimeMaxValueWhenParsingInvalidEventDate(string value)
+		public void It_should_return_DateTime_MaxValue(string value)
 		{
 			Assert.AreEqual(DateTime.MaxValue,
-			                value.AsEventDate(),
+			                Because(value),
 			                "Should have returned DateTime.MaxValue because '{0}' is an invalid date.",
 			                value);
+		}
+	}
+
+	public class When_an_valid_date_value_is_converted_to_an_event_date : Spec
+	{
+		protected static DateTime Because(string value)
+		{
+			return value.AsEventDate();
+		}
+
+		[RowTest]
+		[Row("11.12.2008", 2008, 12, 11)]
+		[Row("11/12/2008", 2008, 12, 11)]
+		public void It_should_return_DateTime_MaxValue(string value, int year, int month, int day)
+		{
+			Assert.AreEqual(new DateTime(year, month, day),
+			                Because(value));
+		}
+	}
+
+	public class When_the_line_count_of_a_string_is_computed : Spec
+	{
+		protected static int Because(string value)
+		{
+			return value.LineCount();
 		}
 
 		[RowTest]
@@ -50,7 +88,7 @@ namespace DnugLeipzig.Definitions.Tests
 		public void ShouldReturnCorrectLineCount(string value, int expectedLineCount)
 		{
 			Assert.AreEqual(expectedLineCount,
-			                value.LineCount(),
+			                Because(value),
 			                "Should have returned a line count of {0} for value '{1}'.",
 			                expectedLineCount,
 			                value);

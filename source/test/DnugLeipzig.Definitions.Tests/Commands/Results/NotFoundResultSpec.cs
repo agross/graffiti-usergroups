@@ -9,24 +9,31 @@ using MbUnit.Framework;
 
 namespace DnugLeipzig.Definitions.Tests.Commands.Results
 {
-	public class NotFoundResultSpec : Spec
+	public class When_a_resource_could_not_be_found : Spec
 	{
+		HttpSimulator _request;
 		ICommandResult _sut;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
 			_sut = new NotFoundResult();
+			_request = new HttpSimulator().SimulateRequest();
+		}
+
+		protected override void Cleanup_after()
+		{
+			_request.Dispose();
+		}
+
+		protected override void Because()
+		{
+			_sut.Render(HttpContext.Current.Response);
 		}
 
 		[Test]
-		public void It_should_render_HTTP_404()
+		public void It_should_set_Http_404_status()
 		{
-			using (new HttpSimulator().SimulateRequest())
-			{
-				_sut.Render(HttpContext.Current.Response);
-
-				Assert.AreEqual(404, HttpContext.Current.Response.StatusCode);
-			}
+			Assert.AreEqual(404, HttpContext.Current.Response.StatusCode);
 		}
 	}
 }

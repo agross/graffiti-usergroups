@@ -67,16 +67,16 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Commands\Calendar\ICreateCalendarItemCommand.cs" />
+    <Compile Include="Commands\Events\IEventRegistrationCommand.cs" />
+    <Compile Include="Commands\Events\IMultipleEventRegistrationCommand.cs" />
+    <Compile Include="Commands\Events\ISingleEventRegistrationCommand.cs" />
+    <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\Results\ErrorResult.cs" />
-    <Compile Include="Commands\Events\EventRegistrationCommand.cs" />
-    <Compile Include="Commands\Events\MultipleEventRegistrationCommand.cs" />
     <Compile Include="Commands\Results\ForbiddenResult.cs" />
     <Compile Include="Commands\Results\NotFoundResult.cs" />
-    <Compile Include="Commands\Command.cs" />
-    <Compile Include="Commands\Calendar\CreateCalendarItemCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandResult.cs" />
-    <Compile Include="Commands\Events\SingleEventRegistrationCommand.cs" />
     <Compile Include="Commands\Results\ValidationErrorResult.cs" />
     <Compile Include="Configuration\GraffitiSiteSettings.cs" />
     <Compile Include="Configuration\Plugins\IPluginConfiguration.cs" />

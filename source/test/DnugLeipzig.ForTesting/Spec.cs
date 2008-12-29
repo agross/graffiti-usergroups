@@ -1,31 +1,45 @@
 using MbUnit.Framework;
 
+using Rhino.Mocks;
+
 namespace DnugLeipzig.ForTesting
 {
 	[TestFixture]
-	public abstract class Spec : AbstractSpec
+	public abstract class Spec
 	{
-		[SetUp]
-		public override void SetUp()
+		protected MockRepository Mocks
 		{
-			base.SetUp();
-
-			Before_each_spec();
+			get;
+			private set;
 		}
 
-		[TearDown]
-		public override void TearDown()
+		[TestFixtureSetUp]
+		public void TestFixtureSetUp()
 		{
-			base.TearDown();
+			Mocks = new MockRepository();
 
-			After_each_spec();
+			Establish_context();
+			Because();
 		}
 
-		protected virtual void Before_each_spec()
+		[TestFixtureTearDown]
+		public void TestFixtureTearDown()
+		{
+			Mocks.ReplayAll();
+			Mocks.VerifyAll();
+
+			Cleanup_after();
+		}
+
+		protected virtual void Establish_context()
 		{
 		}
 
-		protected virtual void After_each_spec()
+		protected virtual void Because()
+		{
+		}
+
+		protected virtual void Cleanup_after()
 		{
 		}
 	}

@@ -64,7 +64,6 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="AbstractSpec.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
     <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
     <Compile Include="HttpMocks\ReflectionHelper.cs" />

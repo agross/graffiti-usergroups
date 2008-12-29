@@ -1,8 +1,8 @@
 using System;
 using System.Web;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Commands.Calendar;
 using DnugLeipzig.Definitions.Commands.Results;
 
 using Graffiti.Core;
@@ -11,6 +11,17 @@ namespace DnugLeipzig.Runtime.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
+		readonly ICommandFactory _commandFactory;
+
+		public CalendarHandler() : this(IoC.Resolve<ICommandFactory>())
+		{
+		}
+
+		public CalendarHandler(ICommandFactory commandFactory)
+		{
+			_commandFactory = commandFactory;
+		}
+
 		#region IHttpHandler Members
 		public void ProcessRequest(HttpContext context)
 		{
@@ -23,7 +34,7 @@ namespace DnugLeipzig.Runtime.Handlers
 
 			try
 			{
-				var command = new CreateCalendarItemCommand(eventId);
+				var command = _commandFactory.CreateCalendarItem(eventId);
 				ICommandResult result = command.Execute();
 
 				result.Render(HttpContext.Current.Response);

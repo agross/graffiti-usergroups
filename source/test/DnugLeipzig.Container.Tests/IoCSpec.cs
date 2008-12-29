@@ -6,25 +6,36 @@ using Castle.MicroKernel.Handlers;
 using Castle.Windsor;
 
 using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 
 using MbUnit.Framework;
 
 namespace DnugLeipzig.Container.Tests
 {
-	public class IoCSpec : Spec
+	public class When_the_IoC_container_has_been_initialized : Spec
 	{
 		IHandler[] _sut;
 
-		protected override void Before_each_spec()
+		protected override void Establish_context()
 		{
 			IWindsorContainer container = new WindsorContainer();
 			foreach (var registration in Registrations.Get())
 			{
 				container.Register(registration);
 			}
-			IoC.Initialize(container);
 
+			IoC.Initialize(container);
+		}
+
+		protected override void Cleanup_after()
+		{
+			IoC.Container.Dispose();
+			IoC.Reset();
+		}
+
+		protected override void Because()
+		{
 			_sut = IoC.Container.Kernel.GetAssignableHandlers(typeof(object));
 		}
 
@@ -57,6 +68,12 @@ namespace DnugLeipzig.Container.Tests
 			              			IoC.Resolve(handler.ComponentModel.Service);
 			              		}
 			              	});
+		}
+
+		[Test]
+		public void It_should_not_contain_services_for_ICommand()
+		{
+			Assert.IsNull(IoC.TryResolve<ICommand>(), "The container should not contain services for the ICommand interface.");
 		}
 	}
 }
