@@ -3,7 +3,6 @@ using System.Diagnostics;
 
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
-using Castle.Windsor;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
@@ -15,23 +14,20 @@ namespace DnugLeipzig.Container.Tests
 {
 	public class When_the_IoC_container_has_been_initialized : Spec
 	{
+		IoCModule _module;
 		IHandler[] _sut;
 
 		protected override void Establish_context()
 		{
-			IWindsorContainer container = new WindsorContainer();
-			foreach (var registration in Registrations.Get())
-			{
-				container.Register(registration);
-			}
-
-			IoC.Initialize(container);
+			_module = new IoCModule();
+// ReSharper disable AssignNullToNotNullAttribute
+			_module.Init(null);
+// ReSharper restore AssignNullToNotNullAttribute
 		}
 
 		protected override void Cleanup_after()
 		{
-			IoC.Container.Dispose();
-			IoC.Reset();
+			_module.Dispose();
 		}
 
 		protected override void Because()

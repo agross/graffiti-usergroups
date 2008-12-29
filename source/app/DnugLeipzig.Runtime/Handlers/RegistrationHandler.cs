@@ -3,26 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using Castle.Core.Logging;
+
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
 using DnugLeipzig.Definitions.Extensions;
-
-using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Handlers
 {
 	public class RegistrationHandler : IHttpHandler
 	{
 		readonly ICommandFactory _commandFactory;
+		ILogger _logger;
 
-		public RegistrationHandler() : this(IoC.Resolve<ICommandFactory>())
+		public RegistrationHandler() : this(IoC.Resolve<ICommandFactory>(), IoC.Resolve<ILogger>())
 		{
 		}
 
-		public RegistrationHandler(ICommandFactory commandFactory)
+		public RegistrationHandler(ICommandFactory commandFactory, ILogger logger)
 		{
 			_commandFactory = commandFactory;
+			Logger = logger;
+		}
+
+		public ILogger Logger
+		{
+			get
+			{
+				if (_logger == null)
+				{
+					return NullLogger.Instance;
+				}
+				return _logger;
+			}
+			set { _logger = value; }
 		}
 
 		#region IHttpHandler Members
@@ -61,8 +76,7 @@ namespace DnugLeipzig.Runtime.Handlers
 			}
 			catch (Exception ex)
 			{
-				// TODO: Inject
-//				Log.Error(String.Format("{0}: Could not process registration request", GetType().Name), ex.ToString());
+				Logger.Error(Create.New.Message().WithTitle("Could not process registration request"), ex);
 				new ErrorResult().Render(HttpContext.Current.Response);
 			}
 		}

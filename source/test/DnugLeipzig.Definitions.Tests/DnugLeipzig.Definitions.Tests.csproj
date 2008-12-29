@@ -54,6 +54,7 @@
     <Compile Include="Commands\Results\ValidationErrorResultSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensionsSpec.cs" />
+    <Compile Include="MessageBuilderSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">

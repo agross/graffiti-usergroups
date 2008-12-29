@@ -1,25 +1,40 @@
 using System;
 using System.Web;
 
+using Castle.Core.Logging;
+
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
-
-using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
 		readonly ICommandFactory _commandFactory;
+		ILogger _logger;
 
-		public CalendarHandler() : this(IoC.Resolve<ICommandFactory>())
+		public CalendarHandler() : this(IoC.Resolve<ICommandFactory>(), IoC.Resolve<ILogger>())
 		{
 		}
 
-		public CalendarHandler(ICommandFactory commandFactory)
+		public CalendarHandler(ICommandFactory commandFactory, ILogger logger)
 		{
 			_commandFactory = commandFactory;
+			Logger = logger;
+		}
+
+		public ILogger Logger
+		{
+			get
+			{
+				if (_logger == null)
+				{
+					return NullLogger.Instance;
+				}
+				return _logger;
+			}
+			set { _logger = value; }
 		}
 
 		#region IHttpHandler Members
@@ -41,7 +56,7 @@ namespace DnugLeipzig.Runtime.Handlers
 			}
 			catch (Exception ex)
 			{
-				Log.Error("Could not generate calendar item", ex.ToString());
+				Logger.Error(Create.New.Message().WithTitle("Could not generate calendar item"), ex);
 				new ErrorResult().Render(HttpContext.Current.Response);
 			}
 		}

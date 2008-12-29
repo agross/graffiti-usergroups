@@ -67,6 +67,7 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="ObjectFactory.cs" />
     <Compile Include="Commands\Calendar\ICreateCalendarItemCommand.cs" />
     <Compile Include="Commands\Events\IEventRegistrationCommand.cs" />
     <Compile Include="Commands\Events\IMultipleEventRegistrationCommand.cs" />
@@ -82,11 +83,15 @@
     <Compile Include="Configuration\Plugins\IPluginConfiguration.cs" />
     <Compile Include="Configuration\Plugins\IEventPluginConfiguration.cs" />
     <Compile Include="Configuration\Plugins\ITalkPluginConfiguration.cs" />
+    <Compile Include="Create.cs" />
+    <Compile Include="Builders\EntityBuilder.cs" />
     <Compile Include="Extensions\IDictionaryExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="IoC.cs" />
+    <Compile Include="Builders\MessageBuilder.cs" />
+    <Compile Include="ObjectFactoryExtensions.cs" />
     <Compile Include="Repositories\ICategorizedPostRepository.cs" />
     <Compile Include="Services\ICalendarItemService.cs" />
     <Compile Include="Services\IEmailSender.cs" />

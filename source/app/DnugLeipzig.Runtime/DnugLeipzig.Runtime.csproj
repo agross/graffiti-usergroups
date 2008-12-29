@@ -71,6 +71,8 @@
     <Compile Include="Commands\Events\SingleEventRegistrationCommand.cs" />
     <Compile Include="Handlers\CalendarHandler.cs" />
     <Compile Include="Handlers\RegistrationHandler.cs" />
+    <Compile Include="Logging\GraffitiLogger.cs" />
+    <Compile Include="Logging\GraffitiLoggerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CategorizedPostRepository.cs" />
     <Compile Include="Repositories\CategoryRepository.cs" />
