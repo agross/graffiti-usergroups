@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Script.Serialization;
 
-using DnugLeipzig.Definitions.Commands;
+using DnugLeipzig.Definitions;
 
 namespace DnugLeipzig.Runtime.Services
 {
-	internal class MultipleEventRegistrationResult : ICommandResult
+	internal class MultipleEventRegistrationResult : IHttpResponse
 	{
 		public MultipleEventRegistrationResult()
 		{
-			EventResults = new List<ICommandResult>();
+			EventResults = new List<IHttpResponse>();
 		}
 
-		#region Implementation of ICommandResult
+		#region Implementation of IHttpResponse
 		public void Render(HttpResponse response)
 		{
 			response.ContentType = "application/json";
@@ -22,7 +22,7 @@ namespace DnugLeipzig.Runtime.Services
 		}
 		#endregion
 
-		public ICollection<ICommandResult> EventResults
+		public ICollection<IHttpResponse> EventResults
 		{
 			get;
 			protected set;

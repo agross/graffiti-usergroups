@@ -2,9 +2,9 @@ using System.Web;
 
 namespace DnugLeipzig.Definitions.Commands.Results
 {
-	public class ForbiddenResult : ICommandResult
+	public class ForbiddenResult : IHttpResponse
 	{
-		#region Implementation of ICommandResult
+		#region Implementation of IHttpResponse
 		public void Render(HttpResponse response)
 		{
 			response.Clear();

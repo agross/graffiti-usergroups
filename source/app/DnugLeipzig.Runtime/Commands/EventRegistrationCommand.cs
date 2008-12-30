@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Services;
 
@@ -73,7 +74,7 @@ namespace DnugLeipzig.Runtime.Commands
 		#endregion
 
 		#region Implementation of ICommand
-		public override ICommandResult Execute()
+		public override IHttpResponse Execute()
 		{
 			return EventRegistrationService.RegisterForEvents(this);
 		}

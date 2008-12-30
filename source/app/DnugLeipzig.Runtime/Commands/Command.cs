@@ -1,5 +1,6 @@
 using Castle.Core.Logging;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 
 namespace DnugLeipzig.Runtime.Commands
@@ -22,7 +23,7 @@ namespace DnugLeipzig.Runtime.Commands
 		}
 
 		#region Implementation of ICommand
-		public abstract ICommandResult Execute();
+		public abstract IHttpResponse Execute();
 		#endregion
 	}
 }

@@ -2,7 +2,7 @@ using System;
 
 namespace DnugLeipzig.Definitions.Repositories
 {
-	public interface ICalendarItem
+	public interface ICalendarItem : IHttpResponse
 	{
 		DateTime StartDate
 		{

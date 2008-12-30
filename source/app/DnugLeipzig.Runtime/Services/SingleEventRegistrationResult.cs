@@ -1,18 +1,18 @@
 using System.Web;
 using System.Web.Script.Serialization;
 
-using DnugLeipzig.Definitions.Commands;
+using DnugLeipzig.Definitions;
 
 namespace DnugLeipzig.Runtime.Services
 {
-	internal class SingleEventRegistrationResult : ICommandResult
+	internal class SingleEventRegistrationResult : IHttpResponse
 	{
 		public SingleEventRegistrationResult(int subscribedEvent)
 		{
 			SubscribedEvent = subscribedEvent;
 		}
 
-		#region Implementation of ICommandResult
+		#region Implementation of IHttpResponse
 		public void Render(HttpResponse response)
 		{
 			response.ContentType = "application/json";

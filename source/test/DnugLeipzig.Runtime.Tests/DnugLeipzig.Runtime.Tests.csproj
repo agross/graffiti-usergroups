@@ -76,6 +76,7 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Handlers\CalendarHandlerSpec.cs" />
     <Compile Include="Handlers\RegistrationHandlerSpec.cs" />
     <Compile Include="Commands\CommandFactorySpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

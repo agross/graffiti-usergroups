@@ -1,6 +1,5 @@
 using System.Web;
 
-using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
@@ -12,7 +11,7 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 	public class When_an_error_occurs : Spec
 	{
 		HttpSimulator _request;
-		ICommandResult _sut;
+		IHttpResponse _sut;
 
 		protected override void Establish_context()
 		{

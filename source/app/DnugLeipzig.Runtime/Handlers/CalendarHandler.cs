@@ -6,21 +6,26 @@ using Castle.Core.Logging;
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
+using DnugLeipzig.Definitions.Repositories;
+
+using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
-		readonly ICommandFactory _commandFactory;
+		readonly IPostRepository _postRepository;
+		readonly ICalendarItemRepository _calendarItemRepository;
 		ILogger _logger;
 
-		public CalendarHandler() : this(IoC.Resolve<ICommandFactory>(), IoC.Resolve<ILogger>())
+		public CalendarHandler() : this(IoC.Resolve<IPostRepository>(), IoC.Resolve<ICalendarItemRepository>(), IoC.Resolve<ILogger>())
 		{
 		}
 
-		public CalendarHandler(ICommandFactory commandFactory, ILogger logger)
+		public CalendarHandler(IPostRepository postRepository, ICalendarItemRepository calendarItemRepository, ILogger logger)
 		{
-			_commandFactory = commandFactory;
+			_postRepository = postRepository;
+			_calendarItemRepository = calendarItemRepository;
 			Logger = logger;
 		}
 
@@ -40,24 +45,35 @@ namespace DnugLeipzig.Runtime.Handlers
 		#region IHttpHandler Members
 		public void ProcessRequest(HttpContext context)
 		{
+			if (context.Request.RequestType != "GET")
+			{
+				new ForbiddenResult().Render(context.Response);
+				return;
+			}
+
 			int eventId;
 			if (!int.TryParse(context.Request.QueryString["eventId"], out eventId))
 			{
-				new NotFoundResult().Render(HttpContext.Current.Response);
+				new NotFoundResult().Render(context.Response);
 				return;
 			}
 
 			try
 			{
-				var command = _commandFactory.CreateCalendarItem(eventId);
-				ICommandResult result = command.Execute();
+				Post post = _postRepository.GetById(eventId);
+				if (post == null)
+				{
+					new NotFoundResult().Render(context.Response);
+					return;
+				}
 
-				result.Render(HttpContext.Current.Response);
+				ICalendarItem item = _calendarItemRepository.CreateCalendarItemForEvent(post);
+				item.Render(context.Response);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(Create.New.Message().WithTitle("Could not generate calendar item"), ex);
-				new ErrorResult().Render(HttpContext.Current.Response);
+				new ErrorResult().Render(context.Response);
 			}
 		}
 

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Web;
 
-using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
@@ -13,7 +12,7 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 	public class When_a_validation_error_result_is_rendered : Spec
 	{
 		HttpSimulator _request;
-		ICommandResult _sut;
+		IHttpResponse _sut;
 
 		protected override void Establish_context()
 		{
@@ -54,7 +53,7 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 	public class When_an_empty_validation_error_result_is_rendered : Spec
 	{
 		HttpSimulator _request;
-		ICommandResult _sut;
+		IHttpResponse _sut;
 
 		protected override void Establish_context()
 		{
