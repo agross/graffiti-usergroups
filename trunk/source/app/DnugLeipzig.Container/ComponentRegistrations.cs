@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Castle.Core;
 using Castle.MicroKernel.Registration;
 
 using DnugLeipzig.Definitions.Commands;
@@ -18,7 +19,7 @@ using DnugLeipzig.Runtime.Services;
 
 namespace DnugLeipzig.Container
 {
-	public static class Registrations
+	public static class ComponentRegistrations
 	{
 		public static IEnumerable<IRegistration> Get()
 		{
@@ -54,7 +55,8 @@ namespace DnugLeipzig.Container
 
 			yield return AllTypes.Of<ICommand>()
 				.FromAssembly(typeof(CreateCalendarItemCommand).Assembly)
-				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type));
+				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
+				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
 
 			// Services.
 			yield return Component.For<IEmailSender>()

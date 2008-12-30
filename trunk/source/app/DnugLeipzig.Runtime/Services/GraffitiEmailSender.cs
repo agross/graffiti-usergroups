@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Services;
 
 using Graffiti.Core;
@@ -34,7 +35,7 @@ namespace DnugLeipzig.Runtime.Services
 			}
 			catch (Exception ex)
 			{
-				Logger.Error("Could not send registration message", ex.ToString());
+				Logger.Error(Create.New.Message().WithTitle("Could not send e-mail"), ex);
 				throw;
 			}
 		}
@@ -68,7 +69,7 @@ namespace DnugLeipzig.Runtime.Services
 			}
 			catch (Exception ex)
 			{
-				Logger.Error("Could not send registration message", ex.ToString());
+				Logger.Error(Create.New.Message().WithTitle("Could not send e-mail"), ex);
 				throw;
 			}
 		}

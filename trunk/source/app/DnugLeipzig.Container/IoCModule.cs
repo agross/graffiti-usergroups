@@ -67,7 +67,7 @@ namespace DnugLeipzig.Container
 			                                          typeof(GraffitiLoggerFactory).AssemblyQualifiedName,
 			                                          null));
 
-			foreach (var registration in Registrations.Get())
+			foreach (var registration in ComponentRegistrations.Get())
 			{
 				container.Register(registration);
 			}
