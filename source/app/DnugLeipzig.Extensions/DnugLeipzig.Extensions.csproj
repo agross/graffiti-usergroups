@@ -64,7 +64,6 @@
     <Compile Include="Configuration\PluginConfiguration.cs" />
     <Compile Include="Configuration\TalkPluginConfiguration.cs" />
     <Compile Include="DateAscendingPostComparer.cs" />
-    <Compile Include="DataObjects\CalendarItem.cs" />
     <Compile Include="Extensions\PostExtensions.cs" />
     <Compile Include="Extensions\PostFilterExtensions.cs" />
     <Compile Include="Macros\Macros.cs" />

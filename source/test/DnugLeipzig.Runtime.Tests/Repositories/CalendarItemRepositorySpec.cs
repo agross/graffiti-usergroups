@@ -7,6 +7,8 @@ using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Repositories;
 
+using Graffiti.Core;
+
 using MbUnit.Framework;
 
 using Rhino.Mocks;
@@ -15,13 +17,13 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 {
 	public class When_a_calendar_item_for_an_exiting_event_is_created : With_calendar_item_repository
 	{
-		protected override void CreatePost(IPostRepository postRepository, IEventPluginConfiguration configuration)
+		protected override Post CreatePost(IEventPluginConfiguration configuration)
 		{
-			postRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(configuration)
-			                                               	.From(DateTime.MinValue)
-			                                               	.To(DateTime.MinValue.AddDays(10))
-			                                               	.AtLocation("somewhere")
-			                                               	.TheTopicIs("techno babble"));
+			return Create.New.Event(configuration)
+				.From(DateTime.MinValue)
+				.To(DateTime.MinValue.AddDays(10))
+				.AtLocation("somewhere")
+				.TheTopicIs("techno babble");
 		}
 
 		[Test]
@@ -65,14 +67,14 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	public class When_a_calendar_item_for_an_exiting_event_is_created_and_the_location_is_unknown
 		: With_calendar_item_repository
 	{
-		protected override void CreatePost(IPostRepository postRepository, IEventPluginConfiguration configuration)
+		protected override Post CreatePost(IEventPluginConfiguration configuration)
 		{
-			postRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(configuration)
-			                                               	.From(DateTime.MinValue)
-			                                               	.To(DateTime.MinValue.AddDays(10))
-			                                               	.AtLocation("somewhere")
-			                                               	.LocationIsUnknown()
-			                                               	.TheTopicIs("techno babble"));
+			return Create.New.Event(configuration)
+				.From(DateTime.MinValue)
+				.To(DateTime.MinValue.AddDays(10))
+				.AtLocation("somewhere")
+				.LocationIsUnknown()
+				.TheTopicIs("techno babble");
 		}
 
 		[Test]
@@ -91,16 +93,15 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	public abstract class With_calendar_item_repository : Spec
 	{
 		protected ICalendarItem _calendarItem;
+		Post _post;
 		CalendarItemRepository _sut;
 
 		protected override void Establish_context()
 		{
-			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			var configuration = MockRepository.GenerateMock<IEventPluginConfiguration>();
 			var settings = MockRepository.GenerateMock<IGraffitiSiteSettings>();
 
-			_sut = new CalendarItemRepository(postRepository,
-			                                  configuration,
+			_sut = new CalendarItemRepository(configuration,
 			                                  settings);
 
 			configuration.Stub(x => x.StartDateField).Return("start");
@@ -111,14 +112,14 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 
 			settings.Stub(x => x.BaseUrl).Return("http://foo");
 
-			CreatePost(postRepository, configuration);
+			_post = CreatePost(configuration);
 		}
 
-		protected abstract void CreatePost(IPostRepository repository, IEventPluginConfiguration configuration);
+		protected abstract Post CreatePost(IEventPluginConfiguration configuration);
 
 		protected override void Because()
 		{
-			_calendarItem = _sut.GetCalendarItemForEvent(42);
+			_calendarItem = _sut.CreateCalendarItemForEvent(_post);
 		}
 	}
 }

@@ -10,5 +10,10 @@ namespace DnugLeipzig.Runtime.Configuration
 		{
 			get { return SiteSettings.BaseUrl; }
 		}
+
+		public new string DateFormat
+		{
+			get { return SiteSettings.DateFormat; }
+		}
 	}
 }

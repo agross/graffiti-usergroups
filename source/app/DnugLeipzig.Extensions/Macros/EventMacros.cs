@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 
 using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
@@ -18,11 +19,18 @@ namespace DnugLeipzig.Extensions.Macros
 	[Chalk("events")]
 	public class EventMacros : Macros<IEventPluginConfiguration>
 	{
+		readonly ICalendarItemRepository _calendarItemRepository;
+		readonly IGraffitiSiteSettings _settings;
+
 		#region Ctors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventMacros"/> class.
 		/// </summary>
-		public EventMacros() : this(IoC.Resolve<ICategorizedPostRepository<IEventPluginConfiguration>>())
+		public EventMacros()
+			: this(
+				IoC.Resolve<ICategorizedPostRepository<IEventPluginConfiguration>>(),
+				IoC.Resolve<IGraffitiSiteSettings>(),
+				IoC.Resolve<ICalendarItemRepository>())
 		{
 		}
 
@@ -31,9 +39,13 @@ namespace DnugLeipzig.Extensions.Macros
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
 		/// <param name="repository">The repository.</param>
-		internal EventMacros(ICategorizedPostRepository<IEventPluginConfiguration> repository)
+		internal EventMacros(ICategorizedPostRepository<IEventPluginConfiguration> repository,
+		                     IGraffitiSiteSettings settings,
+		                     ICalendarItemRepository calendarItemRepository)
 			: base(repository)
 		{
+			_settings = settings;
+			_calendarItemRepository = calendarItemRepository;
 		}
 		#endregion
 
@@ -48,7 +60,7 @@ namespace DnugLeipzig.Extensions.Macros
 			string dateFormat = Configuration.DateFormat;
 			if (String.IsNullOrEmpty(dateFormat))
 			{
-				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
+				dateFormat = String.Format("{{0:{0}}}", _settings.DateFormat);
 			}
 
 			return HttpUtility.HtmlEncode(String.Format(dateFormat, post[Configuration.StartDateField].AsEventDate()));
@@ -71,7 +83,7 @@ namespace DnugLeipzig.Extensions.Macros
 			}
 			if (String.IsNullOrEmpty(dateFormat))
 			{
-				dateFormat = String.Format("{{0:{0}}}", SiteSettings.DateFormat);
+				dateFormat = String.Format("{{0:{0}}}", _settings.DateFormat);
 			}
 
 			return HttpUtility.HtmlEncode(String.Format(dateFormat, endDate));
@@ -183,22 +195,12 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public bool CanCreateCalendarItem(Post post)
 		{
-			CalendarItem item = CreateCalendarItem(post);
-			return item.IsValid();
+			return CreateCalendarItem(post) != null;
 		}
 
-		public CalendarItem CreateCalendarItem(Post post)
+		public ICalendarItem CreateCalendarItem(Post post)
 		{
-			return new CalendarItem
-			       {
-			       	StartDate = post[Configuration.StartDateField].AsEventDate(),
-			       	EndDate = post[Configuration.EndDateField].AsEventDate(),
-			       	Location = post[Configuration.LocationField],
-			       	Subject = HttpUtility.HtmlDecode(post.Title),
-			       	Description = SiteSettings.BaseUrl + post.Url,
-			       	LastModified = post.Published,
-			       	Categories = HttpUtility.HtmlDecode(Repository.GraffitiData.Site.Title)
-			       };
+			return _calendarItemRepository.CreateCalendarItemForEvent(post);
 		}
 	}
 }
