@@ -28,7 +28,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var categoryRepository = MockRepository.GenerateMock<ICategoryRepository>();
 			_sut = new EventPlugin(categoryRepository,
 			                       MockRepository.GenerateMock<IPostRepository>(),
-			                       MockRepository.GenerateMock<IGraffitiSettings>()) { CategoryName = "Talk category" };
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Talk category" };
 
 			var form = new NameValueCollection
 			           {
@@ -273,7 +273,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var categoryRepository = MockRepository.GenerateMock<ICategoryRepository>();
 			_sut = new EventPlugin(categoryRepository,
 			                       MockRepository.GenerateMock<IPostRepository>(),
-			                       MockRepository.GenerateMock<IGraffitiSettings>()) { CategoryName = "Talk category" };
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Talk category" };
 
 			categoryRepository.Stub(x => x.IsExistingCategory(null))
 				.IgnoreArguments()

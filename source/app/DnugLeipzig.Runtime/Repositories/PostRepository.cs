@@ -7,7 +7,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Repositories
 {
-	public class PostRepository : IPostRepository
+	public class PostRepository : Repository, IPostRepository
 	{
 		protected static readonly Data Data = new Data();
 

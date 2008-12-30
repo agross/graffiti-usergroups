@@ -12,7 +12,6 @@ using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Extensions.Configuration;
 using DnugLeipzig.Runtime.Commands;
-using DnugLeipzig.Runtime.Commands.Calendar;
 using DnugLeipzig.Runtime.Configuration;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
@@ -32,11 +31,18 @@ namespace DnugLeipzig.Container
 				.ImplementedBy<EventPluginConfiguration>()
 				.LifeStyle.Transient;
 
-			yield return Component.For<IGraffitiSettings>()
-				.ImplementedBy<Settings>()
+			yield return Component.For<IGraffitiCommentSettings>()
+				.ImplementedBy<GraffitiCommentSettings>()
+				.LifeStyle.Transient;
+
+			yield return Component.For<IGraffitiSiteSettings>()
+				.ImplementedBy<GraffitiSiteSettings>()
 				.LifeStyle.Transient;
 
 			// Repositories.
+			yield return Component.For<ICalendarItemRepository>()
+				.ImplementedBy<CalendarItemRepository>();
+			
 			yield return Component.For<IPostRepository>()
 				.ImplementedBy<PostRepository>();
 
@@ -54,16 +60,13 @@ namespace DnugLeipzig.Container
 				.ImplementedBy<CommandFactory>();
 
 			yield return AllTypes.Of<ICommand>()
-				.FromAssembly(typeof(CreateCalendarItemCommand).Assembly)
+				.FromAssembly(typeof(Command).Assembly)
 				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
 				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
 
 			// Services.
 			yield return Component.For<IEmailSender>()
 				.ImplementedBy<GraffitiEmailSender>();
-
-			yield return Component.For<ICalendarItemService>()
-				.ImplementedBy<CalendarItemService>();
 
 			yield return Component.For<IEventRegistrationService>()
 				.ImplementedBy<EventRegistrationService>()

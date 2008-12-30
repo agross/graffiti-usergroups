@@ -11,10 +11,5 @@ namespace DnugLeipzig.Definitions.Builders
 		}
 
 		protected abstract TEntity BuildInstance();
-
-		public TEntity Cast()
-		{
-			return this;
-		}
 	}
 }

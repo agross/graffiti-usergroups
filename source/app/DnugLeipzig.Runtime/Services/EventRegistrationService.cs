@@ -21,11 +21,11 @@ namespace DnugLeipzig.Runtime.Services
 		readonly IEmailSender _emailSender;
 		readonly string _registrationEmailTemplate;
 		readonly ICategorizedPostRepository<IEventPluginConfiguration> _repository;
-		readonly IGraffitiSettings _settings;
+		readonly IGraffitiSiteSettings _settings;
 
 		public EventRegistrationService(ICategorizedPostRepository<IEventPluginConfiguration> repository,
 		                                IEmailSender emailSender,
-		                                IGraffitiSettings settings,
+										IGraffitiSiteSettings settings,
 		                                string registrationEmailTemplate)
 		{
 			_repository = repository;
