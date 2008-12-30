@@ -59,7 +59,7 @@ namespace DnugLeipzig.Runtime.Handlers
 						                                     where key != null && key.StartsWith("event-")
 						                                     select Convert.ToInt32(key.Replace("event-", String.Empty));
 
-						command = _commandFactory.MultipleEventRegistration(eventsToSubscribe,
+						command = _commandFactory.EventRegistration(eventsToSubscribe,
 						                                                    context.Request.Form["formOfAddress"],
 						                                                    context.Request.Form["name"],
 						                                                    context.Request.Form["occupation"],

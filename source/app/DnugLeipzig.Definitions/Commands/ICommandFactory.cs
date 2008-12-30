@@ -6,11 +6,6 @@ namespace DnugLeipzig.Definitions.Commands
 	{
 		ICommand CreateCalendarItem(int eventId);
 
-		ICommand MultipleEventRegistration(IEnumerable<int> eventsToRegister,
-		                                   string formOfAddress,
-		                                   string name,
-		                                   string occupation,
-		                                   string attendeeEmail,
-		                                   bool sendConfirmationToAttendee);
+		IEventRegistrationCommand EventRegistration(IEnumerable<int> eventsToRegister, string formOfAddress, string name, string occupation, string attendeeEmail, bool sendConfirmationToAttendee);
 	}
 }

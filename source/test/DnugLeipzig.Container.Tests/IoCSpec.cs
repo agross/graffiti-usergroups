@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
+using Castle.Core;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 
@@ -20,9 +21,9 @@ namespace DnugLeipzig.Container.Tests
 		protected override void Establish_context()
 		{
 			_module = new IoCModule();
-// ReSharper disable AssignNullToNotNullAttribute
+			// ReSharper disable AssignNullToNotNullAttribute
 			_module.Init(null);
-// ReSharper restore AssignNullToNotNullAttribute
+			// ReSharper restore AssignNullToNotNullAttribute
 		}
 
 		protected override void Cleanup_after()
@@ -70,6 +71,20 @@ namespace DnugLeipzig.Container.Tests
 		public void It_should_not_contain_services_for_ICommand()
 		{
 			Assert.IsNull(IoC.TryResolve<ICommand>(), "The container should not contain services for the ICommand interface.");
+		}
+
+		[Test]
+		public void It_should_only_contain_commands_with_a_transient_lifestyle()
+		{
+			Array.ForEach(_sut,
+			              handler =>
+			              	{
+			              		if (typeof(ICommand).IsAssignableFrom(handler.ComponentModel.Service))
+			              		{
+			              			Debug.WriteLine(handler.ComponentModel.Service);
+			              			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			              		}
+			              	});
 		}
 	}
 }

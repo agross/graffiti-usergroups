@@ -69,9 +69,7 @@
     </Compile>
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Commands\Calendar\ICreateCalendarItemCommand.cs" />
-    <Compile Include="Commands\Events\IEventRegistrationCommand.cs" />
-    <Compile Include="Commands\Events\IMultipleEventRegistrationCommand.cs" />
-    <Compile Include="Commands\Events\ISingleEventRegistrationCommand.cs" />
+    <Compile Include="Commands\IEventRegistrationCommand.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\Results\ErrorResult.cs" />
     <Compile Include="Commands\Results\ForbiddenResult.cs" />

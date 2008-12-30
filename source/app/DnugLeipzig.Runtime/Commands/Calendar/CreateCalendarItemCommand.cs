@@ -1,4 +1,3 @@
-using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Calendar;
 using DnugLeipzig.Definitions.Services;
@@ -14,11 +13,13 @@ namespace DnugLeipzig.Runtime.Commands.Calendar
 			_calendarItemService = calendarItemService;
 		}
 
+		#region ICreateCalendarItemCommand Members
 		public int EventId
 		{
 			get;
 			protected set;
 		}
+		#endregion
 
 		#region Implementation of ICommand
 		public ICommandResult Execute()

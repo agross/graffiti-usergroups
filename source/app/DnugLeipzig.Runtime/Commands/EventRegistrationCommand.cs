@@ -1,12 +1,13 @@
+using System.Collections.Generic;
+
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Commands.Events;
 using DnugLeipzig.Definitions.Services;
 
-namespace DnugLeipzig.Runtime.Commands.Events
+namespace DnugLeipzig.Runtime.Commands
 {
-	public abstract class EventRegistrationCommand : Command, IEventRegistrationCommand
+	public class EventRegistrationCommand : Command, IEventRegistrationCommand
 	{
-		protected EventRegistrationCommand(IEventRegistrationService eventRegistrationService)
+		public EventRegistrationCommand(IEventRegistrationService eventRegistrationService)
 		{
 			EventRegistrationService = eventRegistrationService;
 		}
@@ -47,19 +48,35 @@ namespace DnugLeipzig.Runtime.Commands.Events
 			get;
 			protected set;
 		}
-		#endregion
 
-		protected void Initialize(string name,
-		                          string formOfAddress,
-		                          string occupation,
-		                          string attendeeEmail,
-		                          bool sendConfirmationToAttendee)
+		public void Initialize(IEnumerable<int> eventsToRegister,
+		                       string name,
+		                       string formOfAddress,
+		                       string occupation,
+		                       string attendeeEmail,
+		                       bool sendConfirmationToAttendee)
 		{
 			Name = name;
 			FormOfAddress = formOfAddress;
 			Occupation = occupation;
 			AttendeeEmail = attendeeEmail;
 			SendConfirmationToAttendee = sendConfirmationToAttendee;
+
+			EventsToRegister = eventsToRegister;
 		}
+
+		public IEnumerable<int> EventsToRegister
+		{
+			get;
+			protected set;
+		}
+		#endregion
+
+		#region Implementation of ICommand
+		public override ICommandResult Execute()
+		{
+			return EventRegistrationService.RegisterForEvents(this);
+		}
+		#endregion
 	}
 }

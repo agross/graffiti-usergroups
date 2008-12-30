@@ -1,13 +1,13 @@
 using System;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Commands.Events;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
-using DnugLeipzig.Runtime.Commands.Events;
+using DnugLeipzig.Runtime.Commands;
 
 using Graffiti.Core;
 
@@ -35,25 +35,7 @@ namespace DnugLeipzig.Runtime.Services
 		}
 
 		#region Implementation of IEventRegistrationService
-		public ICommandResult RegisterForEvents(IMultipleEventRegistrationCommand command)
-		{
-			MultipleEventRegistrationResult result = new MultipleEventRegistrationResult();
-
-			foreach (var eventToRegister in command.EventsToRegister)
-			{
-//				result.EventResults.Add(
-//					RegisterForEvent(new SingleEventRegistrationCommand(eventToRegister,
-//					                                                    command.Name,
-//					                                                    command.FormOfAddress,
-//					                                                    command.Occupation,
-//					                                                    command.AttendeeEmail,
-//					                                                    command.SendConfirmationToAttendee)));
-			}
-
-			return result;
-		}
-
-		public ICommandResult RegisterForEvent(ISingleEventRegistrationCommand command)
+		public ICommandResult RegisterForEvents(IEventRegistrationCommand command)
 		{
 			try
 			{
@@ -111,44 +93,44 @@ namespace DnugLeipzig.Runtime.Services
 			}
 			catch (Exception ex)
 			{
-				Logger.Error("Could not process registration", ex.ToString());
+				Logger.Error(Create.New.Message().WithTitle("Could not process registration"), ex);
 				throw;
 			}
 		}
 		#endregion
 
-		protected virtual bool IsOnWaitingList(Post post, SingleEventRegistrationCommand command)
-		{
-			post[_repository.Configuration.RegistrationListField] += command.AttendeeEmail + Environment.NewLine;
-
-			int numberOfRegistations = post[_repository.Configuration.RegistrationListField].LineCount();
-			int maximumNumberOfRegistations =
-				post[_repository.Configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
-
-			return numberOfRegistations > maximumNumberOfRegistations;
-		}
-
-		void PrepareEmail(IContext mailContext,
-		                  EmailTemplate emailTemplate,
-		                  Post eventToRegister,
-		                  EventRegistrationCommand request,
-		                  bool isOnWaitingList,
-		                  bool isCcToAttendee)
-		{
-			mailContext.Put("event", eventToRegister);
-			mailContext.Put("isCcToAttendee", isCcToAttendee);
-			mailContext.Put("isOnWaitingList", isOnWaitingList);
-
-			emailTemplate.From = request.AttendeeEmail;
-			emailTemplate.To = eventToRegister[_repository.Configuration.RegistrationRecipientField];
-
-			if (isCcToAttendee)
-			{
-				// Send from site's e-mail address.
-				emailTemplate.From = null;
-				emailTemplate.To = request.AttendeeEmail;
-			}
-		}
+//		protected virtual bool IsOnWaitingList(Post post, SingleEventRegistrationCommand command)
+//		{
+//			post[_repository.Configuration.RegistrationListField] += command.AttendeeEmail + Environment.NewLine;
+//
+//			int numberOfRegistations = post[_repository.Configuration.RegistrationListField].LineCount();
+//			int maximumNumberOfRegistations =
+//				post[_repository.Configuration.MaximumNumberOfRegistrationsField].ToInt(int.MaxValue);
+//
+//			return numberOfRegistations > maximumNumberOfRegistations;
+//		}
+//
+//		void PrepareEmail(IContext mailContext,
+//		                  EmailTemplate emailTemplate,
+//		                  Post eventToRegister,
+//		                  EventRegistrationCommand request,
+//		                  bool isOnWaitingList,
+//		                  bool isCcToAttendee)
+//		{
+//			mailContext.Put("event", eventToRegister);
+//			mailContext.Put("isCcToAttendee", isCcToAttendee);
+//			mailContext.Put("isOnWaitingList", isOnWaitingList);
+//
+//			emailTemplate.From = request.AttendeeEmail;
+//			emailTemplate.To = eventToRegister[_repository.Configuration.RegistrationRecipientField];
+//
+//			if (isCcToAttendee)
+//			{
+//				// Send from site's e-mail address.
+//				emailTemplate.From = null;
+//				emailTemplate.To = request.AttendeeEmail;
+//			}
+//		}
 
 		/*
 			public ICollection<string> Validate()

@@ -1,6 +1,8 @@
 using Castle.Core.Logging;
 
-namespace DnugLeipzig.Definitions.Commands
+using DnugLeipzig.Definitions.Commands;
+
+namespace DnugLeipzig.Runtime.Commands
 {
 	public abstract class Command : ICommand
 	{
