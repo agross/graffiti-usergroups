@@ -106,5 +106,10 @@ namespace DnugLeipzig.Definitions.Configuration
 		{
 			get;
 		}
+
+		string DateFormat
+		{
+			get;
+		}
 	}
 }

@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Web;
 
 using DnugLeipzig.Definitions;
+using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Services;
 
 using Graffiti.Core;
@@ -12,6 +13,13 @@ namespace DnugLeipzig.Runtime.Services
 {
 	public class GraffitiEmailSender : Service, IEmailSender
 	{
+		readonly IGraffitiSiteSettings _settings;
+
+		public GraffitiEmailSender(IGraffitiSiteSettings settings)
+		{
+			_settings = settings;
+		}
+
 		#region IEmailSender Members
 		public void Send(EmailTemplate template)
 		{
@@ -25,7 +33,7 @@ namespace DnugLeipzig.Runtime.Services
 				templatePath = HttpContext.Current.Server.MapPath(templatePath);
 
 				string body = TemplateEngine.Evaluate(Util.GetFileText(templatePath), template.Context);
-				using (MailMessage message = new MailMessage(template.From ?? SiteSettings.Get().EmailFrom, template.To))
+				using (MailMessage message = new MailMessage(template.From ?? _settings.EmailFrom, template.To))
 				{
 					message.Subject = template.Subject;
 					message.IsBodyHtml = template.IsHTML;
@@ -46,22 +54,21 @@ namespace DnugLeipzig.Runtime.Services
 			{
 				using (mailMessage)
 				{
-					SiteSettings settings = SiteSettings.Get();
 					SmtpClient client = new SmtpClient
 					                    {
-					                    	Host = settings.EmailServer
+					                    	Host = _settings.EmailServer
 					                    };
 
-					if (settings.EmailServerRequiresAuthentication)
+					if (_settings.EmailServerRequiresAuthentication)
 					{
-						client.Credentials = new NetworkCredential(settings.EmailUser, settings.EmailPassword);
+						client.Credentials = new NetworkCredential(_settings.EmailUser, _settings.EmailPassword);
 					}
 
-					client.EnableSsl = settings.EmailRequiresSSL;
+					client.EnableSsl = _settings.EmailRequiresSSL;
 
-					if (settings.EmailPort > 0)
+					if (_settings.EmailPort > 0)
 					{
-						client.Port = settings.EmailPort;
+						client.Port = _settings.EmailPort;
 					}
 
 					client.Send(mailMessage);
