@@ -94,7 +94,6 @@
     <Compile Include="Repositories\ICalendarItem.cs" />
     <Compile Include="Repositories\ICalendarItemRepository.cs" />
     <Compile Include="Repositories\ICategorizedPostRepository.cs" />
-    <Compile Include="Services\ICalendarItemService.cs" />
     <Compile Include="Services\IEmailSender.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ICategoryRepository.cs" />
