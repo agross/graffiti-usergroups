@@ -43,6 +43,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="DataBuddy, Version=1.0.28.25249, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Graffiti\DataBuddy.dll</HintPath>
+    </Reference>
+    <Reference Include="Graffiti.Core, Version=1.2.0.1451, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Graffiti\Graffiti.Core.dll</HintPath>
+    </Reference>
     <Reference Include="MbUnit.Framework, Version=2.4.2.130, Culture=neutral, PublicKeyToken=5e72ecd30bc408d5">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\tools\MbUnit\MbUnit.Framework.dll</HintPath>
@@ -64,12 +72,20 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Builder\EventBuilder.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
     <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
     <Compile Include="HttpMocks\ReflectionHelper.cs" />
     <Compile Include="HttpMocks\SimulatedHttpRequest.cs" />
+    <Compile Include="ObjectFactoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
+      <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
+      <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

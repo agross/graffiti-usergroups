@@ -6,7 +6,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Repositories
 {
-	public class CategoryRepository : ICategoryRepository
+	public class CategoryRepository : Repository, ICategoryRepository
 	{
 		static readonly Data Data = new Data();
 

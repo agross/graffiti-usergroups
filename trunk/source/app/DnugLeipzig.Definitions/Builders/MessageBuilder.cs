@@ -8,15 +8,15 @@ namespace DnugLeipzig.Definitions.Builders
 		string _message;
 		string _title;
 
-		public MessageBuilder WithMessage(string message)
+		public MessageBuilder WithMessage(string message, params object[] args)
 		{
-			_message = message;
+			_message = String.Format(message, args);
 			return this;
 		}
 
-		public MessageBuilder WithTitle(string title)
+		public MessageBuilder WithTitle(string title, params object[] args)
 		{
-			_title = title;
+			_title = String.Format(title, args);
 			return this;
 		}
 

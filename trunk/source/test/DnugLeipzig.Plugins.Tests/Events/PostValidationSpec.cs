@@ -1,5 +1,6 @@
 using System;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
@@ -23,7 +24,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			{
 				_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 				                       MockRepository.GenerateMock<IPostRepository>(),
-				                       MockRepository.GenerateMock<IGraffitiSettings>());
+									   MockRepository.GenerateMock<IGraffitiCommentSettings>());
 
 				_post = MockRepository.GenerateStub<DataBuddyBase>();
 			}
@@ -50,7 +51,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 				var postRepository = MockRepository.GenerateMock<IPostRepository>();
 				_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 				                       postRepository,
-				                       MockRepository.GenerateMock<IGraffitiSettings>())
+				                       MockRepository.GenerateMock<IGraffitiCommentSettings>())
 				       { CategoryName = "Event category" };
 
 				_post = new Post();
@@ -87,7 +88,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 				var postRepository = MockRepository.GenerateMock<IPostRepository>();
 				_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 				                       postRepository,
-				                       MockRepository.GenerateMock<IGraffitiSettings>())
+									   MockRepository.GenerateMock<IGraffitiCommentSettings>())
 				       {
 				       	CategoryName = EventCategory,
 				       	StartDateField = StartDateField,
@@ -114,7 +115,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row(null)]
 			public void It_should_allow_empty_start_dates(string date)
 			{
-				Because(new PostBuilder(_sut).WithStartDate(date));
+				Because(Create.New.Event(_sut).From(date));
 				Assert.IsTrue(true);
 			}
 
@@ -124,7 +125,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("3.2.2008 8:00")]
 			public void It_should_validate_correct_start_dates(string date)
 			{
-				Because(new PostBuilder(_sut).WithStartDate(date));
+				Because(Create.New.Event(_sut).From(date));
 				Assert.IsTrue(true);
 			}
 
@@ -132,7 +133,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("invalid value", ExpectedException = typeof(ValidationException))]
 			public void It_should_not_validate_incorrect_start_dates(string date)
 			{
-				Because(new PostBuilder(_sut).WithStartDate(date));
+				Because(Create.New.Event(_sut).From(date));
 				Assert.IsTrue(true);
 			}
 
@@ -142,9 +143,9 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row(null)]
 			public void It_should_allow_empty_end_dates(string date)
 			{
-				Because(new PostBuilder(_sut)
-				        	.WithStartDate(DateTime.MinValue)
-				        	.WithEndDate(date));
+				Because(Create.New.Event(_sut)
+				        	.From(DateTime.MinValue)
+				        	.To(date));
 				Assert.IsTrue(true);
 			}
 
@@ -154,9 +155,9 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("3.2.2008 8:00")]
 			public void It_should_validate_correct_end_dates(string date)
 			{
-				Because(new PostBuilder(_sut)
-				        	.WithStartDate(DateTime.MinValue)
-				        	.WithEndDate(date));
+				Because(Create.New.Event(_sut)
+				        	.From(DateTime.MinValue)
+				        	.To(date));
 				Assert.IsTrue(true);
 			}
 
@@ -164,9 +165,9 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("invalid value", ExpectedException = typeof(ValidationException))]
 			public void It_should_not_validate_incorrect_end_dates(string date)
 			{
-				Because(new PostBuilder(_sut)
-				        	.WithStartDate(DateTime.MinValue)
-				        	.WithEndDate(date));
+				Because(Create.New.Event(_sut)
+				        	.From(DateTime.MinValue)
+				        	.To(date));
 				Assert.IsTrue(true);
 			}
 
@@ -174,7 +175,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[ExpectedException(typeof(ValidationException))]
 			public void It_should_require_the_start_date_if_the_end_date_is_given()
 			{
-				Because(new PostBuilder(_sut).WithStartDate(null).WithEndDate(new DateTime(2008, 12, 11).ToString()));
+				Because(Create.New.Event(_sut).From(null).To(new DateTime(2008, 12, 11).ToString()));
 				Assert.IsTrue(true);
 			}
 
@@ -184,7 +185,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row(null, null)]
 			public void It_should_allow_empty_start_and_end_dates_at_the_same_time(string startDate, string endDate)
 			{
-				Because(new PostBuilder(_sut).WithStartDate(startDate).WithEndDate(endDate));
+				Because(Create.New.Event(_sut).From(startDate).To(endDate));
 				Assert.IsTrue(true);
 			}
 
@@ -196,7 +197,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("2008/2/3 7:00 AM", "2008/2/3 6:00 AM", ExpectedException = typeof(ValidationException))]
 			public void It_should_require_that_the_start_date_less_or_equal_than_the_end_date(string startDate, string endDate)
 			{
-				Because(new PostBuilder(_sut).WithStartDate(startDate).WithEndDate(endDate));
+				Because(Create.New.Event(_sut).From(startDate).To(endDate));
 				Assert.IsTrue(true);
 			}
 
@@ -204,7 +205,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[ExpectedException(typeof(ValidationException))]
 			public void It_should_require_that_the_location_is_known_if_the_location_is_given()
 			{
-				Because(new PostBuilder(_sut).WithLocation("some location").LocationIsUnknown());
+				Because(Create.New.Event(_sut).AtLocation("some location").LocationIsUnknown());
 				Assert.IsTrue(true);
 			}
 
@@ -216,7 +217,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			public void It_should_require_a_positive_integer_for_the_maximum_number_of_registrations(
 				string maximumNumberOfRegistrationsValue)
 			{
-				Because(new PostBuilder(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
+				Because(Create.New.Event(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
 				Assert.IsTrue(true);
 			}
 
@@ -226,7 +227,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			public void It_should_allow_an_empty_value_for_the_maximum_number_of_registrations(
 				string maximumNumberOfRegistrationsValue)
 			{
-				Because(new PostBuilder(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
+				Because(Create.New.Event(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
 				Assert.IsTrue(true);
 			}
 
@@ -236,7 +237,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row(null)]
 			public void It_should_allow_an_empty_value_for_the_registration_recipient(string email)
 			{
-				Because(new PostBuilder(_sut).WithRegistrationRecipient(email));
+				Because(Create.New.Event(_sut).WithRegistrationRecipient(email));
 				Assert.IsTrue(true);
 			}
 
@@ -245,7 +246,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("invalid", ExpectedException = typeof(ValidationException))]
 			public void It_should_require_valid_email_addresses_for_the_registration_recipient(string email)
 			{
-				Because(new PostBuilder(_sut).WithRegistrationRecipient(email));
+				Because(Create.New.Event(_sut).WithRegistrationRecipient(email));
 				Assert.IsTrue(true);
 			}
 		}

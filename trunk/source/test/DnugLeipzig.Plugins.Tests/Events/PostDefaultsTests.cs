@@ -21,7 +21,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       MockRepository.GenerateMock<IPostRepository>(),
-			                       MockRepository.GenerateMock<IGraffitiSettings>());
+								   MockRepository.GenerateMock<IGraffitiCommentSettings>());
 
 			_post = MockRepository.GenerateStub<DataBuddyBase>();
 		}
@@ -48,7 +48,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       postRepository,
-			                       MockRepository.GenerateMock<IGraffitiSettings>()) { CategoryName = "Event category" };
+								   MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Event category" };
 
 			_post = new Post();
 
@@ -266,7 +266,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       postRepository,
-			                       MockRepository.GenerateMock<IGraffitiSettings>())
+								   MockRepository.GenerateMock<IGraffitiCommentSettings>())
 			       {
 			       	CategoryName = "Event category",
 			       	LocationField = LocationField,

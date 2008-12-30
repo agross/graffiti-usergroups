@@ -47,7 +47,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Graffiti\DataBuddy.dll</HintPath>
     </Reference>
-    <Reference Include="Graffiti.Core, Version=1.0.1.963, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Graffiti.Core, Version=1.2.0.1451, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Graffiti\Graffiti.Core.dll</HintPath>
     </Reference>
@@ -67,6 +67,8 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Configuration\IGraffitiCommentSettings.cs" />
+    <Compile Include="Configuration\IGraffitiSiteSettings.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Commands\Calendar\ICreateCalendarItemCommand.cs" />
     <Compile Include="Commands\IEventRegistrationCommand.cs" />
@@ -77,7 +79,6 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ICommandResult.cs" />
     <Compile Include="Commands\Results\ValidationErrorResult.cs" />
-    <Compile Include="Configuration\GraffitiSiteSettings.cs" />
     <Compile Include="Configuration\Plugins\IPluginConfiguration.cs" />
     <Compile Include="Configuration\Plugins\IEventPluginConfiguration.cs" />
     <Compile Include="Configuration\Plugins\ITalkPluginConfiguration.cs" />
@@ -90,6 +91,8 @@
     <Compile Include="IoC.cs" />
     <Compile Include="Builders\MessageBuilder.cs" />
     <Compile Include="ObjectFactoryExtensions.cs" />
+    <Compile Include="Repositories\ICalendarItem.cs" />
+    <Compile Include="Repositories\ICalendarItemRepository.cs" />
     <Compile Include="Repositories\ICategorizedPostRepository.cs" />
     <Compile Include="Services\ICalendarItemService.cs" />
     <Compile Include="Services\IEmailSender.cs" />
@@ -97,7 +100,6 @@
     <Compile Include="Repositories\ICategoryRepository.cs" />
     <Compile Include="Repositories\IPostRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Configuration\IGraffitiSettings.cs" />
     <Compile Include="Services\IEventRegistrationService.cs" />
   </ItemGroup>
   <ItemGroup>

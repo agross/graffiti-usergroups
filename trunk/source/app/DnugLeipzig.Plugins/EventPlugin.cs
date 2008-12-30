@@ -40,12 +40,12 @@ namespace DnugLeipzig.Plugins
 		internal const string Form_YearQueryString = "yearQueryString";
 		readonly ICategoryRepository _categoryRepository;
 		readonly IPostRepository _postRepository;
-		readonly IGraffitiSettings _settings;
+		readonly IGraffitiCommentSettings _settings;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventPlugin"/> class.
 		/// </summary>
-		public EventPlugin() : this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>(), IoC.Resolve<IGraffitiSettings>())
+		public EventPlugin() : this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>(), IoC.Resolve<IGraffitiCommentSettings>())
 		{
 			// Initialize with default values.
 			CategoryName = "Events";
@@ -63,7 +63,7 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-			DefaultRegistrationRecipient = _settings.Comments.Email;
+			DefaultRegistrationRecipient = _settings.Email;
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace DnugLeipzig.Plugins
 		/// <param name="settings">The settings repository.</param>
 		internal EventPlugin(ICategoryRepository categoryRepository,
 		                     IPostRepository postRepository,
-		                     IGraffitiSettings settings)
+		                     IGraffitiCommentSettings settings)
 		{
 			if (categoryRepository == null)
 			{
