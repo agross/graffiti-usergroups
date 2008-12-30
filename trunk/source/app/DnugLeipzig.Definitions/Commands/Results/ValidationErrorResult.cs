@@ -4,14 +4,14 @@ using System.Web.Script.Serialization;
 
 namespace DnugLeipzig.Definitions.Commands.Results
 {
-	public class ValidationErrorResult : ICommandResult
+	public class ValidationErrorResult : IHttpResponse
 	{
 		public ValidationErrorResult(ICollection<string> validationErrors)
 		{
 			ValidationErrors = validationErrors;
 		}
 
-		#region Implementation of ICommandResult
+		#region Implementation of IHttpResponse
 		public void Render(HttpResponse response)
 		{
 			response.ContentType = "application/json";

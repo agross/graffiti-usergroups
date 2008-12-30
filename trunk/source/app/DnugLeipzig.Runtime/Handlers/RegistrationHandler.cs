@@ -45,7 +45,7 @@ namespace DnugLeipzig.Runtime.Handlers
 		{
 			if (context.Request.RequestType != "POST")
 			{
-				new ForbiddenResult().Render(HttpContext.Current.Response);
+				new ForbiddenResult().Render(context.Response);
 				return;
 			}
 
@@ -71,13 +71,13 @@ namespace DnugLeipzig.Runtime.Handlers
 						throw new InvalidOperationException(String.Format("Unknown command '{0}'", context.Request.QueryString["command"]));
 				}
 
-				ICommandResult result = command.Execute();
+				IHttpResponse result = command.Execute();
 				result.Render(context.Response);
 			}
 			catch (Exception ex)
 			{
 				Logger.Error(Create.New.Message().WithTitle("Could not process registration request"), ex);
-				new ErrorResult().Render(HttpContext.Current.Response);
+				new ErrorResult().Render(context.Response);
 			}
 		}
 

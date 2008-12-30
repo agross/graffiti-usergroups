@@ -2,6 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Web;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
@@ -84,7 +85,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 	public class When_the_registration_handler_is_called_with_the_register_command : With_registration_handler
 	{
 		IEventRegistrationCommand _command;
-		ICommandResult _commandResult;
+		IHttpResponse _result;
 
 		protected override void Establish_context()
 		{
@@ -95,8 +96,8 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 				.IgnoreArguments()
 				.Return(_command);
 
-			_commandResult = MockRepository.GenerateMock<ICommandResult>();
-			_command.Stub(x => x.Execute()).Return(_commandResult);
+			_result = MockRepository.GenerateMock<IHttpResponse>();
+			_command.Stub(x => x.Execute()).Return(_result);
 		}
 
 		protected override HttpSimulator CreateRequest()
@@ -136,7 +137,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		[Test]
 		public void It_should_render_the_request_result()
 		{
-			_commandResult.AssertWasCalled(x => x.Render(null), x => x.IgnoreArguments());
+			_result.AssertWasCalled(x => x.Render(null), x => x.IgnoreArguments());
 		}
 
 		[Test]

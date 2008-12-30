@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using System.Web;
 
 using DnugLeipzig.Definitions.Repositories;
 
@@ -94,6 +95,20 @@ namespace DnugLeipzig.Runtime.Repositories
 			builder.AppendLine("END:VCALENDAR");
 
 			return builder.ToString();
+		}
+
+		public void Render(HttpResponse response)
+		{
+			string serializedItem = ToString();
+
+			response.Clear();
+			response.AppendHeader("Content-Disposition",
+								  String.Format("attachment; filename={0}.ics",
+												HttpUtility.UrlPathEncode(Subject)));
+			response.AppendHeader("Content-Length", serializedItem.Length.ToString());
+			response.ContentType = "text/calendar";
+
+			response.Write(serializedItem);
 		}
 		#endregion
 

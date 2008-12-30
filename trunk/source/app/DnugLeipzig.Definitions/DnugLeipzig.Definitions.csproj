@@ -70,14 +70,13 @@
     <Compile Include="Configuration\IGraffitiCommentSettings.cs" />
     <Compile Include="Configuration\IGraffitiSiteSettings.cs" />
     <Compile Include="ObjectFactory.cs" />
-    <Compile Include="Commands\Calendar\ICreateCalendarItemCommand.cs" />
     <Compile Include="Commands\IEventRegistrationCommand.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
     <Compile Include="Commands\Results\ErrorResult.cs" />
     <Compile Include="Commands\Results\ForbiddenResult.cs" />
     <Compile Include="Commands\Results\NotFoundResult.cs" />
     <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\ICommandResult.cs" />
+    <Compile Include="IHttpResponse.cs" />
     <Compile Include="Commands\Results\ValidationErrorResult.cs" />
     <Compile Include="Configuration\Plugins\IPluginConfiguration.cs" />
     <Compile Include="Configuration\Plugins\IEventPluginConfiguration.cs" />

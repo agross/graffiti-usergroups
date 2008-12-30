@@ -35,7 +35,7 @@ namespace DnugLeipzig.Runtime.Services
 		}
 
 		#region Implementation of IEventRegistrationService
-		public ICommandResult RegisterForEvents(IEventRegistrationCommand command)
+		public IHttpResponse RegisterForEvents(IEventRegistrationCommand command)
 		{
 			try
 			{

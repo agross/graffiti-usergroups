@@ -2,9 +2,9 @@ using System.Web;
 
 namespace DnugLeipzig.Definitions.Commands.Results
 {
-	public class ErrorResult : ICommandResult
+	public class ErrorResult : IHttpResponse
 	{
-		#region Implementation of ICommandResult
+		#region Implementation of IHttpResponse
 		public void Render(HttpResponse response)
 		{
 			response.Clear();
