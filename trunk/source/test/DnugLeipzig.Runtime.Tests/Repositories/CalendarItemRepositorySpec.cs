@@ -64,6 +64,41 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		}
 	}
 
+	public class When_a_calendar_item_for_an_event_without_a_start_date_is_created : With_calendar_item_repository
+	{
+		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		{
+			return Create.New.Event(configuration)
+				.AtLocation("somewhere")
+				.TheTopicIs("techno babble");
+		}
+
+		[Test]
+		public void It_should_not_return_a_calendar_item()
+		{
+			Assert.IsNull(_calendarItem);
+		}
+	}
+
+	public class When_a_calendar_item_for_an_event_with_the_end_date_before_the_start_date_is_created
+		: With_calendar_item_repository
+	{
+		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		{
+			return Create.New.Event(configuration)
+				.From(DateTime.MinValue.AddDays(10))
+				.To(DateTime.MinValue)
+				.AtLocation("somewhere")
+				.TheTopicIs("techno babble");
+		}
+
+		[Test]
+		public void It_should_not_return_a_calendar_item()
+		{
+			Assert.IsNull(_calendarItem);
+		}
+	}
+
 	public class When_a_calendar_item_for_an_exiting_event_is_created_and_the_location_is_unknown
 		: With_calendar_item_repository
 	{

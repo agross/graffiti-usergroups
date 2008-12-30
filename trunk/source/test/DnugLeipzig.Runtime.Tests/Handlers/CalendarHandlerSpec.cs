@@ -10,9 +10,12 @@ using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
 using DnugLeipzig.Runtime.Handlers;
 
+using Graffiti.Core;
+
 using MbUnit.Framework;
 
 using Rhino.Mocks;
+using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Runtime.Tests.Handlers
 {
@@ -131,6 +134,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 			base.Establish_context();
 
 			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(Configuration)
+			                                               	.Id(42)
 			                                               	.From(DateTime.MinValue)
 			                                               	.To(DateTime.MinValue.AddDays(10))
 			                                               	.AtLocation("somewhere")
@@ -150,7 +154,8 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		[Test]
 		public void It_should_return_the_calendar_item_from_the_repository()
 		{
-			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendarItemForEvent(null), o => o.IgnoreArguments());
+			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendarItemForEvent(null),
+			                                       o => o.Constraints(Is.Matching<Post>(p => p.Id == 42)));
 		}
 
 		[Test]
