@@ -17,6 +17,7 @@ namespace DnugLeipzig.ForTesting.Builder
 		string _registrationRecipient;
 		string _startDate;
 		string _topic;
+		int _id;
 
 		public EventBuilder(IEventPluginConfiguration configuration)
 		{
@@ -25,7 +26,7 @@ namespace DnugLeipzig.ForTesting.Builder
 
 		protected override Post BuildInstance()
 		{
-			Post result = new Post { Title = HttpUtility.HtmlEncode(_topic) };
+			Post result = new Post { Title = HttpUtility.HtmlEncode(_topic), Id = _id };
 			result[_config.StartDateField] = _startDate;
 			result[_config.EndDateField] = _endDate;
 			result[_config.LocationField] = _location;
@@ -40,6 +41,12 @@ namespace DnugLeipzig.ForTesting.Builder
 			return builder.BuildInstance();
 		}
 
+		public EventBuilder Id(int id)
+		{
+			_id = id;
+			return this;
+		}
+		
 		public EventBuilder From(object date)
 		{
 			_startDate = date == null ? null : date.ToString();
