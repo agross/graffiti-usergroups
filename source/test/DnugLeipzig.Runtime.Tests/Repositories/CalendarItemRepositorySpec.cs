@@ -17,9 +17,9 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 {
 	public class When_a_calendar_item_for_an_exiting_event_is_created : With_calendar_item_repository
 	{
-		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		protected override Post CreatePost()
 		{
-			return Create.New.Event(configuration)
+			return Create.New.Event(Configuration)
 				.From(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
@@ -29,46 +29,46 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_return_a_calendar_item()
 		{
-			Assert.IsNotNull(_calendarItem);
+			Assert.IsNotNull(CalendarItem);
 		}
 
 		[Test]
 		public void It_should_initialize_the_start_date_from_the_post()
 		{
-			Assert.AreEqual(DateTime.MinValue, _calendarItem.StartDate);
+			Assert.AreEqual(DateTime.MinValue, CalendarItem.StartDate);
 		}
 
 		[Test]
 		public void It_should_initialize_the_end_date_from_the_post()
 		{
-			Assert.AreEqual(DateTime.MinValue.AddDays(10), _calendarItem.EndDate);
+			Assert.AreEqual(DateTime.MinValue.AddDays(10), CalendarItem.EndDate);
 		}
 
 		[Test]
 		public void It_should_initialize_the_location_from_the_post()
 		{
-			Assert.AreEqual("somewhere", _calendarItem.Location);
+			Assert.AreEqual("somewhere", CalendarItem.Location);
 		}
 
 		[Test]
 		public void It_should_initialize_the_subject_from_the_post()
 		{
-			Assert.AreEqual("techno babble", _calendarItem.Subject);
+			Assert.AreEqual("techno babble", CalendarItem.Subject);
 		}
 
 		[Test]
 		public void It_should_be_able_to_generate_the_ICS_format()
 		{
-			_calendarItem.ToString();
+			CalendarItem.ToString();
 			Assert.IsTrue(true);
 		}
 	}
 
 	public class When_a_calendar_item_for_an_event_without_a_start_date_is_created : With_calendar_item_repository
 	{
-		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		protected override Post CreatePost()
 		{
-			return Create.New.Event(configuration)
+			return Create.New.Event(Configuration)
 				.AtLocation("somewhere")
 				.TheTopicIs("techno babble");
 		}
@@ -76,16 +76,16 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_not_return_a_calendar_item()
 		{
-			Assert.IsNull(_calendarItem);
+			Assert.IsNull(CalendarItem);
 		}
 	}
 
 	public class When_a_calendar_item_for_an_event_with_the_end_date_before_the_start_date_is_created
 		: With_calendar_item_repository
 	{
-		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		protected override Post CreatePost()
 		{
-			return Create.New.Event(configuration)
+			return Create.New.Event(Configuration)
 				.From(DateTime.MinValue.AddDays(10))
 				.To(DateTime.MinValue)
 				.AtLocation("somewhere")
@@ -95,16 +95,16 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_not_return_a_calendar_item()
 		{
-			Assert.IsNull(_calendarItem);
+			Assert.IsNull(CalendarItem);
 		}
 	}
 
 	public class When_a_calendar_item_for_an_exiting_event_is_created_and_the_location_is_unknown
 		: With_calendar_item_repository
 	{
-		protected override Post CreatePost(IEventPluginConfiguration configuration)
+		protected override Post CreatePost()
 		{
-			return Create.New.Event(configuration)
+			return Create.New.Event(Configuration)
 				.From(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
@@ -115,46 +115,52 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_return_a_calendar_item()
 		{
-			Assert.IsNotNull(_calendarItem);
+			Assert.IsNotNull(CalendarItem);
 		}
 
 		[Test]
 		public void It_should_initialize_the_location_from_the_default_settings()
 		{
-			Assert.AreEqual("to be announced", _calendarItem.Location);
+			Assert.AreEqual(Configuration.UnknownText, CalendarItem.Location);
 		}
 	}
 
 	public abstract class With_calendar_item_repository : Spec
 	{
-		protected ICalendarItem _calendarItem;
 		Post _post;
 		CalendarItemRepository _sut;
 
+		protected internal ICalendarItem CalendarItem
+		{
+			get;
+			private set;
+		}
+
+		protected IEventPluginConfiguration Configuration
+		{
+			get;
+			private set;
+		}
+
 		protected override void Establish_context()
 		{
-			var configuration = MockRepository.GenerateMock<IEventPluginConfiguration>();
+			Configuration = Create.New.StubbedEventPluginConfiguration().Build();
+			MockRepository.GenerateMock<IEventPluginConfiguration>();
 			var settings = MockRepository.GenerateMock<IGraffitiSiteSettings>();
 
-			_sut = new CalendarItemRepository(configuration,
+			_sut = new CalendarItemRepository(Configuration,
 			                                  settings);
-
-			configuration.Stub(x => x.StartDateField).Return("start");
-			configuration.Stub(x => x.EndDateField).Return("end");
-			configuration.Stub(x => x.LocationField).Return("location");
-			configuration.Stub(x => x.LocationUnknownField).Return("locationunknown");
-			configuration.Stub(x => x.UnknownText).Return("to be announced");
 
 			settings.Stub(x => x.BaseUrl).Return("http://foo");
 
-			_post = CreatePost(configuration);
+			_post = CreatePost();
 		}
 
-		protected abstract Post CreatePost(IEventPluginConfiguration configuration);
+		protected abstract Post CreatePost();
 
 		protected override void Because()
 		{
-			_calendarItem = _sut.CreateCalendarItemForEvent(_post);
+			CalendarItem = _sut.CreateCalendarItemForEvent(_post);
 		}
 	}
 }

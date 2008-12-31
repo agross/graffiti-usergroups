@@ -15,43 +15,6 @@ using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Runtime.Tests.Handlers
 {
-	public abstract class With_registration_handler : Spec
-	{
-		RegistrationHandler _sut;
-
-		protected ICommandFactory CommandFactory
-		{
-			get;
-			private set;
-		}
-
-		protected HttpSimulator Request
-		{
-			get;
-			private set;
-		}
-
-		protected override void Establish_context()
-		{
-			CommandFactory = MockRepository.GenerateStub<ICommandFactory>();
-			_sut = new RegistrationHandler(CommandFactory, null);
-
-			Request = CreateRequest();
-		}
-
-		protected override void Because()
-		{
-			_sut.ProcessRequest(HttpContext.Current);
-		}
-
-		protected override void Cleanup_after()
-		{
-			Request.Dispose();
-		}
-
-		protected abstract HttpSimulator CreateRequest();
-	}
-
 	public class When_the_registration_handler_is_called_via_Http_get : With_registration_handler
 	{
 		protected override HttpSimulator CreateRequest()
@@ -106,9 +69,9 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 			           {
 			           	{ "event-10", null },
 			           	{ "event-42", null },
-			           	{ "formOfAddress", "foo" },
-			           	{ "name", "bar" },
-			           	{ "occupation", "baz" },
+			           	{ "formOfAddress", "form of address" },
+			           	{ "name", "firstname lastname" },
+			           	{ "occupation", "IANAL" },
 			           	{ "attendeeEMail", "foo@bar.com" },
 			           	{ "ccToAttendee", "on" }
 			           };
@@ -121,9 +84,9 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			CommandFactory.AssertWasCalled(x => x.EventRegistration(null, null, null, null, null, true),
 			                               x => x.Constraints(List.ContainsAll(new[] { 10, 42 }),
-			                                                  Is.Equal("foo"),
-			                                                  Is.Equal("bar"),
-			                                                  Is.Equal("baz"),
+															  Is.Equal("firstname lastname"),
+															  Is.Equal("form of address"),
+															  Is.Equal("IANAL"),
 			                                                  Is.Equal("foo@bar.com"),
 			                                                  Is.Equal(true)));
 		}
@@ -145,5 +108,42 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
 		}
+	}
+
+	public abstract class With_registration_handler : Spec
+	{
+		RegistrationHandler _sut;
+
+		protected ICommandFactory CommandFactory
+		{
+			get;
+			private set;
+		}
+
+		protected HttpSimulator Request
+		{
+			get;
+			private set;
+		}
+
+		protected override void Establish_context()
+		{
+			CommandFactory = MockRepository.GenerateStub<ICommandFactory>();
+			_sut = new RegistrationHandler(CommandFactory, null);
+
+			Request = CreateRequest();
+		}
+
+		protected override void Because()
+		{
+			_sut.ProcessRequest(HttpContext.Current);
+		}
+
+		protected override void Cleanup_after()
+		{
+			Request.Dispose();
+		}
+
+		protected abstract HttpSimulator CreateRequest();
 	}
 }

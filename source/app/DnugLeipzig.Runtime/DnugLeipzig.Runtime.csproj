@@ -79,11 +79,12 @@
     <Compile Include="Repositories\PostRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\CalendarItem.cs" />
+    <Compile Include="Services\EventRegistrationResultList.cs" />
+    <Compile Include="Configuration\GraffitiEmailContext.cs" />
     <Compile Include="Services\GraffitiEmailSender.cs" />
     <Compile Include="Services\EventRegistrationService.cs" />
-    <Compile Include="Services\MultipleEventRegistrationResult.cs" />
+    <Compile Include="Services\EventRegistrationResult.cs" />
     <Compile Include="Services\Service.cs" />
-    <Compile Include="Services\SingleEventRegistrationResult.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>

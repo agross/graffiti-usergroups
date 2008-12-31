@@ -60,11 +60,11 @@ namespace DnugLeipzig.Runtime.Handlers
 						                                     select Convert.ToInt32(key.Replace("event-", String.Empty));
 
 						command = _commandFactory.EventRegistration(eventsToSubscribe,
-						                                                    context.Request.Form["formOfAddress"],
-						                                                    context.Request.Form["name"],
-						                                                    context.Request.Form["occupation"],
-						                                                    context.Request.Form["attendeeEMail"],
-						                                                    context.Request.Form["ccToAttendee"].IsChecked());
+						                                            context.Request.Form["name"],
+																	context.Request.Form["formOfAddress"],
+						                                            context.Request.Form["occupation"],
+						                                            context.Request.Form["attendeeEMail"],
+						                                            context.Request.Form["ccToAttendee"].IsChecked());
 						break;
 
 					default:

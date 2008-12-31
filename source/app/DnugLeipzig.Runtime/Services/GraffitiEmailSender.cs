@@ -47,39 +47,27 @@ namespace DnugLeipzig.Runtime.Services
 				throw;
 			}
 		}
-
-		public void SendMailMessage(MailMessage mailMessage)
-		{
-			try
-			{
-				using (mailMessage)
-				{
-					SmtpClient client = new SmtpClient
-					                    {
-					                    	Host = _settings.EmailServer
-					                    };
-
-					if (_settings.EmailServerRequiresAuthentication)
-					{
-						client.Credentials = new NetworkCredential(_settings.EmailUser, _settings.EmailPassword);
-					}
-
-					client.EnableSsl = _settings.EmailRequiresSSL;
-
-					if (_settings.EmailPort > 0)
-					{
-						client.Port = _settings.EmailPort;
-					}
-
-					client.Send(mailMessage);
-				}
-			}
-			catch (Exception ex)
-			{
-				Logger.Error(Create.New.Message().WithTitle("Could not send e-mail"), ex);
-				throw;
-			}
-		}
 		#endregion
+
+		public void SendMailMessage(MailMessage message)
+		{
+			SmtpClient client = new SmtpClient
+			                    {
+			                    	Host = _settings.EmailServer,
+			                    	EnableSsl = _settings.EmailRequiresSsl
+			                    };
+
+			if (_settings.EmailServerRequiresAuthentication)
+			{
+				client.Credentials = new NetworkCredential(_settings.EmailUser, _settings.EmailPassword);
+			}
+
+			if (_settings.EmailPort > 0)
+			{
+				client.Port = _settings.EmailPort;
+			}
+
+			client.Send(message);
+		}
 	}
 }

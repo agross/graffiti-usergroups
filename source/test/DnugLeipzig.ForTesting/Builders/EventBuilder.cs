@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Web;
 
 using DnugLeipzig.Definitions.Builders;
@@ -5,7 +6,7 @@ using DnugLeipzig.Definitions.Configuration.Plugins;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.ForTesting.Builder
+namespace DnugLeipzig.ForTesting.Builders
 {
 	public class EventBuilder : EntityBuilder<Post>
 	{
@@ -14,10 +15,12 @@ namespace DnugLeipzig.ForTesting.Builder
 		string _location;
 		string _locationUnknown;
 		string _maximumNumberOfRegistrations;
-		string _registrationRecipient;
+		string _organizerEmail;
 		string _startDate;
 		string _topic;
 		int _id;
+		string _registrationList;
+		string _organigerEmail;
 
 		public EventBuilder(IEventPluginConfiguration configuration)
 		{
@@ -32,13 +35,9 @@ namespace DnugLeipzig.ForTesting.Builder
 			result[_config.LocationField] = _location;
 			result[_config.LocationUnknownField] = _locationUnknown;
 			result[_config.MaximumNumberOfRegistrationsField] = _maximumNumberOfRegistrations;
-			result[_config.RegistrationRecipientField] = _registrationRecipient;
+			result[_config.RegistrationRecipientField] = _organizerEmail;
+			result[_config.RegistrationListField] = _registrationList;
 			return result;
-		}
-
-		public static implicit operator Post(EventBuilder builder)
-		{
-			return builder.BuildInstance();
 		}
 
 		public EventBuilder Id(int id)
@@ -77,21 +76,27 @@ namespace DnugLeipzig.ForTesting.Builder
 			return this;
 		}
 
-		public EventBuilder WithMaximumNumberOfRegistrations(string value)
+		public EventBuilder BookedUpWith(string value)
 		{
 			_maximumNumberOfRegistrations = value;
 			return this;
 		}
 
-		public EventBuilder WithRegistrationRecipient(string email)
+		public EventBuilder OrganizedBy(string email)
 		{
-			_registrationRecipient = email;
+			_organizerEmail = email;
 			return this;
 		}
 
 		public EventBuilder TheTopicIs(string topic)
 		{
 			_topic = topic;
+			return this;
+		}
+
+		public EventBuilder WithAttendeeList(string registrationList)
+		{
+			_registrationList = registrationList;
 			return this;
 		}
 	}

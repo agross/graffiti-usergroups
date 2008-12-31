@@ -28,6 +28,7 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 		protected override void Because()
 		{
 			_sut.Render(HttpContext.Current.Response);
+			HttpContext.Current.Response.End();
 		}
 
 		[Test]
@@ -69,6 +70,7 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 		protected override void Because()
 		{
 			_sut.Render(HttpContext.Current.Response);
+			HttpContext.Current.Response.End();
 		}
 
 		[Test]

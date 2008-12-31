@@ -72,7 +72,9 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Builder\EventBuilder.cs" />
+    <Compile Include="Builders\EventBuilder.cs" />
+    <Compile Include="Builders\EventRegistrationCommandBuilder.cs" />
+    <Compile Include="Builders\StubbedEventPluginConfigurationBuilder.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
     <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
     <Compile Include="HttpMocks\ReflectionHelper.cs" />
@@ -85,6 +87,10 @@
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
       <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
       <Name>DnugLeipzig.Definitions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\app\DnugLeipzig.Runtime\DnugLeipzig.Runtime.csproj">
+      <Project>{7F147039-28C6-4CE6-B134-4A94E90BA183}</Project>
+      <Name>DnugLeipzig.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
