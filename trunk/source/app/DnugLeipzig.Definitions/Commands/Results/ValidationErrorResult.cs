@@ -16,7 +16,6 @@ namespace DnugLeipzig.Definitions.Commands.Results
 		{
 			response.ContentType = "application/json";
 			response.Write(new JavaScriptSerializer().Serialize(this));
-			response.End();
 		}
 		#endregion
 

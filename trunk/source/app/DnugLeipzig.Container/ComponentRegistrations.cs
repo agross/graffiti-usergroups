@@ -22,42 +22,52 @@ namespace DnugLeipzig.Container
 	{
 		public static IEnumerable<IRegistration> Get()
 		{
-			// Configurations.
+			// Configuration.
 			yield return Component.For<ITalkPluginConfiguration>()
 				.ImplementedBy<TalkPluginConfiguration>()
-				.LifeStyle.Transient;
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IEventPluginConfiguration>()
 				.ImplementedBy<EventPluginConfiguration>()
-				.LifeStyle.Transient;
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IGraffitiCommentSettings>()
 				.ImplementedBy<GraffitiCommentSettings>()
-				.LifeStyle.Transient;
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IGraffitiSiteSettings>()
 				.ImplementedBy<GraffitiSiteSettings>()
-				.LifeStyle.Transient;
+				.LifeStyle.Is(LifestyleType.Transient);
+
+			yield return Component.For<IGraffitiEmailContext>()
+				.ImplementedBy<GraffitiEmailContext>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			// Repositories.
 			yield return Component.For<ICalendarItemRepository>()
-				.ImplementedBy<CalendarItemRepository>();
-			
+				.ImplementedBy<CalendarItemRepository>()
+				.LifeStyle.Is(LifestyleType.Transient);
+
 			yield return Component.For<IPostRepository>()
-				.ImplementedBy<PostRepository>();
+				.ImplementedBy<PostRepository>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<ICategoryRepository>()
-				.ImplementedBy<CategoryRepository>();
+				.ImplementedBy<CategoryRepository>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<ICategorizedPostRepository<ITalkPluginConfiguration>>()
-				.ImplementedBy<CategorizedPostRepository<ITalkPluginConfiguration>>();
+				.ImplementedBy<CategorizedPostRepository<ITalkPluginConfiguration>>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<ICategorizedPostRepository<IEventPluginConfiguration>>()
-				.ImplementedBy<CategorizedPostRepository<IEventPluginConfiguration>>();
+				.ImplementedBy<CategorizedPostRepository<IEventPluginConfiguration>>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			// Commands.
 			yield return Component.For<ICommandFactory>()
-				.ImplementedBy<CommandFactory>();
+				.ImplementedBy<CommandFactory>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return AllTypes.Of<ICommand>()
 				.FromAssembly(typeof(Command).Assembly)
@@ -66,7 +76,8 @@ namespace DnugLeipzig.Container
 
 			// Services.
 			yield return Component.For<IEmailSender>()
-				.ImplementedBy<GraffitiEmailSender>();
+				.ImplementedBy<GraffitiEmailSender>()
+				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IEventRegistrationService>()
 				.ImplementedBy<EventRegistrationService>()
@@ -74,7 +85,8 @@ namespace DnugLeipzig.Container
 				            {
 				            	Parameter.ForKey("registrationEmailTemplate")
 				            		.Eq("register.view"),
-				            });
+				            })
+				.LifeStyle.Is(LifestyleType.Transient);
 		}
 
 		static Type[] DeepestInterfaceImplementation(Type type)

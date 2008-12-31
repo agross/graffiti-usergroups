@@ -55,6 +55,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\tools\MbUnit\MbUnit.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="NVelocity, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Graffiti\NVelocity.dll</HintPath>
+    </Reference>
     <Reference Include="Rhino.Mocks, Version=3.5.0.1337, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\tools\Rhino Tools\Rhino.Mocks.dll</HintPath>
@@ -81,6 +85,7 @@
     <Compile Include="Commands\CommandFactorySpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CalendarItemRepositorySpec.cs" />
+    <Compile Include="Services\EventRegistrationServiceSpec.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
@@ -95,9 +100,6 @@
       <Project>{6793C240-F450-448C-922D-B8D5AF771E98}</Project>
       <Name>DnugLeipzig.ForTesting</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

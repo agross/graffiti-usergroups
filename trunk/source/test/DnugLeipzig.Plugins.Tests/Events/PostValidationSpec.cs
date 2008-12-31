@@ -217,7 +217,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			public void It_should_require_a_positive_integer_for_the_maximum_number_of_registrations(
 				string maximumNumberOfRegistrationsValue)
 			{
-				Because(Create.New.Event(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
+				Because(Create.New.Event(_sut).BookedUpWith(maximumNumberOfRegistrationsValue));
 				Assert.IsTrue(true);
 			}
 
@@ -227,7 +227,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			public void It_should_allow_an_empty_value_for_the_maximum_number_of_registrations(
 				string maximumNumberOfRegistrationsValue)
 			{
-				Because(Create.New.Event(_sut).WithMaximumNumberOfRegistrations(maximumNumberOfRegistrationsValue));
+				Because(Create.New.Event(_sut).BookedUpWith(maximumNumberOfRegistrationsValue));
 				Assert.IsTrue(true);
 			}
 
@@ -237,7 +237,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row(null)]
 			public void It_should_allow_an_empty_value_for_the_registration_recipient(string email)
 			{
-				Because(Create.New.Event(_sut).WithRegistrationRecipient(email));
+				Because(Create.New.Event(_sut).OrganizedBy(email));
 				Assert.IsTrue(true);
 			}
 
@@ -246,7 +246,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			[Row("invalid", ExpectedException = typeof(ValidationException))]
 			public void It_should_require_valid_email_addresses_for_the_registration_recipient(string email)
 			{
-				Because(Create.New.Event(_sut).WithRegistrationRecipient(email));
+				Because(Create.New.Event(_sut).OrganizedBy(email));
 				Assert.IsTrue(true);
 			}
 		}

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 
 using Castle.Core;
+using Castle.Core.Logging;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 
@@ -74,16 +75,19 @@ namespace DnugLeipzig.Container.Tests
 		}
 
 		[Test]
-		public void It_should_only_contain_commands_with_a_transient_lifestyle()
+		public void It_should_only_contain_services_with_a_transient_lifestyle()
 		{
 			Array.ForEach(_sut,
 			              handler =>
 			              	{
-			              		if (typeof(ICommand).IsAssignableFrom(handler.ComponentModel.Service))
+			              		if (typeof(ILoggerFactory).IsAssignableFrom(handler.ComponentModel.Service) ||
+			              		    typeof(ILogger).IsAssignableFrom(handler.ComponentModel.Service))
 			              		{
-			              			Debug.WriteLine(handler.ComponentModel.Service);
-			              			Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
+			              			return;
 			              		}
+
+			              		Debug.WriteLine(handler.ComponentModel.Service);
+			              		Assert.AreEqual(LifestyleType.Transient, handler.ComponentModel.LifestyleType);
 			              	});
 		}
 	}

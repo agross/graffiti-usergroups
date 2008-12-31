@@ -3,17 +3,18 @@
 Register.submitMessage = function(url)
 {
 	// Track this click in the registration funnel of Google Analytics.
-	if(typeof(pageTracker) !== "undefined")
+	if (typeof (pageTracker) !== "undefined")
 	{
 		pageTracker._trackPageview("/funnel-registration/register-clicked.html")
 	}
-	
+
 	Form.Element.disable('register');
 	$('success').hide();
 	$('error').hide();
+	$$('span.status').each(function(e) { e.hide(); });
 	$('working').show();
 	GraffitiHelpers.statusMessage('registration-status', 'Sending request, please wait.', true);
-	
+
 	new Ajax.Request(url + '?command=register',
 	{
 		method: 'post',
@@ -21,25 +22,53 @@ Register.submitMessage = function(url)
 		onSuccess: function(transport)
 		{
 			var response = transport.responseText.evalJSON();
-			if (response.Success)
+
+			if (!response.ValidationErrors)
 			{
-				$('success').show();
-				
+				response.each(function(event)
+				{
+					if (event.ErrorOccurred)
+					{
+						$('event-' + event.EventId + '-error').show();
+					}
+					else
+					{
+						if (event.AlreadyRegistered)
+						{
+							$('event-' + event.EventId + '-already-registered').show();
+						}
+						else
+						{
+							$('event-' + event.EventId + '-success').show();
+						}
+					}
+
+					if (event.OnWaitingList)
+					{
+						$('event-' + event.EventId + '-waitinglist').show();
+					}
+				});
+
 				GraffitiHelpers.statusMessage('registration-status', "Thank you for your registration.", false);
-				if(response.WaitingListEvents.size() > 0)
+
+				if (response.any(function(event) { return event.OnWaitingList; }))
 				{
 					GraffitiHelpers.statusMessage('registration-status', $('registration-status').innerHTML + " You are on the waiting list for some events.", false);
-					response.WaitingListEvents.each(function(item) { $('event-' + item + '-waitinglist').show(); });
+				}
+
+				if (response.any(function(event) { return event.ErrorOccurred; }))
+				{
+					GraffitiHelpers.statusMessage('registration-status', $('registration-status').innerHTML + " Some registration requests caused an error.", false);
 				}
 			}
 			else
 			{
 				$('error').show();
-				
+
 				var message = 'An error has occured. Please check the following form fields:<ul>';
 				response.ValidationErrors.each(function(item) { message += '<li>' + item + '</li>'; });
-				message += '</ol>';
-				
+				message += '</ul>';
+
 				GraffitiHelpers.statusMessage('registration-status', message, false);
 			}
 		},

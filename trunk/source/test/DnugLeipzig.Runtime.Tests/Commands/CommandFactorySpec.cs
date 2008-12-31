@@ -5,7 +5,6 @@ using DnugLeipzig.Runtime.Commands;
 
 using MbUnit.Framework;
 
-using Rhino.Mocks;
 using Rhino.Testing.AutoMocking;
 
 namespace DnugLeipzig.Runtime.Tests.Commands
@@ -19,7 +18,7 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 			                                      "form of address",
 			                                      "occupation",
 			                                      "attendee@email.com",
-												  true);
+			                                      true);
 		}
 	}
 

@@ -4,6 +4,6 @@ namespace DnugLeipzig.Definitions.Services
 {
 	public interface IEventRegistrationService
 	{
-		IHttpResponse RegisterForEvents(IEventRegistrationCommand command);
+		IEventRegistrationResultList RegisterForEvents(IEventRegistrationCommand command);
 	}
 }

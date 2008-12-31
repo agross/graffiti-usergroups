@@ -11,5 +11,10 @@ namespace DnugLeipzig.Definitions.Builders
 		}
 
 		protected abstract TEntity BuildInstance();
+
+		public TEntity Build()
+		{
+			return BuildInstance();
+		}
 	}
 }

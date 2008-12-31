@@ -19,63 +19,6 @@ using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Runtime.Tests.Handlers
 {
-	public abstract class With_calendar_handler : Spec
-	{
-		CalendarHandler _sut;
-
-		protected IEventPluginConfiguration Configuration
-		{
-			get;
-			private set;
-		}
-
-		protected IPostRepository PostRepository
-		{
-			get;
-			private set;
-		}
-
-		protected HttpSimulator Request
-		{
-			get;
-			private set;
-		}
-
-		protected ICalendarItemRepository CalendarItemRepository
-		{
-			get;
-			private set;
-		}
-
-		protected override void Establish_context()
-		{
-			PostRepository = MockRepository.GenerateStub<IPostRepository>();
-			CalendarItemRepository = MockRepository.GenerateStub<ICalendarItemRepository>();
-			_sut = new CalendarHandler(PostRepository, CalendarItemRepository, MockRepository.GenerateMock<ILogger>());
-
-			Configuration = MockRepository.GenerateMock<IEventPluginConfiguration>();
-			Configuration.Stub(x => x.StartDateField).Return("start");
-			Configuration.Stub(x => x.EndDateField).Return("end");
-			Configuration.Stub(x => x.LocationField).Return("location");
-			Configuration.Stub(x => x.LocationUnknownField).Return("locationunknown");
-			Configuration.Stub(x => x.UnknownText).Return("to be announced");
-
-			Request = CreateRequest();
-		}
-
-		protected override void Because()
-		{
-			_sut.ProcessRequest(HttpContext.Current);
-		}
-
-		protected override void Cleanup_after()
-		{
-			Request.Dispose();
-		}
-
-		protected abstract HttpSimulator CreateRequest();
-	}
-
 	public class When_the_calendar_handler_is_called_via_Http_post : With_calendar_handler
 	{
 		protected override HttpSimulator CreateRequest()
@@ -169,5 +112,57 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
 		}
+	}
+
+	public abstract class With_calendar_handler : Spec
+	{
+		CalendarHandler _sut;
+
+		protected IEventPluginConfiguration Configuration
+		{
+			get;
+			private set;
+		}
+
+		protected IPostRepository PostRepository
+		{
+			get;
+			private set;
+		}
+
+		protected HttpSimulator Request
+		{
+			get;
+			private set;
+		}
+
+		protected ICalendarItemRepository CalendarItemRepository
+		{
+			get;
+			private set;
+		}
+
+		protected override void Establish_context()
+		{
+			PostRepository = MockRepository.GenerateStub<IPostRepository>();
+			CalendarItemRepository = MockRepository.GenerateStub<ICalendarItemRepository>();
+			Configuration = Create.New.StubbedEventPluginConfiguration().Build();
+
+			_sut = new CalendarHandler(PostRepository, CalendarItemRepository, MockRepository.GenerateMock<ILogger>());
+
+			Request = CreateRequest();
+		}
+
+		protected override void Because()
+		{
+			_sut.ProcessRequest(HttpContext.Current);
+		}
+
+		protected override void Cleanup_after()
+		{
+			Request.Dispose();
+		}
+
+		protected abstract HttpSimulator CreateRequest();
 	}
 }

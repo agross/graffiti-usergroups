@@ -1,4 +1,13 @@
 ﻿<input type="checkbox" id="event-$post.Id" name="event-$post.Id" #if ($request.QueryString.get_Item("eventId") == $post.Id) checked="checked" #end />
+<span id="event-${post.Id}-error" class="status" style="display: none;">
+	<img src="$macros.ThemeFile('/images/error.png')" alt="The registration for this event could not be completed successfully" title="The registration for this event could not be completed successfully" />
+</span>
+<span id="event-${post.Id}-already-registered" class="status" style="display: none;">
+	<img src="$macros.ThemeFile('/images/success.png')" alt="You are already registered for this event" title="You are already registered for this event" />
+</span>
+<span id="event-${post.Id}-success" class="status" style="display: none;">
+	<img src="$macros.ThemeFile('/images/success.png')" alt="You have successfully registered for this event" title="You have successfully registered for this event" />
+</span>
 <span id="event-${post.Id}-waitinglist" class="status" style="display: none;">
 	<img src="$macros.ThemeFile('/images/warning.png')" alt="You are on the waiting list for this event" title="You are on the waiting list for this event" />
 </span>
