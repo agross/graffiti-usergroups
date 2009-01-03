@@ -138,7 +138,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			return macros.LoadThemeView("components/site/menu.view");
 		}
 
-		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfiguration
+		void CreateCategory<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfigurationProvider
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 
@@ -248,7 +248,7 @@ namespace DnugLeipzig.DemoSite.Handlers
 			       };
 		}
 
-		void CreateNavigationLink<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfiguration, new()
+		void CreateNavigationLink<TPlugin>() where TPlugin : GraffitiEvent, IPluginConfigurationProvider, new()
 		{
 			TPlugin plugin = PluginHelper.GetPluginWithCurrentSettings<TPlugin>();
 			Category category = _categoryRepository.GetCategory(plugin.CategoryName);

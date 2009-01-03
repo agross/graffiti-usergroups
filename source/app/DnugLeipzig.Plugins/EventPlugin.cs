@@ -16,7 +16,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class EventPlugin : GraffitiEvent, IEventPluginConfiguration, ISupportsMemento
+	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationProvider, ISupportsMemento
 	{
 		internal const string Form_CategoryName = "categoryName";
 		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
@@ -47,7 +47,7 @@ namespace DnugLeipzig.Plugins
 		/// </summary>
 		public EventPlugin() : this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>(), IoC.Resolve<IGraffitiCommentSettings>())
 		{
-			// Initialize with default values.
+			// Initialize default values.
 			CategoryName = "Events";
 			StartDateField = "Start Date";
 			EndDateField = "End Date";
@@ -63,7 +63,7 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-			DefaultRegistrationRecipient = _settings.Email;
+// TODO			DefaultRegistrationRecipient = _settings.Email;
 		}
 
 		/// <summary>
@@ -142,7 +142,7 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
-		#region IEventPluginConfiguration Members
+		#region IEventPluginConfigurationProvider Members
 		public string SortRelevantDateField
 		{
 			get { return StartDateField; }

@@ -14,13 +14,13 @@ using Graffiti.Core;
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("talks")]
-	public class TalkMacros : Macros<ITalkPluginConfiguration>
+	public class TalkMacros : Macros<ITalkPluginConfigurationProvider>
 	{
 		#region Ctors
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TalkMacros"/> class.
 		/// </summary>
-		public TalkMacros() : this(IoC.Resolve<ICategorizedPostRepository<ITalkPluginConfiguration>>())
+		public TalkMacros() : this(IoC.Resolve<ICategorizedPostRepository<ITalkPluginConfigurationProvider>>())
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace DnugLeipzig.Extensions.Macros
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
 		/// <param name="repository">The repository.</param>
-		internal TalkMacros(ICategorizedPostRepository<ITalkPluginConfiguration> repository)
+		internal TalkMacros(ICategorizedPostRepository<ITalkPluginConfigurationProvider> repository)
 			: base(repository)
 		{
 		}

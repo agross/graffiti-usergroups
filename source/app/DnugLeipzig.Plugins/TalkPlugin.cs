@@ -14,7 +14,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Plugins
 {
-	public class TalkPlugin : GraffitiEvent, ITalkPluginConfiguration, ISupportsMemento
+	public class TalkPlugin : GraffitiEvent, ITalkPluginConfigurationProvider, ISupportsMemento
 	{
 		internal const string Form_CategoryName = "categoryName";
 		internal const string Form_CreateTargetCategoryAndFields = "createTargetCategoryAndFields";
@@ -28,10 +28,9 @@ namespace DnugLeipzig.Plugins
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TalkPlugin"/> class.
 		/// </summary>
-		public TalkPlugin()
-			: this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>())
+		public TalkPlugin() : this(IoC.Resolve<ICategoryRepository>(), IoC.Resolve<IPostRepository>())
 		{
-			// Initialize with default values.
+			// Initialize default values.
 			CategoryName = "Talks";
 			DateField = "Date";
 			SpeakerField = "Speaker";
@@ -87,7 +86,7 @@ namespace DnugLeipzig.Plugins
 			set;
 		}
 
-		#region ITalkPluginConfiguration Members
+		#region ITalkPluginConfigurationProvider Members
 		public string DateField
 		{
 			get;

@@ -17,20 +17,15 @@ using Graffiti.Core;
 namespace DnugLeipzig.Extensions.Macros
 {
 	[Chalk("events")]
-	public class EventMacros : Macros<IEventPluginConfiguration>
+	public class EventMacros : Macros<IEventPluginConfigurationProvider>
 	{
 		readonly ICalendarItemRepository _calendarItemRepository;
 		readonly IGraffitiSiteSettings _settings;
 
 		#region Ctors
-		/// <summary>
-		/// Initializes a new instance of the <see cref="EventMacros"/> class.
-		/// </summary>
-		public EventMacros()
-			: this(
-				IoC.Resolve<ICategorizedPostRepository<IEventPluginConfiguration>>(),
-				IoC.Resolve<IGraffitiSiteSettings>(),
-				IoC.Resolve<ICalendarItemRepository>())
+		public EventMacros() : this(IoC.Resolve<ICategorizedPostRepository<IEventPluginConfigurationProvider>>(),
+		                            IoC.Resolve<IGraffitiSiteSettings>(),
+		                            IoC.Resolve<ICalendarItemRepository>())
 		{
 		}
 
@@ -38,8 +33,7 @@ namespace DnugLeipzig.Extensions.Macros
 		/// Initializes a new instance of the <see cref="EventMacros"/> class.
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
-		/// <param name="repository">The repository.</param>
-		internal EventMacros(ICategorizedPostRepository<IEventPluginConfiguration> repository,
+		internal EventMacros(ICategorizedPostRepository<IEventPluginConfigurationProvider> repository,
 		                     IGraffitiSiteSettings settings,
 		                     ICalendarItemRepository calendarItemRepository)
 			: base(repository)
@@ -116,34 +110,32 @@ namespace DnugLeipzig.Extensions.Macros
 
 		public IList<Post> GetForRegistration()
 		{
-			return
-				Repository.GetAll()
-					.HasDate(Configuration.StartDateField)
-					.IsInFuture(Configuration.StartDateField)
-					.RegistrationNeeded(Configuration.RegistrationNeededField)
-					.RegistrationPossible(Configuration.RegistrationListField, Configuration.MaximumNumberOfRegistrationsField)
-					.SortAscending(Configuration.StartDateField).ToList();
+			return Repository.GetAll()
+				.HasDate(Configuration.StartDateField)
+				.IsInFuture(Configuration.StartDateField)
+				.RegistrationNeeded(Configuration.RegistrationNeededField)
+				.RegistrationPossible(Configuration.RegistrationListField, Configuration.MaximumNumberOfRegistrationsField)
+				.SortAscending(Configuration.StartDateField)
+				.ToList();
 		}
 
 		public IList<Post> GetUpcoming(int numberOfEvents)
 		{
-			return
-				Repository.GetAll()
-					.HasDate(Configuration.StartDateField)
-					.IsInFuture(Configuration.StartDateField)
-					.SortAscending(Configuration.StartDateField)
-					.LimitTo(numberOfEvents)
-					.ToList();
+			return Repository.GetAll()
+				.HasDate(Configuration.StartDateField)
+				.IsInFuture(Configuration.StartDateField)
+				.SortAscending(Configuration.StartDateField)
+				.LimitTo(numberOfEvents)
+				.ToList();
 		}
 
 		public IList<Post> GetForYear(int year)
 		{
-			return
-				Repository.GetAll()
-					.IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1))
-					.IsInPast(Configuration.StartDateField)
-					.SortAscending(Configuration.StartDateField)
-					.ToList();
+			return Repository.GetAll()
+				.IsInYear(Configuration.StartDateField, new DateTime(year, 1, 1))
+				.IsInPast(Configuration.StartDateField)
+				.SortAscending(Configuration.StartDateField)
+				.ToList();
 		}
 
 		public ICollection<PastPostInfo> GetPastYearOverview()

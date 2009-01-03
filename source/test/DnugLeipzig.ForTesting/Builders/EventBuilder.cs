@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Web;
 
 using DnugLeipzig.Definitions.Builders;
@@ -10,26 +9,29 @@ namespace DnugLeipzig.ForTesting.Builders
 {
 	public class EventBuilder : EntityBuilder<Post>
 	{
-		readonly IEventPluginConfiguration _config;
+		readonly IEventPluginConfigurationProvider _config;
 		string _endDate;
+		int _id;
 		string _location;
 		string _locationUnknown;
 		string _maximumNumberOfRegistrations;
 		string _organizerEmail;
+		string _registrationList;
 		string _startDate;
 		string _topic;
-		int _id;
-		string _registrationList;
-		string _organigerEmail;
 
-		public EventBuilder(IEventPluginConfiguration configuration)
+		public EventBuilder(IEventPluginConfigurationProvider configurationProvider)
 		{
-			_config = configuration;
+			_config = configurationProvider;
 		}
 
 		protected override Post BuildInstance()
 		{
-			Post result = new Post { Title = HttpUtility.HtmlEncode(_topic), Id = _id };
+			Post result = new Post
+			              {
+			              	Id = _id,
+			              	Title = HttpUtility.HtmlEncode(_topic)
+			              };
 			result[_config.StartDateField] = _startDate;
 			result[_config.EndDateField] = _endDate;
 			result[_config.LocationField] = _location;
@@ -45,7 +47,7 @@ namespace DnugLeipzig.ForTesting.Builders
 			_id = id;
 			return this;
 		}
-		
+
 		public EventBuilder From(object date)
 		{
 			_startDate = date == null ? null : date.ToString();

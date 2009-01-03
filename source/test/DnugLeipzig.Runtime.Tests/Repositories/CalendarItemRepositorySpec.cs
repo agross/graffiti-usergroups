@@ -19,7 +19,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(Configuration)
+			return Create.New.Event(ConfigurationProvider)
 				.From(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
@@ -68,7 +68,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(Configuration)
+			return Create.New.Event(ConfigurationProvider)
 				.AtLocation("somewhere")
 				.TheTopicIs("techno babble");
 		}
@@ -85,7 +85,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(Configuration)
+			return Create.New.Event(ConfigurationProvider)
 				.From(DateTime.MinValue.AddDays(10))
 				.To(DateTime.MinValue)
 				.AtLocation("somewhere")
@@ -104,7 +104,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(Configuration)
+			return Create.New.Event(ConfigurationProvider)
 				.From(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
@@ -121,7 +121,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_initialize_the_location_from_the_default_settings()
 		{
-			Assert.AreEqual(Configuration.UnknownText, CalendarItem.Location);
+			Assert.AreEqual(ConfigurationProvider.UnknownText, CalendarItem.Location);
 		}
 	}
 
@@ -136,7 +136,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 			private set;
 		}
 
-		protected IEventPluginConfiguration Configuration
+		protected IEventPluginConfigurationProvider ConfigurationProvider
 		{
 			get;
 			private set;
@@ -144,11 +144,11 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 
 		protected override void Establish_context()
 		{
-			Configuration = Create.New.StubbedEventPluginConfiguration().Build();
-			MockRepository.GenerateMock<IEventPluginConfiguration>();
+			ConfigurationProvider = Create.New.StubbedEventPluginConfiguration().Build();
+			MockRepository.GenerateMock<IEventPluginConfigurationProvider>();
 			var settings = MockRepository.GenerateMock<IGraffitiSiteSettings>();
 
-			_sut = new CalendarItemRepository(Configuration,
+			_sut = new CalendarItemRepository(ConfigurationProvider,
 			                                  settings);
 
 			settings.Stub(x => x.BaseUrl).Return("http://foo");

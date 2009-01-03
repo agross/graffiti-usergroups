@@ -7,7 +7,7 @@ using Graffiti.Core;
 namespace DnugLeipzig.Definitions.Repositories
 {
 	public interface ICategorizedPostRepository<TConfiguration> : IPostRepository
-		where TConfiguration : IPluginConfiguration
+		where TConfiguration : IPluginConfigurationProvider
 	{
 		TConfiguration Configuration
 		{

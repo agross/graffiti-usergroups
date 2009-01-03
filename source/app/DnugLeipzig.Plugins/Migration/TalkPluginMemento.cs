@@ -9,7 +9,7 @@ namespace DnugLeipzig.Plugins.Migration
 {
 	internal class TalkPluginMemento : IMemento
 	{
-		public TalkPluginMemento(ITalkPluginConfiguration source)
+		public TalkPluginMemento(ITalkPluginConfigurationProvider source)
 		{
 			SpeakerField = source.SpeakerField;
 			DateField = source.DateField;

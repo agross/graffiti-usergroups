@@ -10,7 +10,7 @@ using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
-using DnugLeipzig.Extensions.Configuration;
+using DnugLeipzig.Plugins;
 using DnugLeipzig.Runtime.Commands;
 using DnugLeipzig.Runtime.Configuration;
 using DnugLeipzig.Runtime.Repositories;
@@ -23,12 +23,17 @@ namespace DnugLeipzig.Container
 		public static IEnumerable<IRegistration> Get()
 		{
 			// Configuration.
-			yield return Component.For<ITalkPluginConfiguration>()
-				.ImplementedBy<TalkPluginConfiguration>()
+			yield return Component.For<PluginConfigurationInterceptor>()
+				.ImplementedBy<PluginConfigurationInterceptor>();
+
+			yield return Component.For<ITalkPluginConfigurationProvider>()
+				.ImplementedBy<TalkPlugin>()
+				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>()).Anywhere
 				.LifeStyle.Is(LifestyleType.Transient);
 
-			yield return Component.For<IEventPluginConfiguration>()
-				.ImplementedBy<EventPluginConfiguration>()
+			yield return Component.For<IEventPluginConfigurationProvider>()
+				.ImplementedBy<EventPlugin>()
+				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>()).Anywhere
 				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IGraffitiCommentSettings>()
@@ -56,12 +61,12 @@ namespace DnugLeipzig.Container
 				.ImplementedBy<CategoryRepository>()
 				.LifeStyle.Is(LifestyleType.Transient);
 
-			yield return Component.For<ICategorizedPostRepository<ITalkPluginConfiguration>>()
-				.ImplementedBy<CategorizedPostRepository<ITalkPluginConfiguration>>()
+			yield return Component.For<ICategorizedPostRepository<ITalkPluginConfigurationProvider>>()
+				.ImplementedBy<CategorizedPostRepository<ITalkPluginConfigurationProvider>>()
 				.LifeStyle.Is(LifestyleType.Transient);
 
-			yield return Component.For<ICategorizedPostRepository<IEventPluginConfiguration>>()
-				.ImplementedBy<CategorizedPostRepository<IEventPluginConfiguration>>()
+			yield return Component.For<ICategorizedPostRepository<IEventPluginConfigurationProvider>>()
+				.ImplementedBy<CategorizedPostRepository<IEventPluginConfigurationProvider>>()
 				.LifeStyle.Is(LifestyleType.Transient);
 
 			// Commands.

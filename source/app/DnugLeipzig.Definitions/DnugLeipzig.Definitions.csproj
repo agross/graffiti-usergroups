@@ -82,9 +82,9 @@
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="IHttpResponse.cs" />
     <Compile Include="Commands\Results\ValidationErrorResult.cs" />
-    <Compile Include="Configuration\Plugins\IPluginConfiguration.cs" />
-    <Compile Include="Configuration\Plugins\IEventPluginConfiguration.cs" />
-    <Compile Include="Configuration\Plugins\ITalkPluginConfiguration.cs" />
+    <Compile Include="Configuration\Plugins\IPluginConfigurationProvider.cs" />
+    <Compile Include="Configuration\Plugins\IEventPluginConfigurationProvider.cs" />
+    <Compile Include="Configuration\Plugins\ITalkPluginConfigurationProvider.cs" />
     <Compile Include="Create.cs" />
     <Compile Include="Builders\EntityBuilder.cs" />
     <Compile Include="Extensions\IDictionaryExtensions.cs" />

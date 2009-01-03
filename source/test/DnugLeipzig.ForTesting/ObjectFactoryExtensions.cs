@@ -6,9 +6,9 @@ namespace DnugLeipzig.ForTesting
 {
 	public static class ObjectFactoryExtensions
 	{
-		public static EventBuilder Event(this ObjectFactory ignored, IEventPluginConfiguration configuration)
+		public static EventBuilder Event(this ObjectFactory ignored, IEventPluginConfigurationProvider configurationProvider)
 		{
-			return new EventBuilder(configuration);
+			return new EventBuilder(configurationProvider);
 		}
 
 		public static EventRegistrationCommandBuilder EventRegistration(this ObjectFactory ignored)

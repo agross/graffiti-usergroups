@@ -1,6 +1,6 @@
 namespace DnugLeipzig.Definitions.Configuration.Plugins
 {
-	public interface IPluginConfiguration
+	public interface IPluginConfigurationProvider
 	{
 		string CategoryName
 		{
