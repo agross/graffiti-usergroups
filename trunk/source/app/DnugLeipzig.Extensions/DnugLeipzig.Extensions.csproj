@@ -60,9 +60,6 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\EventPluginConfiguration.cs" />
-    <Compile Include="Configuration\PluginConfiguration.cs" />
-    <Compile Include="Configuration\TalkPluginConfiguration.cs" />
     <Compile Include="DateAscendingPostComparer.cs" />
     <Compile Include="Extensions\PostExtensions.cs" />
     <Compile Include="Extensions\PostFilterExtensions.cs" />

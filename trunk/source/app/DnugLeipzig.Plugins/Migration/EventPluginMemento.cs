@@ -9,7 +9,7 @@ namespace DnugLeipzig.Plugins.Migration
 {
 	internal class EventPluginMemento : IMemento
 	{
-		public EventPluginMemento(IEventPluginConfiguration source)
+		public EventPluginMemento(IEventPluginConfigurationProvider source)
 		{
 			SpeakerField = source.SpeakerField;
 			EndDateField = source.EndDateField;

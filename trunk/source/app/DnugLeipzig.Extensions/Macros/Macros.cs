@@ -9,7 +9,7 @@ using Graffiti.Core;
 
 namespace DnugLeipzig.Extensions.Macros
 {
-	public abstract class Macros<TConfiguration> where TConfiguration : IPluginConfiguration
+	public abstract class Macros<TConfiguration> where TConfiguration : IPluginConfigurationProvider
 	{
 		protected static readonly Graffiti.Core.Macros GraffitiMacros = new Graffiti.Core.Macros();
 

@@ -2,12 +2,12 @@ using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.DemoSite
 {
-	public static class PluginHelper
+	static class PluginHelper
 	{
 		/// <summary>
-		/// Ensure plugiin initialization occurs before querying the plugiin settings.
+		/// Ensure plug-in initialization occurs before querying the plug-in settings.
 		/// </summary>
 		static void EnsureInitialized()
 		{
@@ -21,8 +21,7 @@ namespace DnugLeipzig.Plugins
 		/// <returns>
 		/// 	<c>true</c> if the plug-in is enabled; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool IsPluginEnabled<TPlugin>()
-			where TPlugin : GraffitiEvent
+		public static bool IsPluginEnabled<TPlugin>() where TPlugin : GraffitiEvent
 		{
 			EnsureInitialized();
 
@@ -36,8 +35,7 @@ namespace DnugLeipzig.Plugins
 		/// </summary>
 		/// <typeparam name="TPlugin">The type of the plug-in.</typeparam>
 		/// <returns></returns>
-		public static TPlugin GetPluginWithCurrentSettings<TPlugin>()
-			where TPlugin : GraffitiEvent
+		public static TPlugin GetPluginWithCurrentSettings<TPlugin>() where TPlugin : GraffitiEvent
 		{
 			EnsureInitialized();
 

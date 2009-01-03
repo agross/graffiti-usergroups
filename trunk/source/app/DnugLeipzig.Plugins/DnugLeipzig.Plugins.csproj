@@ -64,7 +64,6 @@
     <Compile Include="Migration\Migrator.cs" />
     <Compile Include="Migration\IMemento.cs" />
     <Compile Include="Migration\MigrationInfo.cs" />
-    <Compile Include="PluginHelper.cs" />
     <Compile Include="PluginMigrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TalkPlugin.cs" />

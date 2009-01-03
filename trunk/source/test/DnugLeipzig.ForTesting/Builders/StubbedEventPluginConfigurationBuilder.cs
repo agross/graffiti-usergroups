@@ -8,11 +8,11 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.ForTesting.Builders
 {
-	public class StubbedEventPluginConfigurationBuilder : EntityBuilder<IEventPluginConfiguration>
+	public class StubbedEventPluginConfigurationBuilder : EntityBuilder<IEventPluginConfigurationProvider>
 	{
-		protected override IEventPluginConfiguration BuildInstance()
+		protected override IEventPluginConfigurationProvider BuildInstance()
 		{
-			var result = MockRepository.GenerateMock<IEventPluginConfiguration>();
+			var result = MockRepository.GenerateMock<IEventPluginConfigurationProvider>();
 
 			foreach (var property in result.GetType().GetProperties(BindingFlags.Public |
 			                                                        BindingFlags.GetProperty |

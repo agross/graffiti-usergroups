@@ -76,7 +76,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			base.Establish_context();
 
-			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(Configuration)
+			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(ConfigurationProvider)
 			                                               	.Id(42)
 			                                               	.From(DateTime.MinValue)
 			                                               	.To(DateTime.MinValue.AddDays(10))
@@ -118,7 +118,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 	{
 		CalendarHandler _sut;
 
-		protected IEventPluginConfiguration Configuration
+		protected IEventPluginConfigurationProvider ConfigurationProvider
 		{
 			get;
 			private set;
@@ -146,7 +146,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			PostRepository = MockRepository.GenerateStub<IPostRepository>();
 			CalendarItemRepository = MockRepository.GenerateStub<ICalendarItemRepository>();
-			Configuration = Create.New.StubbedEventPluginConfiguration().Build();
+			ConfigurationProvider = Create.New.StubbedEventPluginConfiguration().Build();
 
 			_sut = new CalendarHandler(PostRepository, CalendarItemRepository, MockRepository.GenerateMock<ILogger>());
 

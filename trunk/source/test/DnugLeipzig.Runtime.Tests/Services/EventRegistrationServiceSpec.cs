@@ -413,7 +413,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			private set;
 		}
 
-		protected ICategorizedPostRepository<IEventPluginConfiguration> Repository
+		protected ICategorizedPostRepository<IEventPluginConfigurationProvider> Repository
 		{
 			get;
 			private set;
@@ -433,7 +433,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 
 		protected override void Establish_context()
 		{
-			Repository = MockRepository.GenerateMock<ICategorizedPostRepository<IEventPluginConfiguration>>();
+			Repository = MockRepository.GenerateMock<ICategorizedPostRepository<IEventPluginConfigurationProvider>>();
 			Repository.Stub(x => x.Configuration).Return(Create.New.StubbedEventPluginConfiguration().Build());
 
 			EmailSender = MockRepository.GenerateMock<IEmailSender>();

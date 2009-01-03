@@ -13,13 +13,13 @@ namespace DnugLeipzig.Runtime.Repositories
 {
 	public class CalendarItemRepository : Repository, ICalendarItemRepository
 	{
-		readonly IEventPluginConfiguration _eventPluginConfiguration;
+		readonly IEventPluginConfigurationProvider _eventPluginConfigurationProvider;
 		readonly IGraffitiSiteSettings _settings;
 
-		public CalendarItemRepository(IEventPluginConfiguration eventPluginConfiguration,
+		public CalendarItemRepository(IEventPluginConfigurationProvider eventPluginConfigurationProvider,
 		                              IGraffitiSiteSettings settings)
 		{
-			_eventPluginConfiguration = eventPluginConfiguration;
+			_eventPluginConfigurationProvider = eventPluginConfigurationProvider;
 			_settings = settings;
 		}
 
@@ -43,11 +43,11 @@ namespace DnugLeipzig.Runtime.Repositories
 
 				var calendarItem = new CalendarItem
 				                   {
-				                   	StartDate = post[_eventPluginConfiguration.StartDateField].AsEventDate(),
-				                   	EndDate = post[_eventPluginConfiguration.EndDateField].AsEventDate(),
-				                   	Location = post[_eventPluginConfiguration.LocationUnknownField].IsChecked()
-				                   	           	? _eventPluginConfiguration.UnknownText
-				                   	           	: post[_eventPluginConfiguration.LocationField],
+				                   	StartDate = post[_eventPluginConfigurationProvider.StartDateField].AsEventDate(),
+				                   	EndDate = post[_eventPluginConfigurationProvider.EndDateField].AsEventDate(),
+				                   	Location = post[_eventPluginConfigurationProvider.LocationUnknownField].IsChecked()
+				                   	           	? _eventPluginConfigurationProvider.UnknownText
+				                   	           	: post[_eventPluginConfigurationProvider.LocationField],
 				                   	Subject = HttpUtility.HtmlDecode(post.Title),
 				                   	Description = postUrl,
 				                   	LastModified = post.Published,

@@ -40,9 +40,9 @@ namespace DnugLeipzig.Runtime.Services
 		readonly IGraffitiEmailContext _emailContext;
 		readonly IEmailSender _emailSender;
 		readonly string _registrationEmailTemplate;
-		readonly ICategorizedPostRepository<IEventPluginConfiguration> _repository;
+		readonly ICategorizedPostRepository<IEventPluginConfigurationProvider> _repository;
 
-		public EventRegistrationService(ICategorizedPostRepository<IEventPluginConfiguration> repository,
+		public EventRegistrationService(ICategorizedPostRepository<IEventPluginConfigurationProvider> repository,
 		                                IGraffitiEmailContext emailContext,
 		                                IEmailSender emailSender,
 		                                string registrationEmailTemplate)

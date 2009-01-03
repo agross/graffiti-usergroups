@@ -2,13 +2,13 @@
 using System.Diagnostics;
 
 using Castle.Core;
-using Castle.Core.Logging;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Handlers;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.Runtime.Logging;
 
 using MbUnit.Framework;
 
@@ -80,8 +80,7 @@ namespace DnugLeipzig.Container.Tests
 			Array.ForEach(_sut,
 			              handler =>
 			              	{
-			              		if (typeof(ILoggerFactory).IsAssignableFrom(handler.ComponentModel.Service) ||
-			              		    typeof(ILogger).IsAssignableFrom(handler.ComponentModel.Service))
+			              		if (handler.ComponentModel.Service.Assembly != typeof(GraffitiLogger).Assembly)
 			              		{
 			              			return;
 			              		}

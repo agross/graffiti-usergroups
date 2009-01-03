@@ -9,7 +9,7 @@ namespace DnugLeipzig.Runtime.Repositories
 {
 	public class CategorizedPostRepository<TConfiguration>
 		: PostRepository, ICategorizedPostRepository<TConfiguration>
-		where TConfiguration : IPluginConfiguration
+		where TConfiguration : IPluginConfigurationProvider
 	{
 		readonly TConfiguration _configuration;
 

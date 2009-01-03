@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Handlers\DemoSiteHandler.cs" />
     <Compile Include="Macros\DemoSiteMacros.cs" />
+    <Compile Include="PluginHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
