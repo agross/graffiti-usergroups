@@ -3,6 +3,7 @@ using System;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.Runtime.Plugins;
 
 using Graffiti.Core;
 
@@ -10,7 +11,7 @@ using MbUnit.Framework;
 
 using Rhino.Mocks;
 
-namespace DnugLeipzig.Plugins.Tests.Events
+namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 {
 	public class When_the_event_plugin_sets_default_values_on_an_object_that_is_not_a_post : Spec
 	{
@@ -21,7 +22,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 		{
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       MockRepository.GenerateMock<IPostRepository>(),
-								   MockRepository.GenerateMock<IGraffitiCommentSettings>());
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>());
 
 			_post = MockRepository.GenerateStub<DataBuddyBase>();
 		}
@@ -48,7 +49,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       postRepository,
-								   MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Event category" };
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Event category" };
 
 			_post = new Post();
 
@@ -266,7 +267,7 @@ namespace DnugLeipzig.Plugins.Tests.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
 			                       postRepository,
-								   MockRepository.GenerateMock<IGraffitiCommentSettings>())
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>())
 			       {
 			       	CategoryName = "Event category",
 			       	LocationField = LocationField,

@@ -2,6 +2,7 @@ using System;
 
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.Runtime.Plugins;
 
 using Graffiti.Core;
 
@@ -9,7 +10,7 @@ using MbUnit.Framework;
 
 using Rhino.Mocks;
 
-namespace DnugLeipzig.Plugins.Tests.Talks
+namespace DnugLeipzig.Runtime.Tests.Plugins.Talks
 {
 	public class When_the_talk_plugin_validates_an_object_that_is_not_a_post : Spec
 	{

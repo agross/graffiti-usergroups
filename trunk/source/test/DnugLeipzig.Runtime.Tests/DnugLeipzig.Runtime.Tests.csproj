@@ -84,6 +84,15 @@
     <Compile Include="Handlers\CalendarHandlerSpec.cs" />
     <Compile Include="Handlers\RegistrationHandlerSpec.cs" />
     <Compile Include="Commands\CommandFactorySpec.cs" />
+    <Compile Include="Plugins\Events\PostDefaultsTests.cs" />
+    <Compile Include="Plugins\Events\PostValidationSpec.cs" />
+    <Compile Include="Plugins\Events\SettingsValidationSpec.cs" />
+    <Compile Include="Plugins\ListExtensions.cs" />
+    <Compile Include="Plugins\Migration\MigratorTests.Categories.cs" />
+    <Compile Include="Plugins\Migration\MigratorTests.CustomFields.cs" />
+    <Compile Include="Plugins\Talks\PostValidationSpec.cs" />
+    <Compile Include="Plugins\Talks\SettingsValidationSpec.cs" />
+    <Compile Include="Plugins\ValidationExceptionSpec.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CalendarItemRepositorySpec.cs" />
     <Compile Include="Services\EventRegistrationServiceSpec.cs" />

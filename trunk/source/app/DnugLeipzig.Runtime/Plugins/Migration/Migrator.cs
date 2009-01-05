@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins.Migration
+namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	internal class Migrator
 	{

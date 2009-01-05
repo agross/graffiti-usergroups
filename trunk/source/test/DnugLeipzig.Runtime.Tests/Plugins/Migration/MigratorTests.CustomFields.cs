@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Plugins.Migration;
-using DnugLeipzig.Plugins.Tests.Extensions;
+using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
@@ -13,7 +12,7 @@ using MbUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
 
-namespace DnugLeipzig.Plugins.Tests
+namespace DnugLeipzig.Runtime.Tests.Plugins.Migration
 {
 	public partial class MigratorTests
 	{

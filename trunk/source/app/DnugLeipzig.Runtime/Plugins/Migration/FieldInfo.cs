@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins.Migration
+namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	[DebuggerDisplay("FieldName = {FieldName}, FieldType = {FieldType}, Description = {Description}")]
 	public class FieldInfo:IEquatable<FieldInfo>

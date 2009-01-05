@@ -6,13 +6,12 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Plugins.Migration;
-using DnugLeipzig.Runtime;
+using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime.Plugins
 {
 	public class TalkPlugin : GraffitiEvent, ITalkPluginConfigurationProvider, ISupportsMemento
 	{
