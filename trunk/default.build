@@ -47,7 +47,7 @@
 	</script>
 
 	<target name="all"
-			depends="build-app, build-theme, run-tests, build-setup"
+			depends="build-app, build-theme, run-tests, run-coverage, build-setup"
 			description="Compiles the application, runs all unit tests and creates deployment packages.">
 	</target>
 
@@ -249,12 +249,13 @@
 		</foreach>
 	</target>
 
-	<target name="init-run-tests">
+	<target name="init-run-tests"
+			depends="build-tests">
 		<mkdir dir="${basedir.test.results}" />
 	</target>
 
 	<target name="run-tests"
-			depends="build-tests, init-run-tests"
+			depends="init-run-tests"
 			description="Runs the applications' unit tests.">
 		<foreach item="File"
 				 property="testproject">
@@ -289,6 +290,49 @@
 			<tc-addstatistic key="MbUnitPassedTests"
 							 value="${mbunit.successes}"/>
 		</if>
+	</target>
+
+	<!-- Code coverage.
+	________________________________________________________________________________________________________________ -->
+	<fileset id="coverage-assemblies"
+			 basedir="${basedir.app}">
+		<include name="${basedir.app}\**\bin\${build.msbuild.configuration}\DnugLeipzig.*.dll" />
+	</fileset>
+
+	<target name="run-coverage"
+			depends="init-run-tests"
+			description="Runs the applications' unit tests with code coverage enabled.">
+		<foreach item="File"
+				 property="testproject">
+			<in>
+				<items refid="test-projects" />
+			</in>
+			<do>
+				<ncover program="${tools.ncover}\NCover.Console.exe"
+						commandLineExe="${tools.mbunit}\MbUnit.Cons.exe"
+						commandLineArgs='/verbose+ /report-folder:"${basedir.test.results}" /report-name-format:"${path::get-file-name-without-extension(testproject)}" /report-type:html "${path::get-file-name-without-extension(testproject)}.dll"'
+						workingDirectory="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"
+						coverageFile="${basedir.test.results}\${path::get-file-name-without-extension(testproject)}-Coverage.xml"
+						logLevel="Normal"
+						logFile="${basedir.test.results}\${path::get-file-name-without-extension(testproject)}-Coverage.log"
+						excludeAttributes="CoverageExcludeAttribute">
+					<assemblies refid="coverage-assemblies" />
+				</ncover>
+			</do>
+		</foreach>
+
+		<ncoverexplorer program="${tools.ncoverexplorer}\NCoverExplorer.Console.exe"
+						satisfactoryCoverage="${tools.ncoverexplorer.satisfactorycoverage}"
+						reportType="ModuleClassFunctionSummary"
+						outputDir="${basedir.test.results}"
+						htmlReportName="Coverage.html"
+						xmlReportName="Coverage.xml"
+						projectName="${project::get-name()}"
+						showExcluded="false" >
+			<fileset>
+				<include name="${basedir.test.results}\*-Coverage.xml" />
+			</fileset>
+		</ncoverexplorer>
 	</target>
 
 	<!-- Setup.
