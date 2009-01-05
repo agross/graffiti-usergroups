@@ -39,7 +39,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10, 42 })
+				.Register(new[] { 10, 42 })
 				.WithEmail("foo@bar.com")
 				.Build();
 		}
@@ -126,7 +126,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10, 42 })
+				.Register(new[] { 10, 42 })
 				.WithEmail("foo@bar.com")
 				.Build();
 		}
@@ -190,7 +190,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 42 })
+				.Register(new[] { 42 })
 				.WithEmail("foo@bar.com")
 				.Build();
 		}
@@ -233,7 +233,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10, 42 })
+				.Register(new[] { 10, 42 })
 				.WithEmail("foo@bar.com")
 				.Build();
 		}
@@ -285,7 +285,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10, 42 })
+				.Register(new[] { 10, 42 })
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
 				.Build();
@@ -328,7 +328,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10 })
+				.Register(new[] { 10 })
 				.WithEmail("foo@bar.com")
 				.Build();
 		}
@@ -363,7 +363,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		protected override IEventRegistrationCommand CreateCommand()
 		{
 			return Create.New.EventRegistration()
-				.RegisterFor(new[] { 10 })
+				.Register(new[] { 10 })
 				.WithEmail("the-attendee@example.com")
 				.Build();
 		}

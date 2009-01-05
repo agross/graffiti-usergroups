@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Web;
 
 using DnugLeipzig.Definitions.Commands.Results;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
+using DnugLeipzig.Runtime.Validation;
 
 using MbUnit.Framework;
 
@@ -16,7 +18,8 @@ namespace DnugLeipzig.Definitions.Tests.Commands.Results
 
 		protected override void Establish_context()
 		{
-			_sut = new ValidationErrorResult(new List<string> { "foo", "bar" });
+			_sut =
+				new ValidationErrorResult(new List<INotification> { new ValidationError("foo"), new ValidationError("bar") });
 			_request = new HttpSimulator().SimulateRequest();
 		}
 

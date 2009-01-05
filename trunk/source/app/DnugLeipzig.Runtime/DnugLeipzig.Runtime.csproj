@@ -85,6 +85,14 @@
     <Compile Include="Services\EventRegistrationService.cs" />
     <Compile Include="Services\EventRegistrationResult.cs" />
     <Compile Include="Services\Service.cs" />
+    <Compile Include="Specifications\EmailAddressSpecification.cs" />
+    <Compile Include="Validation\ValidationError.cs" />
+    <Compile Include="Validation\EventRegistrationErrors.cs" />
+    <Compile Include="Validation\EventRegistrationCommandValidator.cs" />
+    <Compile Include="Mapping\Mapper.cs" />
+    <Compile Include="Validation\ValidationExtensions.cs" />
+    <Compile Include="Validation\ValidationStep.cs" />
+    <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>

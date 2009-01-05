@@ -10,11 +10,13 @@ using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Plugins;
 using DnugLeipzig.Runtime.Commands;
 using DnugLeipzig.Runtime.Configuration;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
+using DnugLeipzig.Runtime.Validation;
 
 namespace DnugLeipzig.Container
 {
@@ -22,6 +24,11 @@ namespace DnugLeipzig.Container
 	{
 		public static IEnumerable<IRegistration> Get()
 		{
+			// Validators.
+			yield return Component.For<IValidator<IEventRegistrationCommand>>()
+				.ImplementedBy<EventRegistrationCommandValidator>()
+				.LifeStyle.Is(LifestyleType.Transient);
+			
 			// Configuration.
 			yield return Component.For<PluginConfigurationInterceptor>()
 				.ImplementedBy<PluginConfigurationInterceptor>();

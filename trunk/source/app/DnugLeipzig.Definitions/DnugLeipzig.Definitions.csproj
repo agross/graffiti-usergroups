@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="Configuration\IGraffitiCommentSettings.cs" />
     <Compile Include="Configuration\IGraffitiSiteSettings.cs" />
+    <Compile Include="Mapping\IMapperStep.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Commands\IEventRegistrationCommand.cs" />
     <Compile Include="Commands\ICommandFactory.cs" />
@@ -106,6 +107,18 @@
     <Compile Include="Repositories\IPostRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Services\IEventRegistrationService.cs" />
+    <Compile Include="Specifications\AndSpecification.cs" />
+    <Compile Include="Specifications\BinarySpecification.cs" />
+    <Compile Include="Specifications\ExpressionSpecification.cs" />
+    <Compile Include="Specifications\ISpecification.cs" />
+    <Compile Include="Specifications\NotSpecification.cs" />
+    <Compile Include="Specifications\OrSpecification.cs" />
+    <Compile Include="Specifications\Specification.cs" />
+    <Compile Include="Specifications\SpecificationExtensions.cs" />
+    <Compile Include="Mapping\IMapper.cs" />
+    <Compile Include="Validation\IValidator.cs" />
+    <Compile Include="Validation\INotification.cs" />
+    <Compile Include="Validation\NotificationResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Repositories\Repositories.cd" />
