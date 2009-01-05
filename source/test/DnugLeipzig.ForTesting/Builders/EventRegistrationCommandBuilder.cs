@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Builders;
+using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Commands;
 
 namespace DnugLeipzig.ForTesting.Builders
@@ -15,10 +17,11 @@ namespace DnugLeipzig.ForTesting.Builders
 		string _occupation;
 		bool _sendConfirmationToAttendee;
 		IEventRegistrationService _service;
+		IValidator<IEventRegistrationCommand> _validator;
 
 		protected override EventRegistrationCommand BuildInstance()
 		{
-			EventRegistrationCommand result = new EventRegistrationCommand(_service);
+			EventRegistrationCommand result = new EventRegistrationCommand(_validator, _service);
 			result.Initialize(_eventsToRegister, _name, _formOfAddress, _occupation, _attendeeEmail, _sendConfirmationToAttendee);
 
 			return result;
@@ -59,15 +62,21 @@ namespace DnugLeipzig.ForTesting.Builders
 			return this;
 		}
 
-		public EventRegistrationCommandBuilder WithService(IEventRegistrationService service)
+		public EventRegistrationCommandBuilder ExecutedBy(IEventRegistrationService service)
 		{
 			_service = service;
 			return this;
 		}
 
-		public EventRegistrationCommandBuilder RegisterFor(IEnumerable<int> eventsToRegister)
+		public EventRegistrationCommandBuilder Register(IEnumerable<int> eventsToRegister)
 		{
 			_eventsToRegister = eventsToRegister;
+			return this;
+		}
+
+		public EventRegistrationCommandBuilder ValidatedBy(IValidator<IEventRegistrationCommand> validator)
+		{
+			_validator = validator;
 			return this;
 		}
 	}

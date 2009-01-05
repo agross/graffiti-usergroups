@@ -1,11 +1,11 @@
 using System;
 using System.Text.RegularExpressions;
 
-using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Specifications;
 
-namespace DnugLeipzig.Runtime
+namespace DnugLeipzig.Runtime.Specifications
 {
-	public static class Validator
+	public class EmailAddressSpecification : ExpressionSpecification<string>
 	{
 		/// <summary>
 		///  [1]: A numbered capture group. [[a-zA-Z0-9_\-\.]+]
@@ -35,34 +35,13 @@ namespace DnugLeipzig.Runtime
 		static readonly Regex EmailRegex =
 			new Regex(
 				"([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})",
-				RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.IgnorePatternWhitespace |
-				RegexOptions.Compiled);
+				RegexOptions.IgnoreCase
+				| RegexOptions.CultureInvariant
+				| RegexOptions.IgnorePatternWhitespace
+				| RegexOptions.Compiled);
 
-		public static bool ValidateExisting(string value)
+		public EmailAddressSpecification() : base(value => EmailRegex.IsMatch(value ?? String.Empty))
 		{
-			return !value.IsNullOrEmptyTrimmed();
-		}
-
-		public static bool ValidateRange<T>(T value, T minValue, T maxValue) where T : IComparable
-		{
-			return value.CompareTo(minValue) >= 0 && value.CompareTo(maxValue) <= 0;
-		}
-
-		public static bool ValidateDate(string value)
-		{
-			DateTime dateTimeValue;
-			return DateTime.TryParse(value, out dateTimeValue);
-		}
-
-		public static bool ValidateInt(string value)
-		{
-			int intValue;
-			return int.TryParse(value, out intValue);
-		}
-
-		public static bool ValidateEmail(string value)
-		{
-			return EmailRegex.IsMatch(value);
 		}
 	}
 }

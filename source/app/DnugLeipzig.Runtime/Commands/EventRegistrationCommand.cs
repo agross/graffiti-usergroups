@@ -1,16 +1,27 @@
 using System.Collections.Generic;
+using System.Linq;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
+using DnugLeipzig.Definitions.Commands.Results;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Definitions.Validation;
 
 namespace DnugLeipzig.Runtime.Commands
 {
 	public class EventRegistrationCommand : Command, IEventRegistrationCommand
 	{
-		public EventRegistrationCommand(IEventRegistrationService eventRegistrationService)
+		public EventRegistrationCommand(IValidator<IEventRegistrationCommand> validator,
+		                                IEventRegistrationService eventRegistrationService)
 		{
+			Validator = validator;
 			EventRegistrationService = eventRegistrationService;
+		}
+
+		protected IValidator<IEventRegistrationCommand> Validator
+		{
+			get;
+			set;
 		}
 
 		protected IEventRegistrationService EventRegistrationService
@@ -76,6 +87,12 @@ namespace DnugLeipzig.Runtime.Commands
 		#region Implementation of ICommand
 		public override IHttpResponse Execute()
 		{
+			IEnumerable<INotification> validationErrors = Validator.Validate(this);
+			if (validationErrors.Any())
+			{
+				return new ValidationErrorResult(validationErrors);
+			}
+
 			return EventRegistrationService.RegisterForEvents(this);
 		}
 		#endregion

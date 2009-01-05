@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Script.Serialization;
 
+using DnugLeipzig.Definitions.Validation;
+
 namespace DnugLeipzig.Definitions.Commands.Results
 {
 	public class ValidationErrorResult : IHttpResponse
 	{
-		public ValidationErrorResult(ICollection<string> validationErrors)
+		public ValidationErrorResult(IEnumerable<INotification> validationErrors)
 		{
 			ValidationErrors = validationErrors;
 		}
@@ -19,7 +21,7 @@ namespace DnugLeipzig.Definitions.Commands.Results
 		}
 		#endregion
 
-		public ICollection<string> ValidationErrors
+		public IEnumerable<INotification> ValidationErrors
 		{
 			get;
 			protected set;

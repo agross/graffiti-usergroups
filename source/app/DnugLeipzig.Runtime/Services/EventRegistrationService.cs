@@ -56,13 +56,6 @@ namespace DnugLeipzig.Runtime.Services
 		#region Implementation of IEventRegistrationService
 		public IEventRegistrationResultList RegisterForEvents(IEventRegistrationCommand command)
 		{
-			// TODO: Validation
-			//				ICollection<string> validationErrors = command.Validate();
-			//				if (validationErrors.Count != 0)
-			//				{
-			//					return new ValidationErrorResult(validationErrors);
-			//				}
-
 			EventRegistrationResultList results = new EventRegistrationResultList();
 
 			foreach (int eventId in command.EventsToRegister)
@@ -195,40 +188,5 @@ namespace DnugLeipzig.Runtime.Services
 				return EventRegistrationResult.Error();
 			}
 		}
-
-		/*
-			public ICollection<string> Validate()
-			{
-				// TODO: English.
-				List<string> validationErrors = new List<string>();
-				if (!Validator.ValidateRange(RegisteredEvents.Count, 1, int.MaxValue))
-				{
-					validationErrors.Add("Please select at least one event to register for.");
-				}
-
-				if (!Validator.ValidateExisting(FormOfAddress))
-				{
-					validationErrors.Add("Please select a form of address.");
-				}
-
-				if (!Validator.ValidateExisting(Name))
-				{
-					validationErrors.Add("Please enter your name.");
-				}
-
-				if (!Validator.ValidateExisting(Occupation))
-				{
-					validationErrors.Add("Please select your occupation.");
-				}
-
-				if (!Validator.ValidateEmail(AttendeeEMail))
-				{
-					validationErrors.Add("Please enter your e-mail address.");
-				}
-
-				return validationErrors;
-			}
-		}
-*/
 	}
 }
