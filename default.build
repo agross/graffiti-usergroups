@@ -162,7 +162,7 @@
 			<arg value="/maxcpucount" />
 		</msbuild>
 
-		<msbuild project="${basedir.app}\DnugLeipzig.Plugins\DnugLeipzig.Plugins.csproj"
+		<msbuild project="${basedir.app}\DnugLeipzig.Runtime\DnugLeipzig.Runtime.csproj"
 				 target="${build.msbuild.target}"
 				 verbosity="${build.msbuild.verbosity}">
 			<arg value="/p:Configuration=${build.msbuild.configuration}" />

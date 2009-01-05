@@ -1,13 +1,13 @@
-using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Plugins.Migration;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime.Plugins
 {
 	public static class PluginMigrator
 	{
 		public static void MigrateSettings(bool createTargetCategoryAndFields,
-		                           bool migrateFieldValues,
-		                           IMemento newState,
-		                           IMemento oldState)
+		                                   bool migrateFieldValues,
+		                                   IMemento newState,
+		                                   IMemento oldState)
 		{
 			Migrator migrator = new Migrator();
 

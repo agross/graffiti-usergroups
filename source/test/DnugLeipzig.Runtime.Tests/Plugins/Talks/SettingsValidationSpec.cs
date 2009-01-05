@@ -5,6 +5,7 @@ using System.Web;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
+using DnugLeipzig.Runtime.Plugins;
 
 using Graffiti.Core;
 
@@ -12,7 +13,7 @@ using MbUnit.Framework;
 
 using Rhino.Mocks;
 
-namespace DnugLeipzig.Plugins.Tests.Talks
+namespace DnugLeipzig.Runtime.Tests.Plugins.Talks
 {
 	public class
 		When_the_plugin_settings_are_validated_and_the_selected_category_does_not_exists_and_it_should_not_create_the_category

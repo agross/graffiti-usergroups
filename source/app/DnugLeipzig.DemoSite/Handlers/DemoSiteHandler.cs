@@ -5,8 +5,8 @@ using System.Web;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Plugins;
-using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;

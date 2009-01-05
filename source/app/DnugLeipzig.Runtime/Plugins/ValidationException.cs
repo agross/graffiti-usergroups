@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime.Plugins
 {
 	[Serializable]
 	public class ValidationException : Exception

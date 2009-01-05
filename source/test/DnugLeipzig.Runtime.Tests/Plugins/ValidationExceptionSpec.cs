@@ -1,8 +1,9 @@
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.Runtime.Plugins;
 
 using MbUnit.Framework;
 
-namespace DnugLeipzig.Plugins.Tests
+namespace DnugLeipzig.Runtime.Tests.Plugins
 {
 	public class When_a_validation_exception_is_created_with_a_message : Spec
 	{

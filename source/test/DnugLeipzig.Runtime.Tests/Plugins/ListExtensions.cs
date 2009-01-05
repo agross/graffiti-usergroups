@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 
-using DnugLeipzig.Plugins.Migration;
+using DnugLeipzig.Runtime.Plugins.Migration;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins.Tests.Extensions
+namespace DnugLeipzig.Runtime.Tests.Plugins
 {
 	internal static class ListExtensions
 	{

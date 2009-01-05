@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Runtime.Plugins.Migration;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins.Migration
+namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	internal class TalkPluginMemento : IMemento
 	{

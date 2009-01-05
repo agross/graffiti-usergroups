@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace DnugLeipzig.Plugins.Migration
+using DnugLeipzig.Runtime.Plugins.Migration;
+
+namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	internal static class MementoHelper
 	{

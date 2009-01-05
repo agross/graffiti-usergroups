@@ -5,7 +5,7 @@ using DnugLeipzig.Definitions.Configuration.Plugins;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins.Migration
+namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	internal class EventPluginMemento : IMemento
 	{

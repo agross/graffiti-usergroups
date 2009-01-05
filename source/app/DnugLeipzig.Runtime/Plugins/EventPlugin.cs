@@ -7,14 +7,13 @@ using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Plugins.Migration;
-using DnugLeipzig.Runtime;
 using DnugLeipzig.Runtime.Configuration;
+using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime.Plugins
 {
 	public class EventPlugin : GraffitiEvent, IEventPluginConfigurationProvider, ISupportsMemento
 	{
@@ -63,7 +62,7 @@ namespace DnugLeipzig.Plugins
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-// TODO			DefaultRegistrationRecipient = _settings.Email;
+			// TODO			DefaultRegistrationRecipient = _settings.Email;
 		}
 
 		/// <summary>

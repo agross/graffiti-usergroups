@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Graffiti.Core;
 
-namespace DnugLeipzig.Plugins
+namespace DnugLeipzig.Runtime.Plugins
 {
 	internal static class Util
 	{
