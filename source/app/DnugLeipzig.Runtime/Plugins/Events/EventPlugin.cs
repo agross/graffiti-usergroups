@@ -379,24 +379,24 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 				// Write back.
 				oldState = CreateMemento();
 
-				CategoryName = HttpUtility.HtmlEncode(nvc[Fields.CategoryName]);
-				StartDateField = nvc[Fields.StartDate];
-				EndDateField = nvc[Fields.EndDate];
-				SpeakerField = nvc[Fields.Speaker];
-				DateFormat = nvc[Fields.DateFormat];
-				ShortEndDateFormat = nvc[Fields.ShortEndDateFormat];
-				LocationField = nvc[Fields.Location];
-				UnknownText = nvc[Fields.UnknownText];
-				LocationUnknownField = nvc[Fields.LocationUnknown];
-				YearQueryString = nvc[Fields.YearQueryString];
-				DefaultLocation = nvc[Fields.DefaultLocation];
-				RegistrationNeededField = nvc[Fields.RegistrationNeeded];
-				RegistrationRecipientField = nvc[Fields.RegistrationRecipient];
-				DefaultRegistrationRecipient = nvc[Fields.DefaultRegistrationRecipient];
-				MaximumNumberOfRegistrationsField = nvc[Fields.MaximumNumberOfRegistrations];
-				DefaultMaximumNumberOfRegistrations = nvc[Fields.DefaultMaximumNumberOfRegistrations];
-				RegistrationListField = nvc[Fields.RegistrationList];
-				RegistrationMailSubject = nvc[Fields.RegistrationMailSubject];
+				CategoryName = settings.CategoryName;
+				StartDateField = settings.StartDate;
+				EndDateField = settings.EndDate;
+				SpeakerField = settings.Speaker;
+				DateFormat = settings.DateFormat;
+				ShortEndDateFormat = settings.ShortEndDateFormat;
+				LocationField = settings.Location;
+				UnknownText = settings.UnknownText;
+				LocationUnknownField = settings.LocationUnknown;
+				YearQueryString = settings.YearQueryString;
+				DefaultLocation = settings.DefaultLocation;
+				RegistrationNeededField = settings.RegistrationNeeded;
+				RegistrationRecipientField = settings.RegistrationRecipient;
+				DefaultRegistrationRecipient = settings.DefaultRegistrationRecipient;
+				MaximumNumberOfRegistrationsField = settings.MaximumNumberOfRegistrations;
+				DefaultMaximumNumberOfRegistrations = settings.DefaultMaximumNumberOfRegistrations;
+				RegistrationListField = settings.RegistrationList;
+				RegistrationMailSubject = settings.RegistrationMailSubject;
 
 				newState = CreateMemento();
 			}
@@ -410,8 +410,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			{
 				EnableEventHandlers = false;
 
-				PluginMigrator.MigrateSettings(nvc[Fields.CreateTargetCategoryAndFields].IsSelected(),
-				                               nvc[Fields.MigrateFieldValues].IsSelected(),
+				PluginMigrator.MigrateSettings(settings.CreateTargetCategoryAndFields,
+				                               settings.MigrateFieldValues,
 				                               newState,
 				                               oldState);
 				return StatusType.Success;
