@@ -4,11 +4,12 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.ForTesting;
-using DnugLeipzig.Runtime.Validation;
+using DnugLeipzig.Runtime.Commands;
+using DnugLeipzig.Runtime.Tests.Validation;
 
 using MbUnit.Framework;
 
-namespace DnugLeipzig.Runtime.Tests.Validation
+namespace DnugLeipzig.Runtime.Tests.Commands
 {
 	public class When_a_valid_event_registration_request_is_validated : With_event_registration_validator
 	{
@@ -84,7 +85,7 @@ namespace DnugLeipzig.Runtime.Tests.Validation
 			Assert.AreEqual("Please select at least one event to register for.", Notifications.First().Message);
 		}
 	}
-	
+
 	public class When_an_event_registration_request_is_validated_and_the_email_is_missing
 		: With_event_registration_validator
 	{
@@ -108,11 +109,10 @@ namespace DnugLeipzig.Runtime.Tests.Validation
 		[Test]
 		public void It_should_indicate_that_the_email_is_missing()
 		{
-			// TODO
-			//Assert.AreEqual("Please enter your e-mail address.", Notifications.First().Message);
+			Assert.AreEqual("Please enter your e-mail address.", Notifications.First().Message);
 		}
 	}
-	
+
 	public class When_an_event_registration_request_is_validated_and_the_email_is_invalid
 		: With_event_registration_validator
 	{
@@ -137,11 +137,10 @@ namespace DnugLeipzig.Runtime.Tests.Validation
 		[Test]
 		public void It_should_indicate_that_the_email_is_invalid()
 		{
-			// TODO
-			//Assert.AreEqual("The e-mail address 'invalid e-mail' is invalid.", Notifications.First().Message);
+			Assert.AreEqual("The e-mail address 'invalid e-mail' is invalid.", Notifications.First().Message);
 		}
 	}
-	
+
 	public class When_an_event_registration_request_is_validated_and_form_of_address_in_missing
 		: With_event_registration_validator
 	{
@@ -168,7 +167,7 @@ namespace DnugLeipzig.Runtime.Tests.Validation
 			Assert.AreEqual("Please select a form of address.", Notifications.First().Message);
 		}
 	}
-	
+
 	public class When_an_event_registration_request_is_validated_and_occupation_in_missing
 		: With_event_registration_validator
 	{

@@ -1,8 +1,9 @@
 using System.Linq;
 
 using DnugLeipzig.Definitions.Commands;
+using DnugLeipzig.Runtime.Validation;
 
-namespace DnugLeipzig.Runtime.Validation
+namespace DnugLeipzig.Runtime.Commands
 {
 	public class EventRegistrationCommandValidator : Validator<IEventRegistrationCommand>
 	{
@@ -21,7 +22,7 @@ namespace DnugLeipzig.Runtime.Validation
 				.AddNotification(EventRegistrationErrors.OccupationIsMissing);
 
 			IfNot(x => x.AttendeeEmail.IsEmail())
-				.AddNotification(EventRegistrationErrors.EmailIsInvalid<int>("blah"));
+				.AddNotification(x => EventRegistrationErrors.EmailIsInvalid(x.AttendeeEmail));
 		}
 	}
 }

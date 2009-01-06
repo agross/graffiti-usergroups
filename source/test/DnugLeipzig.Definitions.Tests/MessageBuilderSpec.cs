@@ -10,7 +10,7 @@ namespace DnugLeipzig.Definitions.Tests
 
 		protected override void Because()
 		{
-			_result = Create.New.Message().WithTitle("title").WithMessage("message");
+			_result = Create.New.LogMessage().WithTitle("title").WithMessage("message");
 		}
 
 		[Test]
@@ -26,7 +26,7 @@ namespace DnugLeipzig.Definitions.Tests
 
 		protected override void Because()
 		{
-			_result = Create.New.Message().WithTitle("title");
+			_result = Create.New.LogMessage().WithTitle("title");
 		}
 
 		[Test]
@@ -42,7 +42,7 @@ namespace DnugLeipzig.Definitions.Tests
 
 		protected override void Because()
 		{
-			_result = Create.New.Message().WithMessage("message");
+			_result = Create.New.LogMessage().WithMessage("message");
 		}
 
 		[Test]

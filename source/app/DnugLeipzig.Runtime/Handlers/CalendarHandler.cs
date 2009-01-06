@@ -72,7 +72,7 @@ namespace DnugLeipzig.Runtime.Handlers
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(Create.New.Message().WithTitle("Could not generate calendar item"), ex);
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not generate calendar item"), ex);
 				new ErrorResult().Render(context.Response);
 			}
 		}

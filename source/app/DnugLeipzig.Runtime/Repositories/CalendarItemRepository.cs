@@ -45,7 +45,7 @@ namespace DnugLeipzig.Runtime.Repositories
 				                   {
 				                   	StartDate = post[_eventPluginConfigurationProvider.StartDateField].AsEventDate(),
 				                   	EndDate = post[_eventPluginConfigurationProvider.EndDateField].AsEventDate(),
-				                   	Location = post[_eventPluginConfigurationProvider.LocationUnknownField].IsChecked()
+				                   	Location = post[_eventPluginConfigurationProvider.LocationUnknownField].IsSelected()
 				                   	           	? _eventPluginConfigurationProvider.UnknownText
 				                   	           	: post[_eventPluginConfigurationProvider.LocationField],
 				                   	Subject = HttpUtility.HtmlDecode(post.Title),
@@ -63,7 +63,7 @@ namespace DnugLeipzig.Runtime.Repositories
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(Create.New.Message().WithTitle("Could not create calendar item from post {0}", post.Id), ex);
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not create calendar item from post {0}", post.Id), ex);
 				return null;
 			}
 		}

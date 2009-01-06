@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Specialized;
 
+using DnugLeipzig.Definitions.Mapping;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Talks;
 
 using Graffiti.Core;
 
@@ -19,8 +23,9 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Talks
 
 		protected override void Establish_context()
 		{
-			_sut = new TalkPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                      MockRepository.GenerateMock<IPostRepository>());
+			_sut = new TalkPlugin(MockRepository.GenerateMock<IPostRepository>(),
+			                      MockRepository.GenerateMock<IMapper<NameValueCollection, TalkPluginSettings>>(),
+			                      MockRepository.GenerateMock<IValidator<TalkPluginSettings>>());
 
 			_post = MockRepository.GenerateStub<DataBuddyBase>();
 		}
@@ -45,8 +50,9 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Talks
 		protected override void Establish_context()
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
-			_sut = new TalkPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                      postRepository)
+			_sut = new TalkPlugin(postRepository,
+			                      MockRepository.GenerateMock<IMapper<NameValueCollection, TalkPluginSettings>>(),
+			                      MockRepository.GenerateMock<IValidator<TalkPluginSettings>>())
 			       { CategoryName = "Talk category" };
 
 			_post = new Post();
@@ -77,8 +83,9 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Talks
 		protected override void Establish_context()
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
-			_sut = new TalkPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                      postRepository)
+			_sut = new TalkPlugin(postRepository,
+			                      MockRepository.GenerateMock<IMapper<NameValueCollection, TalkPluginSettings>>(),
+			                      MockRepository.GenerateMock<IValidator<TalkPluginSettings>>())
 			       {
 			       	CategoryName = TalkCategory,
 			       	DateField = DateField

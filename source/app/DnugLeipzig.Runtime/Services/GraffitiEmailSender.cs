@@ -43,7 +43,7 @@ namespace DnugLeipzig.Runtime.Services
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(Create.New.Message().WithTitle("Could not send e-mail"), ex);
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not send e-mail"), ex);
 				throw;
 			}
 		}

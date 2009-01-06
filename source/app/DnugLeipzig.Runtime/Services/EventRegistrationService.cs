@@ -70,7 +70,7 @@ namespace DnugLeipzig.Runtime.Services
 				}
 				catch (Exception ex)
 				{
-					Logger.Error(Create.New.Message().WithTitle("Could not process registration for event {0}", eventId), ex);
+					Logger.Error(Create.New.LogMessage().WithTitle("Could not process registration for event {0}", eventId), ex);
 				}
 			}
 
@@ -140,13 +140,13 @@ namespace DnugLeipzig.Runtime.Services
 		{
 			try
 			{
-				Logger.Info(Create.New.Message()
+				Logger.Info(Create.New.LogMessage()
 				            	.WithTitle("Event registration received")
 				            	.WithMessage("From: {0}", command.AttendeeEmail));
 
 				Post post = _repository.GetById(eventId);
 
-				Logger.Info(Create.New.Message()
+				Logger.Info(Create.New.LogMessage()
 				            	.WithTitle("Processing event registration for event {0}", eventId)
 				            	.WithMessage("From: {0}, Recipient: {1}",
 				            	             command.AttendeeEmail,
@@ -184,7 +184,7 @@ namespace DnugLeipzig.Runtime.Services
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(Create.New.Message().WithTitle("Could not process registration for event ID {0}", eventId), ex);
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not process registration for event ID {0}", eventId), ex);
 				return EventRegistrationResult.Error();
 			}
 		}

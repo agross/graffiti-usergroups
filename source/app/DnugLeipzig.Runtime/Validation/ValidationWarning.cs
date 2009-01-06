@@ -2,9 +2,9 @@ using DnugLeipzig.Definitions.Validation;
 
 namespace DnugLeipzig.Runtime.Validation
 {
-	public class ValidationError : INotification
+	public class ValidationWarning : INotification
 	{
-		public ValidationError(string message, params string[] affectedFormFields)
+		public ValidationWarning(string message, params string[] affectedFormFields)
 		{
 			Message = message;
 			AffectedFormFields = affectedFormFields;
@@ -13,7 +13,7 @@ namespace DnugLeipzig.Runtime.Validation
 		#region Implementation of INotification
 		public Severity Severity
 		{
-			get { return Severity.Error; }
+			get { return Severity.Warning; }
 		}
 
 		public string Message

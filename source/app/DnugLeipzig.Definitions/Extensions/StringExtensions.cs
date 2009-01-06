@@ -14,7 +14,7 @@ namespace DnugLeipzig.Definitions.Extensions
 			return String.IsNullOrEmpty(value.Trim());
 		}
 
-		public static bool IsChecked(this string value)
+		public static bool IsSelected(this string value)
 		{
 			if (value.IsNullOrEmptyTrimmed())
 			{
@@ -22,6 +22,11 @@ namespace DnugLeipzig.Definitions.Extensions
 			}
 
 			return String.Equals(value.Trim(), "on", StringComparison.OrdinalIgnoreCase);
+		}
+		
+		public static bool IsNotSelected(this string value)
+		{
+			return !IsSelected(value);
 		}
 
 		public static DateTime AsEventDate(this string value)

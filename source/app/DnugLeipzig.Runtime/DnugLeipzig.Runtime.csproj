@@ -72,7 +72,7 @@
     <Compile Include="Handlers\RegistrationHandler.cs" />
     <Compile Include="Logging\GraffitiLogger.cs" />
     <Compile Include="Logging\GraffitiLoggerFactory.cs" />
-    <Compile Include="Plugins\EventPlugin.cs" />
+    <Compile Include="Plugins\Events\EventPlugin.cs" />
     <Compile Include="Plugins\Migration\EventPluginMemento.cs" />
     <Compile Include="Plugins\Migration\FieldInfo.cs" />
     <Compile Include="Plugins\Migration\IMemento.cs" />
@@ -82,8 +82,8 @@
     <Compile Include="Plugins\Migration\Migrator.cs" />
     <Compile Include="Plugins\Migration\TalkPluginMemento.cs" />
     <Compile Include="Plugins\PluginMigrator.cs" />
-    <Compile Include="Plugins\TalkPlugin.cs" />
-    <Compile Include="Plugins\Util.cs" />
+    <Compile Include="Plugins\Talks\TalkPlugin.cs" />
+    <Compile Include="Plugins\PostExtensions.cs" />
     <Compile Include="Plugins\ValidationException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\CalendarItemRepository.cs" />
@@ -99,12 +99,15 @@
     <Compile Include="Services\EventRegistrationResult.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Specifications\EmailAddressSpecification.cs" />
+    <Compile Include="Plugins\Events\EventPluginSettingsErrors.cs" />
+    <Compile Include="Plugins\Events\EventPluginSettingsValidator.cs" />
     <Compile Include="Validation\ValidationError.cs" />
-    <Compile Include="Validation\EventRegistrationErrors.cs" />
-    <Compile Include="Validation\EventRegistrationCommandValidator.cs" />
+    <Compile Include="Commands\EventRegistrationErrors.cs" />
+    <Compile Include="Commands\EventRegistrationCommandValidator.cs" />
     <Compile Include="Mapping\Mapper.cs" />
     <Compile Include="Validation\ValidationExtensions.cs" />
-    <Compile Include="Validation\ValidationStep.cs" />
+    <Compile Include="Validation\ValidationMapperStep.cs" />
+    <Compile Include="Validation\ValidationWarning.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Validator.cs" />
   </ItemGroup>
@@ -113,6 +116,21 @@
       <Project>{1C5C989B-CE0B-4DC3-AF43-96B114838D08}</Project>
       <Name>DnugLeipzig.Definitions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Mapping\ClassMapper.cs" />
+    <Compile Include="Mapping\ClassMapperStep.cs" />
+    <Compile Include="Plugins\Events\DictionaryToEventPluginSettings.cs" />
+    <Compile Include="Plugins\Talks\DictionaryToTalkPluginSettings.cs" />
+    <Compile Include="Plugins\NotificationResultExtensions.cs" />
+    <Compile Include="Plugins\PluginSettingsResult.cs" />
+    <Compile Include="Plugins\Events\EventPluginSettings.cs" />
+    <Compile Include="Plugins\Talks\TalkPluginSettings.cs" />
+    <Compile Include="Plugins\ValidationResultToPluginSettingsResult.cs" />
+    <Compile Include="Plugins\Events\EventPlugin.Fields.cs" />
+    <Compile Include="Plugins\Talks\TalkPluginSettingsValidator.cs" />
+    <Compile Include="Plugins\Talks\TalkPluginSettingsErrors.cs" />
+    <Compile Include="Plugins\Talks\TalkPlugin.Fields.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Macros\" />

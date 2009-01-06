@@ -2,6 +2,6 @@ namespace DnugLeipzig.Definitions.Mapping
 {
 	public interface IMapperStep<TSource, TResult>
 	{
-		void Map(TSource from, TResult to);
+		void Map(TSource source, TResult result);
 	}
 }
