@@ -75,6 +75,10 @@
 	________________________________________________________________________________________________________________ -->
 	<target name="clean"
 			description="Removes build artifacts.">
+		
+		<tc-progress message="Cleaning up"
+					 type="Start" />
+		
 		<delete dir="${basedir.test.results}"
 				failonerror="false" />
 		<delete dir="${basedir.temp}"
@@ -96,6 +100,10 @@
 						failonerror="false" />
 			</do>
 		</foreach>
+
+
+		<tc-progress message="Cleaning up"
+					 type="End" />
 	</target>
 
 	<!-- Application.
@@ -153,6 +161,9 @@
 	<target name="build-app"
 			depends="init-build-app"
 			description="Compiles the application.">
+		<tc-progress message="Building application"
+					 type="Start" />
+
 		<msbuild project="${basedir.app}\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj"
 				 target="${build.msbuild.target}"
 				 verbosity="${build.msbuild.verbosity}">
@@ -179,6 +190,9 @@
 			<arg value="/p:NAntCall=true" />
 			<arg value="/maxcpucount" />
 		</msbuild>
+
+		<tc-progress message="Building application"
+					 type="End" />
 	</target>
 
 	<!-- Theme.
@@ -257,6 +271,9 @@
 	<target name="run-tests"
 			depends="init-run-tests"
 			description="Runs the applications' unit tests.">
+		<tc-progress message="Running tests"
+					 type="Start" />
+		
 		<foreach item="File"
 				 property="testproject">
 			<in>
@@ -264,9 +281,9 @@
 			</in>
 			<do>
 				<echo message="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}"/>
-				<mbunit report-types="${tools.mbunit.report.type}"
+				<mbunit report-types="html"
 						report-filename-format="${path::get-file-name-without-extension(testproject)}"
-						report-output-directory="${basedir.test.results}"
+						report-directory="${basedir.test.results}"
 						verbose="true"
 						workingdir="${path::get-directory-name(testproject)}\bin\${build.msbuild.configuration}">
 					<assemblies>
@@ -276,20 +293,10 @@
 			</do>
 		</foreach>
 
-		<if test="${property::exists('teamcity.build.checkoutDir')}">
-			<tc-addstatistic key="MbUnitAsserts"
-							 value="${mbunit.asserts}"/>
-			<tc-addstatistic key="MbUnitFailedTests"
-							 value="${mbunit.failures}"/>
-			<tc-addstatistic key="MbUnitIgnoredTests"
-							 value="${mbunit.ignored}"/>
-			<tc-addstatistic key="MbUnitRunTests"
-							 value="${mbunit.run}"/>
-			<tc-addstatistic key="MbUnitSkippedTests"
-							 value="${mbunit.skipped}"/>
-			<tc-addstatistic key="MbUnitPassedTests"
-							 value="${mbunit.successes}"/>
-		</if>
+		<tc-addstatistic-fromprops starting-with="${mbunit::get-counter-prefix()}" />
+
+		<tc-progress message="Running tests"
+					 type="End" />
 	</target>
 
 	<!-- Code coverage.
@@ -302,6 +309,9 @@
 	<target name="run-coverage"
 			depends="init-run-tests"
 			description="Runs the applications' unit tests with code coverage enabled.">
+		<tc-progress message="Running code coverage"
+					 type="Start" />
+		
 		<foreach item="File"
 				 property="testproject">
 			<in>
@@ -333,6 +343,18 @@
 				<include name="${basedir.test.results}\*-Coverage.xml" />
 			</fileset>
 		</ncoverexplorer>
+
+		<if test="${teamcity::is-teamcity-build()}">
+			<xmlpeek file="${basedir.test.results}/Coverage.xml"
+					 property="codecoverage"
+					 xpath="/coverageReport/project/@functionCoverage"/>
+			<tc-addstatistic key="NCoverCodeCoverage"
+							 value="${codecoverage}"/>
+			<tc-buildstatus message="{build.status.text}, Code coverage: ${math::round(double::parse(codecoverage))}%"/>
+		</if>
+
+		<tc-progress message="Running code coverage"
+					 type="End" />
 	</target>
 
 	<!-- Setup.
@@ -345,6 +367,9 @@
 	<target name="build-setup"
 			depends="build-app, build-theme, run-tests, init-build-setup"
 			description="Creates the applications' deployment package.">
+		<tc-progress message="Building setup"
+					 type="Start" />
+		
 		<zip zipfile="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
 			 ziplevel="9"
 			 duplicate="Preserve">
@@ -379,6 +404,9 @@
 				<include name="DnugLeipzig.*" />
 			</fileset>
 		</zip>
+
+		<tc-progress message="Building setup"
+					 type="End" />
 	</target>
 
 	<!-- Deployment.
@@ -405,11 +433,17 @@
 		<fail message="Cannot upload deployment package to Google Code, property 'googlecode.username' and/or property 'googlecode.password' is empty or does not exist."
 			  if="${not property::exists('googlecode.username') or string::get-length(property::get-value('googlecode.username')) == 0 or not property::exists('googlecode.password') or string::get-length(property::get-value('googlecode.password')) == 0}" />
 
+		<tc-progress message="Uploading setup to Google Code"
+					 type="Start" />
+
 		<gcupload username="${googlecode.username}"
 				  password="${googlecode.password}"
 				  filename="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
 				  targetfilename="${project::get-name()}-${build.number}.zip"
 				  summary="${project::get-name()}-${build.number}"
 				  projectname="${project::get-name()}"/>
+
+		<tc-progress message="Uploading setup to Google Code"
+					 type="End" />
 	</target>
 </project>
