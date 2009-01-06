@@ -22,12 +22,12 @@ namespace DnugLeipzig.Runtime.Tests.Validation
 			_dataToValidate = CreateDataToValidate();
 		}
 
-		protected abstract T CreateDataToValidate();
-		protected abstract IValidator<T> CreateValidator();
-
 		protected override void Because()
 		{
 			Notifications = _sut.Validate(_dataToValidate);
 		}
+
+		protected abstract T CreateDataToValidate();
+		protected abstract IValidator<T> CreateValidator();
 	}
 }

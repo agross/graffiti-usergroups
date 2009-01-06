@@ -5,8 +5,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Scripts", "Build Scri
 	ProjectSection(SolutionItems) = preProject
 		..\default.build = ..\default.build
 		..\default.properties = ..\default.properties
-		..\test.build = ..\test.build
-		..\test.properties = ..\test.properties
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.Extensions", "app\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj", "{43CDFC01-CED1-484C-A74B-B9746A670100}"
@@ -43,7 +41,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DnugLeipzig.Theme", "app\Dn
 		Release.AspNetCompiler.ForceOverwrite = "true"
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "41224"
+		VWDPort = "44044"
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.ForTesting", "test\DnugLeipzig.ForTesting\DnugLeipzig.ForTesting.csproj", "{6793C240-F450-448C-922D-B8D5AF771E98}"

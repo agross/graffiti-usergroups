@@ -64,7 +64,7 @@ namespace DnugLeipzig.Runtime.Handlers
 																	context.Request.Form["formOfAddress"],
 						                                            context.Request.Form["occupation"],
 						                                            context.Request.Form["attendeeEMail"],
-						                                            context.Request.Form["ccToAttendee"].IsChecked());
+						                                            context.Request.Form["ccToAttendee"].IsSelected());
 						break;
 
 					default:
@@ -76,7 +76,7 @@ namespace DnugLeipzig.Runtime.Handlers
 			}
 			catch (Exception ex)
 			{
-				Logger.Error(Create.New.Message().WithTitle("Could not process registration request"), ex);
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not process registration request"), ex);
 				new ErrorResult().Render(context.Response);
 			}
 		}

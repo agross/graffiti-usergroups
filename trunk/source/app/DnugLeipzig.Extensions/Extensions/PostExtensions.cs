@@ -37,7 +37,7 @@ namespace DnugLeipzig.Extensions.Extensions
 
 		public static bool RegistrationNeeded(this Post post, string registrationNeededFieldName)
 		{
-			return post[registrationNeededFieldName].IsChecked();
+			return post[registrationNeededFieldName].IsSelected();
 		}
 
 		public static bool RegistrationPossible(this Post post,

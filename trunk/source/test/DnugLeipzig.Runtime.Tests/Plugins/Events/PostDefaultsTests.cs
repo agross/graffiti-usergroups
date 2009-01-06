@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Specialized;
 
 using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.Mapping;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.ForTesting;
-using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Events;
 
 using Graffiti.Core;
 
@@ -20,9 +23,10 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 
 		protected override void Establish_context()
 		{
-			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                       MockRepository.GenerateMock<IPostRepository>(),
-			                       MockRepository.GenerateMock<IGraffitiCommentSettings>());
+			_sut = new EventPlugin(MockRepository.GenerateMock<IPostRepository>(),
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
+								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>());
 
 			_post = MockRepository.GenerateStub<DataBuddyBase>();
 		}
@@ -47,9 +51,10 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		protected override void Establish_context()
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
-			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                       postRepository,
-			                       MockRepository.GenerateMock<IGraffitiCommentSettings>()) { CategoryName = "Event category" };
+			_sut = new EventPlugin(postRepository,
+								   MockRepository.GenerateMock<IGraffitiCommentSettings>(),
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
+								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>()) { CategoryName = "Event category" };
 
 			_post = new Post();
 
@@ -265,9 +270,10 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		protected override void Establish_context()
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
-			_sut = new EventPlugin(MockRepository.GenerateMock<ICategoryRepository>(),
-			                       postRepository,
-			                       MockRepository.GenerateMock<IGraffitiCommentSettings>())
+			_sut = new EventPlugin(postRepository,
+			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
+								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>())
 			       {
 			       	CategoryName = "Event category",
 			       	LocationField = LocationField,

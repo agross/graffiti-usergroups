@@ -3,7 +3,8 @@ using System.Collections;
 using System.Web;
 
 using DnugLeipzig.Definitions.Extensions;
-using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Events;
+using DnugLeipzig.Runtime.Plugins.Talks;
 
 using Graffiti.Core;
 

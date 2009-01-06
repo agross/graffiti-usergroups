@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Commands.Results;
@@ -21,7 +19,7 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 		{
 			base.Establish_context();
 
-			Validator.Stub(x => x.Validate(Command)).Return(new NotificationResult());
+			Validator.Stub(x => x.Validate(Command)).Return(new ValidationReport());
 		}
 
 		[Test]
@@ -43,7 +41,8 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 		{
 			base.Establish_context();
 
-			Validator.Stub(x => x.Validate(Command)).Return(new NotificationResult() { new ValidationError("Something does not validate") });
+			Validator.Stub(x => x.Validate(Command)).Return(new ValidationReport
+			                                                { new ValidationError("Something does not validate") });
 		}
 
 		[Test]

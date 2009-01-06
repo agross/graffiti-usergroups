@@ -58,7 +58,7 @@ namespace DnugLeipzig.Runtime.Repositories
 			CategoryController.Reset();
 		}
 
-		public bool IsExistingCategory(string categoryName)
+		public bool Exists(string categoryName)
 		{
 			return GraffitiData.GetCategory(categoryName) != null;
 		}

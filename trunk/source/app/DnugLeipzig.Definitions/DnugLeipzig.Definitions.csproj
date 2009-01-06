@@ -93,7 +93,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="IoC.cs" />
-    <Compile Include="Builders\MessageBuilder.cs" />
+    <Compile Include="Builders\LogMessageBuilder.cs" />
     <Compile Include="ObjectFactoryExtensions.cs" />
     <Compile Include="Repositories\ICalendarItem.cs" />
     <Compile Include="Repositories\ICalendarItemRepository.cs" />
@@ -118,7 +118,8 @@
     <Compile Include="Mapping\IMapper.cs" />
     <Compile Include="Validation\IValidator.cs" />
     <Compile Include="Validation\INotification.cs" />
-    <Compile Include="Validation\NotificationResult.cs" />
+    <Compile Include="Validation\ValidationReport.cs" />
+    <Compile Include="Validation\Severity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Repositories\Repositories.cd" />

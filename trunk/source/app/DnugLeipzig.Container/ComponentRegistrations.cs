@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 using Castle.Core;
 using Castle.MicroKernel.Registration;
@@ -8,15 +9,16 @@ using Castle.MicroKernel.Registration;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.Definitions.Configuration;
 using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Mapping;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Commands;
 using DnugLeipzig.Runtime.Configuration;
-using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Events;
+using DnugLeipzig.Runtime.Plugins.Talks;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
-using DnugLeipzig.Runtime.Validation;
 
 namespace DnugLeipzig.Container
 {
@@ -24,11 +26,20 @@ namespace DnugLeipzig.Container
 	{
 		public static IEnumerable<IRegistration> Get()
 		{
-			// Validators.
-			yield return Component.For<IValidator<IEventRegistrationCommand>>()
-				.ImplementedBy<EventRegistrationCommandValidator>()
-				.LifeStyle.Is(LifestyleType.Transient);
+			Assembly runtime = typeof(Command).Assembly;
+
+			// Mapper.
+			yield return AllTypes.Of(typeof(IMapper<,>))
+				.FromAssembly(runtime)
+				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
+				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
 			
+			// Validators.
+			yield return AllTypes.Of(typeof(IValidator<>))
+				.FromAssembly(runtime)
+				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
+				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
+
 			// Configuration.
 			yield return Component.For<PluginConfigurationInterceptor>()
 				.ImplementedBy<PluginConfigurationInterceptor>();
@@ -82,7 +93,7 @@ namespace DnugLeipzig.Container
 				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return AllTypes.Of<ICommand>()
-				.FromAssembly(typeof(Command).Assembly)
+				.FromAssembly(runtime)
 				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
 				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
 

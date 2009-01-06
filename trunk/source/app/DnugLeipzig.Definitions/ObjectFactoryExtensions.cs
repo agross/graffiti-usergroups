@@ -4,9 +4,9 @@ namespace DnugLeipzig.Definitions
 {
 	public static class ObjectFactoryExtensions
 	{
-		public static MessageBuilder Message(this ObjectFactory ignored)
+		public static LogMessageBuilder LogMessage(this ObjectFactory ignored)
 		{
-			return new MessageBuilder();
+			return new LogMessageBuilder();
 		}
 	}
 }

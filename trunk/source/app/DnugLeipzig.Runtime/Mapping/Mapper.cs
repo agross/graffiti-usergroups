@@ -4,7 +4,7 @@ using DnugLeipzig.Definitions.Mapping;
 
 namespace DnugLeipzig.Runtime.Mapping
 {
-	public class Mapper<TSource, TResult> : IMapper<TSource, TResult>
+	public abstract class Mapper<TSource, TResult> : IMapper<TSource, TResult>
 	{
 		readonly IList<IMapperStep<TSource, TResult>> _mappingSteps = new List<IMapperStep<TSource, TResult>>();
 

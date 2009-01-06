@@ -6,7 +6,9 @@ using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Runtime.Plugins;
+using DnugLeipzig.Runtime.Plugins.Events;
 using DnugLeipzig.Runtime.Plugins.Migration;
+using DnugLeipzig.Runtime.Plugins.Talks;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
