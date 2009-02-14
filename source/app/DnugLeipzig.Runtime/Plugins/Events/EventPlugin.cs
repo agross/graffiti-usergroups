@@ -19,7 +19,7 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 	public partial class EventPlugin : GraffitiEvent, IEventPluginConfigurationProvider, ISupportsMemento
 	{
 		readonly IPostRepository _postRepository;
-		readonly IGraffitiCommentSettings _settings;
+		readonly IGraffitiCommentSettings _commentSettings;
 		readonly IMapper<NameValueCollection, Settings> _settingsMapper;
 		readonly IValidator<Settings> _settingsValidator;
 
@@ -44,7 +44,7 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-			// TODO			DefaultRegistrationRecipient = _settings.Email;
+			DefaultRegistrationRecipient = _commentSettings.Email;
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 		                     IValidator<Settings> settingsValidator)
 		{
 			_postRepository = postRepository;
-			_settings = commentSettings;
+			_commentSettings = commentSettings;
 			_settingsMapper = settingsMapper;
 			_settingsValidator = settingsValidator;
 
