@@ -34,11 +34,11 @@ namespace DnugLeipzig.Runtime.Repositories
 				{
 					postUrl += post.Url;
 				}
-					// ReSharper disable EmptyGeneralCatchClause
+				// ReSharper disable EmptyGeneralCatchClause
 				catch
-					// ReSharper restore EmptyGeneralCatchClause
+				// ReSharper restore EmptyGeneralCatchClause
 				{
-					// HACK: In unit-testing scenarios, accessing URL causes database access. Well done, telligent.
+					// HACK: In unit-testing scenarios, accessing URL causes database access. Well done, telligent!
 				}
 
 				var calendarItem = new CalendarItem
