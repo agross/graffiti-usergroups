@@ -9,12 +9,11 @@ using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions.Macros
+namespace DnugLeipzig.Runtime.Macros
 {
 	[Chalk("events")]
 	public class EventMacros : Macros<IEventPluginConfigurationProvider>

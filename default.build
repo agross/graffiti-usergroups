@@ -169,15 +169,6 @@
 		<tc-progress message="Building application"
 					 type="Start" />
 
-		<msbuild project="${basedir.app}\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj"
-				 target="${build.msbuild.target}"
-				 verbosity="${build.msbuild.verbosity}">
-			<arg value="/p:Configuration=${build.msbuild.configuration}" />
-			<arg value="/p:SolutionDir=${build.msbuild.solutiondir}" />
-			<arg value="/p:NAntCall=true" />
-			<arg value="/maxcpucount" />
-		</msbuild>
-
 		<msbuild project="${basedir.app}\DnugLeipzig.Runtime\DnugLeipzig.Runtime.csproj"
 				 target="${build.msbuild.target}"
 				 verbosity="${build.msbuild.verbosity}">
@@ -392,12 +383,6 @@
 					 prefix="bin">
 				<include name="Castle.*.dll" />
 				<include name="DnugLeipzig.Container.*" />
-			</fileset>
-			
-			<!-- Extensions. -->
-			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
-					 prefix="bin">
-				<include name="DnugLeipzig.Extensions.*" />
 			</fileset>
 
 			<!-- Definitions. -->

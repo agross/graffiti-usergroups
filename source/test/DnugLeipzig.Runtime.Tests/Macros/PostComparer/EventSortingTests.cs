@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.Runtime.Macros.PostComparer;
 
 using Graffiti.Core;
 
 using MbUnit.Framework;
 
-namespace DnugLeipzig.Extensions.Tests
+namespace DnugLeipzig.Runtime.Tests.Macros.PostComparer
 {
 	public class EventSortingTests : Spec
 	{

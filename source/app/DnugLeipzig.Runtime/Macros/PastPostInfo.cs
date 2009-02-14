@@ -1,4 +1,4 @@
-namespace DnugLeipzig.Extensions.DataObjects
+namespace DnugLeipzig.Runtime.Macros
 {
 	public class PastPostInfo
 	{

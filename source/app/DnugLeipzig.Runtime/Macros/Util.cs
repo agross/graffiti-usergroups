@@ -3,7 +3,7 @@ using System.Web;
 
 using DnugLeipzig.Definitions.Extensions;
 
-namespace DnugLeipzig.Extensions
+namespace DnugLeipzig.Runtime.Macros
 {
 	public static class Util
 	{
