@@ -135,6 +135,86 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Talks.Validation
 		}
 	}
 
+	public class When_the_plugin_settings_are_validated_and_the_date_field_is_checked : With_existing_category
+	{
+		void Because(string dateField)
+		{
+			base.Because();
+
+			Settings.Date = dateField;
+
+			_report = _sut.Validate(Settings);
+		}
+
+		[RowTest]
+		[Row("talk date")]
+		public void It_should_accept_valid_values(string dateField)
+		{
+			Because(dateField);
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_reject_invalid_values(string dateField)
+		{
+			Because(dateField);
+			Assert.AreEqual(Severity.Error, _report.First().Severity);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_return_an_error_message_for_invalid_values(string dateField)
+		{
+			Because(dateField);
+			Assert.AreEqual("Please enter the date field name.", _report.First().Message);
+		}
+	}
+
+	public class When_the_plugin_settings_are_validated_and_the_speaker_field_is_checked : With_existing_category
+	{
+		void Because(string speakerField)
+		{
+			base.Because();
+
+			Settings.Speaker = speakerField;
+
+			_report = _sut.Validate(Settings);
+		}
+
+		[RowTest]
+		[Row("speaker")]
+		public void It_should_accept_valid_values(string speakerField)
+		{
+			Because(speakerField);
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_reject_invalid_values(string speakerField)
+		{
+			Because(speakerField);
+			Assert.AreEqual(Severity.Error, _report.First().Severity);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_return_an_error_message_for_invalid_values(string speakerField)
+		{
+			Because(speakerField);
+			Assert.AreEqual("Please enter the speaker field name.", _report.First().Message);
+		}
+	}
+
 	public abstract class With_existing_category : Spec
 	{
 		protected ValidationReport _report;
@@ -164,9 +244,7 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Talks.Validation
 			           	YearQueryString = "year query string",
 			           	CreateTargetCategoryAndFields = false,
 			           	MigrateFieldValues = false,
-			           	// TODO
 			           	Date = "date",
-			           	// TODO
 			           	Speaker = "speaker"
 			           };
 		}
