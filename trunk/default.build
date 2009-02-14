@@ -384,31 +384,38 @@
 			<fileset basedir="${basedir.temp}\DnugLeipzig.Theme"
 					 prefix="files\themes\${project::get-name()}">
 				<include name="**\*" />
+				<exclude name="bin\**" />
 			</fileset>
 
 			<!-- Container. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Container\bin\${build.msbuild.configuration}"
 					 prefix="bin">
 				<include name="Castle.*.dll" />
-				<include name="DnugLeipzig.*" />
+				<include name="DnugLeipzig.Container.*" />
 			</fileset>
 			
 			<!-- Extensions. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Extensions\bin\${build.msbuild.configuration}"
 					 prefix="bin">
-				<include name="DnugLeipzig.*" />
+				<include name="DnugLeipzig.Extensions.*" />
+			</fileset>
+
+			<!-- Definitions. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.Definitions\bin\${build.msbuild.configuration}"
+					 prefix="bin">
+				<include name="DnugLeipzig.Definitions.*" />
 			</fileset>
 
 			<!-- Plugins. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Plugins\bin\${build.msbuild.configuration}"
 					 prefix="bin">
-				<include name="DnugLeipzig.*" />
+				<include name="DnugLeipzig.Plugins.*" />
 			</fileset>
 
 			<!-- Demo site. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.DemoSite\bin\${build.msbuild.configuration}"
 					 prefix="bin">
-				<include name="DnugLeipzig.*" />
+				<include name="DnugLeipzig.DemoSite.*" />
 			</fileset>
 		</zip>
 
