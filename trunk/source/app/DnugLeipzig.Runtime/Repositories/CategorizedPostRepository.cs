@@ -37,8 +37,7 @@ namespace DnugLeipzig.Runtime.Repositories
 
 		protected IList<Post> PostsByCategoryDisableHomepageOverride(int count)
 		{
-			// HACK
-			// Temporarily disable homepage overrides to get all posts of the category, even if they aren't
+			// HACK: Temporarily disable homepage overrides to get all posts of the category, even if they aren't
 			// displayed on the home page. This is useful for general "overview" teasers that show all content
 			// independent of the page.
 			bool useCustomHomeList = Data.Site.UseCustomHomeList;
