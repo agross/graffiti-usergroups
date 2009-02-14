@@ -21,6 +21,12 @@ namespace DnugLeipzig.Runtime.Plugins.Talks.Validation
 
 			IfNot(x => x.YearQueryString.HasValue())
 				.AddNotification(SettingsErrors.YearQueryStringIsMissing);
+			
+			IfNot(x => x.Date.HasValue())
+				.AddNotification(SettingsErrors.DateFieldIsMissing);
+	
+			IfNot(x => x.Speaker.HasValue())
+				.AddNotification(SettingsErrors.SpeakerFieldIsMissing);
 		}
 	}
 }
