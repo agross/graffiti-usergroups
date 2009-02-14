@@ -405,6 +405,12 @@
 					 prefix="bin">
 				<include name="DnugLeipzig.Definitions.*" />
 			</fileset>
+			
+			<!-- Runtime. -->
+			<fileset basedir="${basedir.app}\DnugLeipzig.Runtime\bin\${build.msbuild.configuration}"
+					 prefix="bin">
+				<include name="DnugLeipzig.Runtime.*" />
+			</fileset>
 
 			<!-- Plugins. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Plugins\bin\${build.msbuild.configuration}"
