@@ -43,6 +43,22 @@ namespace DnugLeipzig.Runtime.Plugins
 					return String.Empty;
 				})
 				.To(x => x.Message);
+			
+			From(x =>
+				{
+					if (x.HasErrors)
+					{
+						return x.Errors.First().AffectedFormFields;
+					}
+
+					if (x.HasWarnings)
+					{
+						return x.Warnings.First().AffectedFormFields;
+					}
+
+					return null;
+				})
+				.To(x => x.AffectedFormFields);
 		}
 	}
 }

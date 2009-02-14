@@ -131,7 +131,7 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 			Container.Get<IPostRepository>().Stub(x => x.GetCategoryNameOf(_post)).Return(_sut.CategoryName);
 			Container.Get<IEventValidator>().Stub(x => x.Validate(_post)).Return(new ValidationReport
 			                                                                   {
-			                                                                   	new ValidationError("something"),
+			                                                                   	new ValidationError("something", "some field"),
 			                                                                   	new ValidationError("some other thing")
 			                                                                   });
 
@@ -152,7 +152,13 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		[Test]
 		public void It_should_return_the_first_validation_error_in_the_exception_message()
 		{
-			Assert.AreEqual("something", _exception.Message);
+			Assert.Contains(_exception.Message, "something");
+		}
+		
+		[Test]
+		public void It_should_return_the_first_validation_errors_affected_field_in_the_exception_message()
+		{
+			Assert.Contains(_exception.Message, "some field");
 		}
 	}
 }

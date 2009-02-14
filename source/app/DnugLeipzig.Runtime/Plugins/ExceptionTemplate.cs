@@ -1,5 +1,3 @@
-using System;
-
 using Graffiti.Core;
 
 namespace DnugLeipzig.Runtime.Plugins
@@ -18,6 +16,12 @@ namespace DnugLeipzig.Runtime.Plugins
 			set;
 		}
 
+		public string[] AffectedFormFields
+		{
+			get;
+			set;
+		}
+
 		public bool Failed
 		{
 			get { return StatusType == StatusType.Error || StatusType == StatusType.Warning; }
@@ -25,7 +29,7 @@ namespace DnugLeipzig.Runtime.Plugins
 
 		public void ThrowAsException()
 		{
-			throw new Exception(Message);
+			throw new ValidationException(Message, null, StatusType, AffectedFormFields);
 		}
 	}
 }
