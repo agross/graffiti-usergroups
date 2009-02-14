@@ -1,6 +1,6 @@
 @echo off
 cls
 
-tools\NAnt\NAnt.exe -buildfile:default.build %1
+tools\NAnt\NAnt.exe -buildfile:default.build %*
 pause
-build.bat %1
+build.bat %*
