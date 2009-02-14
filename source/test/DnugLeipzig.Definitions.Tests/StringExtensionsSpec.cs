@@ -11,7 +11,7 @@ namespace DnugLeipzig.Definitions.Tests
 	{
 		protected static bool Because(string value)
 		{
-			return value.IsNullOrEmptyTrimmed();
+			return value.IsNullOrEmpty();
 		}
 
 		[RowTest]
@@ -64,34 +64,6 @@ namespace DnugLeipzig.Definitions.Tests
 		{
 			Assert.AreEqual(new DateTime(year, month, day),
 			                Because(value));
-		}
-	}
-
-	public class When_the_line_count_of_a_string_is_computed : Spec
-	{
-		protected static int Because(string value)
-		{
-			return value.LineCount();
-		}
-
-		[RowTest]
-		[Row("", 0)]
-		[Row("    ", 0)]
-		[Row(null, 0)]
-		[Row("foo", 1)]
-		[Row("foo\nbar", 2)]
-		[Row("foo\r\nbar", 2)]
-		[Row("foo\r\nbar\n", 2)]
-		[Row("foo\r\nbar\r\n", 2)]
-		[Row("foo\r\nbar\r\n\r\n\r\n\r\n\r\n", 2)]
-		[Row("foo\r\nbar\r\n\r\nbaz\r\n\r\n\r\n", 3)]
-		public void ShouldReturnCorrectLineCount(string value, int expectedLineCount)
-		{
-			Assert.AreEqual(expectedLineCount,
-			                Because(value),
-			                "Should have returned a line count of {0} for value '{1}'.",
-			                expectedLineCount,
-			                value);
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace DnugLeipzig.Extensions.Extensions
 		#region Date/Time Related
 		public static IEnumerable<Post> HasDate(this IEnumerable<Post> posts, string dateFieldName)
 		{
-			return posts.Where(post => post.HasDate(dateFieldName));
+			return posts.Where(post => PostExtensions.HasDate(post, dateFieldName));
 		}
 
 		public static IEnumerable<Post> IsInPastYear(this IEnumerable<Post> posts, string dateFieldName)

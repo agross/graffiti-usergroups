@@ -4,9 +4,8 @@ using System.Diagnostics;
 using System.Web;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration.Plugins;
-using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Mapping;
+using DnugLeipzig.Definitions.Plugins.Talks;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Plugins.Migration;
@@ -18,12 +17,12 @@ namespace DnugLeipzig.Runtime.Plugins.Talks
 	public partial class TalkPlugin : GraffitiEvent, ITalkPluginConfigurationProvider, ISupportsMemento
 	{
 		readonly IPostRepository _postRepository;
-		readonly IMapper<NameValueCollection, TalkPluginSettings> _settingsMapper;
-		readonly IValidator<TalkPluginSettings> _settingsValidator;
+		readonly IMapper<NameValueCollection, Settings> _settingsMapper;
+		readonly IValidator<Settings> _settingsValidator;
 
 		public TalkPlugin() : this(IoC.Resolve<IPostRepository>(),
-		                           IoC.Resolve<IMapper<NameValueCollection, TalkPluginSettings>>(),
-		                           IoC.Resolve<IValidator<TalkPluginSettings>>())
+		                           IoC.Resolve<IMapper<NameValueCollection, Settings>>(),
+		                           IoC.Resolve<IValidator<Settings>>())
 		{
 			// Initialize default values.
 			CategoryName = "Talks";
@@ -37,8 +36,8 @@ namespace DnugLeipzig.Runtime.Plugins.Talks
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
 		internal TalkPlugin(IPostRepository postRepository,
-							IMapper<NameValueCollection, TalkPluginSettings> settingsMapper,
-		                    IValidator<TalkPluginSettings> settingsValidator)
+		                    IMapper<NameValueCollection, Settings> settingsMapper,
+		                    IValidator<Settings> settingsValidator)
 		{
 			_postRepository = postRepository;
 			_settingsMapper = settingsMapper;
@@ -129,13 +128,10 @@ namespace DnugLeipzig.Runtime.Plugins.Talks
 				return;
 			}
 
-			// Validate input.
-			if (!post[DateField].IsNullOrEmptyTrimmed())
+			var validation = IoC.Resolve<ITalkValidator>(this).Validate(post).Interpret();
+			if (validation.Failed)
 			{
-				if (!Validator.ValidateDate(post[DateField]))
-				{
-					throw new ValidationException("Please enter a valid date.", DateField);
-				}
+				validation.ThrowAsException();
 			}
 		}
 
@@ -150,7 +146,7 @@ namespace DnugLeipzig.Runtime.Plugins.Talks
 			IMemento oldState;
 			IMemento newState;
 
-			TalkPluginSettings settings = new TalkPluginSettings();
+			Settings settings = new Settings();
 			_settingsMapper.Map(nvc, settings);
 
 			try
@@ -183,7 +179,7 @@ namespace DnugLeipzig.Runtime.Plugins.Talks
 				EnableEventHandlers = false;
 
 				PluginMigrator.MigrateSettings(settings.CreateTargetCategoryAndFields,
-											   settings.MigrateFieldValues,
+				                               settings.MigrateFieldValues,
 				                               newState,
 				                               oldState);
 				return StatusType.Success;

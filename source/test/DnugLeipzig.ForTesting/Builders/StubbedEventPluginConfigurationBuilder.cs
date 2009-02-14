@@ -1,8 +1,7 @@
-using System;
 using System.Reflection;
 
 using DnugLeipzig.Definitions.Builders;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Plugins.Events;
 
 using Rhino.Mocks;
 

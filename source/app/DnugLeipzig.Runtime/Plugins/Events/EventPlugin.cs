@@ -4,14 +4,13 @@ using System.Diagnostics;
 using System.Web;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration;
-using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Mapping;
+using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Plugins.Migration;
-using DnugLeipzig.Runtime.Plugins.Talks;
 
 using Graffiti.Core;
 
@@ -21,13 +20,13 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 	{
 		readonly IPostRepository _postRepository;
 		readonly IGraffitiCommentSettings _settings;
-		readonly IMapper<NameValueCollection, EventPluginSettings> _settingsMapper;
-		readonly IValidator<EventPluginSettings> _settingsValidator;
+		readonly IMapper<NameValueCollection, Settings> _settingsMapper;
+		readonly IValidator<Settings> _settingsValidator;
 
 		public EventPlugin() : this(IoC.Resolve<IPostRepository>(),
 		                            IoC.Resolve<IGraffitiCommentSettings>(),
-		                            IoC.Resolve<IMapper<NameValueCollection, EventPluginSettings>>(),
-									IoC.Resolve<IValidator<EventPluginSettings>>())
+		                            IoC.Resolve<IMapper<NameValueCollection, Settings>>(),
+		                            IoC.Resolve<IValidator<Settings>>())
 		{
 			// Initialize default values.
 			CategoryName = "Events";
@@ -54,8 +53,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 		/// </summary>
 		internal EventPlugin(IPostRepository postRepository,
 		                     IGraffitiCommentSettings commentSettings,
-		                     IMapper<NameValueCollection, EventPluginSettings> settingsMapper,
-							 IValidator<EventPluginSettings> settingsValidator)
+		                     IMapper<NameValueCollection, Settings> settingsMapper,
+		                     IValidator<Settings> settingsValidator)
 		{
 			_postRepository = postRepository;
 			_settings = commentSettings;
@@ -91,12 +90,6 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			set;
 		}
 
-		public string DefaultLocation
-		{
-			get;
-			set;
-		}
-
 		public string DefaultMaximumNumberOfRegistrations
 		{
 			get;
@@ -110,6 +103,12 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 		}
 
 		#region IEventPluginConfigurationProvider Members
+		public string DefaultLocation
+		{
+			get;
+			set;
+		}
+
 		public string SortRelevantDateField
 		{
 			get { return StartDateField; }
@@ -240,76 +239,10 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 				return;
 			}
 
-			// Validate input.
-			DateTime? startDate = null;
-			DateTime? endDate = null;
-
-			if (!post[StartDateField].IsNullOrEmptyTrimmed())
+			var validation = IoC.Resolve<IEventValidator>(this).Validate(post).Interpret();
+			if (validation.Failed)
 			{
-				if (!Validator.ValidateDate(post[StartDateField]))
-				{
-					throw new ValidationException("Please enter a valid date.", StartDateField);
-				}
-
-				startDate = DateTime.Parse(post[StartDateField]);
-			}
-
-			if (!post[EndDateField].IsNullOrEmptyTrimmed())
-			{
-				if (!Validator.ValidateDate(post[EndDateField]))
-				{
-					throw new ValidationException("Please enter a valid date.", EndDateField);
-				}
-
-				endDate = DateTime.Parse(post[EndDateField]);
-			}
-
-			if (!startDate.HasValue && endDate.HasValue)
-			{
-				throw new ValidationException("Please enter a start date if the end date is set.", StartDateField);
-			}
-
-			if (startDate.HasValue && endDate.HasValue && startDate > endDate)
-			{
-				throw new ValidationException("Please enter a start date that is less or equal than the end date.",
-				                              StartDateField,
-				                              EndDateField);
-			}
-
-			if (post[LocationUnknownField].IsSelected() && !post[LocationField].IsNullOrEmptyTrimmed())
-			{
-				throw new ValidationException(
-					String.Format(
-						"Either check the '{0}' field the or enter a location. You can leave the '{0}' field unchecked and the '{1}' field empty to apply the default location value '{2}'.",
-						LocationUnknownField,
-						LocationField,
-						DefaultLocation),
-					LocationUnknownField,
-					LocationField);
-			}
-
-			if (!post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
-			{
-				if (!Validator.ValidateInt(post[MaximumNumberOfRegistrationsField]))
-				{
-					throw new ValidationException("Please enter a valid integer value.", MaximumNumberOfRegistrationsField);
-				}
-
-				int maximumNumberOfRegistrations = int.Parse(post[MaximumNumberOfRegistrationsField]);
-
-				if (!Validator.ValidateRange(maximumNumberOfRegistrations, 0, int.MaxValue))
-				{
-					throw new ValidationException(String.Format("Please enter a value greater or equal than 0."),
-					                              MaximumNumberOfRegistrationsField);
-				}
-			}
-
-			if (!post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
-			{
-				if (!Validator.ValidateEmail(post[RegistrationRecipientField]))
-				{
-					throw new ValidationException(String.Format("Please enter a valid e-mail address."), RegistrationRecipientField);
-				}
+				validation.ThrowAsException();
 			}
 		}
 
@@ -332,21 +265,21 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			}
 
 			// Set default location if no location is given.
-			if (!post[LocationUnknownField].IsSelected() && post[LocationField].IsNullOrEmptyTrimmed())
+			if (!post[LocationUnknownField].IsSelected() && post[LocationField].IsNullOrEmpty())
 			{
 				post[LocationField] = DefaultLocation;
 				post.ForcePropertyUpdate();
 			}
 
 			// Set default number maximum number of registrations.
-			if (post[MaximumNumberOfRegistrationsField].IsNullOrEmptyTrimmed())
+			if (post[MaximumNumberOfRegistrationsField].IsNullOrEmpty())
 			{
 				post[MaximumNumberOfRegistrationsField] = DefaultMaximumNumberOfRegistrations;
 				post.ForcePropertyUpdate();
 			}
 
 			// Set default registration recipient.
-			if (post[RegistrationRecipientField].IsNullOrEmptyTrimmed())
+			if (post[RegistrationRecipientField].IsNullOrEmpty())
 			{
 				post[RegistrationRecipientField] = DefaultRegistrationRecipient;
 				post.ForcePropertyUpdate();
@@ -364,7 +297,7 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			IMemento oldState;
 			IMemento newState;
 
-			EventPluginSettings settings = new EventPluginSettings();
+			Settings settings = new Settings();
 			_settingsMapper.Map(nvc, settings);
 
 			try

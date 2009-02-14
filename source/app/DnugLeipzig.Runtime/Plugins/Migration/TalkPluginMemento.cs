@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Definitions.Configuration.Plugins;
-using DnugLeipzig.Runtime.Plugins.Migration;
+using DnugLeipzig.Definitions.Plugins.Talks;
 
 using Graffiti.Core;
 

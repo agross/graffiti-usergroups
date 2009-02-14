@@ -1,5 +1,3 @@
-using System;
-
 namespace DnugLeipzig.Extensions.DataObjects
 {
 	public class PastPostInfo

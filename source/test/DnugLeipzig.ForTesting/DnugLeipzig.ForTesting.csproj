@@ -59,6 +59,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\tools\Rhino Tools\Rhino.Mocks.dll</HintPath>
     </Reference>
+    <Reference Include="Rhino.Testing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\tools\Rhino Tools\Rhino.Testing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -75,6 +79,9 @@
     <Compile Include="Builders\EventBuilder.cs" />
     <Compile Include="Builders\EventRegistrationCommandBuilder.cs" />
     <Compile Include="Builders\StubbedEventPluginConfigurationBuilder.cs" />
+    <Compile Include="Builders\StubbedTalkPluginConfigurationBuilder.cs" />
+    <Compile Include="Builders\TalkBuilder.cs" />
+    <Compile Include="Catch.cs" />
     <Compile Include="HttpMocks\HttpSimulator.cs" />
     <Compile Include="HttpMocks\HttpSimulatorTests.cs" />
     <Compile Include="HttpMocks\ReflectionHelper.cs" />
@@ -82,6 +89,7 @@
     <Compile Include="ObjectFactoryExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Spec.cs" />
+    <Compile Include="With_IoC_container.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\app\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">

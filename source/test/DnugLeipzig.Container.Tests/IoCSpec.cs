@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 using Castle.Core;
@@ -9,6 +10,8 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Logging;
+using DnugLeipzig.Runtime.Plugins.Events.Validation;
+using DnugLeipzig.Runtime.Plugins.Talks.Validation;
 
 using MbUnit.Framework;
 
@@ -40,6 +43,8 @@ namespace DnugLeipzig.Container.Tests
 		[Test]
 		public void It_should_be_able_to_create_instances_of_registered_types()
 		{
+			IList<Type> typesWithUnsatisfyableCtors = new List<Type> { typeof(EventValidator), typeof(TalkValidator) };
+
 			Array.ForEach(_sut,
 			              handler =>
 			              	{
@@ -62,7 +67,12 @@ namespace DnugLeipzig.Container.Tests
 			              		}
 			              		else
 			              		{
-			              			Debug.WriteLine(handler.ComponentModel.Service + " -> " + handler.ComponentModel.Name);
+									if (typesWithUnsatisfyableCtors.Contains(handler.ComponentModel.Implementation))
+									{
+										return;
+									}
+
+									Debug.WriteLine(handler.ComponentModel.Service + " -> " + handler.ComponentModel.Name);
 			              			IoC.Resolve(handler.ComponentModel.Service);
 			              		}
 			              	});

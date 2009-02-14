@@ -4,7 +4,7 @@ using System.Web;
 using Castle.Core.Logging;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.ForTesting.HttpMocks;
@@ -76,9 +76,9 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		{
 			base.Establish_context();
 
-			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event(ConfigurationProvider)
+			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event()
 			                                               	.Id(42)
-			                                               	.From(DateTime.MinValue)
+			                                               	.StartingAt(DateTime.MinValue)
 			                                               	.To(DateTime.MinValue.AddDays(10))
 			                                               	.AtLocation("somewhere")
 			                                               	.TheTopicIs("techno babble"));

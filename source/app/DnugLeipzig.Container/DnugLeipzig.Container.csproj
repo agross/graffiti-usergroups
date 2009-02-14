@@ -47,6 +47,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Castle\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="DataBuddy, Version=1.0.28.25249, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Graffiti\DataBuddy.dll</HintPath>
+    </Reference>
     <Reference Include="Graffiti.Core, Version=1.2.0.1451, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Graffiti\Graffiti.Core.dll</HintPath>
