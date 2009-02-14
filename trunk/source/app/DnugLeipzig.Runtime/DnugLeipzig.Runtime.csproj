@@ -66,8 +66,8 @@
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\CommandFactory.cs" />
     <Compile Include="Commands\EventRegistrationCommand.cs" />
-    <Compile Include="Configuration\GraffitiCommentSettings.cs" />
-    <Compile Include="Configuration\GraffitiSiteSettings.cs" />
+    <Compile Include="GraffitiIntegration\GraffitiCommentSettings.cs" />
+    <Compile Include="GraffitiIntegration\GraffitiSiteSettings.cs" />
     <Compile Include="Handlers\CalendarHandler.cs" />
     <Compile Include="Handlers\RegistrationHandler.cs" />
     <Compile Include="Logging\GraffitiLogger.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="Plugins\Migration\MigrationInfo.cs" />
     <Compile Include="Plugins\Migration\Migrator.cs" />
     <Compile Include="Plugins\Migration\TalkPluginMemento.cs" />
-    <Compile Include="Plugins\PluginMigrator.cs" />
+    <Compile Include="Plugins\Migration\PluginMigrator.cs" />
     <Compile Include="Plugins\Talks\TalkPlugin.cs" />
     <Compile Include="Plugins\PostExtensions.cs" />
     <Compile Include="Plugins\ValidationException.cs" />
@@ -93,14 +93,14 @@
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\CalendarItem.cs" />
     <Compile Include="Services\EventRegistrationResultList.cs" />
-    <Compile Include="Configuration\GraffitiEmailContext.cs" />
+    <Compile Include="GraffitiIntegration\GraffitiEmailContext.cs" />
     <Compile Include="Services\GraffitiEmailSender.cs" />
     <Compile Include="Services\EventRegistrationService.cs" />
     <Compile Include="Services\EventRegistrationResult.cs" />
     <Compile Include="Services\Service.cs" />
     <Compile Include="Specifications\EmailAddressSpecification.cs" />
-    <Compile Include="Plugins\Events\EventPluginSettingsErrors.cs" />
-    <Compile Include="Plugins\Events\EventPluginSettingsValidator.cs" />
+    <Compile Include="Plugins\Events\Validation\SettingsErrors.cs" />
+    <Compile Include="Plugins\Events\Validation\SettingsValidator.cs" />
     <Compile Include="Validation\ValidationError.cs" />
     <Compile Include="Commands\EventRegistrationErrors.cs" />
     <Compile Include="Commands\EventRegistrationCommandValidator.cs" />
@@ -109,7 +109,6 @@
     <Compile Include="Validation\ValidationMapperStep.cs" />
     <Compile Include="Validation\ValidationWarning.cs" />
     <Compile Include="Validation\Validator.cs" />
-    <Compile Include="Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DnugLeipzig.Definitions\DnugLeipzig.Definitions.csproj">
@@ -118,18 +117,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mapping\ClassMapper.cs" />
+    <Compile Include="Mapping\TypeMapper.cs" />
     <Compile Include="Mapping\ClassMapperStep.cs" />
-    <Compile Include="Plugins\Events\DictionaryToEventPluginSettings.cs" />
-    <Compile Include="Plugins\Talks\DictionaryToTalkPluginSettings.cs" />
-    <Compile Include="Plugins\NotificationResultExtensions.cs" />
-    <Compile Include="Plugins\PluginSettingsResult.cs" />
-    <Compile Include="Plugins\Events\EventPluginSettings.cs" />
-    <Compile Include="Plugins\Talks\TalkPluginSettings.cs" />
-    <Compile Include="Plugins\ValidationResultToPluginSettingsResult.cs" />
+    <Compile Include="Plugins\Events\DictionaryToSettings.cs" />
+    <Compile Include="Plugins\Events\Validation\EventErrors.cs" />
+    <Compile Include="Plugins\Events\Validation\EventValidator.cs" />
+    <Compile Include="Plugins\Talks\DictionaryToSettings.cs" />
+    <Compile Include="Plugins\ValidationReportExtensions.cs" />
+    <Compile Include="Plugins\ExceptionTemplate.cs" />
+    <Compile Include="Plugins\Events\Settings.cs" />
+    <Compile Include="Plugins\Talks\Settings.cs" />
+    <Compile Include="Plugins\Talks\Validation\TalkErrors.cs" />
+    <Compile Include="Plugins\Talks\Validation\TalkValidator.cs" />
+    <Compile Include="Plugins\ValidationReportToExceptionTemplate.cs" />
     <Compile Include="Plugins\Events\EventPlugin.Fields.cs" />
-    <Compile Include="Plugins\Talks\TalkPluginSettingsValidator.cs" />
-    <Compile Include="Plugins\Talks\TalkPluginSettingsErrors.cs" />
+    <Compile Include="Plugins\Talks\Validation\SettingsValidator.cs" />
+    <Compile Include="Plugins\Talks\Validation\SettingsErrors.cs" />
     <Compile Include="Plugins\Talks\TalkPlugin.Fields.cs" />
   </ItemGroup>
   <ItemGroup>

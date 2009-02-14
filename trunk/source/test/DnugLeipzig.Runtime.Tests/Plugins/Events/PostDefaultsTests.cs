@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Specialized;
 
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Mapping;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Validation;
@@ -25,8 +25,8 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		{
 			_sut = new EventPlugin(MockRepository.GenerateMock<IPostRepository>(),
 			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
-								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
-								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>());
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
+								   MockRepository.GenerateMock<IValidator<Settings>>());
 
 			_post = MockRepository.GenerateStub<DataBuddyBase>();
 		}
@@ -53,8 +53,8 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(postRepository,
 								   MockRepository.GenerateMock<IGraffitiCommentSettings>(),
-								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
-								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>()) { CategoryName = "Event category" };
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
+								   MockRepository.GenerateMock<IValidator<Settings>>()) { CategoryName = "Event category" };
 
 			_post = new Post();
 
@@ -272,8 +272,8 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(postRepository,
 			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
-								   MockRepository.GenerateMock<IMapper<NameValueCollection, EventPluginSettings>>(),
-								   MockRepository.GenerateMock<IValidator<EventPluginSettings>>())
+								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
+								   MockRepository.GenerateMock<IValidator<Settings>>())
 			       {
 			       	CategoryName = "Event category",
 			       	LocationField = LocationField,

@@ -4,8 +4,8 @@ using System.Web;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Configuration;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.GraffitiIntegration;
+using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.ForTesting;
@@ -30,7 +30,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId)
 					        	.OrganizedBy("organizer@example.com"));
 			}
@@ -118,7 +118,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			Repository.Stub(x => x.GetById(10)).Throw(new Exception());
 
 			Repository.Stub(x => x.GetById(42))
-				.Return(Create.New.Event(Repository.Configuration)
+				.Return(Create.New.Event()
 				        	.Id(42)
 				        	.OrganizedBy("organizer@example.com"));
 		}
@@ -180,9 +180,9 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId)
-					        	.BookedUpWith("2")
+					        	.WillBeBookedUpAfterRegistrationNumber("2")
 					        	.WithAttendeeList("foo@example.com\r\nbar@example.com"));
 			}
 		}
@@ -222,7 +222,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId)
 					        	.OrganizedBy("organizer@example.com"));
 			}
@@ -277,7 +277,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId));
 			}
 		}
@@ -319,7 +319,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId)
 					        	.WithAttendeeList("\n    \r\nblah@example.com\r\n    \r  foobar@baz.com  \n"));
 			}
@@ -354,7 +354,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 			foreach (int eventId in Command.EventsToRegister)
 			{
 				Repository.Stub(x => x.GetById(eventId))
-					.Return(Create.New.Event(Repository.Configuration)
+					.Return(Create.New.Event()
 					        	.Id(eventId)
 					        	.WithAttendeeList("blah@example.com\r\n the-attendee@example.com "));
 			}

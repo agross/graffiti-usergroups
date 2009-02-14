@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Plugins.Events;
 
 using Graffiti.Core;
 

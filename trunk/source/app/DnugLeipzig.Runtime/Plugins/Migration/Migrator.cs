@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Runtime.Plugins.Migration;
 using DnugLeipzig.Runtime.Repositories;
 
 using Graffiti.Core;
@@ -108,7 +107,7 @@ namespace DnugLeipzig.Runtime.Plugins.Migration
 			{
 				FieldInfo field1 = field;
 				CustomField customField =
-					formSettings.Fields.Find(f => Graffiti.Core.Util.AreEqualIgnoreCase(field1.FieldName, f.Name));
+					formSettings.Fields.Find(f => Util.AreEqualIgnoreCase(field1.FieldName, f.Name));
 
 				if (customField != null)
 				{
@@ -125,9 +124,9 @@ namespace DnugLeipzig.Runtime.Plugins.Migration
 		void EnsureFieldDescription(FieldInfo field, CustomFormSettings formSettings)
 		{
 			CustomField customField =
-				formSettings.Fields.Find(f => Graffiti.Core.Util.AreEqualIgnoreCase(field.FieldName, f.Name));
+				formSettings.Fields.Find(f => Util.AreEqualIgnoreCase(field.FieldName, f.Name));
 
-			if (!customField.Description.IsNullOrEmptyTrimmed())
+			if (!customField.Description.IsNullOrEmpty())
 			{
 				return;
 			}

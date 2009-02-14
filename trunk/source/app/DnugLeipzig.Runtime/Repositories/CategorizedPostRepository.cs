@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Plugins;
 using DnugLeipzig.Definitions.Repositories;
 
 using Graffiti.Core;

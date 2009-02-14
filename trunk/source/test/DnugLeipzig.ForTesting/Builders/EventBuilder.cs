@@ -1,7 +1,7 @@
 using System.Web;
 
 using DnugLeipzig.Definitions.Builders;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.Plugins.Events;
 
 using Graffiti.Core;
 
@@ -48,7 +48,7 @@ namespace DnugLeipzig.ForTesting.Builders
 			return this;
 		}
 
-		public EventBuilder From(object date)
+		public EventBuilder StartingAt(object date)
 		{
 			_startDate = date == null ? null : date.ToString();
 			return this;
@@ -78,7 +78,7 @@ namespace DnugLeipzig.ForTesting.Builders
 			return this;
 		}
 
-		public EventBuilder BookedUpWith(string value)
+		public EventBuilder WillBeBookedUpAfterRegistrationNumber(string value)
 		{
 			_maximumNumberOfRegistrations = value;
 			return this;

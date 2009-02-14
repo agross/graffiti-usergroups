@@ -7,18 +7,21 @@ using Castle.Core;
 using Castle.MicroKernel.Registration;
 
 using DnugLeipzig.Definitions.Commands;
-using DnugLeipzig.Definitions.Configuration;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Mapping;
+using DnugLeipzig.Definitions.Plugins.Events;
+using DnugLeipzig.Definitions.Plugins.Talks;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Commands;
-using DnugLeipzig.Runtime.Configuration;
+using DnugLeipzig.Runtime.GraffitiIntegration;
 using DnugLeipzig.Runtime.Plugins.Events;
 using DnugLeipzig.Runtime.Plugins.Talks;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
+
+using Graffiti.Core;
 
 namespace DnugLeipzig.Container
 {
@@ -33,7 +36,7 @@ namespace DnugLeipzig.Container
 				.FromAssembly(runtime)
 				.WithService.Select((type, baseType) => DeepestInterfaceImplementation(type))
 				.Configure(r => r.LifeStyle.Is(LifestyleType.Transient));
-			
+
 			// Validators.
 			yield return AllTypes.Of(typeof(IValidator<>))
 				.FromAssembly(runtime)

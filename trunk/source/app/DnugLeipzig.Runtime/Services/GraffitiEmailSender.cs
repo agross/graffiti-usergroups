@@ -4,7 +4,7 @@ using System.Net.Mail;
 using System.Web;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration;
+using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Services;
 
 using Graffiti.Core;

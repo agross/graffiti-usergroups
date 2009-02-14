@@ -4,7 +4,7 @@ namespace DnugLeipzig.Definitions.Extensions
 {
 	public static class StringExtensions
 	{
-		public static bool IsNullOrEmptyTrimmed(this string value)
+		public static bool IsNullOrEmpty(this string value)
 		{
 			if (value == null)
 			{
@@ -14,19 +14,35 @@ namespace DnugLeipzig.Definitions.Extensions
 			return String.IsNullOrEmpty(value.Trim());
 		}
 
+		public static bool HasValue(this string value)
+		{
+			return !value.IsNullOrEmpty();
+		}
+
 		public static bool IsSelected(this string value)
 		{
-			if (value.IsNullOrEmptyTrimmed())
+			if (value.IsNullOrEmpty())
 			{
 				return false;
 			}
 
 			return String.Equals(value.Trim(), "on", StringComparison.OrdinalIgnoreCase);
 		}
-		
+
 		public static bool IsNotSelected(this string value)
 		{
 			return !IsSelected(value);
+		}
+
+		public static bool IsDate(this string value)
+		{
+			DateTime date;
+			return DateTime.TryParse(value, out date);
+		}
+
+		public static DateTime ToDate(this string value)
+		{
+			return DateTime.Parse(value);
 		}
 
 		public static DateTime AsEventDate(this string value)
@@ -40,10 +56,10 @@ namespace DnugLeipzig.Definitions.Extensions
 			return DateTime.MaxValue;
 		}
 
-		public static bool IsDate(this string value)
+		public static bool IsInt(this string value)
 		{
-			DateTime date;
-			return DateTime.TryParse(value, out date);
+			int intValue;
+			return int.TryParse(value, out intValue);
 		}
 
 		public static int ToInt(this string value, int defaultValue)
@@ -57,19 +73,14 @@ namespace DnugLeipzig.Definitions.Extensions
 			return intValue;
 		}
 
+		public static bool IsInRange<T>(this T value, T minValue, T maxValue) where T : IComparable
+		{
+			return value.CompareTo(minValue) >= 0 && value.CompareTo(maxValue) <= 0;
+		}
+
 		public static string StripDefaultAspx(this string url)
 		{
 			return url.Replace("default.aspx", "");
-		}
-
-		public static int LineCount(this string value)
-		{
-			if (value.IsNullOrEmptyTrimmed())
-			{
-				return 0;
-			}
-
-			return value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries).Length;
 		}
 	}
 }

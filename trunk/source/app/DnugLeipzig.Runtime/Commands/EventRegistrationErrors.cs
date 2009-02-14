@@ -1,7 +1,7 @@
 using System;
 
-using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Validation;
 using DnugLeipzig.Runtime.Validation;
 
 namespace DnugLeipzig.Runtime.Commands
@@ -19,7 +19,7 @@ namespace DnugLeipzig.Runtime.Commands
 
 		public static INotification EmailIsInvalid(string emailAddress)
 		{
-			if (emailAddress.IsNullOrEmptyTrimmed())
+			if (emailAddress.IsNullOrEmpty())
 			{
 				return new ValidationError("Please enter your e-mail address.");
 			}

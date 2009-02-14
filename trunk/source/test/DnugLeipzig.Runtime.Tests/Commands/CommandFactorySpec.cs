@@ -5,8 +5,6 @@ using DnugLeipzig.Runtime.Commands;
 
 using MbUnit.Framework;
 
-using Rhino.Testing.AutoMocking;
-
 namespace DnugLeipzig.Runtime.Tests.Commands
 {
 	public class When_the_command_factory_builds_a_registration_request : With_command_factory<IEventRegistrationCommand>
@@ -22,18 +20,16 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 		}
 	}
 
-	public abstract class With_command_factory<TCommand> : Spec where TCommand : class, ICommand
+	public abstract class With_command_factory<TCommand> : With_IoC_container where TCommand : class, ICommand
 	{
 		protected TCommand _command;
 		protected CommandFactory _factory;
 
 		protected override void Establish_context()
 		{
-			var container = new AutoMockingContainer(Mocks);
-			container.Initialize();
-			container.Mark<TCommand>().Stubbed();
-			IoC.Initialize(container);
+			base.Establish_context();
 
+			Container.Mark<TCommand>().Stubbed();
 			_factory = new CommandFactory();
 		}
 

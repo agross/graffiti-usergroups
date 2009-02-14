@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using DnugLeipzig.Runtime.Plugins.Migration;
-
 namespace DnugLeipzig.Runtime.Plugins.Migration
 {
 	internal class MigrationInfo

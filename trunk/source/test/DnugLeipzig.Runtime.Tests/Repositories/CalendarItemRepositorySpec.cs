@@ -1,8 +1,8 @@
 using System;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration;
-using DnugLeipzig.Definitions.Configuration.Plugins;
+using DnugLeipzig.Definitions.GraffitiIntegration;
+using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Repositories;
@@ -19,8 +19,8 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(ConfigurationProvider)
-				.From(DateTime.MinValue)
+			return Create.New.Event()
+				.StartingAt(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
 				.TheTopicIs("techno babble");
@@ -68,7 +68,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(ConfigurationProvider)
+			return Create.New.Event()
 				.AtLocation("somewhere")
 				.TheTopicIs("techno babble");
 		}
@@ -85,8 +85,8 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(ConfigurationProvider)
-				.From(DateTime.MinValue.AddDays(10))
+			return Create.New.Event()
+				.StartingAt(DateTime.MinValue.AddDays(10))
 				.To(DateTime.MinValue)
 				.AtLocation("somewhere")
 				.TheTopicIs("techno babble");
@@ -104,8 +104,8 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		protected override Post CreatePost()
 		{
-			return Create.New.Event(ConfigurationProvider)
-				.From(DateTime.MinValue)
+			return Create.New.Event()
+				.StartingAt(DateTime.MinValue)
 				.To(DateTime.MinValue.AddDays(10))
 				.AtLocation("somewhere")
 				.LocationIsUnknown()

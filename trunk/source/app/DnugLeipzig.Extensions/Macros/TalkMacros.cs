@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using DnugLeipzig.Definitions;
-using DnugLeipzig.Definitions.Configuration.Plugins;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Plugins.Talks;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
