@@ -24,12 +24,12 @@ namespace DnugLeipzig.Runtime.Mapping
 
 			public void AutoConvertTo<TTo>(Expression<Func<TResultType, TTo>> result)
 			{
-				_mapper.Add(new ClassMapperStep<TSourceType, TFrom, TResultType, TTo>(_source, result));
+				_mapper.Add(new TypeMapperStep<TSourceType, TFrom, TResultType, TTo>(_source, result));
 			}
 
 			public void To(Expression<Func<TResultType, TFrom>> result)
 			{
-				_mapper.Add(new ClassMapperStep<TSourceType, TFrom, TResultType, TFrom>(_source, result));
+				_mapper.Add(new TypeMapperStep<TSourceType, TFrom, TResultType, TFrom>(_source, result));
 			}
 		}
 		#endregion

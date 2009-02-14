@@ -118,7 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mapping\TypeMapper.cs" />
-    <Compile Include="Mapping\ClassMapperStep.cs" />
+    <Compile Include="Mapping\TypeMapperStep.cs" />
     <Compile Include="Plugins\Events\DictionaryToSettings.cs" />
     <Compile Include="Plugins\Events\Validation\EventErrors.cs" />
     <Compile Include="Plugins\Events\Validation\EventValidator.cs" />
