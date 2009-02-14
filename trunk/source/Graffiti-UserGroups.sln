@@ -7,8 +7,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Scripts", "Build Scri
 		..\default.properties = ..\default.properties
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.Extensions", "app\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj", "{43CDFC01-CED1-484C-A74B-B9746A670100}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{80EB3C62-C3AE-4240-BE42-70C007F6821F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{80AA3029-84FE-4694-9A13-CBFC3BFB85A1}"
@@ -23,10 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.DemoSite", "app
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.Definitions.Tests", "test\DnugLeipzig.Definitions.Tests\DnugLeipzig.Definitions.Tests.csproj", "{2FB6553B-34BA-4A75-9E88-E82F3D3C1891}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DnugLeipzig.Theme", "app\DnugLeipzig.Theme", "{256F19B3-7288-42B1-82F0-3BC4D284891E}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DnugLeipzig.Theme", "app\DnugLeipzig.Theme\", "{256F19B3-7288-42B1-82F0-3BC4D284891E}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "3.5"
-		ProjectReferences = "{47E83768-1722-4F4C-BA0E-CA313AE6B11D}|DnugLeipzig.DemoSite.dll;{43CDFC01-CED1-484C-A74B-B9746A670100}|DnugLeipzig.Extensions.dll;{1C5C989B-CE0B-4DC3-AF43-96B114838D08}|DnugLeipzig.Definitions.dll;{7F147039-28C6-4CE6-B134-4A94E90BA183}|DnugLeipzig.Runtime.dll;"
+		ProjectReferences = "{47E83768-1722-4F4C-BA0E-CA313AE6B11D}|DnugLeipzig.DemoSite.dll;{1C5C989B-CE0B-4DC3-AF43-96B114838D08}|DnugLeipzig.Definitions.dll;{7F147039-28C6-4CE6-B134-4A94E90BA183}|DnugLeipzig.Runtime.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/DnugLeipzig.Theme"
 		Debug.AspNetCompiler.PhysicalPath = "app\DnugLeipzig.Theme\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\DnugLeipzig.Theme\"
@@ -58,10 +56,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{43CDFC01-CED1-484C-A74B-B9746A670100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{43CDFC01-CED1-484C-A74B-B9746A670100}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{43CDFC01-CED1-484C-A74B-B9746A670100}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{43CDFC01-CED1-484C-A74B-B9746A670100}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC3CAE00-FF7B-4B38-AAE1-FA8F385D1242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC3CAE00-FF7B-4B38-AAE1-FA8F385D1242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC3CAE00-FF7B-4B38-AAE1-FA8F385D1242}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -105,7 +99,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{43CDFC01-CED1-484C-A74B-B9746A670100} = {80EB3C62-C3AE-4240-BE42-70C007F6821F}
 		{1C5C989B-CE0B-4DC3-AF43-96B114838D08} = {80EB3C62-C3AE-4240-BE42-70C007F6821F}
 		{7F147039-28C6-4CE6-B134-4A94E90BA183} = {80EB3C62-C3AE-4240-BE42-70C007F6821F}
 		{47E83768-1722-4F4C-BA0E-CA313AE6B11D} = {80EB3C62-C3AE-4240-BE42-70C007F6821F}

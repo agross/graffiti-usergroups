@@ -60,14 +60,9 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="EventSortingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\app\DnugLeipzig.Extensions\DnugLeipzig.Extensions.csproj">
-      <Project>{43CDFC01-CED1-484C-A74B-B9746A670100}</Project>
-      <Name>DnugLeipzig.Extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DnugLeipzig.ForTesting\DnugLeipzig.ForTesting.csproj">
       <Project>{6793C240-F450-448C-922D-B8D5AF771E98}</Project>
       <Name>DnugLeipzig.ForTesting</Name>

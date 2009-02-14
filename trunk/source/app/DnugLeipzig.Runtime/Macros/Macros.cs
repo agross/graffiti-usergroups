@@ -7,7 +7,7 @@ using DnugLeipzig.Definitions.Repositories;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions.Macros
+namespace DnugLeipzig.Runtime.Macros
 {
 	public abstract class Macros<TConfiguration> where TConfiguration : IPluginConfigurationProvider
 	{

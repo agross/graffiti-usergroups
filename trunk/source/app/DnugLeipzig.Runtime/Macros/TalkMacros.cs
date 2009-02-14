@@ -6,12 +6,11 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Plugins.Talks;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.DataObjects;
 using DnugLeipzig.Extensions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions.Macros
+namespace DnugLeipzig.Runtime.Macros
 {
 	[Chalk("talks")]
 	public class TalkMacros : Macros<ITalkPluginConfigurationProvider>

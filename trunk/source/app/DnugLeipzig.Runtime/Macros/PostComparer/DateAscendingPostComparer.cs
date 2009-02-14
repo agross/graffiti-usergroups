@@ -5,7 +5,7 @@ using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions
+namespace DnugLeipzig.Runtime.Macros.PostComparer
 {
 	internal class DateAscendingPostComparer : IComparer<Post>
 	{

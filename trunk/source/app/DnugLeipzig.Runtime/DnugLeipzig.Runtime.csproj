@@ -48,6 +48,7 @@
       <HintPath>..\..\..\lib\Graffiti\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -117,6 +118,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Macros\EventMacros.cs" />
+    <Compile Include="Macros\Extensions\PostExtensions.cs" />
+    <Compile Include="Macros\Extensions\PostFilterExtensions.cs" />
+    <Compile Include="Macros\Macros.cs" />
+    <Compile Include="Macros\PastPostInfo.cs" />
+    <Compile Include="Macros\PostComparer\DateAscendingPostComparer.cs" />
+    <Compile Include="Macros\PostComparer\DateDescendingPostComparer.cs" />
+    <Compile Include="Macros\TalkMacros.cs" />
+    <Compile Include="Macros\UiMacros.cs" />
+    <Compile Include="Macros\Util.cs" />
     <Compile Include="Mapping\TypeMapper.cs" />
     <Compile Include="Mapping\TypeMapperStep.cs" />
     <Compile Include="Plugins\Events\DictionaryToSettings.cs" />
@@ -134,9 +145,6 @@
     <Compile Include="Plugins\Talks\Validation\SettingsValidator.cs" />
     <Compile Include="Plugins\Talks\Validation\SettingsErrors.cs" />
     <Compile Include="Plugins\Talks\TalkPlugin.Fields.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Macros\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

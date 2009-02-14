@@ -84,6 +84,7 @@
     <Compile Include="Handlers\CalendarHandlerSpec.cs" />
     <Compile Include="Handlers\RegistrationHandlerSpec.cs" />
     <Compile Include="Commands\CommandFactorySpec.cs" />
+    <Compile Include="Macros\PostComparer\EventSortingTests.cs" />
     <Compile Include="Plugins\Events\EventPluginSpec.cs" />
     <Compile Include="Plugins\Events\PostDefaultsTests.cs" />
     <Compile Include="Plugins\Events\Validation\EventValidatorSpec.cs" />
