@@ -10,6 +10,7 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Logging;
+using DnugLeipzig.Runtime.Plugins.Events;
 using DnugLeipzig.Runtime.Plugins.Events.Validation;
 using DnugLeipzig.Runtime.Plugins.Talks.Validation;
 
@@ -43,7 +44,7 @@ namespace DnugLeipzig.Container.Tests
 		[Test]
 		public void It_should_be_able_to_create_instances_of_registered_types()
 		{
-			IList<Type> typesWithUnsatisfyableCtors = new List<Type> { typeof(EventValidator), typeof(TalkValidator) };
+			IList<Type> typesWithUnsatisfyableCtors = new List<Type> { typeof(EventValidator), typeof(TalkValidator), typeof(EventPlugin) };
 
 			Array.ForEach(_sut,
 			              handler =>
