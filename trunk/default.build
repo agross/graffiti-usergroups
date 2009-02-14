@@ -46,6 +46,10 @@
 		</code>
 	</script>
 
+	<target name="quick">
+		<property name="quick" value="true"/>
+	</target>
+
 	<target name="all"
 			depends="build-app, build-theme, run-tests, run-coverage, build-setup"
 			description="Compiles the application, runs all unit tests and creates deployment packages.">
@@ -74,7 +78,8 @@
 	<!-- Cleanup.
 	________________________________________________________________________________________________________________ -->
 	<target name="clean"
-			description="Removes build artifacts.">
+			description="Removes build artifacts."
+			unless="${property::exists('quick')}">
 		
 		<tc-progress message="Cleaning up"
 					 type="Start" />
@@ -244,7 +249,8 @@
 
 	<target name="build-tests"
 			depends="build-app"
-			description="Compiles the applications' unit tests.">
+			description="Compiles the applications' unit tests."
+			unless="${property::exists('quick')}">
 		<foreach item="File"
 				 property="testproject">
 			<in>
@@ -270,7 +276,8 @@
 
 	<target name="run-tests"
 			depends="init-run-tests"
-			description="Runs the applications' unit tests.">
+			description="Runs the applications' unit tests."
+			unless="${property::exists('quick')}">
 		<tc-progress message="Running tests"
 					 type="Start" />
 		
