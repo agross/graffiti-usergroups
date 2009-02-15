@@ -396,7 +396,46 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		}
 	}
 
-	public class When_an_event_registration_request_is_received_for_an_event_that_is_not_allowed_to_be_registered_for : With_event_registration_service
+	public class When_an_event_registration_request_is_received_and_the_registration_has_not_begun : With_event_registration_service
+	{
+		protected override void Establish_context()
+		{
+			base.Establish_context();
+
+			foreach (int eventId in Command.EventsToRegister)
+			{
+				Repository.Stub(x => x.GetById(eventId))
+					.Return(Create.New.Event()
+								.Id(eventId)
+								.StartingAt(new DateTime(2009, 02, 01))
+								.RegistrationStartingAt(new DateTime(2009, 01, 01)));
+			}
+
+			Clock.Stub(x => x.Now).Return(new DateTime(2008, 12, 31));
+		}
+
+		protected override IEventRegistrationCommand CreateCommand()
+		{
+			return Create.New.EventRegistration()
+				.Register(new[] { 42 })
+				.WithEmail("foo@bar.com")
+				.Build();
+		}
+
+		[Test]
+		public void It_should_fail()
+		{
+			Assert.IsTrue(Result[0].ErrorOccurred);
+		}
+	
+		[Test]
+		public void It_should_indicate_which_event_id_the_registration_failed()
+		{
+			Assert.AreEqual(42, Result[0].EventId);
+		}
+	}
+	
+	public class When_an_event_registration_request_is_received_and_the_registration_has_ended : With_event_registration_service
 	{
 		protected override void Establish_context()
 		{
@@ -411,7 +450,47 @@ namespace DnugLeipzig.Runtime.Tests.Services
 								.RegistrationUntil(new DateTime(2009, 01, 10)));
 			}
 
-			Clock.Stub(x => x.Now).Return(new DateTime(2008, 12, 31));
+			Clock.Stub(x => x.Now).Return(new DateTime(2009, 01, 11));
+		}
+
+		protected override IEventRegistrationCommand CreateCommand()
+		{
+			return Create.New.EventRegistration()
+				.Register(new[] { 42 })
+				.WithEmail("foo@bar.com")
+				.Build();
+		}
+
+		[Test]
+		public void It_should_fail()
+		{
+			Assert.IsTrue(Result[0].ErrorOccurred);
+		}
+	
+		[Test]
+		public void It_should_indicate_which_event_id_the_registration_failed()
+		{
+			Assert.AreEqual(42, Result[0].EventId);
+		}
+	}
+	
+	public class When_an_event_registration_request_is_received_and_the_event_has_not_yet_started_but_registration_is_not_allowed : With_event_registration_service
+	{
+		protected override void Establish_context()
+		{
+			base.Establish_context();
+
+			foreach (int eventId in Command.EventsToRegister)
+			{
+				Repository.Stub(x => x.GetById(eventId))
+					.Return(Create.New.Event()
+								.Id(eventId)
+								.StartingAt(new DateTime(2009, 01, 30))
+								.RegistrationStartingAt(new DateTime(2009, 01, 01))
+								.RegistrationUntil(new DateTime(2009, 01, 10)));
+			}
+
+			Clock.Stub(x => x.Now).Return(new DateTime(2009, 1, 15));
 		}
 
 		protected override IEventRegistrationCommand CreateCommand()
