@@ -4,7 +4,7 @@ using DnugLeipzig.Definitions.Extensions;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions.Extensions
+namespace DnugLeipzig.Runtime.Macros.Extensions
 {
 	internal static class PostExtensions
 	{

@@ -6,7 +6,7 @@ using DnugLeipzig.Runtime.Macros.PostComparer;
 
 using Graffiti.Core;
 
-namespace DnugLeipzig.Extensions.Extensions
+namespace DnugLeipzig.Runtime.Macros.Extensions
 {
 	internal static class PostFilterExtensions
 	{
