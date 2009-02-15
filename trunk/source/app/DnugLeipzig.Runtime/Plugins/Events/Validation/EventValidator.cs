@@ -10,18 +10,11 @@ namespace DnugLeipzig.Runtime.Plugins.Events.Validation
 	{
 		public EventValidator(IEventPluginConfigurationProvider config)
 		{
-			If(x => x[config.StartDateField].HasValue() && !x[config.StartDateField].IsDate())
-				.AddNotification(EventErrors.InvalidDate(config.StartDateField));
-
-			If(x => x[config.EndDateField].HasValue() && !x[config.EndDateField].IsDate())
-				.AddNotification(EventErrors.InvalidDate(config.EndDateField));
-
+			RequireValidDateRangeWithOptionalValues(config.StartDateField, config.EndDateField);
 			If(x => x[config.EndDateField].HasValue() && !x[config.StartDateField].HasValue())
 				.AddNotification(EventErrors.StartDateIsRequiredWhenEndDateIsSet(config.StartDateField));
 
-			If(x => x[config.StartDateField].IsDate() && x[config.EndDateField].IsDate() &&
-			        x[config.StartDateField].ToDate() > x[config.EndDateField].ToDate())
-				.AddNotification(EventErrors.StartDateMustBeBeforeEndDate(config.StartDateField, config.EndDateField));
+			RequireValidDateRangeWithOptionalValues(config.EarliestRegistrationField, config.LatestRegistrationField);
 
 			If(x => x[config.MaximumNumberOfRegistrationsField].HasValue() &&
 			        !x[config.MaximumNumberOfRegistrationsField].ToInt(int.MinValue).IsInRange(0, int.MaxValue))
@@ -31,6 +24,19 @@ namespace DnugLeipzig.Runtime.Plugins.Events.Validation
 			If(x => x[config.RegistrationRecipientField].HasValue() &&
 			        !x[config.RegistrationRecipientField].IsEmail())
 				.AddNotification(EventErrors.InvalidRegistrationRecipientEmail(config.RegistrationRecipientField));
+		}
+
+		void RequireValidDateRangeWithOptionalValues(string startDateField, string endDateField)
+		{
+			If(x => x[startDateField].HasValue() && !x[startDateField].IsDate())
+				.AddNotification(EventErrors.InvalidDate(startDateField));
+
+			If(x => x[endDateField].HasValue() && !x[endDateField].IsDate())
+				.AddNotification(EventErrors.InvalidDate(endDateField));
+
+			If(x => x[startDateField].IsDate() && x[endDateField].IsDate() &&
+			        x[startDateField].ToDate() > x[endDateField].ToDate())
+				.AddNotification(EventErrors.StartDateMustBeBeforeEndDate(startDateField, endDateField));
 		}
 	}
 }

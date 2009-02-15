@@ -14,9 +14,19 @@ namespace DnugLeipzig.ForTesting
 
 		protected override void Establish_context()
 		{
+			base.Establish_context();
+			Mocks.BackToRecordAll();
 			Container = new AutoMockingContainer(Mocks);
 			Container.Initialize();
 			IoC.Initialize(Container);
+		}
+		
+		protected override void Cleanup_after()
+		{
+			base.Cleanup_after();
+
+			IoC.Reset();
+			Container.Dispose();
 		}
 	}
 }

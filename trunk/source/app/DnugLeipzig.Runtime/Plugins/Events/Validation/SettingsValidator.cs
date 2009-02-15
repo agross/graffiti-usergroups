@@ -29,6 +29,12 @@ namespace DnugLeipzig.Runtime.Plugins.Events.Validation
 
 			IfNot(x => x.YearQueryString.HasValue())
 				.AddNotification(SettingsErrors.YearQueryStringIsMissing);
+			
+			IfNot(x => x.EarliestRegistration.HasValue())
+				.AddNotification(SettingsErrors.EarliestRegistrationFieldIsMissing);
+	
+			IfNot(x => x.LatestRegistration.HasValue())
+				.AddNotification(SettingsErrors.LatestRegistrationFieldIsMissing);
 		}
 	}
 }

@@ -21,6 +21,8 @@ namespace DnugLeipzig.Runtime.Plugins.Migration
 			MaximumNumberOfRegistrationsField = source.MaximumNumberOfRegistrationsField;
 			RegistrationListField = source.RegistrationListField;
 			CategoryName = source.CategoryName;
+			EarliestRegistrationField = source.EarliestRegistrationField;
+			LatestRegistrationField = source.LatestRegistrationField;
 		}
 
 		public string SpeakerField
@@ -72,6 +74,18 @@ namespace DnugLeipzig.Runtime.Plugins.Migration
 		}
 
 		public string RegistrationListField
+		{
+			get;
+			protected set;
+		}
+
+		public string EarliestRegistrationField
+		{
+			get;
+			protected set;
+		}
+
+		public string LatestRegistrationField
 		{
 			get;
 			protected set;
@@ -133,6 +147,18 @@ namespace DnugLeipzig.Runtime.Plugins.Migration
 				       	{
 				       		new Guid("{6741A2DA-6B1E-481c-B139-A0043AEC0EE0}"),
 				       		new FieldInfo(RegistrationListField, FieldType.TextArea, "The list of registered attendees.")
+				       		},
+				       	{
+				       		new Guid("{6741B2DA-6B1E-481c-B139-A0043AEC0EE0}"),
+				       		new FieldInfo(EarliestRegistrationField,
+				       		              FieldType.TextBox,
+				       		              "The date the registration starts. Leave empty to allow registrations from now on.")
+				       		},
+				       	{
+				       		new Guid("{674CA2DA-6B1E-481c-B139-A0043AEC0EE0}"),
+				       		new FieldInfo(LatestRegistrationField,
+				       		              FieldType.TextBox,
+				       		              "The date the registration ends. Leave empty to allow registrations until the event starts.")
 				       		}
 				       };
 			}

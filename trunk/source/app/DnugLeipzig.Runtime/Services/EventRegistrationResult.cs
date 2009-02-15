@@ -74,5 +74,14 @@ namespace DnugLeipzig.Runtime.Services
 		{
 			return new EventRegistrationResult { ErrorOccurred = true };
 		}
+
+		public static EventRegistrationResult NotAllowedFor(Post post)
+		{
+			return new EventRegistrationResult
+			       {
+			       	Post = post,
+			       	ErrorOccurred = true
+			       };
+		}
 	}
 }

@@ -10,6 +10,7 @@ using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Runtime.Macros;
+using DnugLeipzig.Runtime.Macros.Extensions;
 
 using Graffiti.Core;
 
@@ -38,6 +39,8 @@ namespace DnugLeipzig.Runtime.Services
 		                                           | RegexOptions.IgnorePatternWhitespace
 		                                           | RegexOptions.Compiled);
 
+		readonly IClock _clock;
+
 		readonly IGraffitiEmailContext _emailContext;
 		readonly IEmailSender _emailSender;
 		readonly string _registrationEmailTemplate;
@@ -46,12 +49,14 @@ namespace DnugLeipzig.Runtime.Services
 		public EventRegistrationService(ICategorizedPostRepository<IEventPluginConfigurationProvider> repository,
 		                                IGraffitiEmailContext emailContext,
 		                                IEmailSender emailSender,
-		                                string registrationEmailTemplate)
+		                                string registrationEmailTemplate,
+		                                IClock clock)
 		{
 			_repository = repository;
 			_emailContext = emailContext;
 			_emailSender = emailSender;
 			_registrationEmailTemplate = registrationEmailTemplate;
+			_clock = clock;
 		}
 
 		#region Implementation of IEventRegistrationService
@@ -156,6 +161,21 @@ namespace DnugLeipzig.Runtime.Services
 				// registrations. This does not prevent the CMS itself to work with the post, though.
 				lock (PostLock)
 				{
+					if (!post.RegistrationPossible(_repository.Configuration.RegistrationListField,
+					                               _repository.Configuration.MaximumNumberOfRegistrationsField,
+					                               _repository.Configuration.EarliestRegistrationField,
+					                               _repository.Configuration.LatestRegistrationField,
+					                               _repository.Configuration.StartDateField,
+												   _clock))
+					{
+						Logger.Warn(Create.New
+						            	.LogMessage()
+						            	.WithTitle(
+						            	"Received a registration for an event for which registration has been disabled. Event ID {0}",
+						            	eventId));
+						return EventRegistrationResult.NotAllowedFor(post);
+					}
+
 					var entries = EmailLines.Matches(post[_repository.Configuration.RegistrationListField] ?? String.Empty);
 
 					string[] lines = new string[entries.Count + 1];

@@ -20,6 +20,12 @@ namespace DnugLeipzig.Runtime.Plugins.Events.Validation
 		public static readonly INotification YearQueryStringIsMissing =
 			new ValidationError("Please enter a year query string parameter.");
 
+		public static INotification EarliestRegistrationFieldIsMissing =
+			new ValidationError("Please enter a value for the earliest registration field.");
+	
+		public static INotification LatestRegistrationFieldIsMissing =
+			new ValidationError("Please enter a value for the latest registration field.");
+
 		public static INotification CategoryDoesNotExist(Settings instance)
 		{
 			return new ValidationWarning(String.Format("The category '{0}' does not exist.",

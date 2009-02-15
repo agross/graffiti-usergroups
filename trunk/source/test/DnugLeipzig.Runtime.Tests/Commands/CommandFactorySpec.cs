@@ -1,4 +1,3 @@
-using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Commands;
@@ -31,12 +30,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 
 			Container.Mark<TCommand>().Stubbed();
 			_factory = new CommandFactory();
-		}
-
-		protected override void Cleanup_after()
-		{
-			IoC.Container.Dispose();
-			IoC.Reset();
 		}
 
 		[Test]

@@ -98,6 +98,7 @@
     <Compile Include="Repositories\ICalendarItem.cs" />
     <Compile Include="Repositories\ICalendarItemRepository.cs" />
     <Compile Include="Repositories\ICategorizedPostRepository.cs" />
+    <Compile Include="Services\IClock.cs" />
     <Compile Include="Services\IEventRegistrationResult.cs" />
     <Compile Include="Services\IEventRegistrationResultList.cs" />
     <Compile Include="GraffitiIntegration\IGraffitiEmailContext.cs" />

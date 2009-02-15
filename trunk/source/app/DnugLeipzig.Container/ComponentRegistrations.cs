@@ -21,8 +21,6 @@ using DnugLeipzig.Runtime.Plugins.Talks;
 using DnugLeipzig.Runtime.Repositories;
 using DnugLeipzig.Runtime.Services;
 
-using Graffiti.Core;
-
 namespace DnugLeipzig.Container
 {
 	public static class ComponentRegistrations
@@ -30,6 +28,9 @@ namespace DnugLeipzig.Container
 		public static IEnumerable<IRegistration> Get()
 		{
 			Assembly runtime = typeof(Command).Assembly;
+
+			yield return Component.For<IClock>()
+				.ImplementedBy<Clock>();
 
 			// Mapper.
 			yield return AllTypes.Of(typeof(IMapper<,>))
