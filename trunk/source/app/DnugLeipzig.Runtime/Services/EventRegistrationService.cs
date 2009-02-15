@@ -9,6 +9,7 @@ using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.Definitions.Services;
+using DnugLeipzig.Runtime.Macros;
 
 using Graffiti.Core;
 
@@ -92,8 +93,7 @@ namespace DnugLeipzig.Runtime.Services
 		{
 			IGraffitiEmailContext context = _emailContext;
 			context.Put("request", HttpContext.Current.Request);
-			// TODO: Put the macros
-			//			mailContext.Put("events", new EventMacros());
+			context.Put("events", new EventMacros());
 			context.Put("formOfAddress", HttpUtility.HtmlEncode(command.FormOfAddress));
 			context.Put("name", HttpUtility.HtmlEncode(command.Name));
 			context.Put("occupation", HttpUtility.HtmlEncode(command.Occupation));
