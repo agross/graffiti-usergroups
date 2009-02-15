@@ -3,23 +3,9 @@
 <title></title>
 </head>
 <body>
-	#if($formOfAddress == "mr")
-		#set($formOfAddressText = "Mr")
-	#else
-		#set($formOfAddressText = "Mrs")
-	#end
-	
-	#if($occupation == "student")
-		#set($occupationText = "Student")
-	#elseif($occupation == "researcher")
-		#set($occupationText = "Researcher")
-	#else
-		#set($occupationText = "Other")
-	#end
-
 	#if ($isCcToAttendee)
 		<p>
-			Dear $formOfAddressText $name,
+			Dear $formOfAddress $name,
 		</p>
 		<p>
 			As requested you receive a copy of your registration for the following event.
@@ -55,11 +41,11 @@
 	<p>
 		<ul>
 			<li>
-				Form of address: $formOfAddressText</li>
+				Form of address: $formOfAddress</li>
 			<li>
 				Name: $name</li>
 			<li>
-				Occupation: $occupationText</li>
+				Occupation: $occupation</li>
 			<li>
 				E-mail: <a href="mailto:$attendeeEMail">$attendeeEMail</a></li>
 			<li>
