@@ -5,7 +5,6 @@ using System.Web;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Extensions;
-using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Mapping;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
@@ -42,6 +41,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
+			EarliestRegistrationField = "Earliest registration date";
+			LatestRegistrationField = "Latest registration date";
 		}
 
 		/// <summary>
@@ -99,6 +100,18 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 
 		#region IEventPluginConfigurationProvider Members
 		public string DefaultLocation
+		{
+			get;
+			set;
+		}
+
+		public string EarliestRegistrationField
+		{
+			get;
+			set;
+		}
+
+		public string LatestRegistrationField
 		{
 			get;
 			set;
@@ -325,6 +338,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 				DefaultMaximumNumberOfRegistrations = settings.DefaultMaximumNumberOfRegistrations;
 				RegistrationListField = settings.RegistrationList;
 				RegistrationMailSubject = settings.RegistrationMailSubject;
+				EarliestRegistrationField = settings.EarliestRegistration;
+				LatestRegistrationField = settings.LatestRegistration;
 
 				newState = CreateMemento();
 			}
@@ -377,6 +392,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			nvc[Fields.DefaultMaximumNumberOfRegistrations] = DefaultMaximumNumberOfRegistrations;
 			nvc[Fields.RegistrationList] = RegistrationListField;
 			nvc[Fields.RegistrationMailSubject] = RegistrationMailSubject;
+			nvc[Fields.EarliestRegistration] = EarliestRegistrationField;
+			nvc[Fields.LatestRegistration] = LatestRegistrationField;
 
 			return nvc;
 		}

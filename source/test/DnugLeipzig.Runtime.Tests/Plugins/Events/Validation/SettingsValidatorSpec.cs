@@ -219,6 +219,86 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events.Validation
 		}
 	}
 
+	public class When_the_plugin_settings_are_validated_and_the_earliest_registration_is_checked : With_existing_category
+	{
+		void Because(string earliestRegistration)
+		{
+			base.Because();
+
+			Settings.EarliestRegistration = earliestRegistration;
+
+			_report = _sut.Validate(Settings);
+		}
+
+		[RowTest]
+		[Row("earliest")]
+		public void It_should_accept_valid_values(string earliestRegistration)
+		{
+			Because(earliestRegistration);
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_return_an_error_message_for_invalid_values(string earliestRegistration)
+		{
+			Because(earliestRegistration);
+			Assert.AreEqual("Please enter a value for the earliest registration field.", _report.First().Message);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_reject_invalid_values(string earliestRegistration)
+		{
+			Because(earliestRegistration);
+			Assert.AreEqual(Severity.Error, _report.First().Severity);
+		}
+	}
+	
+	public class When_the_plugin_settings_are_validated_and_the_latest_registration_is_checked : With_existing_category
+	{
+		void Because(string latestRegistration)
+		{
+			base.Because();
+
+			Settings.LatestRegistration = latestRegistration;
+
+			_report = _sut.Validate(Settings);
+		}
+
+		[RowTest]
+		[Row("latest")]
+		public void It_should_accept_valid_values(string latestRegistration)
+		{
+			Because(latestRegistration);
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_return_an_error_message_for_invalid_values(string latestRegistration)
+		{
+			Because(latestRegistration);
+			Assert.AreEqual("Please enter a value for the latest registration field.", _report.First().Message);
+		}
+
+		[RowTest]
+		[Row(null)]
+		[Row("")]
+		[Row("    ")]
+		public void It_should_reject_invalid_values(string latestRegistration)
+		{
+			Because(latestRegistration);
+			Assert.AreEqual(Severity.Error, _report.First().Severity);
+		}
+	}
+
 	public abstract class With_existing_category : Spec
 	{
 		protected ValidationReport _report;
@@ -248,7 +328,9 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events.Validation
 			           	YearQueryString = "year query string",
 			           	DefaultMaximumNumberOfRegistrations = "42",
 			           	CreateTargetCategoryAndFields = false,
-			           	MigrateFieldValues = false
+			           	MigrateFieldValues = false,
+						EarliestRegistration = "earliest",
+						LatestRegistration = "latest"
 			           };
 			// TODO
 			//					DateFormat = "dateFormat";

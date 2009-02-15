@@ -1,6 +1,8 @@
 using System;
 
+using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Extensions;
+using DnugLeipzig.Definitions.Services;
 
 using Graffiti.Core;
 
@@ -8,47 +10,64 @@ namespace DnugLeipzig.Runtime.Macros.Extensions
 {
 	internal static class PostExtensions
 	{
-		#region Date/Time Related
-		public static bool HasDate(this Post post, string dateFieldName)
+		static readonly IClock Clock = IoC.Resolve<IClock>();
+
+		public static bool HasDate(this Post post, string dateField)
 		{
-			return post[dateFieldName].IsDate();
+			return post[dateField].IsDate();
 		}
 
-		public static bool IsInPastYear(this Post post, string dateFieldName)
+		public static bool IsInPastYear(this Post post, string dateField)
 		{
-			return post[dateFieldName].AsEventDate().Year < DateTime.Now.Year;
+			return post[dateField].AsEventDate().Year < DateTime.Now.Year;
 		}
 
-		public static bool IsInPast(this Post post, string dateFieldName)
+		public static bool IsInPast(this Post post, string dateField)
 		{
-			return post[dateFieldName].AsEventDate().Date < DateTime.Now.Date;
+			return post[dateField].AsEventDate().Date < DateTime.Now.Date;
 		}
 
-		public static bool IsInFuture(this Post post, string dateFieldName)
+		public static bool IsInFuture(this Post post, string dateField)
 		{
-			return post[dateFieldName].AsEventDate().Date >= DateTime.Now.Date;
+			return post[dateField].AsEventDate().Date >= DateTime.Now.Date;
 		}
 
-		public static bool IsInYear(this Post post, string dateFieldName, DateTime year)
+		public static bool IsInYear(this Post post, string dateField, DateTime year)
 		{
-			return post[dateFieldName].AsEventDate().Year == year.Year;
+			return post[dateField].AsEventDate().Year == year.Year;
 		}
-		#endregion
 
-		public static bool RegistrationNeeded(this Post post, string registrationNeededFieldName)
+		public static bool RegistrationNeeded(this Post post, string registrationNeededField)
 		{
-			return post[registrationNeededFieldName].IsSelected();
+			return post[registrationNeededField].IsSelected();
 		}
 
 		public static bool RegistrationPossible(this Post post,
-		                                        string numberOfRegistrationsFieldName,
-		                                        string maximumNumberOfRegistrationsFieldName)
+		                                        string numberOfRegistrationsField,
+		                                        string maximumNumberOfRegistrationsField,
+		                                        string earliestRegistrationField,
+		                                        string latestRegistrationField,
+		                                        string startDate,
+		                                        IClock clock)
 		{
 			// Registration is always possible, but attendees will be notified if they are on the waiting list.
-			return true;
+			//return post[numberOfRegistrationsField].ToInt(0) <
+			//       post[maximumNumberOfRegistrationsField].ToInt(int.MaxValue);
 
-			//return post[numberOfRegistrationsFieldName].ToInt(0) <
-			//       post[maximumNumberOfRegistrationsFieldName].ToInt(int.MaxValue);
+			if (!post[earliestRegistrationField].HasValue() || !post[latestRegistrationField].HasValue())
+			{
+				return true;
+			}
+
+			DateTime earliest = post[earliestRegistrationField].ToDate(DateTime.MinValue);
+			DateTime latest = post[latestRegistrationField].ToDate(DateTime.MaxValue);
+			DateTime eventStart = post[startDate].AsEventDate();
+			if (latest > eventStart)
+			{
+				latest = eventStart;
+			}
+
+			return Clock.Now.IsInRange(earliest, latest);
 		}
 	}
 }

@@ -51,6 +51,10 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 				.To(x => x.RegistrationList);
 			From(x => x[EventPlugin.Fields.RegistrationMailSubject])
 				.To(x => x.RegistrationMailSubject);
+			From(x => x[EventPlugin.Fields.EarliestRegistration])
+				.To(x => x.EarliestRegistration);
+			From(x => x[EventPlugin.Fields.LatestRegistration])
+				.To(x => x.LatestRegistration);
 		}
 	}
 }

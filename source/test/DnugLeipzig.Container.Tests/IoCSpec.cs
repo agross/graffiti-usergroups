@@ -10,7 +10,6 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands;
 using DnugLeipzig.ForTesting;
 using DnugLeipzig.Runtime.Logging;
-using DnugLeipzig.Runtime.Plugins.Events;
 using DnugLeipzig.Runtime.Plugins.Events.Validation;
 using DnugLeipzig.Runtime.Plugins.Talks.Validation;
 

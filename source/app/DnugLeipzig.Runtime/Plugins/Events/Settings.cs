@@ -121,5 +121,17 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			get;
 			set;
 		}
+
+		public string EarliestRegistration
+		{
+			get;
+			set;
+		}
+
+		public string LatestRegistration
+		{
+			get;
+			set;
+		}
 	}
 }

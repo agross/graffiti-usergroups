@@ -27,6 +27,8 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			internal const string StartDate = "startDateField";
 			internal const string UnknownText = "unknownText";
 			internal const string YearQueryString = "yearQueryString";
+			internal const string EarliestRegistration = "earliesRegistration";
+			internal const string LatestRegistration = "latestRegistration";
 
 			public static FormElementCollection AsFormElements()
 			{
@@ -91,6 +93,12 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 				       	new TextFormElement(RegistrationList,
 				       	                    "\"Registration list\" field",
 				       	                    "Enter the name of the custom multi-line textbox field to store registration information like the attendees' e-mail addresses, e.g. \"Registration list\"."),
+						new TextFormElement(EarliestRegistration,
+				       	                    "\"Earliest registration date\" field",
+				       	                    "Enter the name of the custom text field to store the date for the earliest possible registration, e.g. \"Earliest registration date\"."),
+						new TextFormElement(LatestRegistration,
+				       	                    "\"Latest registration date\" field",
+				       	                    "Enter the name of the custom text field to store the date for the latest possible registration, e.g. \"Latest registration date\"."),
 				       	new TextFormElement(YearQueryString,
 				       	                    "Query string parameter for paging by year",
 				       	                    "Enter a value for the query string parameter used to display talks of a specific year.")

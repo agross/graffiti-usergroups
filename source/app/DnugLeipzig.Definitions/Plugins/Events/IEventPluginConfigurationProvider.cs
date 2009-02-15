@@ -66,5 +66,15 @@ namespace DnugLeipzig.Definitions.Plugins.Events
 		{
 			get;
 		}
+
+		string EarliestRegistrationField
+		{
+			get;
+		}
+
+		string LatestRegistrationField
+		{
+			get;
+		}
 	}
 }

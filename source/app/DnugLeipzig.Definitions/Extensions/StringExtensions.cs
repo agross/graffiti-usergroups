@@ -44,16 +44,15 @@ namespace DnugLeipzig.Definitions.Extensions
 		{
 			return DateTime.Parse(value);
 		}
+		
+		public static DateTime ToDate(this string value, DateTime defaultValue)
+		{
+			return value.IsDate() ? DateTime.Parse(value) : defaultValue;
+		}
 
 		public static DateTime AsEventDate(this string value)
 		{
-			DateTime date;
-			if (DateTime.TryParse(value, out date))
-			{
-				return date;
-			}
-
-			return DateTime.MaxValue;
+			return value.ToDate(DateTime.MaxValue);
 		}
 
 		public static bool IsInt(this string value)

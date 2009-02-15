@@ -220,5 +220,127 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events.Validation
 
 			Assert.IsTrue(_report.HasErrors);
 		}
+
+		[RowTest]
+		[Row("")]
+		[Row("     ")]
+		[Row(null)]
+		public void It_should_accept_empty_registration_start_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(date));
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("2008/2/3")]
+		[Row("2008/2/3 8:00 AM")]
+		[Row("3.2.2008 8:00")]
+		public void It_should_accept_valid_registration_start_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(date)
+				);
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("invalid value")]
+		public void It_should_reject_invalid_registration_start_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(date));
+
+			Assert.IsTrue(_report.HasErrors);
+		}
+		
+		[RowTest]
+		[Row("")]
+		[Row("     ")]
+		[Row(null)]
+		public void It_should_accept_empty_registration_end_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationUntil(date));
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("2008/2/3")]
+		[Row("2008/2/3 8:00 AM")]
+		[Row("3.2.2008 8:00")]
+		public void It_should_accept_valid_registration_end_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationUntil(date)
+				);
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("invalid value")]
+		public void It_should_reject_invalid_registration_end_dates(string date)
+		{
+			Because(Create.New.Event()
+						.RegistrationUntil(date));
+
+			Assert.IsTrue(_report.HasErrors);
+		}
+
+		[Test]
+		public void It_should_allow_an_empty_registration_start_date_if_the_registration_end_date_is_given()
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(null)
+						.RegistrationUntil(new DateTime(2008, 12, 11).ToString())
+				);
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("", "")]
+		[Row("   ", "    ")]
+		[Row(null, null)]
+		public void It_should_allow_empty_registration_start_and_end_dates_at_the_same_time(string startDate, string endDate)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(startDate)
+						.RegistrationUntil(endDate)
+				);
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("2008/2/3", "2008/2/3")]
+		[Row("2008/2/3", "2008/2/3 8:00 AM")]
+		[Row("2008/2/3 7:00 AM", "2008/2/3 8:00 AM")]
+		public void It_should_allow_registration_end_dates_after_the_registration_start_date(string startDate, string endDate)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(startDate)
+						.RegistrationUntil(endDate)
+				);
+
+			Assert.AreEqual(0, _report.Count);
+		}
+
+		[RowTest]
+		[Row("2008/2/3 7:00 AM", "2008/2/3")]
+		[Row("2008/2/3 7:00 AM", "2008/2/3 6:00 AM")]
+		public void It_should_reject_if_the_registration_start_date_is_greater_than_the_registration_end_date(string startDate, string endDate)
+		{
+			Because(Create.New.Event()
+						.RegistrationStartingAt(startDate)
+						.RegistrationUntil(endDate)
+				);
+
+			Assert.IsTrue(_report.HasErrors);
+		}
 	}
 }

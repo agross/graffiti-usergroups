@@ -387,7 +387,7 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		}
 
 		[Test]
-		public void It_should_indicate_that_the_registration_was_duplicated()
+		public void It_should_indicate_that_the_registration_request_was_duplicated()
 		{
 			foreach (var result in Result)
 			{
@@ -396,10 +396,55 @@ namespace DnugLeipzig.Runtime.Tests.Services
 		}
 	}
 
-	public abstract class With_event_registration_service : Spec
+	public class When_an_event_registration_request_is_received_for_an_event_that_is_not_allowed_to_be_registered_for : With_event_registration_service
+	{
+		protected override void Establish_context()
+		{
+			base.Establish_context();
+
+			foreach (int eventId in Command.EventsToRegister)
+			{
+				Repository.Stub(x => x.GetById(eventId))
+					.Return(Create.New.Event()
+								.Id(eventId)
+								.RegistrationStartingAt(new DateTime(2009, 01, 01))
+								.RegistrationUntil(new DateTime(2009, 01, 10)));
+			}
+
+			Clock.Stub(x => x.Now).Return(new DateTime(2008, 12, 31));
+		}
+
+		protected override IEventRegistrationCommand CreateCommand()
+		{
+			return Create.New.EventRegistration()
+				.Register(new[] { 42 })
+				.WithEmail("foo@bar.com")
+				.Build();
+		}
+
+		[Test]
+		public void It_should_fail()
+		{
+			Assert.IsTrue(Result[0].ErrorOccurred);
+		}
+	
+		[Test]
+		public void It_should_indicate_which_event_id_the_registration_failed()
+		{
+			Assert.AreEqual(42, Result[0].EventId);
+		}
+	}
+
+	public abstract class With_event_registration_service : With_IoC_container
 	{
 		HttpSimulator _request;
 		EventRegistrationService _sut;
+
+		protected IClock Clock
+		{
+			get;
+			private set;
+		}
 
 		protected IGraffitiEmailContext EmailContext
 		{
@@ -433,16 +478,20 @@ namespace DnugLeipzig.Runtime.Tests.Services
 
 		protected override void Establish_context()
 		{
+			base.Establish_context();
+
 			Repository = MockRepository.GenerateMock<ICategorizedPostRepository<IEventPluginConfigurationProvider>>();
 			Repository.Stub(x => x.Configuration).Return(Create.New.StubbedEventPluginConfiguration().Build());
 
 			EmailSender = MockRepository.GenerateMock<IEmailSender>();
 
 			EmailContext = MockRepository.GenerateMock<IGraffitiEmailContext>();
+			Clock = MockRepository.GenerateStub<IClock>();
 			_sut = new EventRegistrationService(Repository,
 			                                    EmailContext,
 			                                    EmailSender,
-			                                    "template.view");
+			                                    "template.view",
+												Clock);
 
 			Command = CreateCommand();
 
@@ -451,6 +500,8 @@ namespace DnugLeipzig.Runtime.Tests.Services
 
 		protected override void Cleanup_after()
 		{
+			base.Cleanup_after();
+
 			_request.Dispose();
 		}
 

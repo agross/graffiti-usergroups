@@ -19,6 +19,8 @@ namespace DnugLeipzig.ForTesting.Builders
 		string _registrationList;
 		string _startDate;
 		string _topic;
+		string _earliestRegistration;
+		string _latestRegistration;
 
 		public EventBuilder(IEventPluginConfigurationProvider configurationProvider)
 		{
@@ -39,6 +41,8 @@ namespace DnugLeipzig.ForTesting.Builders
 			result[_config.MaximumNumberOfRegistrationsField] = _maximumNumberOfRegistrations;
 			result[_config.RegistrationRecipientField] = _organizerEmail;
 			result[_config.RegistrationListField] = _registrationList;
+			result[_config.EarliestRegistrationField] = _earliestRegistration;
+			result[_config.LatestRegistrationField] = _latestRegistration;
 			return result;
 		}
 
@@ -99,6 +103,18 @@ namespace DnugLeipzig.ForTesting.Builders
 		public EventBuilder WithAttendeeList(string registrationList)
 		{
 			_registrationList = registrationList;
+			return this;
+		}
+
+		public EventBuilder RegistrationStartingAt(object date)
+		{
+			_earliestRegistration = date == null ? null : date.ToString();
+			return this;
+		}
+	
+		public EventBuilder RegistrationUntil(object date)
+		{
+			_latestRegistration = date == null ? null : date.ToString();
 			return this;
 		}
 	}

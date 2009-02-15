@@ -9,6 +9,7 @@ using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
+using DnugLeipzig.Definitions.Services;
 using DnugLeipzig.Runtime.Macros.Extensions;
 
 using Graffiti.Core;
@@ -19,12 +20,14 @@ namespace DnugLeipzig.Runtime.Macros
 	public class EventMacros : Macros<IEventPluginConfigurationProvider>
 	{
 		readonly ICalendarItemRepository _calendarItemRepository;
+		readonly IClock _clock;
 		readonly IGraffitiSiteSettings _settings;
 
 		#region Ctors
 		public EventMacros() : this(IoC.Resolve<ICategorizedPostRepository<IEventPluginConfigurationProvider>>(),
 		                            IoC.Resolve<IGraffitiSiteSettings>(),
-		                            IoC.Resolve<ICalendarItemRepository>())
+		                            IoC.Resolve<ICalendarItemRepository>(),
+		                            IoC.Resolve<IClock>())
 		{
 		}
 
@@ -34,11 +37,13 @@ namespace DnugLeipzig.Runtime.Macros
 		/// </summary>
 		internal EventMacros(ICategorizedPostRepository<IEventPluginConfigurationProvider> repository,
 		                     IGraffitiSiteSettings settings,
-		                     ICalendarItemRepository calendarItemRepository)
+		                     ICalendarItemRepository calendarItemRepository,
+		                     IClock clock)
 			: base(repository)
 		{
 			_settings = settings;
 			_calendarItemRepository = calendarItemRepository;
+			_clock = clock;
 		}
 		#endregion
 
@@ -112,7 +117,12 @@ namespace DnugLeipzig.Runtime.Macros
 				.HasDate(Configuration.StartDateField)
 				.IsInFuture(Configuration.StartDateField)
 				.RegistrationNeeded(Configuration.RegistrationNeededField)
-				.RegistrationPossible(Configuration.RegistrationListField, Configuration.MaximumNumberOfRegistrationsField)
+				.RegistrationPossible(Configuration.RegistrationListField,
+				                      Configuration.MaximumNumberOfRegistrationsField,
+				                      Configuration.EarliestRegistrationField,
+				                      Configuration.LatestRegistrationField,
+				                      Configuration.StartDateField,
+									  _clock)
 				.SortAscending(Configuration.StartDateField)
 				.ToList();
 		}
@@ -159,7 +169,11 @@ namespace DnugLeipzig.Runtime.Macros
 			       post.IsInFuture(Configuration.StartDateField) &&
 			       post.RegistrationNeeded(Configuration.RegistrationNeededField) &&
 			       post.RegistrationPossible(Configuration.RegistrationListField,
-			                                 Configuration.MaximumNumberOfRegistrationsField);
+			                                 Configuration.MaximumNumberOfRegistrationsField,
+			                                 Configuration.EarliestRegistrationField,
+			                                 Configuration.LatestRegistrationField,
+											 Configuration.StartDateField,
+			                                 _clock);
 		}
 
 		public string RegisterButton(IDictionary properties, bool generateOnClickHandler)
