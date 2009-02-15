@@ -44,7 +44,7 @@ namespace DnugLeipzig.Container.Tests
 		[Test]
 		public void It_should_be_able_to_create_instances_of_registered_types()
 		{
-			IList<Type> typesWithUnsatisfyableCtors = new List<Type> { typeof(EventValidator), typeof(TalkValidator), typeof(EventPlugin) };
+			IList<Type> typesWithUnsatisfyableCtors = new List<Type> { typeof(EventValidator), typeof(TalkValidator) };
 
 			Array.ForEach(_sut,
 			              handler =>
@@ -68,12 +68,14 @@ namespace DnugLeipzig.Container.Tests
 			              		}
 			              		else
 			              		{
+									Debug.WriteLine(handler.ComponentModel.Service + " -> " + handler.ComponentModel.Name);
 									if (typesWithUnsatisfyableCtors.Contains(handler.ComponentModel.Implementation))
 									{
+										Debug.WriteLine("(Skipped)");
 										return;
 									}
 
-									Debug.WriteLine(handler.ComponentModel.Service + " -> " + handler.ComponentModel.Name);
+									
 			              			IoC.Resolve(handler.ComponentModel.Service);
 			              		}
 			              	});

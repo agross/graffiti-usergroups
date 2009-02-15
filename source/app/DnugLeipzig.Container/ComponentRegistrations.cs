@@ -49,16 +49,14 @@ namespace DnugLeipzig.Container
 
 			yield return Component.For<ITalkPluginConfigurationProvider>()
 				.ImplementedBy<TalkPlugin>()
-				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>()).Anywhere
+				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>())
+				.Anywhere
 				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IEventPluginConfigurationProvider>()
 				.ImplementedBy<EventPlugin>()
-				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>()).Anywhere
-				.LifeStyle.Is(LifestyleType.Transient);
-
-			yield return Component.For<IGraffitiCommentSettings>()
-				.ImplementedBy<GraffitiCommentSettings>()
+				.Interceptors(InterceptorReference.ForType<PluginConfigurationInterceptor>())
+				.Anywhere
 				.LifeStyle.Is(LifestyleType.Transient);
 
 			yield return Component.For<IGraffitiSiteSettings>()

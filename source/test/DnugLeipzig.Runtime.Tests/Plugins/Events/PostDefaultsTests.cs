@@ -24,7 +24,6 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		protected override void Establish_context()
 		{
 			_sut = new EventPlugin(MockRepository.GenerateMock<IPostRepository>(),
-			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
 								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
 								   MockRepository.GenerateMock<IValidator<Settings>>());
 
@@ -52,7 +51,6 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(postRepository,
-								   MockRepository.GenerateMock<IGraffitiCommentSettings>(),
 								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
 								   MockRepository.GenerateMock<IValidator<Settings>>()) { CategoryName = "Event category" };
 
@@ -271,7 +269,6 @@ namespace DnugLeipzig.Runtime.Tests.Plugins.Events
 		{
 			var postRepository = MockRepository.GenerateMock<IPostRepository>();
 			_sut = new EventPlugin(postRepository,
-			                       MockRepository.GenerateMock<IGraffitiCommentSettings>(),
 								   MockRepository.GenerateMock<IMapper<NameValueCollection, Settings>>(),
 								   MockRepository.GenerateMock<IValidator<Settings>>())
 			       {
