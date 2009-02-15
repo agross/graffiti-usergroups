@@ -71,7 +71,6 @@
     <Compile Include="..\..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
-    <Compile Include="GraffitiIntegration\IGraffitiCommentSettings.cs" />
     <Compile Include="GraffitiIntegration\IGraffitiSiteSettings.cs" />
     <Compile Include="Mapping\IMapperStep.cs" />
     <Compile Include="ObjectFactory.cs" />
