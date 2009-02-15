@@ -6,7 +6,7 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.Plugins.Talks;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Runtime.Macros.Extensions;
 
 using Graffiti.Core;
 

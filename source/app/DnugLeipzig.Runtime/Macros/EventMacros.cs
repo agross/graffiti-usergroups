@@ -9,7 +9,7 @@ using DnugLeipzig.Definitions.Extensions;
 using DnugLeipzig.Definitions.GraffitiIntegration;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
-using DnugLeipzig.Extensions.Extensions;
+using DnugLeipzig.Runtime.Macros.Extensions;
 
 using Graffiti.Core;
 
@@ -100,11 +100,10 @@ namespace DnugLeipzig.Runtime.Macros
 
 		public IList<Post> GetForFuture()
 		{
-			return
-				Repository.GetAll()
-					.IsInFuture(Configuration.StartDateField)
-					.SortAscending(Configuration.StartDateField)
-					.ToList();
+			return Repository.GetAll()
+				.IsInFuture(Configuration.StartDateField)
+				.SortAscending(Configuration.StartDateField)
+				.ToList();
 		}
 
 		public IList<Post> GetForRegistration()
@@ -156,7 +155,8 @@ namespace DnugLeipzig.Runtime.Macros
 
 		public bool RegistrationPossible(Post post)
 		{
-			return post.HasDate(Configuration.StartDateField) && post.IsInFuture(Configuration.StartDateField) &&
+			return post.HasDate(Configuration.StartDateField) &&
+			       post.IsInFuture(Configuration.StartDateField) &&
 			       post.RegistrationNeeded(Configuration.RegistrationNeededField) &&
 			       post.RegistrationPossible(Configuration.RegistrationListField,
 			                                 Configuration.MaximumNumberOfRegistrationsField);
