@@ -19,12 +19,10 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 	public partial class EventPlugin : GraffitiEvent, IEventPluginConfigurationProvider, ISupportsMemento
 	{
 		readonly IPostRepository _postRepository;
-		readonly IGraffitiCommentSettings _commentSettings;
 		readonly IMapper<NameValueCollection, Settings> _settingsMapper;
 		readonly IValidator<Settings> _settingsValidator;
 
 		public EventPlugin() : this(IoC.Resolve<IPostRepository>(),
-		                            IoC.Resolve<IGraffitiCommentSettings>(),
 		                            IoC.Resolve<IMapper<NameValueCollection, Settings>>(),
 		                            IoC.Resolve<IValidator<Settings>>())
 		{
@@ -44,7 +42,6 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 			MaximumNumberOfRegistrationsField = "Maximum number of registrations";
 			RegistrationListField = "Registration list";
 			RegistrationMailSubject = "New Registration";
-			DefaultRegistrationRecipient = _commentSettings.Email;
 		}
 
 		/// <summary>
@@ -52,12 +49,10 @@ namespace DnugLeipzig.Runtime.Plugins.Events
 		/// This constructor is used for dependency injection in unit testing scenarios.
 		/// </summary>
 		internal EventPlugin(IPostRepository postRepository,
-		                     IGraffitiCommentSettings commentSettings,
 		                     IMapper<NameValueCollection, Settings> settingsMapper,
 		                     IValidator<Settings> settingsValidator)
 		{
 			_postRepository = postRepository;
-			_commentSettings = commentSettings;
 			_settingsMapper = settingsMapper;
 			_settingsValidator = settingsValidator;
 
