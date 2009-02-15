@@ -47,7 +47,11 @@
 	</script>
 
 	<target name="quick">
-		<property name="quick" value="true"/>
+		<property name="quick"
+				  value="true"/>
+		<property name="build.msbuild.target"
+				  value="Rebuild"
+				  overwrite="true" />
 	</target>
 
 	<target name="all"
@@ -80,10 +84,10 @@
 	<target name="clean"
 			description="Removes build artifacts."
 			unless="${property::exists('quick')}">
-		
+
 		<tc-progress message="Cleaning up"
 					 type="Start" />
-		
+
 		<delete dir="${basedir.test.results}"
 				failonerror="false" />
 		<delete dir="${basedir.temp}"
@@ -203,7 +207,8 @@
 			depends="build-app, init-build-theme"
 			description="Builds the theme.">
 		<!-- Copy content files. -->
-		<copy todir="${basedir.temp}\DnugLeipzig.Theme">
+		<copy todir="${basedir.temp}\DnugLeipzig.Theme"
+			  overwrite="true">
 			<fileset basedir="${basedir.app}\DnugLeipzig.Theme">
 				<include name="**\*.css" />
 				<include name="**\*.js" />
@@ -225,7 +230,8 @@
 			</in>
 			<do>
 				<move file="${filename}"
-					  tofile="${path::change-extension(filename, '.view')}" />
+					  tofile="${path::change-extension(filename, '.view')}"
+					  overwrite="true" />
 			</do>
 		</foreach>
 	</target>
@@ -271,7 +277,7 @@
 			unless="${property::exists('quick')}">
 		<tc-progress message="Running tests"
 					 type="Start" />
-		
+
 		<foreach item="File"
 				 property="testproject">
 			<in>
@@ -309,7 +315,7 @@
 			description="Runs the applications' unit tests with code coverage enabled.">
 		<tc-progress message="Running code coverage"
 					 type="Start" />
-		
+
 		<foreach item="File"
 				 property="testproject">
 			<in>
@@ -367,7 +373,7 @@
 			description="Creates the applications' deployment package.">
 		<tc-progress message="Building setup"
 					 type="Start" />
-		
+
 		<zip zipfile="${basedir.deployment.artifacts}\${project::get-name()}-${build.number}.zip"
 			 ziplevel="9"
 			 duplicate="Preserve">
@@ -390,7 +396,7 @@
 					 prefix="bin">
 				<include name="DnugLeipzig.Definitions.*" />
 			</fileset>
-			
+
 			<!-- Runtime. -->
 			<fileset basedir="${basedir.app}\DnugLeipzig.Runtime\bin\${build.msbuild.configuration}"
 					 prefix="bin">
