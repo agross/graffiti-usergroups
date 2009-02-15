@@ -10,8 +10,6 @@ namespace DnugLeipzig.Runtime.Macros.Extensions
 {
 	internal static class PostExtensions
 	{
-		static readonly IClock Clock = IoC.Resolve<IClock>();
-
 		public static bool HasDate(this Post post, string dateField)
 		{
 			return post[dateField].IsDate();
@@ -54,11 +52,6 @@ namespace DnugLeipzig.Runtime.Macros.Extensions
 			//return post[numberOfRegistrationsField].ToInt(0) <
 			//       post[maximumNumberOfRegistrationsField].ToInt(int.MaxValue);
 
-			if (!post[earliestRegistrationField].HasValue() || !post[latestRegistrationField].HasValue())
-			{
-				return true;
-			}
-
 			DateTime earliest = post[earliestRegistrationField].ToDate(DateTime.MinValue);
 			DateTime latest = post[latestRegistrationField].ToDate(DateTime.MaxValue);
 			DateTime eventStart = post[startDate].AsEventDate();
@@ -67,7 +60,7 @@ namespace DnugLeipzig.Runtime.Macros.Extensions
 				latest = eventStart;
 			}
 
-			return Clock.Now.IsInRange(earliest, latest);
+			return clock.Now.IsInRange(earliest, latest);
 		}
 	}
 }
