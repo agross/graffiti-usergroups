@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.GraffitiIntegration;
@@ -28,45 +29,51 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		}
 
 		[Test]
-		public void It_should_return_a_calendar_item()
+		public void It_should_return_a_calendar()
 		{
-			Assert.IsNotNull(CalendarItem);
+			Assert.IsNotNull(Calendar);
+		}
+		
+		[Test]
+		public void It_should_return_a_calendar_with_one_entry()
+		{
+			Assert.AreEqual(1, Calendar.Items.Count);
 		}
 
 		[Test]
 		public void It_should_initialize_the_start_date_from_the_post()
 		{
-			Assert.AreEqual(DateTime.MinValue, CalendarItem.StartDate);
+			Assert.AreEqual(DateTime.MinValue, Calendar.Items.First().StartDate);
 		}
 
 		[Test]
 		public void It_should_initialize_the_end_date_from_the_post()
 		{
-			Assert.AreEqual(DateTime.MinValue.AddDays(10), CalendarItem.EndDate);
+			Assert.AreEqual(DateTime.MinValue.AddDays(10), Calendar.Items.First().EndDate);
 		}
 
 		[Test]
 		public void It_should_initialize_the_location_from_the_post()
 		{
-			Assert.AreEqual("somewhere", CalendarItem.Location);
+			Assert.AreEqual("somewhere", Calendar.Items.First().Location);
 		}
 
 		[Test]
 		public void It_should_initialize_the_subject_from_the_post()
 		{
-			Assert.AreEqual("techno babble", CalendarItem.Subject);
+			Assert.AreEqual("techno babble", Calendar.Items.First().Subject);
 		}
 
 		[Test]
 		public void It_should_be_able_to_generate_the_ICS_format()
 		{
-			StringAssert.Contains(CalendarItem.ToString(), "techno babble");
+			StringAssert.Contains(Calendar.ToString(), "techno babble");
 		}
 
 		[Test]
 		public void It_should_not_generate_the_ICS_header()
 		{
-			StringAssert.NotLike(CalendarItem.ToString(), "%BEGIN:VCALENDAR%");
+			StringAssert.NotLike(Calendar.ToString(), "%BEGIN:VCALENDAR%");
 		}
 	}
 
@@ -109,9 +116,8 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 			Assert.AreEqual(_calendar.ToString().IndexOf("BEGIN:VCALENDAR"), _calendar.ToString().LastIndexOf("BEGIN:VCALENDAR"));
 		}
 
-
 		[Test]
-		public void It_should_set_the_calendar_name()
+		public void It_should_set_the_calendar_name_to_the_site_name()
 		{
 			StringAssert.Contains(_calendar.ToString(), _settings.Title);
 		}
@@ -127,9 +133,15 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		}
 
 		[Test]
-		public void It_should_not_return_a_calendar_item()
+		public void It_should_return_a_calendar()
 		{
-			Assert.IsNull(CalendarItem);
+			Assert.IsNotNull(Calendar);
+		}
+
+		[Test]
+		public void It_should_return_a_calendar_with_no_entries()
+		{
+			Assert.AreEqual(0, Calendar.Items.Count);
 		}
 	}
 
@@ -146,9 +158,15 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		}
 
 		[Test]
-		public void It_should_not_return_a_calendar_item()
+		public void It_should_return_a_calendar()
 		{
-			Assert.IsNull(CalendarItem);
+			Assert.IsNotNull(Calendar);
+		}
+
+		[Test]
+		public void It_should_return_a_calendar_with_no_entries()
+		{
+			Assert.AreEqual(0, Calendar.Items.Count);
 		}
 	}
 
@@ -166,15 +184,21 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		}
 
 		[Test]
-		public void It_should_return_a_calendar_item()
+		public void It_should_return_a_calendar()
 		{
-			Assert.IsNotNull(CalendarItem);
+			Assert.IsNotNull(Calendar);
+		}
+
+		[Test]
+		public void It_should_return_a_calendar_with_one_entry()
+		{
+			Assert.AreEqual(1, Calendar.Items.Count);
 		}
 
 		[Test]
 		public void It_should_initialize_the_location_from_the_default_settings()
 		{
-			Assert.AreEqual(ConfigurationProvider.UnknownText, CalendarItem.Location);
+			Assert.AreEqual(ConfigurationProvider.UnknownText, Calendar.Items.First().Location);
 		}
 	}
 
@@ -207,7 +231,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	{
 		Post _post;
 
-		protected internal ICalendarItem CalendarItem
+		protected internal ICalendar Calendar
 		{
 			get;
 			private set;
@@ -223,7 +247,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 
 		protected override void Because()
 		{
-			CalendarItem = _sut.CreateCalendarItemForEvent(_post);
+			Calendar = _sut.CreateCalendarForEvent(_post);
 		}
 	}
 }
