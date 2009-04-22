@@ -103,7 +103,7 @@ namespace DnugLeipzig.Runtime.Handlers
 					return;
 				}
 
-				ICalendar calendar = _calendarItemRepository.CreateCalendar(post);
+				ICalendar calendar = _calendarItemRepository.CreateCalendarForEvent(post);
 				calendar.Render(context.Response);
 			}
 			catch (Exception ex)

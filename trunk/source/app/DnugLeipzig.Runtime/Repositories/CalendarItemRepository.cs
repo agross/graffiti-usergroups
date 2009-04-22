@@ -10,8 +10,6 @@ using DnugLeipzig.Definitions.Repositories;
 
 using Graffiti.Core;
 
-using System.Linq;
-
 namespace DnugLeipzig.Runtime.Repositories
 {
 	public class CalendarItemRepository : Repository, ICalendarItemRepository
@@ -29,15 +27,10 @@ namespace DnugLeipzig.Runtime.Repositories
 		#region Implementation of ICalendarItemRepository
 		public ICalendar CreateCalendar(IEnumerable<Post> posts)
 		{
-			return CreateCalendar(posts.ToArray());
-		}
-
-		public ICalendar CreateCalendar(params Post[] posts)
-		{
-			ICalendar calendar = new Calendar(_settings);
+			ICalendar calendar = new Calendar(_settings.Title, true);
 			foreach (var post in posts)
 			{
-				var item = CreateCalendarItemForEvent(post);
+				var item = CreateCalendarItem(post);
 
 				if (item != null)
 				{
@@ -47,7 +40,18 @@ namespace DnugLeipzig.Runtime.Repositories
 			return calendar;
 		}
 
-		public ICalendarItem CreateCalendarItemForEvent(Post post)
+		public ICalendar CreateCalendarForEvent(Post post)
+		{
+			ICalendar calendar = new Calendar(HttpUtility.HtmlDecode(post.Title), false);
+			var item = CreateCalendarItem(post);
+			if (item != null)
+			{
+				calendar.Items.Add(item);
+			}
+			return calendar;
+		}
+
+		ICalendarItem CreateCalendarItem(Post post)
 		{
 			try
 			{

@@ -87,7 +87,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 			PostRepository.Stub(x => x.GetById(42)).Return(_event);
 
 			_calendar = MockRepository.GenerateMock<ICalendar>();
-			CalendarItemRepository.Stub(x => x.CreateCalendar(_event))
+			CalendarItemRepository.Stub(x => x.CreateCalendarForEvent(_event))
 				.Return(_calendar);
 		}
 
@@ -99,7 +99,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		[Test]
 		public void It_should_create_the_calendar()
 		{
-			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendar(_event));
+			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendarForEvent(_event));
 		}
 
 		[Test]
