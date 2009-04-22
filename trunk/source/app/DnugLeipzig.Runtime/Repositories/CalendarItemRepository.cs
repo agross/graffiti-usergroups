@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 using DnugLeipzig.Definitions;
@@ -8,6 +9,8 @@ using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 
 using Graffiti.Core;
+
+using System.Linq;
 
 namespace DnugLeipzig.Runtime.Repositories
 {
@@ -24,6 +27,26 @@ namespace DnugLeipzig.Runtime.Repositories
 		}
 
 		#region Implementation of ICalendarItemRepository
+		public ICalendar CreateCalendar(IEnumerable<Post> posts)
+		{
+			return CreateCalendar(posts.ToArray());
+		}
+
+		public ICalendar CreateCalendar(params Post[] posts)
+		{
+			ICalendar calendar = new Calendar(_settings);
+			foreach (var post in posts)
+			{
+				var item = CreateCalendarItemForEvent(post);
+
+				if (item != null)
+				{
+					calendar.Items.Add(item);
+				}
+			}
+			return calendar;
+		}
+
 		public ICalendarItem CreateCalendarItemForEvent(Post post)
 		{
 			try
@@ -34,9 +57,9 @@ namespace DnugLeipzig.Runtime.Repositories
 				{
 					postUrl += post.Url;
 				}
-				// ReSharper disable EmptyGeneralCatchClause
+					// ReSharper disable EmptyGeneralCatchClause
 				catch
-				// ReSharper restore EmptyGeneralCatchClause
+					// ReSharper restore EmptyGeneralCatchClause
 				{
 					// HACK: In unit-testing scenarios, accessing URL causes database access. Well done, telligent!
 				}

@@ -144,6 +144,7 @@
     <Compile Include="Plugins\Talks\Validation\SettingsValidator.cs" />
     <Compile Include="Plugins\Talks\Validation\SettingsErrors.cs" />
     <Compile Include="Plugins\Talks\TalkPlugin.Fields.cs" />
+    <Compile Include="Repositories\Calendar.cs" />
     <Compile Include="Services\Clock.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

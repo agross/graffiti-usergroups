@@ -5,6 +5,7 @@ using Castle.Core.Logging;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Commands.Results;
+using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 
 using Graffiti.Core;
@@ -13,22 +14,26 @@ namespace DnugLeipzig.Runtime.Handlers
 {
 	public class CalendarHandler : IHttpHandler
 	{
-		readonly IPostRepository _postRepository;
 		readonly ICalendarItemRepository _calendarItemRepository;
+		readonly ICategorizedPostRepository<IEventPluginConfigurationProvider> _eventRepository;
 		ILogger _logger;
 
-		public CalendarHandler() : this(IoC.Resolve<IPostRepository>(), IoC.Resolve<ICalendarItemRepository>(), IoC.Resolve<ILogger>())
+		public CalendarHandler() : this(IoC.Resolve<ICategorizedPostRepository<IEventPluginConfigurationProvider>>(),
+		                                IoC.Resolve<ICalendarItemRepository>(),
+		                                IoC.Resolve<ILogger>())
 		{
 		}
 
-		public CalendarHandler(IPostRepository postRepository, ICalendarItemRepository calendarItemRepository, ILogger logger)
+		public CalendarHandler(ICategorizedPostRepository<IEventPluginConfigurationProvider> postRepository,
+		                       ICalendarItemRepository calendarItemRepository,
+		                       ILogger logger)
 		{
-			_postRepository = postRepository;
+			_eventRepository = postRepository;
 			_calendarItemRepository = calendarItemRepository;
 			Logger = logger;
 		}
 
-		public ILogger Logger
+		ILogger Logger
 		{
 			get
 			{
@@ -50,6 +55,38 @@ namespace DnugLeipzig.Runtime.Handlers
 				return;
 			}
 
+			if (String.IsNullOrEmpty(context.Request.QueryString["eventId"]))
+			{
+				CreateCalendar(context);
+				return;
+			}
+
+			CreateCalendarItem(context);
+		}
+
+		public bool IsReusable
+		{
+			get { return true; }
+		}
+		#endregion
+
+		void CreateCalendar(HttpContext context)
+		{
+			try
+			{
+				var posts = _eventRepository.GetAll();
+				var calendar = _calendarItemRepository.CreateCalendar(posts);
+				calendar.Render(context.Response);
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(Create.New.LogMessage().WithTitle("Could not generate calendar"), ex);
+				new ErrorResult().Render(context.Response);
+			}
+		}
+
+		void CreateCalendarItem(HttpContext context)
+		{
 			int eventId;
 			if (!int.TryParse(context.Request.QueryString["eventId"], out eventId))
 			{
@@ -59,15 +96,15 @@ namespace DnugLeipzig.Runtime.Handlers
 
 			try
 			{
-				Post post = _postRepository.GetById(eventId);
+				Post post = _eventRepository.GetById(eventId);
 				if (post == null)
 				{
 					new NotFoundResult().Render(context.Response);
 					return;
 				}
 
-				ICalendarItem item = _calendarItemRepository.CreateCalendarItemForEvent(post);
-				item.Render(context.Response);
+				ICalendar calendar = _calendarItemRepository.CreateCalendar(post);
+				calendar.Render(context.Response);
 			}
 			catch (Exception ex)
 			{
@@ -75,11 +112,5 @@ namespace DnugLeipzig.Runtime.Handlers
 				new ErrorResult().Render(context.Response);
 			}
 		}
-
-		public bool IsReusable
-		{
-			get { return true; }
-		}
-		#endregion
 	}
 }

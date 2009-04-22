@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.GraffitiIntegration;
@@ -15,7 +16,7 @@ using Rhino.Mocks;
 
 namespace DnugLeipzig.Runtime.Tests.Repositories
 {
-	public class When_a_calendar_item_for_an_exiting_event_is_created : With_calendar_item_repository
+	public class When_a_calendar_item_for_an_exiting_event_is_created : With_single_event
 	{
 		protected override Post CreatePost()
 		{
@@ -59,12 +60,64 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		[Test]
 		public void It_should_be_able_to_generate_the_ICS_format()
 		{
-			CalendarItem.ToString();
-			Assert.IsTrue(true);
+			StringAssert.Contains(CalendarItem.ToString(), "techno babble");
+		}
+
+		[Test]
+		public void It_should_not_generate_the_ICS_header()
+		{
+			StringAssert.NotLike(CalendarItem.ToString(), "%BEGIN:VCALENDAR%");
 		}
 	}
 
-	public class When_a_calendar_item_for_an_event_without_a_start_date_is_created : With_calendar_item_repository
+	public class When_the_calendar_is_created : With_calendar_item_repository
+	{
+		ICalendar _calendar;
+
+		protected override void Because()
+		{
+			_calendar = _sut.CreateCalendar(new List<Post>
+			                                {
+			                                	Create.New.Event()
+			                                		.StartingAt(DateTime.MinValue)
+			                                		.To(DateTime.MinValue.AddDays(10))
+			                                		.AtLocation("somewhere")
+			                                		.TheTopicIs("techno babble"),
+			                                	Create.New.Event()
+			                                		.StartingAt(DateTime.MinValue)
+			                                		.To(DateTime.MinValue.AddDays(10))
+			                                		.AtLocation("somewhere")
+			                                		.TheTopicIs("techno babble")
+			                                });
+		}
+
+		[Test]
+		public void It_should_create_items_for_each_event()
+		{
+			Assert.AreEqual(2, _calendar.Items.Count);
+		}
+		
+		[Test]
+		public void It_should_be_able_to_generate_the_ICS_format()
+		{
+			StringAssert.Contains(_calendar.ToString(), "techno babble");
+		}
+		
+		[Test]
+		public void It_should_generate_a_single_ICS_header()
+		{
+			Assert.AreEqual(_calendar.ToString().IndexOf("BEGIN:VCALENDAR"), _calendar.ToString().LastIndexOf("BEGIN:VCALENDAR"));
+		}
+
+
+		[Test]
+		public void It_should_set_the_calendar_name()
+		{
+			StringAssert.Contains(_calendar.ToString(), _settings.Title);
+		}
+	}
+
+	public class When_a_calendar_item_for_an_event_without_a_start_date_is_created : With_single_event
 	{
 		protected override Post CreatePost()
 		{
@@ -81,7 +134,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	}
 
 	public class When_a_calendar_item_for_an_event_with_the_end_date_before_the_start_date_is_created
-		: With_calendar_item_repository
+		: With_single_event
 	{
 		protected override Post CreatePost()
 		{
@@ -100,7 +153,7 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 	}
 
 	public class When_a_calendar_item_for_an_exiting_event_is_created_and_the_location_is_unknown
-		: With_calendar_item_repository
+		: With_single_event
 	{
 		protected override Post CreatePost()
 		{
@@ -127,14 +180,8 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 
 	public abstract class With_calendar_item_repository : Spec
 	{
-		Post _post;
-		CalendarItemRepository _sut;
-
-		protected internal ICalendarItem CalendarItem
-		{
-			get;
-			private set;
-		}
+		protected CalendarItemRepository _sut;
+		protected IGraffitiSiteSettings _settings;
 
 		protected IEventPluginConfigurationProvider ConfigurationProvider
 		{
@@ -146,13 +193,29 @@ namespace DnugLeipzig.Runtime.Tests.Repositories
 		{
 			ConfigurationProvider = Create.New.StubbedEventPluginConfiguration().Build();
 			MockRepository.GenerateMock<IEventPluginConfigurationProvider>();
-			var settings = MockRepository.GenerateMock<IGraffitiSiteSettings>();
+			_settings = MockRepository.GenerateMock<IGraffitiSiteSettings>();
+			_settings.Stub(x => x.Title).Return("The site's title");
 
 			_sut = new CalendarItemRepository(ConfigurationProvider,
-			                                  settings);
+			                                  _settings);
 
-			settings.Stub(x => x.BaseUrl).Return("http://foo");
+			_settings.Stub(x => x.BaseUrl).Return("http://foo");
+		}
+	}
 
+	public abstract class With_single_event : With_calendar_item_repository
+	{
+		Post _post;
+
+		protected internal ICalendarItem CalendarItem
+		{
+			get;
+			private set;
+		}
+
+		protected override void Establish_context()
+		{
+			base.Establish_context();
 			_post = CreatePost();
 		}
 

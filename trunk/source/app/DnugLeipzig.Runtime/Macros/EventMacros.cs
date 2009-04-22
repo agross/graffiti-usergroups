@@ -200,12 +200,7 @@ namespace DnugLeipzig.Runtime.Macros
 
 		public bool CanCreateCalendarItem(Post post)
 		{
-			return CreateCalendarItem(post) != null;
-		}
-
-		public ICalendarItem CreateCalendarItem(Post post)
-		{
-			return _calendarItemRepository.CreateCalendarItemForEvent(post);
+			return _calendarItemRepository.CreateCalendar(post).Items.Count != 0;
 		}
 	}
 }
