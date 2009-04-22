@@ -57,7 +57,7 @@ namespace DnugLeipzig.Runtime.Repositories
 			{
 				try
 				{
-					result.AppendLine(item.ToString());
+					result.Append(item.ToString());
 				}
 				catch (InvalidOperationException)
 				{
