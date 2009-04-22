@@ -61,9 +61,6 @@ namespace DnugLeipzig.Runtime.Repositories
 			var builder = new StringBuilder();
 
 			// Header.
-			builder.AppendLine("BEGIN:VCALENDAR");
-			builder.AppendLine("PRODID:-//Microsoft Corporation//Outlook MIMEDIR//EN");
-			builder.AppendLine("VERSION:1.0");
 			builder.AppendLine("BEGIN:VEVENT");
 
 			// Fill in data.
@@ -92,8 +89,7 @@ namespace DnugLeipzig.Runtime.Repositories
 
 			// Footer.
 			builder.AppendLine("END:VEVENT");
-			builder.AppendLine("END:VCALENDAR");
-
+			
 			return builder.ToString();
 		}
 

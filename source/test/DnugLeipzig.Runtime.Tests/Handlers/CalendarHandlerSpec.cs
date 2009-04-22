@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Web;
 
 using Castle.Core.Logging;
@@ -7,6 +8,7 @@ using DnugLeipzig.Definitions;
 using DnugLeipzig.Definitions.Plugins.Events;
 using DnugLeipzig.Definitions.Repositories;
 using DnugLeipzig.ForTesting;
+using DnugLeipzig.ForTesting.Builders;
 using DnugLeipzig.ForTesting.HttpMocks;
 using DnugLeipzig.Runtime.Handlers;
 
@@ -15,7 +17,6 @@ using Graffiti.Core;
 using MbUnit.Framework;
 
 using Rhino.Mocks;
-using Rhino.Mocks.Constraints;
 
 namespace DnugLeipzig.Runtime.Tests.Handlers
 {
@@ -33,7 +34,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		}
 	}
 
-	public class When_the_calendar_handler_creates_an_item_for_a_non_numeric_event_ID : With_calendar_handler
+	public class When_an_event_calendar_item_is_requested_for_a_non_numeric_event_ID : With_calendar_handler
 	{
 		protected override HttpSimulator CreateRequest()
 		{
@@ -47,7 +48,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		}
 	}
 
-	public class When_the_calendar_handler_creates_an_item_for_a_non_existing_event : With_calendar_handler
+	public class When_an_event_calendar_item_is_requested_for_a_non_existing_event : With_calendar_handler
 	{
 		protected override void Establish_context()
 		{
@@ -68,25 +69,26 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		}
 	}
 
-	public class When_the_calendar_handler_creates_an_item : With_calendar_handler
+	public class When_an_event_calendar_item_is_requested : With_calendar_handler
 	{
-		ICalendarItem _calendarItem;
+		ICalendar _calendar;
+		Post _event;
 
 		protected override void Establish_context()
 		{
 			base.Establish_context();
 
-			PostRepository.Stub(x => x.GetById(42)).Return(Create.New.Event()
-			                                               	.Id(42)
-			                                               	.StartingAt(DateTime.MinValue)
-			                                               	.To(DateTime.MinValue.AddDays(10))
-			                                               	.AtLocation("somewhere")
-			                                               	.TheTopicIs("techno babble"));
+			_event = Create.New.Event()
+				.Id(42)
+				.StartingAt(DateTime.MinValue)
+				.To(DateTime.MinValue.AddDays(10))
+				.AtLocation("somewhere")
+				.TheTopicIs("techno babble");
+			PostRepository.Stub(x => x.GetById(42)).Return(_event);
 
-			_calendarItem = MockRepository.GenerateMock<ICalendarItem>();
-			CalendarItemRepository.Stub(x => x.CreateCalendarItemForEvent(null))
-				.IgnoreArguments()
-				.Return(_calendarItem);
+			_calendar = MockRepository.GenerateMock<ICalendar>();
+			CalendarItemRepository.Stub(x => x.CreateCalendar(_event))
+				.Return(_calendar);
 		}
 
 		protected override HttpSimulator CreateRequest()
@@ -95,16 +97,70 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		}
 
 		[Test]
-		public void It_should_return_the_calendar_item_from_the_repository()
+		public void It_should_create_the_calendar()
 		{
-			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendarItemForEvent(null),
-			                                       o => o.Constraints(Is.Matching<Post>(p => p.Id == 42)));
+			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendar(_event));
 		}
 
 		[Test]
-		public void It_should_render_the_returned_calendar_item()
+		public void It_should_render_the_calendar()
 		{
-			_calendarItem.AssertWasCalled(x => x.Render(null), o => o.IgnoreArguments());
+			_calendar.AssertWasCalled(x => x.Render(null), o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void It_should_set_Http_200_status()
+		{
+			Assert.AreEqual(200, HttpContext.Current.Response.StatusCode);
+		}
+	}
+
+	public class When_the_event_calendar_is_requested : With_calendar_handler
+	{
+		ICalendar _calendar;
+		List<Post> _events;
+
+		protected override void Establish_context()
+		{
+			base.Establish_context();
+
+			_events = new List<Post>
+			          {
+			          	Create.New.Event()
+			          		.Id(42)
+			          		.StartingAt(DateTime.MinValue)
+			          		.To(DateTime.MinValue.AddDays(10))
+			          		.AtLocation("somewhere")
+			          		.TheTopicIs("techno babble"),
+			          	Create.New.Event()
+			          		.Id(43)
+			          		.StartingAt(DateTime.MinValue)
+			          		.To(DateTime.MinValue.AddDays(10))
+			          		.AtLocation("somewhere else")
+			          		.TheTopicIs("blah blah")
+			          };
+			PostRepository.Stub(x => x.GetAll()).Return(_events);
+
+			_calendar = MockRepository.GenerateMock<ICalendar>();
+			CalendarItemRepository.Stub(x => x.CreateCalendar(_events))
+				.Return(_calendar);
+		}
+
+		protected override HttpSimulator CreateRequest()
+		{
+			return new HttpSimulator().SimulateRequest(new Uri("http://foo"), HttpVerb.GET);
+		}
+
+		[Test]
+		public void It_should_create_the_calendar()
+		{
+			CalendarItemRepository.AssertWasCalled(x => x.CreateCalendar(_events));
+		}
+
+		[Test]
+		public void It_should_render_the_calendar()
+		{
+			_calendar.AssertWasCalled(x => x.Render(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -118,22 +174,16 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 	{
 		CalendarHandler _sut;
 
-		protected IEventPluginConfigurationProvider ConfigurationProvider
+		protected ICategorizedPostRepository<IEventPluginConfigurationProvider> PostRepository
 		{
 			get;
 			private set;
 		}
 
-		protected IPostRepository PostRepository
+		HttpSimulator Request
 		{
 			get;
-			private set;
-		}
-
-		protected HttpSimulator Request
-		{
-			get;
-			private set;
+			set;
 		}
 
 		protected ICalendarItemRepository CalendarItemRepository
@@ -144,9 +194,8 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 
 		protected override void Establish_context()
 		{
-			PostRepository = MockRepository.GenerateStub<IPostRepository>();
+			PostRepository = MockRepository.GenerateStub<ICategorizedPostRepository<IEventPluginConfigurationProvider>>();
 			CalendarItemRepository = MockRepository.GenerateStub<ICalendarItemRepository>();
-			ConfigurationProvider = Create.New.StubbedEventPluginConfiguration().Build();
 
 			_sut = new CalendarHandler(PostRepository, CalendarItemRepository, MockRepository.GenerateMock<ILogger>());
 

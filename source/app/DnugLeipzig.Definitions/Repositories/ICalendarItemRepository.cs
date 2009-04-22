@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+
 using Graffiti.Core;
 
 namespace DnugLeipzig.Definitions.Repositories
 {
 	public interface ICalendarItemRepository
 	{
-		ICalendarItem CreateCalendarItemForEvent(Post post);
+		ICalendar CreateCalendar(IEnumerable<Post> posts);
+		ICalendar CreateCalendar(params Post[] posts);
 	}
 }

@@ -95,6 +95,7 @@
     <Compile Include="Builders\LogMessageBuilder.cs" />
     <Compile Include="ObjectFactoryExtensions.cs" />
     <Compile Include="Plugins\Talks\ITalkValidator.cs" />
+    <Compile Include="Repositories\ICalendar.cs" />
     <Compile Include="Repositories\ICalendarItem.cs" />
     <Compile Include="Repositories\ICalendarItemRepository.cs" />
     <Compile Include="Repositories\ICategorizedPostRepository.cs" />
