@@ -25,9 +25,10 @@ namespace DnugLeipzig.Runtime.Repositories
 			string serializedItems = ToString();
 
 			response.Clear();
+			var calendarName = _calendarName.Replace(',', ' ');
 			response.AppendHeader("Content-Disposition",
 			                      String.Format("attachment; filename={0}.ics",
-			                                    HttpUtility.UrlPathEncode(_calendarName)));
+			                                    HttpUtility.UrlPathEncode(calendarName)));
 			response.ContentType = "text/calendar";
 
 			response.Write(serializedItems);
