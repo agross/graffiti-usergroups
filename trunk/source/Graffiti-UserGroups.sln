@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Scripts", "Build Scripts", "{3223D8B5-B7B6-4C03-A840-E1145C8A8B0E}"
 	ProjectSection(SolutionItems) = preProject
 		..\default.build = ..\default.build
@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DnugLeipzig.Definitions.Tes
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "DnugLeipzig.Theme", "app\DnugLeipzig.Theme\", "{256F19B3-7288-42B1-82F0-3BC4D284891E}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFramework = "3.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
 		ProjectReferences = "{47E83768-1722-4F4C-BA0E-CA313AE6B11D}|DnugLeipzig.DemoSite.dll;{1C5C989B-CE0B-4DC3-AF43-96B114838D08}|DnugLeipzig.Definitions.dll;{7F147039-28C6-4CE6-B134-4A94E90BA183}|DnugLeipzig.Runtime.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/DnugLeipzig.Theme"
 		Debug.AspNetCompiler.PhysicalPath = "app\DnugLeipzig.Theme\"
