@@ -118,7 +118,7 @@ namespace DnugLeipzig.Runtime.Services
 			       	Subject = _repository.Configuration.RegistrationMailSubject,
 			       	Context = context.ToEmailTemplateToolboxContext(),
 			       	TemplateName = _registrationEmailTemplate,
-			       	From = command.AttendeeEmail,
+			       	From = null,
 			       	To = result.Post[_repository.Configuration.RegistrationRecipientField]
 			       };
 		}

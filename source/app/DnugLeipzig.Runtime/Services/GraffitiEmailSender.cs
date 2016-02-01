@@ -33,7 +33,7 @@ namespace DnugLeipzig.Runtime.Services
 				templatePath = HttpContext.Current.Server.MapPath(templatePath);
 
 				string body = TemplateEngine.Evaluate(Util.GetFileText(templatePath), template.Context);
-				using (MailMessage message = new MailMessage(template.From ?? _settings.EmailFrom, template.To))
+				using (MailMessage message = new MailMessage(_settings.EmailFrom, template.To))
 				{
 					message.Subject = template.Subject;
 					message.IsBodyHtml = template.IsHTML;
