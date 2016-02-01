@@ -55,7 +55,7 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 			base.Establish_context();
 
 			_command = MockRepository.GenerateMock<IEventRegistrationCommand>();
-			CommandFactory.Stub(x => x.EventRegistration(null, null, null, null, null, true))
+			CommandFactory.Stub(x => x.EventRegistration(null, null, null, true))
 				.IgnoreArguments()
 				.Return(_command);
 
@@ -82,11 +82,9 @@ namespace DnugLeipzig.Runtime.Tests.Handlers
 		[Test]
 		public void It_should_create_a_registration_request_from_the_form_values()
 		{
-			CommandFactory.AssertWasCalled(x => x.EventRegistration(null, null, null, null, null, true),
+			CommandFactory.AssertWasCalled(x => x.EventRegistration(null, null, null, true),
 			                               x => x.Constraints(List.ContainsAll(new[] { 10, 42 }),
 															  Is.Equal("firstname lastname"),
-															  Is.Equal("form of address"),
-															  Is.Equal("IANAL"),
 			                                                  Is.Equal("foo@bar.com"),
 			                                                  Is.Equal(true)));
 		}

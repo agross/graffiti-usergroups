@@ -61,8 +61,6 @@ namespace DnugLeipzig.Runtime.Handlers
 
 						command = _commandFactory.EventRegistration(eventsToSubscribe,
 						                                            context.Request.Form["name"],
-																	context.Request.Form["formOfAddress"],
-						                                            context.Request.Form["occupation"],
 						                                            context.Request.Form["attendeeEMail"],
 						                                            context.Request.Form["ccToAttendee"].IsSelected());
 						break;

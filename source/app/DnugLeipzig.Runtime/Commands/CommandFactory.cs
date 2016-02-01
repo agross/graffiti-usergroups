@@ -10,13 +10,11 @@ namespace DnugLeipzig.Runtime.Commands
 		#region Implementation of ICommandFactory
 		public IEventRegistrationCommand EventRegistration(IEnumerable<int> eventsToRegister,
 		                                                   string name,
-		                                                   string formOfAddress,
-		                                                   string occupation,
 		                                                   string attendeeEmail,
 		                                                   bool sendConfirmationToAttendee)
 		{
 			var command = IoC.Resolve<IEventRegistrationCommand>();
-			command.Initialize(eventsToRegister, name, formOfAddress, occupation, attendeeEmail, sendConfirmationToAttendee);
+			command.Initialize(eventsToRegister, name, attendeeEmail, sendConfirmationToAttendee);
 
 			return command;
 		}

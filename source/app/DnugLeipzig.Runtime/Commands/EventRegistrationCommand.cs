@@ -37,18 +37,6 @@ namespace DnugLeipzig.Runtime.Commands
 			protected set;
 		}
 
-		public string FormOfAddress
-		{
-			get;
-			protected set;
-		}
-
-		public string Occupation
-		{
-			get;
-			protected set;
-		}
-
 		public string AttendeeEmail
 		{
 			get;
@@ -63,14 +51,10 @@ namespace DnugLeipzig.Runtime.Commands
 
 		public void Initialize(IEnumerable<int> eventsToRegister,
 		                       string name,
-		                       string formOfAddress,
-		                       string occupation,
 		                       string attendeeEmail,
 		                       bool sendConfirmationToAttendee)
 		{
 			Name = name;
-			FormOfAddress = formOfAddress;
-			Occupation = occupation;
 			AttendeeEmail = attendeeEmail;
 			SendConfirmationToAttendee = sendConfirmationToAttendee;
 

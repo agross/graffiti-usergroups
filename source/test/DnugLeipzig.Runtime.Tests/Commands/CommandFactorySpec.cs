@@ -12,8 +12,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 		{
 			_command = _factory.EventRegistration(new[] { 10, 42 },
 			                                      "firstname lastname",
-			                                      "form of address",
-			                                      "occupation",
 			                                      "attendee@email.com",
 			                                      true);
 		}

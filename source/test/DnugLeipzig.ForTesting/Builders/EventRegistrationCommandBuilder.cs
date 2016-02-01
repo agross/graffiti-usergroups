@@ -12,9 +12,7 @@ namespace DnugLeipzig.ForTesting.Builders
 	{
 		string _attendeeEmail;
 		IEnumerable<int> _eventsToRegister;
-		string _formOfAddress;
 		string _name;
-		string _occupation;
 		bool _sendConfirmationToAttendee;
 		IEventRegistrationService _service;
 		IValidator<IEventRegistrationCommand> _validator;
@@ -22,7 +20,7 @@ namespace DnugLeipzig.ForTesting.Builders
 		protected override EventRegistrationCommand BuildInstance()
 		{
 			EventRegistrationCommand result = new EventRegistrationCommand(_validator, _service);
-			result.Initialize(_eventsToRegister, _name, _formOfAddress, _occupation, _attendeeEmail, _sendConfirmationToAttendee);
+			result.Initialize(_eventsToRegister, _name, _attendeeEmail, _sendConfirmationToAttendee);
 
 			return result;
 		}
@@ -41,18 +39,6 @@ namespace DnugLeipzig.ForTesting.Builders
 		public EventRegistrationCommandBuilder ForAttendee(string name)
 		{
 			_name = name;
-			return this;
-		}
-
-		public EventRegistrationCommandBuilder WithFormOfAddress(string formOfAddress)
-		{
-			_formOfAddress = formOfAddress;
-			return this;
-		}
-
-		public EventRegistrationCommandBuilder WithOccupation(string occupation)
-		{
-			_occupation = occupation;
 			return this;
 		}
 

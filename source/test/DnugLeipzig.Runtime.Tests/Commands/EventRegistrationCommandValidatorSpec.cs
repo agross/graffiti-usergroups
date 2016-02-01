@@ -20,8 +20,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.ForAttendee("First name last name")
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -41,8 +39,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.Register(new[] { 10, 42 })
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -68,8 +64,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.ForAttendee("First name last name")
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -95,8 +89,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.Register(new[] { 10, 42 })
 				.ForAttendee("First name last name")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -123,8 +115,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.ForAttendee("First name last name")
 				.WithEmail("invalid e-mail")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -151,7 +141,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.ForAttendee("First name last name")
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
-				.WithOccupation("IT Pro")
 				.Build();
 		}
 
@@ -178,7 +167,6 @@ namespace DnugLeipzig.Runtime.Tests.Commands
 				.ForAttendee("First name last name")
 				.WithEmail("foo@bar.com")
 				.SendConfirmationToAttendee()
-				.WithFormOfAddress("Mr")
 				.Build();
 		}
 

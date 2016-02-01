@@ -9,16 +9,6 @@ namespace DnugLeipzig.Definitions.Commands
 			get;
 		}
 
-		string FormOfAddress
-		{
-			get;
-		}
-
-		string Occupation
-		{
-			get;
-		}
-
 		string AttendeeEmail
 		{
 			get;
@@ -36,8 +26,6 @@ namespace DnugLeipzig.Definitions.Commands
 
 		void Initialize(IEnumerable<int> eventsToRegister,
 		                string name,
-		                string formOfAddress,
-		                string occupation,
 		                string attendeeEmail,
 		                bool sendConfirmationToAttendee);
 	}

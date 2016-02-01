@@ -99,9 +99,7 @@ namespace DnugLeipzig.Runtime.Services
 			IGraffitiEmailContext context = _emailContext;
 			context.Put("request", HttpContext.Current.Request);
 			context.Put("events", new EventMacros());
-			context.Put("formOfAddress", HttpUtility.HtmlEncode(command.FormOfAddress));
 			context.Put("name", HttpUtility.HtmlEncode(command.Name));
-			context.Put("occupation", HttpUtility.HtmlEncode(command.Occupation));
 			context.Put("attendeeEMail", HttpUtility.HtmlEncode(command.AttendeeEmail));
 			context.Put("event", result.Post);
 			context.Put("isCcToAttendee", false);
